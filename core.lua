@@ -34,6 +34,8 @@ function IAMathC( val, vmin, vmax )
 	end
 end
 
+
+
 IAHIDDEN = CreateFrame( "FRAME", "IAHIDDEN" )
 IAHIDDEN:Hide()
 
@@ -41,7 +43,7 @@ function ImproveAny:Event( event, ... )
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
 
-		IATAB = IATAB or {}
+		ImproveAny:InitDB()
 
 		ImproveAny:InitCastBar()
 		ImproveAny:InitDurabilityFrame()
@@ -50,8 +52,42 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitMoneyBar()
 		ImproveAny:InitSkillBars()
 		ImproveAny:InitBags()
-		
+
+		ImproveAny:InitIASettings()
+
 		IAUpdateChatChannels()
+
+		C_Timer.After( 1, function()
+			for i = 2.6, 4.1, 0.1 do
+				ConsoleExec( "cameraDistanceMaxZoomFactor " .. i )
+			end
+			ConsoleExec( "WorldTextScale " .. 1.2 )
+		end )
+
+		local ImproveAnyMinimapIcon = LibStub("LibDataBroker-1.1"):NewDataObject("ImproveAnyMinimapIcon", {
+			type = "data source",
+			text = "ImproveAnyMinimapIcon",
+			icon = 136033,
+			OnClick = function(self, btn)
+				if btn == "LeftButton" then
+					ImproveAny:ToggleSettings()
+				elseif btn == "RightButton" then
+					--ToggleMinimapButton()
+				end
+			end,
+			OnTooltipShow = function(tooltip)
+				if not tooltip or not tooltip.AddLine then return end
+				tooltip:AddLine( "ImproveAny")
+				tooltip:AddLine( "LeftClick = Options" )
+				--tooltip:AddLine( "RightClick = Options" )
+			end,
+		})
+		if ImproveAnyMinimapIcon then
+			icon = LibStub("LibDBIcon-1.0", true)
+			if icon then
+				icon:Register( "ImproveAnyMinimapIcon", ImproveAnyMinimapIcon, IAGV( "MMICON", {} ) )
+			end
+		end
 
 		--print("|cff00ff00Loaded " .. AddOnName )
 	end
