@@ -97,3 +97,22 @@ local f = CreateFrame("Frame")
 f:SetScript( "OnEvent", ImproveAny.Event )
 f:RegisterEvent( "PLAYER_LOGIN" )
 f.incombat = false 
+
+
+
+local ts = 0
+function FastLooting()
+    if GetTime() - ts >= 0.3 then
+        ts = GetTime()
+        if GetCVarBool( "autoLootDefault" ) ~= IsModifiedClick( "AUTOLOOTTOGGLE" ) then
+            for i = GetNumLootItems(), 1, -1 do
+                LootSlot( i )
+            end
+            ts = GetTime()
+        end
+    end
+end
+
+local f = CreateFrame( "Frame" )
+f:RegisterEvent( "LOOT_READY" )
+f:SetScript( "OnEvent", FastLooting )

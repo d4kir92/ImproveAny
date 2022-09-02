@@ -3,7 +3,6 @@ local AddOnName, ImproveAny = ...
 
 local textc = "|cFF00FF00" -- Colored
 local textw = "|r" -- "WHITE"
-local maxlevel = 60
 
 C_Timer.After( 0.01, function()
 
