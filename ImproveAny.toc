@@ -1,5 +1,5 @@
 ## Interface: 90207
-## Version: 0.1.3
+## Version: 0.1.4
 ## Title: ImproveAny |T136033/:16:16:0:0|t by |cFFAAAAFFD4KiR |T132115/:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -26,6 +26,7 @@ ele/minimap.lua
 ele/moneybar.lua
 ele/skillbars.lua
 ele/supertrackedframe.lua
+ele/tokenbar.lua
 ele/xpbar.lua
 ele/repbar.lua
 core.lua

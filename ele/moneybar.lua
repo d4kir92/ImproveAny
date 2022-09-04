@@ -7,7 +7,7 @@ IAMoneyBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 100 )
 
 function ImproveAny:InitMoneyBar()
 	IAMoneyBar.text = IAMoneyBar:CreateFontString(nil, "ARTWORK")
-	IAMoneyBar.text:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
+	IAMoneyBar.text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
 	IAMoneyBar.text:SetPoint("CENTER", IAMoneyBar, "CENTER", 0, 0)
 	IAMoneyBar.text:SetText(GetCoinTextureString(GetMoney()))
 

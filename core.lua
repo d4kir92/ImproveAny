@@ -50,6 +50,7 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitItemLevel()
 		ImproveAny:InitMinimap()
 		ImproveAny:InitMoneyBar()
+		ImproveAny:InitTokenBar()
 		ImproveAny:InitSkillBars()
 		ImproveAny:InitBags()
 
