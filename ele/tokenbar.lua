@@ -5,8 +5,20 @@ local tab = {}
 function GetTokenList()
 	tab = {}
 
-	for  index = 1, GetCurrencyListSize() do
-		local name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = GetCurrencyListInfo(index)
+	local max = 1
+	if GetCurrencyListSize then
+		max = GetCurrencyListSize()
+	elseif C_CurrencyInfo.GetCurrencyListSize then
+		max = C_CurrencyInfo.GetCurrencyListSize()
+	end
+
+	for  index = 1, max do
+		local name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = nil
+		if GetCurrencyListInfo then
+			name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = GetCurrencyListInfo( index )
+		elseif C_CurrencyInfo.GetCurrencyListInfo then
+			name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = C_CurrencyInfo.GetCurrencyListInfo( index )
+		end
 		if name then
 			if isWatched then
 				tinsert( tab, {
@@ -15,6 +27,8 @@ function GetTokenList()
 					["icon"] = icon
 				} )
 			end
+		else
+			break
 		end
 	end
 
@@ -44,5 +58,8 @@ function ImproveAny:InitTokenBar()
 	IATokenBar:SetScript("OnEvent", function(self, ...)
 		GetTokenList()
 	end)
+	hooksecurefunc( "TokenFrame_Update", function()
+		GetTokenList()
+	end )
 	GetTokenList()
 end
