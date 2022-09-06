@@ -1,7 +1,7 @@
 
 local AddOnName, ImproveAny = ...
 
-local sw = 160
+local sw = 180
 local sh = 18
 
 local textc = "|cFF00FF00"
