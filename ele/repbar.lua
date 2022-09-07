@@ -103,7 +103,7 @@ C_Timer.After( 0.01, function()
 				local per = (value - minBar) / (maxBar-minBar)
 				local percent = per * 100
 				if maxBar-minBar > 0 then
-					text = name .. ": " .. textc .. IAFormatValue((value - minBar)) .. textw .. "/" .. textc .. IAFormatValue((maxBar-minBar)) .. " " .. textw .. "(" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
+					text = name .. ": " .. textc .. IAFormatValue((value - minBar), 0) .. textw .. "/" .. textc .. IAFormatValue((maxBar-minBar), 0) .. " " .. textw .. "(" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
 					self:SetText(text)
 					if ReputationWatchBar.show then
 						self:Show()
