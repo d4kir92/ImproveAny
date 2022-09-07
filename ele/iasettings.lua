@@ -129,7 +129,7 @@ function ImproveAny:InitIASettings()
 			IAFonts()
 		end
 	}
-	local ddfontNames = MACreateDropdown( fontNames )
+	local ddfontNames = IACreateDropdown( fontNames )
 	ddfontNames:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 0, -36 );
 	--py = py - sh
 

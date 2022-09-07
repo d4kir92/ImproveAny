@@ -103,7 +103,7 @@ f.incombat = false
 
 local ts = 0
 function FastLooting()
-    if GetTime() - ts >= 0.3 then
+    if GetTime() - ts >= 0.2 then
         ts = GetTime()
         if GetCVarBool( "autoLootDefault" ) ~= IsModifiedClick( "AUTOLOOTTOGGLE" ) then
             for i = GetNumLootItems(), 1, -1 do
