@@ -1,19 +1,6 @@
 
 local AddOnName, ImproveAny = ...
 
-function IALerp(pos1, pos2, perc)
-	return ( 1 - perc ) * pos1 + perc * pos2
-end
-
-function string.iareplace( text, old, new )
-	local b,e = text:find(old,1,true)
-	if b==nil then
-		return text
-	else
-		return text:sub(1,b-1) .. new .. text:sub(e+1)
-	end
-end
-
 if SuperTrackedFrame and SuperTrackedFrame.GetTargetAlphaBaseValue then
 	local fAlpha = SuperTrackedFrame.GetTargetAlphaBaseValue
 

@@ -34,3 +34,19 @@ function IAFormatValue( val, dec )
 	elseif val<1000000000000 then return ("%." .. dec .. "fb"):format(val/1000000000)
 	else return ("%." .. dec .. "ft"):format(val/1000000000000) end
 end
+
+function IALerp(pos1, pos2, perc)
+	return ( 1 - perc ) * pos1 + perc * pos2
+end
+
+function string.iareplace( text, old, new )
+	if text == nil then
+		return ""
+	end
+	local b,e = text:find( old, 1, true )
+	if b == nil then
+		return text
+	else
+		return text:sub( 1, b-1 ) .. new .. text:sub( e+1 )
+	end
+end

@@ -145,6 +145,9 @@ function IAResetMsg( msg )
 end
 
 function IAChatAddItemIcons( msg, c )
+	if c >= 40 then
+		return msg
+	end
 	msg = string.gsub(msg, "(|H)", "|Z", 1)
 	msg = string.gsub(msg, "(|h)", "|y", 1)
 	msg = string.gsub(msg, "(|h)", "|z", 1)
@@ -185,19 +188,12 @@ function IAChatAddItemIcons( msg, c )
 					if GetClassColor then
 						r, g, b, hex = GetClassColor(engClass)
 					end
-					if ( string.find( msg, name .. "-" .. realm, 1, true ) or string.find( msg, name, 1, true ) ) and IABUILD ~= "RETAIL" and true then
-						msg = string.gsub(msg, "(|Z)", res .. "[|c" .. hex .. "|X", 1)
-						msg = string.gsub(msg, "(%[" .. name .. "%])", name, 1)
-						msg = string.gsub(msg, "(|z)", "|r]|x", 1)
-					else
-						if IABUILD ~= "RETAIL" and true then
-							msg = string.gsub(msg, "(|Z)", res .. "|c" .. hex .. "|X", 1)
-							msg = string.gsub(msg, "(|z)", "|r|x", 1)
-						else
-							msg = string.gsub(msg, "(|Z)", res .. "|X", 1)
-							msg = string.gsub(msg, "(|z)", "|x", 1)
-						end
-					end
+
+					msg = string.gsub( msg, "%[", "" )
+					msg = string.gsub( msg, "%]", "" )
+
+					msg = string.gsub( msg, "(|Z)", res .. "[|c" .. hex .. "|X", 1 )
+					msg = string.gsub( msg, "(|z)", "|r]|x", 1 )
 
 					return IAChatAddItemIcons( msg, c + 1 )
 				else
