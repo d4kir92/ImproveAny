@@ -22,10 +22,18 @@ function ImproveAny:InitMinimap()
 	end
 	SHAPE("SQUARE")
 
-	MinimapBorder:Hide()
-	MinimapBorderTop:Hide()
-	MinimapZoomIn:Hide()
-	MinimapZoomOut:Hide()
+	if MinimapBorder then
+		MinimapBorder:Hide()
+	end
+	if MinimapBorderTop then
+		MinimapBorderTop:Hide()
+	end
+	if MinimapZoomIn then
+		MinimapZoomIn:Hide()
+	end
+	if MinimapZoomOut then
+		MinimapZoomOut:Hide()
+	end
 
 	function IAOnMouseWheel( self, dir )
 		if ( dir > 0 ) then
@@ -152,7 +160,9 @@ function ImproveAny:InitMinimap()
 
 		if TimeManagerClockButton then
 			local clocktexture = select( 1, TimeManagerClockButton:GetRegions() )
-			clocktexture:SetTexture( nil )
+			if clocktexture and clocktexture.SetTexture then
+				clocktexture:SetTexture( nil )
+			end
 		end
 
 		if MiniMapWorldMapButton then
