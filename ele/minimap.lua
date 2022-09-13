@@ -62,7 +62,7 @@ function ImproveAny:InitMinimap()
 				end
 		
 				btn:SetMovable( true )
-				btn:SetUserPlaced( true )
+				btn:SetUserPlaced( false )
 
 				local radius = 76
 				IATAB[name .. "ofsx"] = IATAB[name .. "ofsx"] or radius

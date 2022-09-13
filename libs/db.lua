@@ -2,9 +2,13 @@
 local AddOnName, ImproveAny = ...
 
 local COL_R = "|cFFFF0000"
+local COL_Y = "|cFFFFFF00"
 
+function ImproveAny:MSG( msg )
+	print( "|cff3FC7EB" .. "[ImproveAny]|r " .. COL_Y .. msg )
+end
 function ImproveAny:MSG_Error( msg )
-	print( "|cFFA4A4FF" .. "[ImproveAny] " .. COL_R .. "[ERROR] |r|r" .. msg )
+	print( "|cff3FC7EB" .. "[ImproveAny] " .. COL_R .. "[ERROR] |r|r" .. msg )
 		
 end
 

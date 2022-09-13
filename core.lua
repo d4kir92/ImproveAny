@@ -43,6 +43,10 @@ function ImproveAny:Event( event, ... )
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
 
+		if IsAddOnLoaded("D4KiR MoveAndImprove") then
+			ImproveAny:MSG( "DON'T use MoveAndImprove, when you use ImproveAny" )
+		end
+
 		ImproveAny:InitDB()
 
 		ImproveAny:InitCastBar()
