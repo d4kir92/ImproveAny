@@ -37,9 +37,13 @@ function ImproveAny:InitMinimap()
 
 	function IAOnMouseWheel( self, dir )
 		if ( dir > 0 ) then
-			MinimapZoomIn:Click()
+			if MinimapZoomIn then
+				MinimapZoomIn:Click()
+			end
 		else
-			MinimapZoomOut:Click()
+			if MinimapZoomOut then
+				MinimapZoomOut:Click()
+			end
 		end
 	end
 	Minimap:SetScript( "OnMouseWheel", IAOnMouseWheel )
@@ -158,10 +162,15 @@ function ImproveAny:InitMinimap()
 			MinimapToggleButton:Hide()
 		end
 
-		if TimeManagerClockButton then
-			local clocktexture = select( 1, TimeManagerClockButton:GetRegions() )
-			if clocktexture and clocktexture.SetTexture then
-				clocktexture:SetTexture( nil )
+		if select(4, GetBuildInfo()) < 100000 then
+			if TimeManagerClockButton then
+				local clocktexture = select( 1, TimeManagerClockButton:GetRegions() )
+				if clocktexture and clocktexture.SetTexture then
+					clocktexture:SetTexture( nil )
+				end
+
+				TimeManagerClockButton:ClearAllPoints()
+				TimeManagerClockButton:SetPoint( "BOTTOM", Minimap, "BOTTOM", 0, -4 )
 			end
 		end
 
@@ -172,10 +181,7 @@ function ImproveAny:InitMinimap()
 			end
 		end
 
-		if TimeManagerClockButton then
-			TimeManagerClockButton:ClearAllPoints()
-			TimeManagerClockButton:SetPoint( "BOTTOM", Minimap, "BOTTOM", 0, -4 )
-		end
+
 
 		if MinimapZoneTextButton then
 			MinimapZoneTextButton:ClearAllPoints()
@@ -192,7 +198,9 @@ function ImproveAny:InitMinimap()
 		if GameTimeFrame then
 			GameTimeFrame:SetFrameLevel( 10 )
 		end
-		IAConvertToMinimapButton( "GameTimeFrame", true ) -- Calendar
+		if select(4, GetBuildInfo()) < 100000 then
+			IAConvertToMinimapButton( "GameTimeFrame", true ) -- Calendar
+		end
 		IAConvertToMinimapButton( "GarrisonLandingPageMinimapButton" ) -- Sanctum
 		IAConvertToMinimapButton( "QueueStatusMinimapButton" ) -- LFG
 		if MiniMapInstanceDifficulty then
