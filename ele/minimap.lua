@@ -39,10 +39,14 @@ function ImproveAny:InitMinimap()
 		if ( dir > 0 ) then
 			if MinimapZoomIn then
 				MinimapZoomIn:Click()
+			else
+				Minimap.ZoomIn:Click()
 			end
 		else
 			if MinimapZoomOut then
 				MinimapZoomOut:Click()
+			else
+				Minimap.ZoomOut:Click()
 			end
 		end
 	end
