@@ -52,6 +52,10 @@ function ImproveAny:InitMinimap()
 	end
 	Minimap:SetScript( "OnMouseWheel", IAOnMouseWheel )
 
+	if ElvUI then
+		return
+	end
+	
 	C_Timer.After( 0.3, function()
 		if MinimapBorder then
 			MinimapBorder:SetParent( IAHIDDEN )
