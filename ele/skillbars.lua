@@ -7,6 +7,11 @@ local sh = 18
 local textc = "|cFF00FF00"
 local textw = "|r"
 
+local skillMax = -1
+local skillIds = {}
+local jobs = {}
+local subTypes = {}
+
 if IABUILD ~= "RETAIL" then
 	IASkills = CreateFrame( "FRAME", "IASkills", UIParent )
 	IASkills:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 400, 0 )
@@ -19,16 +24,33 @@ function IAGetSkillData( name )
 	local itemmax = nil
 	local itemname = nil
 	if GetSkillLineInfo then
-		for i = 1, 60 do
-			skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(i)
+		local id = skillIds[name]
+		if id then
+			skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo( id )
 			if skillName then
-				if name == string.lower( skillName ) then
-					itemcur = skillRank
-					itemmax = skillMaxRank
-					itemname = skillName
+				itemcur = skillRank
+				itemmax = skillMaxRank
+				itemname = skillName
+			end
+		else
+			for i = 1, GetNumSkillLines() do
+				skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo( i )
+				if skillName then
+					if name == string.lower( skillName ) then
+						skillIds[name] = i
+						
+						itemcur = skillRank
+						itemmax = skillMaxRank
+						itemname = skillName
+
+						return itemname, itemcur, itemmax
+					end
+				else
+					break
 				end
-			else
-				break
+			end
+			if name then
+				skillIds[name] = -1
 			end
 		end
 	end
@@ -42,8 +64,10 @@ function IAGetWeaponSkillData( id )
 
 	local item = GetInventoryItemLink("player", id )
 	if item then
-		if item then
-			_, _, _, _, _, _, itemSubType = GetItemInfo(item)
+		if subTypes[item] then
+			itemname, itemcur, itemmax = IAGetSkillData( subTypes[item] )
+		else
+			_, _, _, _, _, _, itemSubType = GetItemInfo( item )
 			if itemSubType then
 				if AUCTION_SUBCATEGORY_ONE_HANDED then
 					local s1, e1 = string.find( itemSubType, AUCTION_SUBCATEGORY_ONE_HANDED, 1, true )
@@ -57,29 +81,38 @@ function IAGetWeaponSkillData( id )
 				end
 				itemSubType = string.lower( itemSubType )
 			end
+
+			subTypes[item] = itemSubType
+			itemname, itemcur, itemmax = IAGetSkillData( itemSubType )
 		end
-		itemname, itemcur, itemmax = IAGetSkillData( itemSubType )
 	end
 
 	return itemname, itemcur, itemmax
 end
 
 function IASkillsThink()
-	local jobs = {}
-
-	if GetSkillLineInfo then
-		for i = 1, 64 do
-			local skillName, isHeader, isExpanded, skillRank, numTempPoints, skillModifier, skillMaxRank, isAbandonable, stepCost, rankCost, minLevel, skillCostType = GetSkillLineInfo(i)
-			if skillName then
-				if isAbandonable then
-					tinsert( jobs, skillName )
+	if GetNumSkillLines() ~= skillMax then
+		skillMax = GetNumSkillLines()
+		skillIds = {}
+		jobs = {}
+		subTypes = {}
+		
+		if GetSkillLineInfo then
+			for i = 1, 64 do
+				local skillName, isHeader, isExpanded, skillRank, numTempPoints, skillModifier, skillMaxRank, isAbandonable, stepCost, rankCost, minLevel, skillCostType = GetSkillLineInfo(i)
+				if skillName then
+					if not tContains( jobs, skillName ) then
+						if isAbandonable then
+							tinsert( jobs, skillName )
+						end
+					end
+				else
+					break
 				end
-			else
-				break
 			end
 		end
 	end
-
+	
 	local id = 1
 	local jobid = 1
 	for i, bar in pairs( IASkills.bars ) do
@@ -89,23 +122,23 @@ function IASkillsThink()
 				name, cur, max = bar.func( string.lower( jobs[jobid] ) )
 				jobid = jobid + 1
 			end
-		end 
+		end
+
 		if name and cur and max and cur < max then
-			bar:Show()
+			if not bar:IsShown() then
+				bar:Show()
+			end
+
 			bar:SetPoint( "TOPLEFT", IASkills, "TOPLEFT", 0, - ( id - 1 ) * sh )
 			
-			bar.bar.sw = sw
-			bar.bar:SetSize(sw, sh - 1)
-			bar.bar:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
-			bar.bg:SetSize(sw, sh - 1)
-			bar.bg:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
-		
 			bar.text:SetText( name .. " " .. textc .. cur .. textw .. "/" .. textc .. max )
 			bar.bar:SetWidth( cur / max * bar.bar.sw )
 
 			id = id + 1
 		else
-			bar:Hide()
+			if bar:IsShown() then
+				bar:Hide()
+			end
 		end
 	end
 
@@ -114,7 +147,7 @@ function IASkillsThink()
 		IASkillsMover:SetHeight(  ( id - 1 ) * sh)
 	end
 
-	C_Timer.After( 0.1, IASkillsThink )
+	C_Timer.After( 0.2, IASkillsThink )
 end
 
 local skillid = 0
@@ -146,6 +179,12 @@ function IAAddStatusBar( func, args )
 		bar.text:SetFont(STANDARD_TEXT_FONT, 10, "")
 		bar.text:SetPoint("CENTER", bar, "CENTER", 0, 0)
 		bar.text:SetText("LOAD")
+
+		bar.bar.sw = sw
+		bar.bar:SetSize(sw, sh - 1.1)
+		bar.bar:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
+		bar.bg:SetSize(sw, sh - 1.1)
+		bar.bg:SetPoint("TOPLEFT", bar, "TOPLEFT", 0, 0)
 	end
 end
 
