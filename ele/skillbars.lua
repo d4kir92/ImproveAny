@@ -33,7 +33,11 @@ function IAGetSkillData( name )
 				itemname = skillName
 			end
 		else
-			for i = 1, GetNumSkillLines() do
+			local numSkillLines = 999
+			if GetNumSkillLines then
+				numSkillLines = GetNumSkillLines()
+			end
+			for i = 1, numSkillLines do
 				skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo( i )
 				if skillName then
 					if name == string.lower( skillName ) then
@@ -91,8 +95,12 @@ function IAGetWeaponSkillData( id )
 end
 
 function IASkillsThink()
-	if GetNumSkillLines() ~= skillMax then
-		skillMax = GetNumSkillLines()
+	local numSkillLines = 999
+	if GetNumSkillLines then
+		numSkillLines = GetNumSkillLines()
+	end
+	if GetNumSkillLines ~= skillMax then
+		skillMax = GetNumSkillLines
 		skillIds = {}
 		jobs = {}
 		subTypes = {}
