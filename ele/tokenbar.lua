@@ -4,7 +4,6 @@ local AddOnName, ImproveAny = ...
 local tab = {}
 function GetTokenList()
 	tab = {}
-
 	local max = 1
 	if GetCurrencyListSize then
 		max = GetCurrencyListSize()
@@ -13,11 +12,15 @@ function GetTokenList()
 	end
 
 	for  index = 1, max do
-		local name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = nil
+		local name, _, _, _, isWatched, count, icon, maxCount, _, _ = nil
 		if GetCurrencyListInfo then
-			name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = GetCurrencyListInfo( index )
+			name, _, _, _, isWatched, count, icon, maxCount, _, _ = GetCurrencyListInfo( index )
 		elseif C_CurrencyInfo.GetCurrencyListInfo then
-			name, isHeader, isExpanded, isUnused, isWatched, count, icon, maxCount, itemID, test = C_CurrencyInfo.GetCurrencyListInfo( index )
+			info = C_CurrencyInfo.GetCurrencyListInfo( index )
+			name = info.name
+			isWatched = info.isShowInBackpack
+			icon = info.iconFileID
+			count = info.quantity
 		end
 		if name then
 			if isWatched then
@@ -58,8 +61,10 @@ function ImproveAny:InitTokenBar()
 	IATokenBar:SetScript("OnEvent", function(self, ...)
 		GetTokenList()
 	end)
-	hooksecurefunc( "TokenFrame_Update", function()
-		GetTokenList()
-	end )
+	if TokenFrame_Update then
+		hooksecurefunc( "TokenFrame_Update", function()
+			GetTokenList()
+		end )
+	end
 	GetTokenList()
 end
