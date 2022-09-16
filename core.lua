@@ -57,6 +57,7 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitTokenBar()
 		ImproveAny:InitSkillBars()
 		ImproveAny:InitBags()
+		ImproveAny:InitWorldMapFrame()
 
 		ImproveAny:InitIASettings()
 
