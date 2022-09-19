@@ -4,7 +4,7 @@ local AddOnName, ImproveAny = ...
 local fontSize = 12
 
 IAMoneyBar = CreateFrame( "FRAME", "IAMoneyBar", UIParent )
-IAMoneyBar:SetSize( 240, 30 )
+IAMoneyBar:SetSize( 180, 30 )
 IAMoneyBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100 )
 
 function ImproveAny:InitMoneyBar()
@@ -22,7 +22,7 @@ function ImproveAny:InitMoneyBar()
 	
 	IAMoneyBar.Reset = CreateFrame( "Button", "ResetMoneyPerHour", IAMoneyBar, "UIPanelButtonTemplate" )
 	IAMoneyBar.Reset:SetSize( 100, 20 )
-	IAMoneyBar.Reset:SetPoint( "RIGHT", IAMoneyBar, 0, 0 )
+	IAMoneyBar.Reset:SetPoint( "BOTTOM", IAMoneyBar, 0, 0 )
 	IAMoneyBar.Reset:SetText( RESET )
 	IAMoneyBar.Reset:SetScript( "OnClick", function( self, ... )
 		ts = 0

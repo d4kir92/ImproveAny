@@ -49,7 +49,7 @@ function GetTokenList()
 end
 
 IATokenBar = CreateFrame( "FRAME", "IATokenBar", UIParent )
-IATokenBar:SetSize( 240, 20 )
+IATokenBar:SetSize( 180, 20 )
 IATokenBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 130 )
 
 function ImproveAny:InitTokenBar()
@@ -67,25 +67,4 @@ function ImproveAny:InitTokenBar()
 		end )
 	end
 	GetTokenList()
-
-	local oldDir = ""
-	function IATokenBar:TokenThink()
-		local p1 = IATokenBar:GetPoint()
-		if p1 ~= oldDir then
-			oldDir = p1
-			local px = 0
-			if p1 == "BOTTOMRIGHT" or p1 == "RIGHT" or p1 == "TOPRIGHT" then
-				p1 = "RIGHT"
-				px = -12
-			elseif p1 == "BOTTOMLEFT" or p1 == "LEFT" or p1 == "TOPLEFT" then
-				p1 = "LEFT"
-				px = 8
-			end
-			IATokenBar.text:ClearAllPoints()
-			IATokenBar.text:SetPoint( p1, IATokenBar, p1, px, 0 )
-		end
-
-		C_Timer.After( 1, IATokenBar.TokenThink )
-	end
-	IATokenBar:TokenThink()
 end
