@@ -1,4 +1,6 @@
 
+local AddOnName, ImproveAny = ...
+
 function IAChatOnlyBig( str )
 	local res = string.gsub(str, "[^%u-]", "" )
 
@@ -144,6 +146,80 @@ function IAResetMsg( msg )
 	return msg
 end
 
+local levelTab = {}
+function IAGetLevel( name, realm )
+	if realm == nil or realm == "" then
+		realm = GetRealmName()
+	end
+	return levelTab[name .. "-" .. realm]
+end
+
+function IASetLevel( name, realm, level )
+	if realm == nil or realm == "" then
+		realm = GetRealmName()
+	end
+	if name and realm then
+		levelTab[name .. "-" .. realm] = level
+	end
+end
+IASetLevel( UnitName( "player" ), nil, UnitLevel( "player" ) )
+
+local lf = CreateFrame( "Frame", "IALevelFrame" )
+lf:RegisterEvent( "GROUP_ROSTER_UPDATE" )
+lf:RegisterEvent( "CHAT_MSG_RAID" )
+lf:RegisterEvent( "CHAT_MSG_GUILD" )
+lf:RegisterEvent( "CHAT_MSG_OFFICER" )
+lf:RegisterEvent( "FRIENDLIST_UPDATE" )
+lf:RegisterEvent( "GUILD_ROSTER_UPDATE" )
+lf:RegisterEvent( "RAID_ROSTER_UPDATE" )
+lf:RegisterEvent( "WHO_LIST_UPDATE" )
+lf:RegisterEvent( "PLAYER_LEVEL_UP" )
+lf:RegisterEvent( "CHAT_MSG_SYSTEM" )
+lf:SetScript( "OnEvent", function( self, event, ... )
+	if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
+		if IsInGuild() then
+			C_GuildInfo.GuildRoster()
+
+			for i = 1, GetNumGuildMembers( true ) do
+				local Name, _, _, Level = GetGuildRosterInfo(i)
+				local name, realm = Name:match("([^%-]+)%-?(.*)")
+				IASetLevel( name, realm, Level )
+			end
+		end
+	elseif event == "PLAYER_LEVEL_UP" then
+		levelTab[UnitName( "player" ) .. "-" .. GetRealmName()] = UnitLevel( "player" )
+	elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
+		if self.wholib then return end
+
+		local Name, Class, Level, Server, _
+		for i = 1, C_FriendList.GetNumWhoResults() do
+			local info = C_FriendList.GetWhoInfo( i )
+			IASetLevel( info.fullName, nil, info.level )
+		end
+	elseif event == "FRIENDLIST_UPDATE" then
+		local Name, Class, Level
+		for i = 1, C_FriendList.GetNumFriends() do
+			Name, Level, Class = C_FriendList.GetFriendInfo( i )
+			IASetLevel( Name, nil, Level )
+		end
+	elseif event == "RAID_ROSTER_UPDATE" or event == "CHAT_MSG_RAID" then
+		local max = GetNumGroupMembers or GetNumRaidMembers
+  		for i = 1, max() do
+			local _, _, _, Level = GetRaidRosterInfo( i )
+			Name, Server = UnitName( "raid" .. i )
+			IASetLevel( Name, Server, Level )
+		end
+	elseif event == "GROUP_ROSTER_UPDATE" then
+		local max = GetNumSubgroupMembers or GetNumPartyMembers
+  		for i = 1, max() do
+			local name, realm = UnitName( "party" .. i )
+			IASetLevel( name, realm, UnitLevel( "party" .. i ) )
+		end
+	else
+		ImproveAny:MSG( "Missing Event: " .. event )
+	end
+end )
+
 function IAChatAddItemIcons( msg, c )
 	if c >= 40 then
 		return msg
@@ -187,6 +263,11 @@ function IAChatAddItemIcons( msg, c )
 					local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
 					if GetClassColor then
 						r, g, b, hex = GetClassColor(engClass)
+					end
+
+					local level = IAGetLevel( name, realm )
+					if level then
+						msg = string.gsub( msg, name, level .. ":" .. name )
 					end
 
 					msg = string.gsub( msg, "%[", "" )
@@ -291,4 +372,76 @@ function ChatFrame_ResolvePrefixedChannelName( communityChannel )
 	else
 		return prefix..ChatFrame_ResolveChannelName(communityChannel);
 	end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+-- URLs / IPs / Emails
+local patterns = {
+	"[htps:/]*%w+%.%w[%w%.%/%+%-%_%#%?%=]*"
+}
+
+function ImproveAny:FormatURL( url )
+    url = "|cff".."3FC7EB".."|Hurl:"..url.."|h"..url.."|h|r"
+    return url
+end
+
+function IAConvertMessage( self, event, msg, ... )
+	for i, p in pairs( patterns ) do
+		if string.find( msg, p ) then
+			msg = string.gsub( msg, p, ImproveAny:FormatURL( "%1" ) )
+		end
+	end
+    
+    return false, msg, ...
+end
+
+StaticPopupDialogs["CLICK_LINK_URL"] = {
+    text = "LINK/EMAIL/IP",
+    button1 = "Close",
+    OnAccept = function()
+
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3, 
+    OnShow = 
+        function ( self, data )
+            self.editBox:SetText( data.url )
+            self.editBox:HighlightText()
+        end,
+    hasEditBox = true
+}
+
+local OrgSetHyperlink = ItemRefTooltip.SetHyperlink
+function ItemRefTooltip:SetHyperlink( link )
+	if ( string.sub( link, 1, 3 ) == "url" ) then
+		local url = string.sub(link, 5);
+		local tab = {}
+		tab.url = url
+		StaticPopup_Show( "CLICK_LINK_URL", "", "", tab )
+	else
+		OrgSetHyperlink( self, link )
+	end
+end
+
+local chatTypes = {}
+for i, v in pairs( _G ) do
+	if string.find( i, "CHAT_MSG_" ) then
+		tinsert( chatTypes, i )
+	end
+end
+
+for i, type in pairs( chatTypes ) do
+    ChatFrame_AddMessageEventFilter( type, IAConvertMessage )
 end
