@@ -12,9 +12,9 @@ function ImproveAny:InitWorldMapFrame()
 		end
 
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x,y = MapCanvasScrollControllerMixin.GetCursorPosition(f);
-			local s = WorldMapFrame:GetScale();
-			return x/s, y/s;
+			local x,y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local s = WorldMapFrame:GetScale()
+			return x/s, y/s
 		end
 
 		if MABUILD ~= "RETAIL" then -- TBC, ERA

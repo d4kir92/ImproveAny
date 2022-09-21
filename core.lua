@@ -176,7 +176,7 @@ local IATabBuffs = {}
 function IAInitCombatText()
 	local max = NUM_COMBAT_TEXT_LINES or 1
 	for i = 1, max do
-		str = _G["CombatText" .. i];
+		str = _G["CombatText" .. i]
 		if str and str.initsettext == nil then
 			str.initsettext = true
 
@@ -208,7 +208,7 @@ function IAInitCombatText()
 					end
 					if icon then
 						local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
-						self:SetText( t );
+						self:SetText( t )
 						done = true
 					end
 				end
@@ -220,12 +220,16 @@ function IAInitCombatText()
 						val = gsub( val, "%.", "" )
 						amount = tonumber( val )
 					end
-					local icon = cle.tabhot[amount]
-					if icon then
-						local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
-						self:SetText( t );
+					if cle.tabhot then
+						local icon = cle.tabhot[amount]
+						if icon then
+							local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
+							self:SetText( t )
+						else
+							self:SetText( text )
+						end
 					else
-						self:SetText( text );
+						self:SetText( text )
 					end
 				end
 				self.iasettext = false

@@ -164,6 +164,51 @@ function IASetLevel( name, realm, level )
 end
 IASetLevel( UnitName( "player" ), nil, UnitLevel( "player" ) )
 
+function IAWhoScan()
+	local Name, Class, Level, Server, _
+	for i = 1, C_FriendList.GetNumWhoResults() do
+		local info = C_FriendList.GetWhoInfo( i )
+		IASetLevel( info.fullName, nil, info.level )
+	end
+end
+
+function IAFriendScan()
+	local Name, Class, Level
+	for i = 1, C_FriendList.GetNumFriends() do
+		Name, Level, Class = C_FriendList.GetFriendInfo( i )
+		IASetLevel( Name, nil, Level )
+	end
+end
+
+function IAPartyScan()
+	local max = GetNumSubgroupMembers or GetNumPartyMembers
+	for i = 1, max() do
+		local name, realm = UnitName( "party" .. i )
+		IASetLevel( name, realm, UnitLevel( "party" .. i ) )
+	end
+end
+
+function IARaidScan()
+	local max = GetNumGroupMembers or GetNumRaidMembers
+	for i = 1, max() do
+		local _, _, _, Level = GetRaidRosterInfo( i )
+		Name, Server = UnitName( "raid" .. i )
+		IASetLevel( Name, Server, Level )
+	end
+end
+
+function IAGuildScan()
+	if IsInGuild() then
+		C_GuildInfo.GuildRoster()
+
+		for i = 1, GetNumGuildMembers( true ) do
+			local Name, _, _, Level = GetGuildRosterInfo(i)
+			local name, realm = Name:match("([^%-]+)%-?(.*)")
+			IASetLevel( name, realm, Level )
+		end
+	end
+end
+
 local lf = CreateFrame( "Frame", "IALevelFrame" )
 lf:RegisterEvent( "GROUP_ROSTER_UPDATE" )
 lf:RegisterEvent( "CHAT_MSG_RAID" )
@@ -175,46 +220,26 @@ lf:RegisterEvent( "RAID_ROSTER_UPDATE" )
 lf:RegisterEvent( "WHO_LIST_UPDATE" )
 lf:RegisterEvent( "PLAYER_LEVEL_UP" )
 lf:RegisterEvent( "CHAT_MSG_SYSTEM" )
+lf:RegisterEvent( "PLAYER_LOGIN" )
 lf:SetScript( "OnEvent", function( self, event, ... )
 	if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
-		if IsInGuild() then
-			C_GuildInfo.GuildRoster()
-
-			for i = 1, GetNumGuildMembers( true ) do
-				local Name, _, _, Level = GetGuildRosterInfo(i)
-				local name, realm = Name:match("([^%-]+)%-?(.*)")
-				IASetLevel( name, realm, Level )
-			end
-		end
+		IAGuildScan()
 	elseif event == "PLAYER_LEVEL_UP" then
 		levelTab[UnitName( "player" ) .. "-" .. GetRealmName()] = UnitLevel( "player" )
 	elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
-		if self.wholib then return end
-
-		local Name, Class, Level, Server, _
-		for i = 1, C_FriendList.GetNumWhoResults() do
-			local info = C_FriendList.GetWhoInfo( i )
-			IASetLevel( info.fullName, nil, info.level )
-		end
+		IAWhoScan()
 	elseif event == "FRIENDLIST_UPDATE" then
-		local Name, Class, Level
-		for i = 1, C_FriendList.GetNumFriends() do
-			Name, Level, Class = C_FriendList.GetFriendInfo( i )
-			IASetLevel( Name, nil, Level )
-		end
+		IAFriendScan()
 	elseif event == "RAID_ROSTER_UPDATE" or event == "CHAT_MSG_RAID" then
-		local max = GetNumGroupMembers or GetNumRaidMembers
-  		for i = 1, max() do
-			local _, _, _, Level = GetRaidRosterInfo( i )
-			Name, Server = UnitName( "raid" .. i )
-			IASetLevel( Name, Server, Level )
-		end
+		IARaidScan()
 	elseif event == "GROUP_ROSTER_UPDATE" then
-		local max = GetNumSubgroupMembers or GetNumPartyMembers
-  		for i = 1, max() do
-			local name, realm = UnitName( "party" .. i )
-			IASetLevel( name, realm, UnitLevel( "party" .. i ) )
-		end
+		IAPartyScan()
+	elseif event == "PLAYER_LOGIN" then
+		IAWhoScan()
+		IAFriendScan()
+		IAPartyScan()
+		IARaidScan()
+		IAGuildScan()
 	else
 		ImproveAny:MSG( "Missing Event: " .. event )
 	end
@@ -366,11 +391,11 @@ function IAUpdateChatChannels()
 end
 
 function ChatFrame_ResolvePrefixedChannelName( communityChannel )
-	local prefix, communityChannel = communityChannel:match("(%d+. )(.*)");
+	local prefix, communityChannel = communityChannel:match("(%d+. )(.*)")
 	if true then
 		return IAChatOnlyBig( communityChannel )
 	else
-		return prefix..ChatFrame_ResolveChannelName(communityChannel);
+		return prefix..ChatFrame_ResolveChannelName(communityChannel)
 	end
 end
 
@@ -401,7 +426,19 @@ function IAConvertMessage( self, event, msg, ... )
 			msg = string.gsub( msg, p, ImproveAny:FormatURL( "%1" ) )
 		end
 	end
-    
+
+    if string.find( msg, "ginv", 0, true ) then
+		local name = select(1, ...)
+		if name then
+			msg = string.gsub( msg, "ginv", "|cff".."AAFFAA".."|Hginv:" .. name .. "|h" .. "ginv" .. "|h|r" )
+		end
+	elseif string.find( msg, "inv", 0, true ) then
+		local name = select(1, ...)
+		if name then
+			msg = string.gsub( msg, "inv", "|cff".."FFFF00".."|Hinv:" .. name .. "|h" .. "inv" .. "|h|r" )
+		end
+	end
+
     return false, msg, ...
 end
 
@@ -425,11 +462,19 @@ StaticPopupDialogs["CLICK_LINK_URL"] = {
 
 local OrgSetHyperlink = ItemRefTooltip.SetHyperlink
 function ItemRefTooltip:SetHyperlink( link )
-	if ( string.sub( link, 1, 3 ) == "url" ) then
-		local url = string.sub(link, 5);
+	local poi = string.find( link, ":", 0, true )
+	local typ =  string.sub( link, 1, poi - 1 )
+	if typ == "url" then
+		local url = string.sub( link, 5 )
 		local tab = {}
 		tab.url = url
 		StaticPopup_Show( "CLICK_LINK_URL", "", "", tab )
+	elseif typ == "ginv" then
+		local name = string.sub( link, poi + 1 )
+		GuildInvite( name )
+	elseif typ == "inv" then
+		local name = string.sub( link, poi + 1 )
+		InviteUnit( name )
 	else
 		OrgSetHyperlink( self, link )
 	end

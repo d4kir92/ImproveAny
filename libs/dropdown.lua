@@ -32,7 +32,7 @@ function IACreateDropdown( opts )
     UIDropDownMenu_Initialize(dropdown, function(self, level, _)
         local info = UIDropDownMenu_CreateInfo()
         for key, val in pairs(menu_items) do
-            info.text = val;
+            info.text = val
             info.checked = false
             info.menuList= key
             info.hasArrow = false

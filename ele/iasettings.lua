@@ -130,7 +130,7 @@ function ImproveAny:InitIASettings()
 		end
 	}
 	local ddfontNames = IACreateDropdown( fontNames )
-	ddfontNames:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 0, -36 );
+	ddfontNames:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 0, -36 )
 	--py = py - sh
 
 	IASettings.close = CreateFrame( "BUTTON", "IASettings" .. ".opt.close", IASettings, "UIPanelButtonTemplate" )

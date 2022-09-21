@@ -123,7 +123,7 @@ function ImproveAny:InitItemLevel()
 						local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo(ItemID)
 						local ilvl, _, baseilvl = GetDetailedItemLevelInfo(ItemID)
 						local color = ITEM_QUALITY_COLORS[rarity]
-						local current, maximum = GetInventoryItemDurability(i);
+						local current, maximum = GetInventoryItemDurability(i)
 						if current and maximum then
 							local per = current / maximum
 							if current == maximum then -- 100%
@@ -393,15 +393,15 @@ function ImproveAny:InitItemLevel()
 		BagItemAutoSortButton:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square")
 		]]
 		BagItemAutoSortButton:SetScript("OnClick", function(self, ...)
-			PlaySound(SOUNDKIT.UI_BAG_SORTING_01);
+			PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 			if SortBags then
-				SortBags();
+				SortBags()
 			end
 		end)
 		BagItemAutoSortButton:SetScript("OnEnter", function(self, ...)
-			GameTooltip:SetOwner(self);
-			GameTooltip:SetText(BAG_CLEANUP_BAGS);
-			GameTooltip:Show();
+			GameTooltip:SetOwner(self)
+			GameTooltip:SetText(BAG_CLEANUP_BAGS)
+			GameTooltip:Show()
 		end)
 		BagItemAutoSortButton:SetScript("OnLeave", function(self, ...)
 			GameTooltip_Hide()

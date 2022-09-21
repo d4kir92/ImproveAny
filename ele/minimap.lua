@@ -160,7 +160,7 @@ function ImproveAny:InitMinimap()
 				end )
 		
 				btn:SetScript( "OnDragStop", function()
-					btn:StopMovingOrSizing();
+					btn:StopMovingOrSizing()
 					btn.moving = false
 				end )
 			end
