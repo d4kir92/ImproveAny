@@ -146,18 +146,27 @@ function IAResetMsg( msg )
 	return msg
 end
 
+function IAFixName( name, realm )
+	if realm == nil or realm == "" then
+		local s1 = string.find( name, "-", 0, true )
+		if name and s1 then
+			realm = string.sub( name, s1+1 )
+			name = string.sub( name, 1, s1-1 )
+		else
+			realm = GetRealmName()
+		end
+	end
+	return name, realm
+end
+
 local levelTab = {}
 function IAGetLevel( name, realm )
-	if realm == nil or realm == "" then
-		realm = GetRealmName()
-	end
+	name, realm = IAFixName( name, realm )
 	return levelTab[name .. "-" .. realm]
 end
 
-function IASetLevel( name, realm, level )
-	if realm == nil or realm == "" then
-		realm = GetRealmName()
-	end
+function IASetLevel( name, realm, level, from )
+	name, realm = IAFixName( name, realm )
 	if name and realm then
 		levelTab[name .. "-" .. realm] = level
 	end
@@ -168,15 +177,19 @@ function IAWhoScan()
 	local Name, Class, Level, Server, _
 	for i = 1, C_FriendList.GetNumWhoResults() do
 		local info = C_FriendList.GetWhoInfo( i )
-		IASetLevel( info.fullName, nil, info.level )
+		if info and info.fullName and info.level then
+			IASetLevel( info.fullName, nil, info.level, "IAWhoScan" )
+		end
 	end
 end
 
 function IAFriendScan()
 	local Name, Class, Level
 	for i = 1, C_FriendList.GetNumFriends() do
-		Name, Level, Class = C_FriendList.GetFriendInfo( i )
-		IASetLevel( Name, nil, Level )
+		local info = C_FriendList.GetFriendInfo( i )
+		if info and info.fullName and info.level then
+			IASetLevel( info.fullName, nil, info.level, "IAFriendScan" )
+		end
 	end
 end
 
@@ -184,7 +197,7 @@ function IAPartyScan()
 	local max = GetNumSubgroupMembers or GetNumPartyMembers
 	for i = 1, max() do
 		local name, realm = UnitName( "party" .. i )
-		IASetLevel( name, realm, UnitLevel( "party" .. i ) )
+		IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
 	end
 end
 
@@ -193,7 +206,7 @@ function IARaidScan()
 	for i = 1, max() do
 		local _, _, _, Level = GetRaidRosterInfo( i )
 		Name, Server = UnitName( "raid" .. i )
-		IASetLevel( Name, Server, Level )
+		IASetLevel( Name, Server, Level, "IARaidScan" )
 	end
 end
 
@@ -204,7 +217,7 @@ function IAGuildScan()
 		for i = 1, GetNumGuildMembers( true ) do
 			local Name, _, _, Level = GetGuildRosterInfo(i)
 			local name, realm = Name:match("([^%-]+)%-?(.*)")
-			IASetLevel( name, realm, Level )
+			IASetLevel( name, realm, Level, "IAGuildScan" )
 		end
 	end
 end
