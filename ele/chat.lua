@@ -147,7 +147,7 @@ function IAResetMsg( msg )
 end
 
 function IAFixName( name, realm )
-	if realm == nil or realm == "" then
+	if name and realm == nil or realm == "" then
 		local s1 = string.find( name, "-", 0, true )
 		if name and s1 then
 			realm = string.sub( name, s1+1 )
@@ -197,7 +197,9 @@ function IAPartyScan()
 	local max = GetNumSubgroupMembers or GetNumPartyMembers
 	for i = 1, max() do
 		local name, realm = UnitName( "party" .. i )
-		IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
+		if name then
+			IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
+		end
 	end
 end
 
@@ -206,7 +208,9 @@ function IARaidScan()
 	for i = 1, max() do
 		local _, _, _, Level = GetRaidRosterInfo( i )
 		Name, Server = UnitName( "raid" .. i )
-		IASetLevel( Name, Server, Level, "IARaidScan" )
+		if Name then
+			IASetLevel( Name, Server, Level, "IARaidScan" )
+		end
 	end
 end
 
@@ -217,7 +221,9 @@ function IAGuildScan()
 		for i = 1, GetNumGuildMembers( true ) do
 			local Name, _, _, Level = GetGuildRosterInfo(i)
 			local name, realm = Name:match("([^%-]+)%-?(.*)")
-			IASetLevel( name, realm, Level, "IAGuildScan" )
+			if name then
+				IASetLevel( name, realm, Level, "IAGuildScan" )
+			end
 		end
 	end
 end
