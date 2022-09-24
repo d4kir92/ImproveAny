@@ -76,9 +76,13 @@ function ImproveAny:InitMinimap()
 				btn:SetMovable( true )
 				btn:SetUserPlaced( false )
 
-				local radius = 76
-				IATAB[name .. "ofsx"] = IATAB[name .. "ofsx"] or radius
-				IATAB[name .. "ofsy"] = IATAB[name .. "ofsy"] or radius
+				local radius = 80
+				local pos = random( 0, 360 )
+				local ofsx = ( -80 * cos( pos ) )
+				local ofsy = ( 80 * sin( pos ) )
+				IATAB[name .. "ofsx"] = IATAB[name .. "ofsx"] or ofsx
+				IATAB[name .. "ofsy"] = IATAB[name .. "ofsy"] or ofsy
+
 				function btn:UpdatePos()
 					if btn.maiinit == nil then
 						btn.maiinit = true

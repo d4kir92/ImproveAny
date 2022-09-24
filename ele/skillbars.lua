@@ -14,7 +14,7 @@ local subTypes = {}
 
 if IABUILD ~= "RETAIL" then
 	IASkills = CreateFrame( "FRAME", "IASkills", UIParent )
-	IASkills:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 400, 0 )
+	IASkills:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 520, 0 )
 	IASkills:SetSize( sw, 6 * sh )
 	IASkills.bars = {}
 end
