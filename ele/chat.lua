@@ -310,7 +310,7 @@ function IAChatAddItemIcons( msg, c )
 					end
 
 					local level = IAGetLevel( name, realm )
-					if level then
+					if level and level > 0 then
 						msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]" )
 					end
 
