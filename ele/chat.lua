@@ -441,7 +441,9 @@ end
 
 function IAConvertMessage( self, event, msg, ... )
 	for i, p in pairs( patterns ) do
-		if string.find( msg, p ) then
+		local s1 = string.find( msg, "|" )
+		local s2 = string.find( msg, p )
+		if s1 == nil and s2 ~= nil then
 			msg = string.gsub( msg, p, ImproveAny:FormatURL( "%1" ) )
 		end
 	end
