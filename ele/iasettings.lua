@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny v|cff3FC7EB%s", "0.4.0" )
+	["title"] = format( "ImproveAny v|cff3FC7EB%s", "0.4.1" )
 }
 
 

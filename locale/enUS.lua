@@ -10,7 +10,7 @@ end
 
 function IALang_enUS()
 	local tab = {
-		["MMBTNLEFT"] = "Left Click => Locks/Unlocks + Options",
+		["MMBTNLEFT"] = "Left Click => Options",
 		["MMBTNRIGHT"] = "Right Click => Hide Minimap Button",
 
 		["GENERAL"] = "General",

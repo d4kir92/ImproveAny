@@ -2,7 +2,7 @@
 
 function IALang_deDE()
 	local tab = {
-		["MMBTNLEFT"] = "Linksklick => Sperren/Entsperren + Optionen",
+		["MMBTNLEFT"] = "Linksklick => Optionen",
 		["MMBTNRIGHT"] = "Rechtsklick => Minimapknopf verstecken",
 
 		["GENERAL"] = "Allgemein",
