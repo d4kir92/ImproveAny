@@ -15,7 +15,7 @@ function IACreateDropdown( opts )
 
     local dropdown = CreateFrame("Frame", dropdown_name, opts["parent"], "UIDropDownMenuTemplate")
     local dd_title = dropdown:CreateFontString("dropdown_name_title", "OVERLAY", "GameFontNormal")
-    dd_title:SetPoint("TOPLEFT", 20, 10)
+    dd_title:SetPoint( "TOPLEFT", 0, 12 )
 
     for _, item in pairs(menu_items) do -- Sets the dropdown width to the largest item string width.
         dd_title:SetText(item)

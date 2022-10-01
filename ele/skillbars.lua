@@ -197,16 +197,18 @@ function IAAddStatusBar( func, args )
 end
 
 function ImproveAny:InitSkillBars()
-	IAAddStatusBar( IAGetWeaponSkillData, 16 )
-	IAAddStatusBar( IAGetWeaponSkillData, 17 )
-	IAAddStatusBar( IAGetWeaponSkillData, 18 )
-	IAAddStatusBar( IAGetSkillData, string.lower( STAT_CATEGORY_DEFENSE ) )
+	if ImproveAny:IsEnabled( "SKILLBARS", true ) then
+		IAAddStatusBar( IAGetWeaponSkillData, 16 )
+		IAAddStatusBar( IAGetWeaponSkillData, 17 )
+		IAAddStatusBar( IAGetWeaponSkillData, 18 )
+		IAAddStatusBar( IAGetSkillData, string.lower( STAT_CATEGORY_DEFENSE ) )
 
-	IAAddStatusBar( IAGetSkillData, "job" )
-	IAAddStatusBar( IAGetSkillData, "job" )
-	IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_FIRST_AID ) )
-	IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_COOKING ) )
-	IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_FISHING ) )
+		IAAddStatusBar( IAGetSkillData, "job" )
+		IAAddStatusBar( IAGetSkillData, "job" )
+		IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_FIRST_AID ) )
+		IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_COOKING ) )
+		IAAddStatusBar( IAGetSkillData, string.lower( PROFESSIONS_FISHING ) )
 
-	IASkillsThink()
+		IASkillsThink()
+	end
 end

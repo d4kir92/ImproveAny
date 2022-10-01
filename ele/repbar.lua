@@ -7,9 +7,6 @@ local textw = "|r" -- "WHITE"
 C_Timer.After( 0.01, function()
 
 	if ReputationWatchBar and ReputationWatchBar.StatusBar then
-		ReputationWatchBar:SetHeight( 15 )
-		ReputationWatchBar.StatusBar:SetHeight( 15 )
-
 		ReputationWatchBar.show = true
 		ReputationWatchBar:HookScript( "OnEnter", function( self )
 			ReputationWatchBar.show = false
@@ -20,16 +17,21 @@ C_Timer.After( 0.01, function()
 			ReputationWatchBar.OverlayFrame.Text:Show()
 		end )
 		
-		for i = 0, 3 do
-			local art = ReputationWatchBar.StatusBar["WatchBarTexture" .. i]
-			local art2 = ReputationWatchBar.StatusBar["XPBarTexture" .. i]
-			if art then
-				art.Show = art.Hide
-				art:Hide()
-			end
-			if art2 then
-				art2.Show = art.Hide
-				art2:Hide()
+		if ImproveAny:IsEnabled( "REPHIDEARTWORK", false ) then
+			ReputationWatchBar:SetHeight( 15 )
+			ReputationWatchBar.StatusBar:SetHeight( 15 )
+			
+			for i = 0, 3 do
+				local art = ReputationWatchBar.StatusBar["WatchBarTexture" .. i]
+				local art2 = ReputationWatchBar.StatusBar["XPBarTexture" .. i]
+				if art then
+					art.Show = art.Hide
+					art:Hide()
+				end
+				if art2 then
+					art2.Show = art.Hide
+					art2:Hide()
+				end
 			end
 		end
 	end
@@ -103,8 +105,20 @@ C_Timer.After( 0.01, function()
 				local per = (value - minBar) / (maxBar-minBar)
 				local percent = per * 100
 				if maxBar-minBar > 0 then
-					text = name .. ": " .. textc .. IAFormatValue((value - minBar), 0) .. textw .. "/" .. textc .. IAFormatValue((maxBar-minBar), 0) .. " " .. textw .. "(" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
-					self:SetText(text)
+					if ImproveAny:IsEnabled( "REPNUMBER", true ) then
+						if text ~= "" then
+							text = text .. " "
+						end
+						text = text .. textc .. (value - minBar) .. textw .. "/" .. textc .. (maxBar-minBar)
+					end
+					if ImproveAny:IsEnabled( "REPPERCENT", true ) then
+						if text ~= "" then
+							text = text .. textw .. " (" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
+						else
+							text = text .. textc .. format("%.2f", percent) .. "%"
+						end
+					end
+					self:SetText(name .. ": " .. text)
 					if ReputationWatchBar.show then
 						self:Show()
 					end
@@ -113,6 +127,6 @@ C_Timer.After( 0.01, function()
 
 			self.iasettext = false
 		end )
-		ReputationWatchBar.OverlayFrame.Text:SetText( "LOADING" )
+		ReputationWatchBar.OverlayFrame.Text:SetText( ReputationWatchBar.OverlayFrame.Text:GetText() or "" )
 	end
 end )

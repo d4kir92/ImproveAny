@@ -53,18 +53,20 @@ IATokenBar:SetSize( 180, 20 )
 IATokenBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 130 )
 
 function ImproveAny:InitTokenBar()
-	IATokenBar.text = IATokenBar:CreateFontString( nil, "ARTWORK" )
-	IATokenBar.text:SetFont( STANDARD_TEXT_FONT, 12, "THINOUTLINE" )
-	IATokenBar.text:SetPoint( "CENTER", IATokenBar, "CENTER", 0, 0 )
+	if ImproveAny:IsEnabled( "TOKENBAR", true ) then
+		IATokenBar.text = IATokenBar:CreateFontString( nil, "ARTWORK" )
+		IATokenBar.text:SetFont( STANDARD_TEXT_FONT, 12, "THINOUTLINE" )
+		IATokenBar.text:SetPoint( "CENTER", IATokenBar, "CENTER", 0, 0 )
 
-	IATokenBar:RegisterEvent( "CURRENCY_DISPLAY_UPDATE" )
-	IATokenBar:SetScript("OnEvent", function(self, ...)
-		GetTokenList()
-	end)
-	if TokenFrame_Update then
-		hooksecurefunc( "TokenFrame_Update", function()
+		IATokenBar:RegisterEvent( "CURRENCY_DISPLAY_UPDATE" )
+		IATokenBar:SetScript("OnEvent", function(self, ...)
 			GetTokenList()
-		end )
+		end)
+		if TokenFrame_Update then
+			hooksecurefunc( "TokenFrame_Update", function()
+				GetTokenList()
+			end )
+		end
+		GetTokenList()
 	end
-	GetTokenList()
 end

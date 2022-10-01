@@ -6,12 +6,13 @@ SlashCmdList["RL"] = function(msg)
 	C_UI.Reload()
 end
 
+IABUILDNR = select(4, GetBuildInfo())
 IABUILD = "CLASSIC"
-if select(4, GetBuildInfo()) > 90000 then
+if IABUILDNR > 90000 then
 	IABUILD = "RETAIL"
-elseif select(4, GetBuildInfo()) > 29999 then
+elseif IABUILDNR > 29999 then
 	IABUILD = "WRATH"
-elseif select(4, GetBuildInfo()) > 19999 then
+elseif IABUILDNR > 19999 then
 	IABUILD = "TBC"
 end
 
@@ -36,6 +37,18 @@ end
 
 
 
+SLASH_RL1 = "/rl"
+SlashCmdList["RL"] = function(msg)
+	C_UI.Reload()
+end
+
+SLASH_IMAN1, SLASH_IMAN2 = "/iman", "/improveany"
+SlashCmdList["IMAN"] = function(msg)
+	ImproveAny:ToggleSettings()
+end
+
+
+
 IAHIDDEN = CreateFrame( "FRAME", "IAHIDDEN" )
 IAHIDDEN:Hide()
 
@@ -49,19 +62,31 @@ function ImproveAny:Event( event, ... )
 
 		ImproveAny:InitDB()
 
-		ImproveAny:InitCastBar()
-		ImproveAny:InitDurabilityFrame()
+		if ImproveAny:IsEnabled( "CASTBAR", true ) then
+			ImproveAny:InitCastBar()
+		end
+		if ImproveAny:IsEnabled( "DURABILITY", true ) then
+			ImproveAny:InitDurabilityFrame()
+		end
 		ImproveAny:InitItemLevel()
 		ImproveAny:InitMinimap()
 		ImproveAny:InitMoneyBar()
 		ImproveAny:InitTokenBar()
 		ImproveAny:InitSkillBars()
-		ImproveAny:InitBags()
-		ImproveAny:InitWorldMapFrame()
-
+		if ImproveAny:IsEnabled( "BAGS", true ) then
+			ImproveAny:InitBags()
+		end
+		if ImproveAny:IsEnabled( "WORLDMAP", true ) then
+			ImproveAny:InitWorldMapFrame()
+		end
+		ImproveAny:InitXPBar()
+		
 		ImproveAny:InitIASettings()
 
-		IAUpdateChatChannels()
+		if ImproveAny:IsEnabled( "CHAT", true ) then
+			ImproveAny:InitChat()
+			IAUpdateChatChannels()
+		end
 
 		C_Timer.After( 1, function()
 			for i = 2.6, 4.1, 0.1 do
@@ -69,6 +94,41 @@ function ImproveAny:Event( event, ... )
 			end
 			ConsoleExec( "WorldTextScale " .. 1.2 )
 		end )
+
+		function ImproveAny:UpdateMinimapButton()
+			if IAMMBTN then
+				if ImproveAny:IsEnabled( "SHOWMINIMAPBUTTON", true ) then
+					IAMMBTN:Show("ImproveAnyMinimapIcon")
+				else
+					IAMMBTN:Hide("ImproveAnyMinimapIcon")
+				end
+			end
+		end
+
+		function ImproveAny:ToggleMinimapButton()
+			ImproveAny:SetEnabled( "SHOWMINIMAPBUTTON", not ImproveAny:IsEnabled( "SHOWMINIMAPBUTTON", true ) )
+			if IAMMBTN then
+				if ImproveAny:IsEnabled( "SHOWMINIMAPBUTTON", true ) then
+					IAMMBTN:Show("ImproveAnyMinimapIcon")
+				else
+					IAMMBTN:Hide("ImproveAnyMinimapIcon")
+				end
+			end
+		end
+		
+		function ImproveAny:HideMinimapButton()
+			ImproveAny:SetEnabled( "SHOWMINIMAPBUTTON", false )
+			if IAMMBTN then
+				IAMMBTN:Hide("ImproveAnyMinimapIcon")
+			end
+		end
+		
+		function ImproveAny:ShowMinimapButton()
+			ImproveAny:SetEnabled( "SHOWMINIMAPBUTTON", true )
+			if IAMMBTN then
+				IAMMBTN:Show("ImproveAnyMinimapIcon")
+			end
+		end
 
 		local ImproveAnyMinimapIcon = LibStub("LibDataBroker-1.1"):NewDataObject("ImproveAnyMinimapIcon", {
 			type = "data source",
@@ -78,20 +138,28 @@ function ImproveAny:Event( event, ... )
 				if btn == "LeftButton" then
 					ImproveAny:ToggleSettings()
 				elseif btn == "RightButton" then
-					--ToggleMinimapButton()
+					ImproveAny:HideMinimapButton()
 				end
 			end,
 			OnTooltipShow = function(tooltip)
 				if not tooltip or not tooltip.AddLine then return end
 				tooltip:AddLine( "ImproveAny")
-				tooltip:AddLine( "LeftClick = Options" )
-				--tooltip:AddLine( "RightClick = Options" )
+				tooltip:AddLine( IAGT( "MMBTNLEFT" ) )
+				tooltip:AddLine( IAGT( "MMBTNRIGHT" ) )
 			end,
 		})
 		if ImproveAnyMinimapIcon then
-			icon = LibStub("LibDBIcon-1.0", true)
-			if icon then
-				icon:Register( "ImproveAnyMinimapIcon", ImproveAnyMinimapIcon, IAGV( "MMICON", {} ) )
+			IAMMBTN = LibStub("LibDBIcon-1.0", true)
+			if IAMMBTN then
+				IAMMBTN:Register( "ImproveAnyMinimapIcon", ImproveAnyMinimapIcon, ImproveAny:GetMinimapTable() )
+			end
+		end
+
+		if IAMMBTN then
+			if ImproveAny:IsEnabled( "SHOWMINIMAPBUTTON", true ) then
+				IAMMBTN:Show("ImproveAnyMinimapIcon")
+			else
+				IAMMBTN:Hide("ImproveAnyMinimapIcon")
 			end
 		end
 	end
@@ -106,7 +174,7 @@ f.incombat = false
 
 local ts = 0
 function FastLooting()
-    if GetTime() - ts >= 0.2 then
+    if GetTime() - ts >= 0.2 and ImproveAny:IsEnabled( "FASTLOOTING", true ) then
         ts = GetTime()
         if GetCVarBool( "autoLootDefault" ) ~= IsModifiedClick( "AUTOLOOTTOGGLE" ) then
             for i = GetNumLootItems(), 1, -1 do

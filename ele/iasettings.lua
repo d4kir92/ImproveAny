@@ -1,6 +1,12 @@
 
 local AddOnName, ImproveAny = ...
 
+local config = {
+	["title"] = format( "ImproveAny v|cff3FC7EB%s", "0.4.0" )
+}
+
+
+
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
 IAOldFonts = IAOldFonts or {}
 
@@ -70,27 +76,100 @@ function IAFonts()
 	end
 end
 
-local function AddCheckBox( x, y, key, lstr )
-	local cb = CreateFrame( "CheckButton", key .. "_CB", IASettings, "UICheckButtonTemplate" ) --CreateFrame("CheckButton", "moversettingsmove", mover, "UICheckButtonTemplate")
-	cb:SetSize( 24, 24 )
-	cb:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", x, y )
-	cb:SetChecked( ImproveAny:IsEnabled( key, true ) )
-	cb:SetScript( "OnClick", function( self )
-		ImproveAny:SetEnabled( key, self:GetChecked() )
+local searchStr = ""
+local posy = -4
+local cas = {}
+local cbs = {}
+local dds = {}
 
-		if IASettings.save then
-			IASettings.save:Enable()
+local function IASetPos( ele, key )
+	ele:ClearAllPoints()
+	if strfind( strlower( key ), strlower( searchStr ) ) then
+		ele:Show()
+
+		if posy < -4 then
+			posy = posy - 10
 		end
-	end)
+		ele:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", 6, posy )
+		posy = posy - 24
+	else
+		ele:Hide()
+	end
+end
 
-	cb.f = cb:CreateFontString( nil, nil, "GameFontNormal" )
-	cb.f:SetPoint( "LEFT", cb, "RIGHT", 0, 0 )
-	cb.f:SetText( lstr )
+local function AddCategory( key )
+	if cas[key] == nil then
+		cas[key] = CreateFrame( "Frame", key .. "_Category", IASettings.SC )
+		local ca = cas[key]
+		ca:SetSize( 24, 24 )
+
+		ca.f = ca:CreateFontString( nil, nil, "GameFontNormal" )
+		ca.f:SetPoint( "LEFT", ca, "LEFT", 0, 0 )
+		ca.f:SetText( IAGT( key ) )
+	end
+
+	IASetPos( cas[key], key )
+end
+
+local function AddCheckBox( x, key, val, func )
+	if val == nil then
+		val = true
+	end
+	if cbs[key] == nil then
+		cbs[key] = CreateFrame( "CheckButton", key .. "_CB", IASettings.SC, "UICheckButtonTemplate" ) --CreateFrame( "CheckButton", "moversettingsmove", mover, "UICheckButtonTemplate" )
+		local cb = cbs[key]
+		cb:SetSize( 24, 24 )
+		cb:SetChecked( ImproveAny:IsEnabled( key, val ) )
+		cb:SetScript( "OnClick", function( self )
+			ImproveAny:SetEnabled( key, self:GetChecked() )
+
+			if func then
+				func()
+			end
+
+			if IASettings.save then
+				IASettings.save:Enable()
+			end
+		end)
+
+		cb.f = cb:CreateFontString( nil, nil, "GameFontNormal" )
+		cb.f:SetPoint( "LEFT", cb, "RIGHT", 0, 0 )
+		cb.f:SetText( IAGT( key ) )
+	end
+
+	cbs[key]:ClearAllPoints()
+	if strfind( strlower( key ), strlower( searchStr ) ) or strfind( strlower( IAGT( key ) ), strlower( searchStr ) ) then
+		cbs[key]:Show()
+
+		cbs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
+		posy = posy - 24
+	else
+		cbs[key]:Hide()
+	end
+end
+
+function ImproveAny:UpdateILVLIcons()
+	PDThink.UpdateItemInfos()
+	if IFThink and IFThink.UpdateItemInfos then
+		IFThink.UpdateItemInfos()
+	end
+	if ContainerFrame_UpdateAll then
+		ContainerFrame_UpdateAll()
+	end
+end
+
+function ImproveAny:ToggleSettings()
+	ImproveAny:SetEnabled( "SETTINGS", not ImproveAny:IsEnabled( "SETTINGS", false ) )
+	if ImproveAny:IsEnabled( "SETTINGS", false ) then
+		IASettings:Show()
+	else
+		IASettings:Hide()
+	end
 end
 
 function ImproveAny:InitIASettings()
-	IASettings = CreateFrame( "FRAME", "IASettings", UIParent )
-	IASettings:SetSize( 420, 250 )
+	IASettings = CreateFrame( "Frame", "IASettings", UIParent, "BasicFrameTemplate" )
+	IASettings:SetSize( 420, 420 )
 	IASettings:SetPoint( "CENTER", UIParent, "CENTER", 0, 0 )
 
 	IASettings:SetFrameStrata( "HIGH" )
@@ -107,55 +186,136 @@ function ImproveAny:InitIASettings()
 		local p1, p2, p3, p4, p5 = IASettings:GetPoint()
 		ImproveAny:SetElePoint( "IASettings", p1, _, p3, p4, p5 )
 	end )
+	if ImproveAny:IsEnabled( "SETTINGS", false ) then
+		IASettings:Show()
+	else
+		IASettings:Hide()
+	end
 
-	IASettings.bg = IASettings:CreateTexture( "IASettings.bg", "BACKGROUND", nil, 7 )
-	IASettings.bg:SetAllPoints( IASettings )
-	IASettings.bg:SetColorTexture( 0.03, 0.03, 0.03, 1 )
+	IASettings.TitleText:SetText( config.title )
 
-	IASettings.f = IASettings:CreateFontString( nil, nil, "GameFontNormal" )
-	IASettings.f:SetPoint( "TOP", IASettings, "TOP", 0, -6 )
-	IASettings.f:SetText( "ImproveAny" )
-
-	local sh = 24
-	local py = -sh
-	local fontNames = {
-		["name"] = "fontNames",
-		["parent"]= IASettings,
-		["title"] = "Ui Font",
-		["items"]= { "Default", "Prototype" },
-		["defaultVal"] = IAGV( "fontName", "Default" ), 
-		["changeFunc"] = function( dropdown_frame, dropdown_val )
-			IASV( "fontName", dropdown_val )
-			IAFonts()
-		end
-	}
-	local ddfontNames = IACreateDropdown( fontNames )
-	ddfontNames:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 0, -36 )
-	--py = py - sh
-
-	IASettings.close = CreateFrame( "BUTTON", "IASettings" .. ".opt.close", IASettings, "UIPanelButtonTemplate" )
-	IASettings.close:SetSize( 120, 24 )
-	IASettings.close:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 10, -IASettings:GetHeight() + 24 + 10 )
-	IASettings.close:SetText( CLOSE )
-	IASettings.close:SetScript("OnClick", function()
+	IASettings.CloseButton:SetScript( "OnClick", function()
 		ImproveAny:ToggleSettings()
+	end )
+
+	function IAUpdateElementList()
+		local _, class = UnitClass( "PLAYER" )
+		
+		local sh = 24
+		posy = -4
+
+		if dds["FONT"] == nil then
+			local fontNames = {
+				["name"] = "fontNames",
+				["parent"]= IASettings.SC,
+				["title"] = "Ui Font",
+				["items"]= { "Default", "Prototype" },
+				["defaultVal"] = IAGV( "fontName", "Default" ), 
+				["changeFunc"] = function( dropdown_frame, dropdown_val )
+					IASV( "fontName", dropdown_val )
+					IAFonts()
+				end
+			}
+			dds["FONT"] = IACreateDropdown( fontNames, posy )
+		end
+		
+		AddCategory( "GENERAL" )
+		AddCheckBox( 4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton )
+		IASetPos( dds["FONT"], "FONT" )
+
+		AddCategory( "QUICKGAMEPLAY" )
+		AddCheckBox( 4, "FASTLOOTING", true )
+
+		AddCategory( "CHAT" )
+		AddCheckBox( 4, "CHAT", true )
+		AddCheckBox( 24, "SHORTCHANNELS", true )
+		AddCheckBox( 24, "ITEMICONS", true )
+		AddCheckBox( 24, "CLASSICONS", true )
+		AddCheckBox( 24, "RACEICONS", false )
+		AddCheckBox( 24, "CHATLEVELS", true )
+
+		AddCategory( "MINIMAP" )
+		AddCheckBox( 4, "MINIMAP", true )
+		AddCheckBox( 24, "MINIMAPHIDEBORDER", true )
+		AddCheckBox( 24, "MINIMAPHIDEZOOMBUTTONS", true )
+		AddCheckBox( 24, "MINIMAPSCROLLZOOM", true )
+		AddCheckBox( 24, "MINIMAPSHAPESQUARE", true )
+
+		AddCategory( "ITEMLEVEL" )
+		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )
+		AddCheckBox( 4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons )
+
+		AddCategory( "XPBAR" )
+		AddCheckBox( 4, "XPBAR", true )
+		AddCheckBox( 24, "XPLEVEL", false )
+		AddCheckBox( 24, "XPNUMBER", true )
+		AddCheckBox( 24, "XPPERCENT", true )
+		AddCheckBox( 24, "XPMISSING", true )
+		AddCheckBox( 24, "XPEXHAUSTION", true )
+		AddCheckBox( 24, "XPXPPERHOUR", true )
+		AddCheckBox( 24, "XPHIDEARTWORK", true )
+
+		AddCategory( "REPBAR" )
+		AddCheckBox( 4, "REPBAR", true )
+		AddCheckBox( 24, "REPNUMBER", true )
+		AddCheckBox( 24, "REPPERCENT", true )
+		AddCheckBox( 24, "REPHIDEARTWORK", true )
+
+		AddCategory( "EXTRAS" )
+		AddCheckBox( 4, "MONEYBAR", true )
+		AddCheckBox( 4, "TOKENBAR", true )
+		AddCheckBox( 4, "SKILLBARS", true )
+		AddCheckBox( 4, "CASTBAR", true )
+		AddCheckBox( 4, "DURABILITY", true )
+		AddCheckBox( 4, "BAGS", true )
+		AddCheckBox( 4, "WORLDMAP", true )
+	end
+
+	IASettings.Search = CreateFrame( "EditBox", "IASettings_Search", IASettings, "InputBoxTemplate" )
+	IASettings.Search:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 12, -26 )
+	IASettings.Search:SetSize( 400, 24 )
+	IASettings.Search:SetAutoFocus( false )
+	IASettings.Search:SetScript( "OnTextChanged", function( self, ... )
+		searchStr = IASettings.Search:GetText()
+		IAUpdateElementList()
+	end )
+
+	IASettings.SF = CreateFrame( "ScrollFrame", "IASettings_SF", IASettings, "UIPanelScrollFrameTemplate" )
+	IASettings.SF:SetPoint( "TOPLEFT", IASettings, 8, -30 - 24 )
+	IASettings.SF:SetPoint( "BOTTOMRIGHT", IASettings, -32, 24 + 8 )
+
+	IASettings.SC = CreateFrame( "Frame", "IASettings_SC", IASettings.SF )
+	IASettings.SC:SetSize( 400, 400 )
+	IASettings.SC:SetPoint( "TOPLEFT", IASettings.SF, "TOPLEFT", 0, 0 )
+
+	IASettings.SF:SetScrollChild( IASettings.SC )
+
+	IASettings.SF.bg = IASettings.SF:CreateTexture( "IASettings.SF.bg", "ARTWORK" )
+	IASettings.SF.bg:SetAllPoints( IASettings.SF )
+	IASettings.SF.bg:SetColorTexture( 0.03, 0.03, 0.03, 0.5 )
+
+	IASettings.save = CreateFrame( "BUTTON", "IASettings" .. ".save", IASettings, "UIPanelButtonTemplate" )
+	IASettings.save:SetSize( 120, 24 )
+	IASettings.save:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 4, -IASettings:GetHeight() + 24 + 4 )
+	IASettings.save:SetText( SAVE )
+	IASettings.save:SetScript("OnClick", function()
+		C_UI.Reload()
 	end)
+	IASettings.save:Disable()
+
+	IASettings.reload = CreateFrame( "BUTTON", "IASettings" .. ".reload", IASettings, "UIPanelButtonTemplate" )
+	IASettings.reload:SetSize( 120, 24 )
+	IASettings.reload:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 4 + 120 + 4, -IASettings:GetHeight() + 24 + 4 )
+	IASettings.reload:SetText( RELOADUI )
+	IASettings.reload:SetScript("OnClick", function()
+		C_UI.Reload()
+	end)
+
+
 
 	local dbp1, dbp2, dbp3, dbp4, dbp5 = ImproveAny:GetElePoint( "IASettings" )
 	if dbp1 and dbp3 then
 		IASettings:ClearAllPoints()
 		IASettings:SetPoint( dbp1, UIParent, dbp3, dbp4, dbp5 )
-	end
-
-	IASettings:Hide()
-
-	IAFonts()
-end
-
-function ImproveAny:ToggleSettings()
-	if IASettings:IsVisible() then
-		IASettings:Hide()
-	else
-		IASettings:Show()
 	end
 end

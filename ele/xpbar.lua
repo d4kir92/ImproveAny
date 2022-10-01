@@ -48,7 +48,9 @@ function IAXPPerHourLoop()
 		gainedxp = curxp - lastxp
 	elseif curxp < lastxp then
 		-- Gained Xp + Levelup
-		gainedxp = lastxpmax - lastxp + curxp
+		--gainedxp = lastxpmax - lastxp + curxp
+		ts = 0
+		totalxp = 0
 	end
 	if gainedxp > 0 then
 		totalxp = totalxp + gainedxp
@@ -90,111 +92,162 @@ function IAXPPerHourLoop()
 
 	C_Timer.After( 0.2, IAXPPerHourLoop )
 end
-C_Timer.After( 1, function()
-	lastxp = UnitXP( "PLAYER" )
-	lastxpmax = UnitXPMax( "PLAYER" )
 
-	IAXPPerHourLoop()
-end )
+function ImproveAny:InitXPBar()
+	C_Timer.After( 1, function()
+		lastxp = UnitXP( "PLAYER" )
+		lastxpmax = UnitXPMax( "PLAYER" )
 
-C_Timer.After( 0.01, function()
-	if IABUILD == "TBC" then
-		maxlevel = 70
-	end
-	if IABUILD == "WRATH" then
-		maxlevel = 80
-	end
-	if GetMaxLevelForPlayerExpansion then
-		maxlevel = GetMaxLevelForPlayerExpansion()
-	end
+		IAXPPerHourLoop()
+	end )
 
-	if MainMenuExpBar then
-		MainMenuExpBar:SetHeight( 15 )
-
-		MainMenuExpBar.show = true
-		MainMenuExpBar:HookScript( "OnEnter", function( self )
-			MainMenuExpBar.show = false
-			MainMenuBarExpText:Hide()
-		end )
-		MainMenuExpBar:HookScript( "OnLeave", function( self )
-			MainMenuExpBar.show = true
-			MainMenuBarExpText:Show()
-		end )
-	end
-
-	for i = 0, 3 do
-		local art = _G["MainMenuXPBarTexture" .. i]
-		if art then
-			art:Hide()
+	C_Timer.After( 0.01, function()
+		if IABUILD == "TBC" then
+			maxlevel = 70
 		end
-	end
+		if IABUILD == "WRATH" then
+			maxlevel = 80
+		end
+		if GetMaxLevelForPlayerExpansion then
+			maxlevel = GetMaxLevelForPlayerExpansion()
+		end
 
-	if MainMenuExpBar then
-		local sw, sh = MainMenuExpBar:GetSize()
-		MainMenuExpBar.xph = MainMenuExpBar:CreateTexture( nil, "ARTWORK" )
-		MainMenuExpBar.xph:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-		MainMenuExpBar.xph:SetVertexColor( 1, 1, 0.5, 0.5 )
-		MainMenuExpBar.xph:SetDrawLayer( "ARTWORK", 1 )
-		MainMenuExpBar.xph:SetSize( 1, sh )
-	end
+		if MainMenuExpBar then
+			MainMenuExpBar:SetHeight( 15 )
 
-	if MainMenuExpBar and MainMenuBarExpText then
-		local fontName, fontSize, fontFlags = MainMenuBarExpText:GetFont()	
-		MainMenuBarExpText:SetFont( fontName, 12, fontFlags )
-		MainMenuBarExpText:SetPoint( "CENTER", MainMenuExpBar, "CENTER", 0, 1 )
-		hooksecurefunc( MainMenuBarExpText, "SetText", function( self, text )
-			if self.iasettext then return end
-			self.iasettext = true
+			MainMenuExpBar.show = true
+			MainMenuExpBar:HookScript( "OnEnter", function( self )
+				MainMenuExpBar.show = false
+				MainMenuBarExpText:Hide()
+			end )
+			MainMenuExpBar:HookScript( "OnLeave", function( self )
+				MainMenuExpBar.show = true
+				MainMenuBarExpText:Show()
+			end )
+		end
 
-			local currXP = UnitXP("PLAYER")
-			local maxBar = UnitXPMax("PLAYER")
-		
-			if maxBar == 0 then
-				self.iasettext = false
-				return
-			end
-
-			if (GameLimitedMode_IsActive()) then
-				local rLevel = GetRestrictedAccountData()
-				if (UnitLevel("player") >= rLevel) then
-					currXP = UnitTrialXP("player")
+		if ImproveAny:IsEnabled( "XPHIDEARTWORK", false ) then
+			for i = 0, 3 do
+				local art = _G["MainMenuXPBarTexture" .. i]
+				if art then
+					art:Hide()
 				end
 			end
-			local xps = IAGetXPPerSec()
-			local xph = IAGetXPPerHour()
-			local per = currXP / maxBar
-			local percent = per * 100
-			local missingXp = (maxBar - currXP)
-			local percent2 = missingXp / maxBar * 100
-			local xplu = 0
-			if xps > 0 then
-				xplu = missingXp / xps -- XP to  level up
-			end
+		end
 
-			local text = LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. maxlevel .. textw
+		if MainMenuExpBar then
+			local sw, sh = MainMenuExpBar:GetSize()
+			MainMenuExpBar.xph = MainMenuExpBar:CreateTexture( nil, "ARTWORK" )
+			MainMenuExpBar.xph:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			MainMenuExpBar.xph:SetVertexColor( 1, 1, 0.5, 0.5 )
+			MainMenuExpBar.xph:SetDrawLayer( "ARTWORK", 1 )
+			MainMenuExpBar.xph:SetSize( 1, sh )
+		end
 
-			text = text .. "    " .. XP .. ": " .. textc .. IAFormatValue(currXP) .. textw .. "/" .. textc .. IAFormatValue(maxBar) .. " " .. textw .. "(" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
+		if MainMenuExpBar and MainMenuBarExpText then
+			local fontName, fontSize, fontFlags = MainMenuBarExpText:GetFont()	
+			MainMenuBarExpText:SetFont( fontName, 12, fontFlags )
+			MainMenuBarExpText:SetPoint( "CENTER", MainMenuExpBar, "CENTER", 0, 1 )
+			hooksecurefunc( MainMenuBarExpText, "SetText", function( self, text )
+				if self.iasettext then return end
+				self.iasettext = true
 
-			text = text .. "    " .. ADDON_MISSING .. ": " .. textc .. IAFormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
-			text = text .. " " .. textc .. string.format( SecondsToTime( xplu ) ) .. textw
+				local currXP = UnitXP("PLAYER")
+				local maxBar = UnitXPMax("PLAYER")
 			
-			if GetXPExhaustion() and GetXPExhaustion() >= 0 then
-				local eper = GetXPExhaustion() / maxBar
-				local epercent = eper * 100
-				text = text .. "    " .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. IAFormatValue( GetXPExhaustion() ) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
-			end
+				if maxBar == 0 then
+					self.iasettext = false
+					return
+				end
 
-			if xph > 0 then
-				text = text .. "    " .. textc .. IAFormatValue( xph, xph <= 5000 and 1 or 0 ) .. textw .. " " .. textw .. XP .. "/" .. HOUR
-			end
+				if (GameLimitedMode_IsActive()) then
+					local rLevel = GetRestrictedAccountData()
+					if (UnitLevel("player") >= rLevel) then
+						currXP = UnitTrialXP("player")
+					end
+				end
+				local xps = IAGetXPPerSec()
+				local xph = IAGetXPPerHour()
+				local per = currXP / maxBar
+				local percent = per * 100
+				local missingXp = (maxBar - currXP)
+				local percent2 = missingXp / maxBar * 100
+				local xplu = 0
+				if xps > 0 then
+					xplu = missingXp / xps -- XP to  level up
+				end
 
-			self:SetText(text)
-			if MainMenuExpBar.show then
-				self:Show()
-			end
+				local text = ""
+				if ImproveAny:IsEnabled( "XPLEVEL", false ) then
+					if text ~= "" then
+						text = text .. "    "
+					end
+					text = text .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. maxlevel .. textw
+				end
 
-			self.iasettext = false
-		end )
-		MainMenuBarExpText:SetText( "LOADING" )
-	end
-end )
+				if ImproveAny:IsEnabled( "XPNUMBER", true ) then
+					if text ~= "" then
+						text = text .. "    "
+					end
+					text = text .. XP .. ": " .. textc .. IAFormatValue(currXP) .. textw .. "/" .. textc .. IAFormatValue(maxBar)
+				end
+				if ImproveAny:IsEnabled( "XPPERCENT", true ) then
+					if ImproveAny:IsEnabled( "XPNUMBER", true ) then
+						if text ~= "" then
+							text = text .. textw .. " ("
+						end
+					else
+						if text ~= "" then
+							text = text .. "    "
+						end
+					end
+					text = text .. textc .. format("%.2f", percent) .. textw .. "%"
+					if ImproveAny:IsEnabled( "XPNUMBER", true ) then
+						if text ~= "" then
+							text = text .. textw .. ")"
+						end
+					end
+				end
+
+				if ImproveAny:IsEnabled( "XPEXHAUSTION", true ) then
+					if GetXPExhaustion() and GetXPExhaustion() >= 0 then
+						local eper = GetXPExhaustion() / maxBar
+						local epercent = eper * 100
+						if text ~= "" then
+							text = text .. "    "
+						end
+						text = text .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. IAFormatValue( GetXPExhaustion() ) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
+					end
+				end
+
+				if ImproveAny:IsEnabled( "XPMISSING", true ) then
+					if text ~= "" then
+						text = text .. "    "
+					end
+					text = text .. ADDON_MISSING .. ": " .. textc .. IAFormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
+				end
+
+				if ImproveAny:IsEnabled( "XPXPPERHOUR", true ) then
+					if text ~= "" then
+						text = text .. " "
+					end
+					text = text .. textc .. string.format( SecondsToTime( xplu ) ) .. textw
+				end
+
+				if ImproveAny:IsEnabled( "XPXPPERHOUR", true ) then
+					if xph > 0 then
+						text = text .. "    " .. textc .. IAFormatValue( xph, xph <= 5000 and 1 or 0 ) .. textw .. " " .. textw .. XP .. "/" .. HOUR
+					end
+				end
+
+				self:SetText(text)
+				if MainMenuExpBar.show then
+					self:Show()
+				end
+
+				self.iasettext = false
+			end )
+			MainMenuBarExpText:SetText( "LOADING" )
+		end
+	end )
+end

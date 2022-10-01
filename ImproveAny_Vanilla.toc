@@ -1,5 +1,5 @@
 ## Interface: 11403
-## Version: 0.3.9
+## Version: 0.4.0
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -15,6 +15,10 @@ libs\LibDBIcon-1.0\LibDBIcon-1.0\lib.xml
 libs/math.lua
 libs/dropdown.lua
 libs/db.lua
+
+locale/enUS.lua
+locale/deDE.lua
+libs/lang.lua
 
 ele/bags.lua
 ele/castbar.lua

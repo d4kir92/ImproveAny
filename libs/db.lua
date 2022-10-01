@@ -55,6 +55,27 @@ function ImproveAny:GetTab()
 	return IATAB["PROFILES"][ImproveAny:GetCP()]
 end
 
+function ImproveAny:SetEnabled( element, value )
+	ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
+	ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+end
+
+function ImproveAny:IsEnabled( element, value )
+	if element == nil then
+		ImproveAny:MSG_Error( "[IsEnabled] Missing Name" )
+		return false
+	end
+	if value == nil then
+		ImproveAny:MSG_Error( "[IsEnabled] Missing Value" )
+		return false
+	end
+	ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
+	if ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] == nil then
+		ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+	end
+	return ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"]
+end
+
 function ImproveAny:GetElePoint( key )
 	ImproveAny:GetTab()["ELES"]["POINTS"][key] = ImproveAny:GetTab()["ELES"]["POINTS"][key] or {}
 
@@ -93,4 +114,12 @@ function IAGV( name, value )
 		IASV( name, value )
 	end
 	return IATAB["VALUES"][name] or value
+end
+
+function ImproveAny:GetMinimapTable()
+	IATAB["PROFILES"] = IATAB["PROFILES"] or {}
+	
+	ImproveAny:GetTab()["MMICON"] = ImproveAny:GetTab()["MMICON"] or {}
+
+	return ImproveAny:GetTab()["MMICON"]
 end

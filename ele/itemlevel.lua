@@ -87,7 +87,7 @@ function IAAddIlvl(SLOT, i)
 				end
 			end
 
-			C_Timer.After( 0.05, SLOT.info.UpdateVisible )
+			C_Timer.After( 0.04, SLOT.info.UpdateVisible )
 		end
 		SLOT.info:UpdateVisible()
 	end
@@ -96,10 +96,6 @@ end
 function ImproveAny:InitItemLevel()
 	if PaperDollFrame then
 		PDThink = CreateFrame("FRAME")
-
-		if IATAB["showilvl"] == nil then
-			IATAB["showilvl"] = true
-		end
 
 		PaperDollFrame.ilvl = PaperDollFrame:CreateFontString(nil, "ARTWORK")
 		PaperDollFrame.ilvl:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
@@ -159,13 +155,19 @@ function ImproveAny:InitItemLevel()
 								count = count + 1
 								sum = sum + ilvl
 							end
-							if IATAB["showilvl"] then
-								SLOT.text:SetText( color.hex .. ilvl )
+							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
+								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
+									SLOT.text:SetText( color.hex .. ilvl )
+								end
 								local alpha = IAGlowAlpha
 								if color.r == 1 and color.g == 1 and color.b == 1 then
 									alpha = alpha - 0.2
 								end
-								SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+								if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+									SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+								else
+									SLOT.border:SetVertexColor(1, 1, 1, 0)
+								end
 								--SLOT.info:Show()
 							else
 								SLOT.text:SetText("")
@@ -223,10 +225,10 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.btn = CreateFrame("CheckButton", "PaperDollFrame" .. "btn", PaperDollFrame, "UICheckButtonTemplate")
 		PaperDollFrame.btn:SetSize(20, 20)
 		PaperDollFrame.btn:SetPoint("TOPLEFT", CharacterWristSlot, "BOTTOMLEFT", 6, -10)
-		PaperDollFrame.btn:SetChecked( IATAB["showilvl"] )
+		PaperDollFrame.btn:SetChecked( ImproveAny:IsEnabled( "ITEMLEVEL", true ) )
 		PaperDollFrame.btn:SetScript("OnClick", function(self)
 			local newval = self:GetChecked()
-			IATAB["showilvl"] = newval
+			ImproveAny:SetEnabled( "ITEMLEVEL", newval )
 			PDThink.UpdateItemInfos()
 			if IFThink and IFThink.UpdateItemInfos then
 				IFThink.UpdateItemInfos()
@@ -261,18 +263,25 @@ function ImproveAny:InitItemLevel()
 								local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo(ItemID)
 								local ilvl, _, baseilvl = GetDetailedItemLevelInfo(ItemID)
 								local color = ITEM_QUALITY_COLORS[rarity]
-								if ilvl and color then
+
+								if ImproveAny:IsEnabled( "ITEMLEVEL", true ) and ilvl and color then
 									if i ~= 4 and i ~= 19 and i ~= 20 then -- ignore: shirt, tabard, ammo
 										count = count + 1
 										sum = sum + ilvl
 									end
-									if IATAB["showilvl"] then
-										SLOT.text:SetText(color.hex .. ilvl)
+									if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
+										if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
+											SLOT.text:SetText(color.hex .. ilvl)
+										end
 										local alpha = IAGlowAlpha
 										if color.r == 1 and color.g == 1 and color.b == 1 then
 											alpha = alpha - 0.2
 										end
-										SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+										if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+											SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+										else
+											SLOT.border:SetVertexColor(1, 1, 1, 0)
+										end
 										--SLOT.info:Show()
 									else
 										SLOT.text:SetText("")
@@ -304,7 +313,7 @@ function ImproveAny:InitItemLevel()
 							max = max - 1
 						end
 						IAILVLINSPECT = string.format("%0.2f", sum / max)
-						if IATAB["showilvl"] then
+						if ImproveAny:IsEnabled( "ITEMLEVEL", true ) and ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
 							InspectPaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVLINSPECT)
 						else
 							InspectPaperDollFrame.ilvl:SetText("")
@@ -345,8 +354,8 @@ function ImproveAny:InitItemLevel()
 						local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
 						local color = ITEM_QUALITY_COLORS[rarity]
 						if ilvl and color then
-							if IATAB["showilvl"] then
-								if tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
+							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
+								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
 									SLOT.text:SetText(color.hex .. ilvl)
 								else
 									SLOT.text:SetText("")
@@ -355,7 +364,11 @@ function ImproveAny:InitItemLevel()
 								if color.r == 1 and color.g == 1 and color.b == 1 then
 									alpha = alpha - 0.2
 								end
-								SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+								if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+									SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+								else
+									SLOT.border:SetVertexColor(1, 1, 1, 0)
+								end
 								--SLOT.info:Show()
 							else
 								SLOT.text:SetText("")
@@ -396,6 +409,8 @@ function ImproveAny:InitItemLevel()
 			PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 			if SortBags then
 				SortBags()
+			elseif C_Container and C_Container.SortBags then
+				C_Container.SortBags()
 			end
 		end)
 		BagItemAutoSortButton:SetScript("OnEnter", function(self, ...)
