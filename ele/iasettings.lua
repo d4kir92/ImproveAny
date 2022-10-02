@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.3" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.5" )
 }
 
 
@@ -203,27 +203,35 @@ function ImproveAny:UpdateRaidFrameSize()
 			local options = DefaultCompactMiniFrameSetUpOptions;
 			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
 				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) );
-				
+			end
+
+			if true then
 				local index = 1;
 				local frameNum = 1;
 				local filter = nil;
 				while ( frameNum <= 10 ) do
-					local buffName = UnitBuff(frame.displayedUnit, index, filter);
-					if ( buffName ) then
-						if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
-							local buffFrame = frame.buffFrames[frameNum];
-							if buffFrame then
-								buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
+					if frame.displayedUnit then
+						local buffName = UnitBuff(frame.displayedUnit, index, filter);
+						if ( buffName ) then
+							if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
+								local buffFrame = frame.buffFrames[frameNum];
+								if buffFrame then
+									buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
+								end
+								CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter);
+								frameNum = frameNum + 1;
 							end
-							CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter);
-							frameNum = frameNum + 1;
+						else
+							break;
 						end
 					else
 						break;
 					end
 					index = index + 1;
 				end
+			end
 
+			if true then
 				local index = 1;
 				local frameNum = 1;
 				local filter = nil;
@@ -231,9 +239,9 @@ function ImproveAny:UpdateRaidFrameSize()
 				--Show both Boss buffs & debuffs in the debuff location
 				--First, we go through all the debuffs looking for any boss flagged ones.
 				while ( frameNum <= 10 ) do
-					local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
-					if ( debuffName ) then
-						if ( CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) ) then
+					if frame.displayedUnit then
+						local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
+						if ( debuffName ) then
 							local debuffFrame = frame.debuffFrames[frameNum];
 							if debuffFrame then
 								debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
@@ -243,6 +251,8 @@ function ImproveAny:UpdateRaidFrameSize()
 							--Boss debuffs are about twice as big as normal debuffs, so display one less.
 							local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
 							maxDebuffs = maxDebuffs - (bossDebuffScale - 1);
+						else
+							break;
 						end
 					else
 						break;
@@ -322,6 +332,9 @@ function ImproveAny:InitIASettings()
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
 
+		AddCategory( "COMBAT" )
+		AddCheckBox( 4, "COMBATTEXTICONS", true )
+
 		AddCategory( "CHAT" )
 		AddCheckBox( 4, "CHAT", true )
 		AddCheckBox( 24, "SHORTCHANNELS", true )
@@ -331,11 +344,11 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "CHATLEVELS", true )
 
 		AddCategory( "MINIMAP" )
-		AddCheckBox( 4, "MINIMAP", true )
-		AddCheckBox( 24, "MINIMAPHIDEBORDER", true )
-		AddCheckBox( 24, "MINIMAPHIDEZOOMBUTTONS", true )
-		AddCheckBox( 24, "MINIMAPSCROLLZOOM", true )
-		AddCheckBox( 24, "MINIMAPSHAPESQUARE", true )
+		AddCheckBox( 4, "MINIMAP", true, ImproveAny.UpdateMinimapSettings )
+		AddCheckBox( 24, "MINIMAPHIDEBORDER", true, ImproveAny.UpdateMinimapSettings )
+		AddCheckBox( 24, "MINIMAPHIDEZOOMBUTTONS", true, ImproveAny.UpdateMinimapSettings )
+		AddCheckBox( 24, "MINIMAPSCROLLZOOM", true, ImproveAny.UpdateMinimapSettings )
+		AddCheckBox( 24, "MINIMAPSHAPESQUARE", true, ImproveAny.UpdateMinimapSettings )
 
 		AddCategory( "ITEMLEVEL" )
 		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )

@@ -52,16 +52,7 @@ end
 IAHIDDEN = CreateFrame( "FRAME", "IAHIDDEN" )
 IAHIDDEN:Hide()
 
-
-hooksecurefunc( "DefaultCompactUnitFrameSetup", function( frame )
-	local options = DefaultCompactMiniFrameSetUpOptions;
-	if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
-		frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) );
-	end
-end )
-
 hooksecurefunc( "CompactUnitFrame_UtilShouldDisplayBuff", function( unit, index, filter )
-
 	local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter);
 
 	local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT");
@@ -77,130 +68,42 @@ hooksecurefunc( "CompactUnitFrame_UtilShouldDisplayBuff", function( unit, index,
 	end
 end )
 
-hooksecurefunc( "CompactUnitFrame_UpdateBuffs", function( frame, ... )
-	if ( not frame.buffFrames or not frame.optionTable.displayBuffs ) then
-		CompactUnitFrame_HideAllBuffs(frame);
-		return;
+hooksecurefunc( "CompactUnitFrame_SetMaxBuffs", function( frame, numBuffs )
+	
+	if frame.initbuffs == nil then
+		frame.initbuffs = true
+
+		hooksecurefunc( frame, "SetSize", function( self, sw, sh )
+			if self.iasetsize then return end
+			self.iasetsize = true
+			local options = DefaultCompactMiniFrameSetUpOptions;
+			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
+				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) );
+			end
+			self.iasetsize = false
+		end )
+
+		local sw, sh = frame.buffFrames[1]:GetSize()
+		for i = 4, 10 do
+			frame.buffFrames[i] = CreateFrame( "Button", frame:GetName() .. "Buff" .. i, frame, "CompactBuffTemplate" )
+		end
 	end
 
-	local index = 1;
-	local frameNum = 1;
-	local filter = nil;
-	while ( frameNum <= 10 ) do
-		local buffName = UnitBuff(frame.displayedUnit, index, filter);
-		if ( buffName ) then
-			if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
-				local buffFrame = frame.buffFrames[frameNum];
-				if buffFrame then
-					buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
-				end
-				CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter);
-				frameNum = frameNum + 1;
-			end
-		else
-			break;
-		end
-		index = index + 1;
-	end
-	for i=frameNum, frame.maxBuffs do
-		local buffFrame = frame.buffFrames[i];
-		buffFrame:Hide();
-	end
+	frame.maxBuffs = 10;
 end )
 
-hooksecurefunc( "CompactUnitFrame_UpdateDebuffs", function( frame )
-	if ( not frame.debuffFrames or not frame.optionTable.displayDebuffs ) then
-		CompactUnitFrame_HideAllDebuffs(frame);
-		return;
-	end
+hooksecurefunc( "CompactUnitFrame_SetMaxDebuffs", function( frame, numBuffs )
+	
+	if frame.initdebuffs == nil then
+		frame.initdebuffs = true
 
-	local index = 1;
-	local frameNum = 1;
-	local filter = nil;
-	local maxDebuffs = frame.maxDebuffs;
-	--Show both Boss buffs & debuffs in the debuff location
-	--First, we go through all the debuffs looking for any boss flagged ones.
-	while ( frameNum <= 10 ) do
-		local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
-		if ( debuffName ) then
-			if ( CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) ) then
-				local debuffFrame = frame.debuffFrames[frameNum];
-				if debuffFrame then
-					debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
-				end
-				CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false);
-				frameNum = frameNum + 1;
-				--Boss debuffs are about twice as big as normal debuffs, so display one less.
-				local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
-				maxDebuffs = maxDebuffs - (bossDebuffScale - 1);
-			end
-		else
-			break;
+		local sw, sh = frame.debuffFrames[1]:GetSize()
+		for i = 4, 10 do
+			frame.debuffFrames[i] = CreateFrame( "Button", frame:GetName() .. "Debuff" .. i, frame, "CompactDebuffTemplate" )
 		end
-		index = index + 1;
-	end
-	--Then we go through all the buffs looking for any boss flagged ones.
-	index = 1;
-	while ( frameNum <= maxDebuffs ) do
-		local debuffName = UnitBuff(frame.displayedUnit, index, filter);
-		if ( debuffName ) then
-			if ( CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
-				local debuffFrame = frame.debuffFrames[frameNum];
-				CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, true);
-				frameNum = frameNum + 1;
-				--Boss debuffs are about twice as big as normal debuffs, so display one less.
-				local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
-				maxDebuffs = maxDebuffs - (bossDebuffScale - 1);
-			end
-		else
-			break;
-		end
-		index = index + 1;
 	end
 
-	--Now we go through the debuffs with a priority (e.g. Weakened Soul and Forbearance)
-	index = 1;
-	while ( frameNum <= maxDebuffs ) do
-		local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
-		if ( debuffName ) then
-			if ( CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter) ) then
-				local debuffFrame = frame.debuffFrames[frameNum];
-				CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false);
-				frameNum = frameNum + 1;
-			end
-		else
-			break;
-		end
-		index = index + 1;
-	end
-
-	if ( frame.optionTable.displayOnlyDispellableDebuffs ) then
-		filter = "RAID";
-	end
-
-	index = 1;
-	--Now, we display all normal debuffs.
-	if ( frame.optionTable.displayNonBossDebuffs ) then
-	while ( frameNum <= maxDebuffs ) do
-		local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
-		if ( debuffName ) then
-			if ( CompactUnitFrame_UtilShouldDisplayDebuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) and
-				not CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter)) then
-				local debuffFrame = frame.debuffFrames[frameNum];
-				CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false);
-				frameNum = frameNum + 1;
-			end
-		else
-			break;
-		end
-		index = index + 1;
-	end
-	end
-
-	for i=frameNum, frame.maxDebuffs do
-		local debuffFrame = frame.debuffFrames[i];
-		debuffFrame:Hide();
-	end
+	frame.maxDebuffs = 10;
 end )
 
 function ImproveAny:Event( event, ... )
@@ -425,7 +328,7 @@ function IAInitCombatText()
 							end
 						end
 					end
-					if icon then
+					if icon and ImproveAny:IsEnabled( "COMBATTEXTICONS", true ) then
 						local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
 						self:SetText( t )
 						done = true

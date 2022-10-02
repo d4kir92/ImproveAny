@@ -4,12 +4,97 @@ local AddOnName, ImproveAny = ...
 local mmdelay = 0.1
 local minimapshape = "ROUND"
 
+function ImproveAny:UpdateMinimapSettings()
+	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPSHAPESQUARE", true ) then
+		IASHAPE( "SQUARE" )
+	else
+		IASHAPE( "ROUND" )
+	end
+
+	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPHIDEBORDER", true ) then
+		if MinimapBorder then
+			MinimapBorder:Hide()
+		end
+		if MinimapBorderTop then
+			MinimapBorderTop:Hide()
+		end
+	else
+		if MinimapBorder then
+			MinimapBorder:Show()
+		end
+		if MinimapBorderTop then
+			MinimapBorderTop:Show()
+		end
+	end
+	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPHIDEZOOMBUTTONS", true ) then
+		if MinimapZoomIn then
+			MinimapZoomIn:Hide()
+		end
+		if MinimapZoomOut then
+			MinimapZoomOut:Hide()
+		end
+	else
+		if MinimapZoomIn then
+			MinimapZoomIn:Show()
+		end
+		if MinimapZoomOut then
+			MinimapZoomOut:Show()
+		end
+	end
+	
+	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPSCROLLZOOM", true ) then
+		function IAOnMouseWheel( self, dir )
+			if ( dir > 0 ) then
+				if MinimapZoomIn then
+					MinimapZoomIn:Click()
+				else
+					Minimap.ZoomIn:Click()
+				end
+			else
+				if MinimapZoomOut then
+					MinimapZoomOut:Click()
+				else
+					Minimap.ZoomOut:Click()
+				end
+			end
+		end
+		Minimap:SetScript( "OnMouseWheel", IAOnMouseWheel )
+	else
+		Minimap:SetScript( "OnMouseWheel", function()
+			--
+		end )
+	end
+
+	C_Timer.After( 0.1, function()
+		if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPHIDEBORDER", true ) then
+			if MinimapBorder then
+				MinimapBorder:SetParent( IAHIDDEN )
+			end
+
+			if Minimap.Border then
+				Minimap.Border:SetParent( IAHIDDEN )
+			end
+
+			if MiniMapWorldMapButton then
+				if MiniMapWorldMapButton:GetNormalTexture():GetTexture() == 452113 then -- "Interface\\minimap\\UI-Minimap-WorldMapSquare"
+					MiniMapWorldMapButton:SetNormalTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
+					MiniMapWorldMapButton:SetPushedTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
+				end
+			end
+		elseif not ImproveAny:IsEnabled( "MINIMAP", true ) or not ImproveAny:IsEnabled( "MINIMAPSHAPESQUARE", true ) then
+			if Minimap.Border then
+				Minimap.Border:SetParent( Minimap )
+			end
+		end
+	end )
+end
+
 function ImproveAny:InitMinimap()
 	function GetMinimapShape()
 		return minimapshape
 	end
 
-	local function SHAPE(msg)
+	function IASHAPE(msg)
 		msg = msg:upper()
 		if msg == "SQUARE" then
 			minimapshape = msg
@@ -20,71 +105,14 @@ function ImproveAny:InitMinimap()
 			Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_round]])
 		end
 	end
-	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPSHAPESQUARE", true ) then
-		SHAPE( "SQUARE" )
-	else
-		SHAPE( "ROUND" )
-	end
+	ImproveAny:UpdateMinimapSettings()
 
 	if ImproveAny:IsEnabled( "MINIMAP", true ) then
-		if ImproveAny:IsEnabled( "MINIMAPHIDEBORDER", true ) then
-			if MinimapBorder then
-				MinimapBorder:Hide()
-			end
-			if MinimapBorderTop then
-				MinimapBorderTop:Hide()
-			end
-		end
-		if ImproveAny:IsEnabled( "MINIMAPHIDEZOOMBUTTONS", true ) then
-			if MinimapZoomIn then
-				MinimapZoomIn:Hide()
-			end
-			if MinimapZoomOut then
-				MinimapZoomOut:Hide()
-			end
-		end
-
-		if ImproveAny:IsEnabled( "MINIMAPSCROLLZOOM", true ) then
-			function IAOnMouseWheel( self, dir )
-				if ( dir > 0 ) then
-					if MinimapZoomIn then
-						MinimapZoomIn:Click()
-					else
-						Minimap.ZoomIn:Click()
-					end
-				else
-					if MinimapZoomOut then
-						MinimapZoomOut:Click()
-					else
-						Minimap.ZoomOut:Click()
-					end
-				end
-			end
-			Minimap:SetScript( "OnMouseWheel", IAOnMouseWheel )
-		end
-
 		if ElvUI then
 			return
 		end
 		
 		C_Timer.After( 0.3, function()
-			if ImproveAny:IsEnabled( "MINIMAPHIDEBORDER", true ) then
-				if MinimapBorder then
-					MinimapBorder:SetParent( IAHIDDEN )
-				end
-
-				if Minimap.Border then
-					Minimap.Border:SetParent( IAHIDDEN )
-				end
-
-				if MiniMapWorldMapButton then
-					if MiniMapWorldMapButton:GetNormalTexture():GetTexture() == 452113 then -- "Interface\\minimap\\UI-Minimap-WorldMapSquare"
-						MiniMapWorldMapButton:SetNormalTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
-						MiniMapWorldMapButton:SetPushedTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
-					end
-				end
-			end
-
 			local IAMMBtnsBliz = {}
 			function IAConvertToMinimapButton( name, hide )
 				local btn = _G[name]

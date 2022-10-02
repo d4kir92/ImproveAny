@@ -11,6 +11,9 @@ function IALang_deDE()
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",
 
+		["COMBAT"] = "Kampf",
+		["COMBATTEXTICONS"] = "Kampftext Symbole",
+
 		["CHAT"] = "Chat",
 		["SHORTCHANNELS"] = "Kurze Chat-Kanäle",
 		["ITEMICONS"] = "Gegenstandssymbole",

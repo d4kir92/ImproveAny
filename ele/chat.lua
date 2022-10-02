@@ -241,7 +241,6 @@ function ImproveAny:InitChat()
 		lf:RegisterEvent( "WHO_LIST_UPDATE" )
 		lf:RegisterEvent( "PLAYER_LEVEL_UP" )
 		lf:RegisterEvent( "CHAT_MSG_SYSTEM" )
-		lf:RegisterEvent( "PLAYER_LOGIN" )
 		lf:SetScript( "OnEvent", function( self, event, ... )
 			if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
 				IAGuildScan()
@@ -255,16 +254,16 @@ function ImproveAny:InitChat()
 				IARaidScan()
 			elseif event == "GROUP_ROSTER_UPDATE" then
 				IAPartyScan()
-			elseif event == "PLAYER_LOGIN" then
-				IAWhoScan()
-				IAFriendScan()
-				IAPartyScan()
-				IARaidScan()
-				IAGuildScan()
 			else
 				ImproveAny:MSG( "Missing Event: " .. event )
 			end
 		end )
+
+		IAWhoScan()
+		IAFriendScan()
+		IAPartyScan()
+		IARaidScan()
+		IAGuildScan()
 
 		function IAChatAddItemIcons( msg, c )
 			if c >= 40 then

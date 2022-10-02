@@ -19,6 +19,9 @@ function IALang_enUS()
 		["QUICKGAMEPLAY"] = "Quick Gameplay",
 		["FASTLOOTING"] = "Fast Looting",
 
+		["COMBAT"] = "Combat",
+		["COMBATTEXTICONS"] = "CombatText Icons",
+
 		["CHAT"] = "Chat",
 		["SHORTCHANNELS"] = "Short Chat Channels",
 		["ITEMICONS"] = "Item Icons",
