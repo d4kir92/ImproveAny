@@ -247,6 +247,11 @@ function ImproveAny:InitMinimap()
 
 			IAConvertToMinimapButton( "MiniMapBattlefieldFrame" ) -- PVP
 
+
+			IAConvertToMinimapButton( "MinimapZoomIn" )
+			IAConvertToMinimapButton( "MinimapZoomOut" )
+			IAConvertToMinimapButton( "CodexBrowserIcon" )
+
 			-- ADDONS
 			local mmbtns = {}
 			function IAUpdateMMBtns()
