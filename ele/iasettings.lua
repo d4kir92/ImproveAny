@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.2" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.3" )
 }
 
 
@@ -81,8 +81,9 @@ local posy = -4
 local cas = {}
 local cbs = {}
 local dds = {}
+local sls = {}
 
-local function IASetPos( ele, key )
+local function IASetPos( ele, key, x )
 	ele:ClearAllPoints()
 	if strfind( strlower( key ), strlower( searchStr ) ) then
 		ele:Show()
@@ -90,7 +91,7 @@ local function IASetPos( ele, key )
 		if posy < -4 then
 			posy = posy - 10
 		end
-		ele:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", 6, posy )
+		ele:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x or 6, posy )
 		posy = posy - 24
 	else
 		ele:Hide()
@@ -148,6 +149,43 @@ local function AddCheckBox( x, key, val, func )
 	end
 end
 
+function IACreateSlider( x, key, val, func, vmin, vmax, steps )
+	sls[key] = CreateFrame("Slider", nil, IASettings.SC, "OptionsSliderTemplate")
+
+	sls[key]:SetWidth( IASettings.SC:GetWidth() - 30 - x )
+	sls[key]:SetPoint("TOPLEFT", x + 5, posy )
+
+	sls[key].Low:SetText(vmin)
+	sls[key].High:SetText(vmax)
+
+	sls[key].Text:SetText(IAGT(key) .. ": " .. IAGV( key, val ) )
+
+	sls[key]:SetMinMaxValues(vmin, vmax)
+	sls[key]:SetObeyStepOnDrag(true)
+	sls[key]:SetValueStep(steps)
+
+	sls[key]:SetValue(  IAGV( key, val ) )
+
+	sls[key]:SetScript("OnValueChanged", function(self, val)
+		--val = val - val % steps
+		val = tonumber( string.format( "%" .. steps .. "f", val ) )
+		if val and val ~= IAGV( key ) then
+			IASV( key, val )
+			sls[key].Text:SetText( IAGT( key ) .. ": " .. val )
+
+			if func then
+				func()
+			end
+
+			if IASettings.save then
+				IASettings.save:Enable()
+			end
+		end
+	end)
+
+	IASetPos( sls[key], key, x )
+end
+
 function ImproveAny:UpdateILVLIcons()
 	PDThink.UpdateItemInfos()
 	if IFThink and IFThink.UpdateItemInfos then
@@ -155,6 +193,64 @@ function ImproveAny:UpdateILVLIcons()
 	end
 	if ContainerFrame_UpdateAll then
 		ContainerFrame_UpdateAll()
+	end
+end
+
+function ImproveAny:UpdateRaidFrameSize()
+	for i = 1, 40 do
+		local frame = _G["CompactRaidFrame" .. i]
+		if frame then
+			local options = DefaultCompactMiniFrameSetUpOptions;
+			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
+				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) );
+				
+				local index = 1;
+				local frameNum = 1;
+				local filter = nil;
+				while ( frameNum <= 10 ) do
+					local buffName = UnitBuff(frame.displayedUnit, index, filter);
+					if ( buffName ) then
+						if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
+							local buffFrame = frame.buffFrames[frameNum];
+							if buffFrame then
+								buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
+							end
+							CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter);
+							frameNum = frameNum + 1;
+						end
+					else
+						break;
+					end
+					index = index + 1;
+				end
+
+				local index = 1;
+				local frameNum = 1;
+				local filter = nil;
+				local maxDebuffs = frame.maxDebuffs;
+				--Show both Boss buffs & debuffs in the debuff location
+				--First, we go through all the debuffs looking for any boss flagged ones.
+				while ( frameNum <= 10 ) do
+					local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
+					if ( debuffName ) then
+						if ( CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) ) then
+							local debuffFrame = frame.debuffFrames[frameNum];
+							if debuffFrame then
+								debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
+							end
+							CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false);
+							frameNum = frameNum + 1;
+							--Boss debuffs are about twice as big as normal debuffs, so display one less.
+							local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
+							maxDebuffs = maxDebuffs - (bossDebuffScale - 1);
+						end
+					else
+						break;
+					end
+					index = index + 1;
+				end
+			end
+		end
 	end
 end
 
@@ -260,6 +356,14 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "REPNUMBER", true )
 		AddCheckBox( 24, "REPPERCENT", true )
 		AddCheckBox( 24, "REPHIDEARTWORK", true )
+
+		AddCategory( "UNITFRAMES" )
+		IACreateSlider( 4, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+		IACreateSlider( 4, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+		local options = DefaultCompactMiniFrameSetUpOptions;
+		AddCheckBox( 4, "OVERWRITERAIDFRAMESIZE", false )
+		IACreateSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+		IACreateSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
 
 		AddCategory( "EXTRAS" )
 		AddCheckBox( 4, "MONEYBAR", true )

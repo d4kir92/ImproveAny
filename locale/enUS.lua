@@ -50,6 +50,13 @@ function IALang_enUS()
 		["REPPERCENT"] = "Reputation Percent",
 		["REPHIDEARTWORK"] = "Reputation Bar Hide Artwork",
 
+		["UNITFRAMES"] = "UnitFrames",
+		["BUFFSCALE"] = "Buff-Scale",
+		["DEBUFFSCALE"] = "Debuff-Scale",
+		["OVERWRITERAIDFRAMESIZE"] = "Override Raidframe-Size",
+		["RAIDFRAMEW"] = "Raidframe Width",
+		["RAIDFRAMEH"] = "Raidframe Height",
+
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Money Bar",
 		["TOKENBAR"] = "Token Bar",

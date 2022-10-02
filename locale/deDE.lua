@@ -42,6 +42,13 @@ function IALang_deDE()
 		["REPPERCENT"] = "Ruf Prozent",
 		["REPHIDEARTWORK"] = "Rufleiste - Kunstwerk ausblenden",
 
+		["UNITFRAMES"] = "Einheitenfenster (UnitFrames)",
+		["BUFFSCALE"] = "Stärkungszauber-Skalierung (Buff-Scale)",
+		["DEBUFFSCALE"] = "Schwächungszauber-Skalierung (Debuff-Scale)",
+		["OVERWRITERAIDFRAMESIZE"] = "Raidfenster-Größe überschreiben",
+		["RAIDFRAMEW"] = "Raidfenster Weite",
+		["RAIDFRAMEH"] = "Raidfenster Höhe",
+
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Geldleiste",
 		["TOKENBAR"] = "Wertmarkenleiste",
