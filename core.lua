@@ -53,23 +53,24 @@ IAHIDDEN = CreateFrame( "FRAME", "IAHIDDEN" )
 IAHIDDEN:Hide()
 
 hooksecurefunc( "CompactUnitFrame_UtilShouldDisplayBuff", function( unit, index, filter )
-	local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter);
+	if unit then
+		local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter);
 
-	local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT");
-	
-	if ( name == "Dornen" or name == "Thorns" ) and InCombatLockdown() then
-		return false
-	end
+		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT");
+		
+		if ( name == "Dornen" or name == "Thorns" ) and InCombatLockdown() then
+			return false
+		end
 
-	if ( hasCustom ) then
-		return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"));
-	else
-		return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId);
+		if ( hasCustom ) then
+			return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"));
+		else
+			return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId);
+		end
 	end
 end )
 
 hooksecurefunc( "CompactUnitFrame_SetMaxBuffs", function( frame, numBuffs )
-	
 	if frame.initbuffs == nil then
 		frame.initbuffs = true
 
