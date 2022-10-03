@@ -54,6 +54,7 @@ function IALang_enUS()
 		["REPHIDEARTWORK"] = "Reputation Bar Hide Artwork",
 
 		["UNITFRAMES"] = "UnitFrames",
+		["RAIDFRAMEMOREBUFFS"] = "Raidframe more Buffs",
 		["BUFFSCALE"] = "Buff-Scale",
 		["DEBUFFSCALE"] = "Debuff-Scale",
 		["OVERWRITERAIDFRAMESIZE"] = "Override Raidframe-Size",

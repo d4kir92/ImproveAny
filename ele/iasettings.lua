@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.7" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.8" )
 }
 
 
@@ -200,64 +200,64 @@ function ImproveAny:UpdateRaidFrameSize()
 	for i = 1, 40 do
 		local frame = _G["CompactRaidFrame" .. i]
 		if frame then
-			local options = DefaultCompactMiniFrameSetUpOptions;
+			local options = DefaultCompactMiniFrameSetUpOptions
 			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
-				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) );
+				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) )
 			end
 
 			if true then
-				local index = 1;
-				local frameNum = 1;
-				local filter = nil;
+				local index = 1
+				local frameNum = 1
+				local filter = nil
 				while ( frameNum <= 10 ) do
 					if frame.displayedUnit then
-						local buffName = UnitBuff(frame.displayedUnit, index, filter);
+						local buffName = UnitBuff(frame.displayedUnit, index, filter)
 						if ( buffName ) then
 							if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
-								local buffFrame = frame.buffFrames[frameNum];
+								local buffFrame = _G[frame:GetName() .. "Buff" .. i]
 								if buffFrame then
 									buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
 								end
-								CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter);
-								frameNum = frameNum + 1;
+								CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
+								frameNum = frameNum + 1
 							end
 						else
-							break;
+							break
 						end
 					else
-						break;
+						break
 					end
-					index = index + 1;
+					index = index + 1
 				end
 			end
 
 			if true then
-				local index = 1;
-				local frameNum = 1;
-				local filter = nil;
-				local maxDebuffs = frame.maxDebuffs;
+				local index = 1
+				local frameNum = 1
+				local filter = nil
+				local maxDebuffs = frame.maxDebuffs
 				--Show both Boss buffs & debuffs in the debuff location
 				--First, we go through all the debuffs looking for any boss flagged ones.
 				while ( frameNum <= 10 ) do
 					if frame.displayedUnit then
-						local debuffName = UnitDebuff(frame.displayedUnit, index, filter);
+						local debuffName = UnitDebuff(frame.displayedUnit, index, filter)
 						if ( debuffName ) then
-							local debuffFrame = frame.debuffFrames[frameNum];
+							local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
 							if debuffFrame then
 								debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
 							end
-							CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false);
-							frameNum = frameNum + 1;
+							CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false)
+							frameNum = frameNum + 1
 							--Boss debuffs are about twice as big as normal debuffs, so display one less.
 							local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
-							maxDebuffs = maxDebuffs - (bossDebuffScale - 1);
+							maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
 						else
-							break;
+							break
 						end
 					else
-						break;
+						break
 					end
-					index = index + 1;
+					index = index + 1
 				end
 			end
 		end
@@ -371,9 +371,10 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "REPHIDEARTWORK", true )
 
 		AddCategory( "UNITFRAMES" )
-		IACreateSlider( 4, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
-		IACreateSlider( 4, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
-		local options = DefaultCompactMiniFrameSetUpOptions;
+		AddCheckBox( 4, "RAIDFRAMEMOREBUFFS", true )
+		IACreateSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+		IACreateSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+		local options = DefaultCompactMiniFrameSetUpOptions
 		AddCheckBox( 4, "OVERWRITERAIDFRAMESIZE", false )
 		IACreateSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
 		IACreateSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )

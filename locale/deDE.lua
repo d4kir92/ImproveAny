@@ -46,6 +46,7 @@ function IALang_deDE()
 		["REPHIDEARTWORK"] = "Rufleiste - Kunstwerk ausblenden",
 
 		["UNITFRAMES"] = "Einheitenfenster (UnitFrames)",
+		["RAIDFRAMEMOREBUFFS"] = "Schlachtzugfenster mehr Stärkungszauber",
 		["BUFFSCALE"] = "Stärkungszauber-Skalierung (Buff-Scale)",
 		["DEBUFFSCALE"] = "Schwächungszauber-Skalierung (Debuff-Scale)",
 		["OVERWRITERAIDFRAMESIZE"] = "Raidfenster-Größe überschreiben",

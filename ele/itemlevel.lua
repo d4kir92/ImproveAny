@@ -189,6 +189,7 @@ function ImproveAny:InitItemLevel()
 					end
 				end
 			end
+			
 			if count > 0 then
 				local max = 16 -- when only IAnhand
 				if GetInventoryItemID("PLAYER", 17) then
@@ -200,6 +201,7 @@ function ImproveAny:InitItemLevel()
 				if IABUILD == "RETAIL" then
 					max = max - 1
 				end
+
 				IAILVL = string.format("%0.2f", sum / max)
 				if true then
 					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
