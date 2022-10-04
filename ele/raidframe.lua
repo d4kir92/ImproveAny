@@ -53,10 +53,8 @@ function ImproveAny:InitRaidFrames()
 
 			hooksecurefunc( _G[frame:GetName() .. "Buff" .. 1], "SetSize", function( self, w, h )
 				local sw, sh = _G[frame:GetName() .. "Buff" .. 1]:GetSize()
-				print(sw, sh)
 				for i = 4, 10 do
 					if _G[frame:GetName() .. "Buff" .. i] ~= nil then
-						print(_G[frame:GetName() .. "Buff" .. i], sw, sh)
 						_G[frame:GetName() .. "Buff" .. i]:SetSize( sw, sh )
 					end
 				end
