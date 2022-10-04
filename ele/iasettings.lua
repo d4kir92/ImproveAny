@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.10" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.11" )
 }
 
 
@@ -155,12 +155,15 @@ function IAAddEditBox( x, key, val, func )
 	ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
 	ebs[key]:SetSize( 360, 24 )
 	ebs[key]:SetAutoFocus( false )
+	ebs[key].text = IAGV( key, val )
 	ebs[key]:SetText( IAGV( key, val ) )
 	ebs[key]:SetScript( "OnTextChanged", function( self, ... )
-		IASV( key, ebs[key]:GetText() )
+		if self.text ~= ebs[key]:GetText() then
+			IASV( key, ebs[key]:GetText() )
 
-		if func then
-			func()
+			if func then
+				func()
+			end
 		end
 	end )
 
