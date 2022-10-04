@@ -130,7 +130,7 @@ function ImproveAny:InitRaidFrames()
 			end
 			ImproveAny:RFAddDebuffs( frame )
 			if frame:GetName() then
-				for i = 4, 10 do
+				for i = 1, 10 do
 					local debuff = _G[frame:GetName() .. "Debuff" .. i]
 					if debuff then
 						debuff:Hide()
@@ -234,12 +234,6 @@ function ImproveAny:InitRaidFrames()
 								end
 								frameNum = frameNum + 1
 							end
-						elseif frame:GetName() and frameNum then
-							local buffFrame =  _G[frame:GetName() .. "Buff" .. frameNum]
-							if buffFrame then
-								buffFrame:Hide()
-							end
-							frameNum = frameNum + 1
 						else
 							break
 						end
@@ -274,12 +268,6 @@ function ImproveAny:InitRaidFrames()
 								--Boss debuffs are about twice as big as normal debuffs, so display one less.
 								local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
 								maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
-							elseif frame:GetName() and frameNum then
-								local debuffFrame =  _G[frame:GetName() .. "Debuff" .. frameNum]
-								if debuffFrame then
-									debuffFrame:Hide()
-								end
-								frameNum = frameNum + 1
 							else
 								break
 							end
@@ -306,12 +294,6 @@ function ImproveAny:InitRaidFrames()
 								--Boss debuffs are about twice as big as normal debuffs, so display one less.
 								local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
 								maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
-							elseif frame:GetName() and frameNum then
-								local debuffFrame =  _G[frame:GetName() .. "Debuff" .. frameNum]
-								if debuffFrame then
-									debuffFrame:Hide()
-								end
-								frameNum = frameNum + 1
 							else
 								break
 							end
@@ -334,12 +316,6 @@ function ImproveAny:InitRaidFrames()
 								local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 								if debuffFrame then
 									IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
-								end
-								frameNum = frameNum + 1
-							elseif frame:GetName() and frameNum then
-								local debuffFrame =  _G[frame:GetName() .. "Debuff" .. frameNum]
-								if debuffFrame then
-									debuffFrame:Hide()
 								end
 								frameNum = frameNum + 1
 							else
@@ -370,12 +346,6 @@ function ImproveAny:InitRaidFrames()
 									local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 									if debuffFrame then
 										IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
-									end
-									frameNum = frameNum + 1
-								elseif frame:GetName() and frameNum then
-									local debuffFrame =  _G[frame:GetName() .. "Debuff" .. frameNum]
-									if debuffFrame then
-										debuffFrame:Hide()
 									end
 									frameNum = frameNum + 1
 								else
