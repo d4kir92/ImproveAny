@@ -242,6 +242,11 @@ function ImproveAny:InitRaidFrames()
 					end
 					index = index + 1
 				end
+
+				for i = frameNum, 10 do
+					local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
+					buffFrame:Hide()
+				end
 			end
 		end )
 	end
@@ -279,6 +284,7 @@ function ImproveAny:InitRaidFrames()
 					end
 					index = index + 1
 				end
+
 				--Then we go through all the buffs looking for any boss flagged ones.
 				index = 1
 				while ( frameNum <= 10 ) do
@@ -360,6 +366,11 @@ function ImproveAny:InitRaidFrames()
 						index = index + 1
 					end
 				end
+
+				for i = frameNum, 10 do
+					local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
+					debuffFrame:Hide()
+				end
 			end
 		end )
 	end
@@ -388,9 +399,9 @@ function ImproveAny:InitRaidFrames()
 		local inNotCombatIds = {}
 		
 		function CompactUnitFrame_UtilShouldDisplayBuff( unit, index, filter )
-			local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter);
+			local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter)
 
-			local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT");
+			local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
 
 			if oldInCombatIds ~= IAGV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
 				oldInCombatIds = IAGV( "RFHIDEBUFFIDSINCOMBAT", "" )
@@ -411,9 +422,9 @@ function ImproveAny:InitRaidFrames()
 			end
 
 			if ( hasCustom ) then
-				return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"));
+				return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"))
 			else
-				return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId);
+				return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId)
 			end
 		end
 	end
