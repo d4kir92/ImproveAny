@@ -379,7 +379,7 @@ function ImproveAny:InitRaidFrames()
 		end
 	end
 
-	if CompactUnitFrame_UtilShouldDisplayBuff and SpellGetVisibilityInfo and UnitAffectingCombat then
+	if CompactUnitFrame_UtilShouldDisplayBuff and IABUILD ~= "RETAIL" then
 		local oldInCombatIds = ""
 		local inCombatIds = {}
 	
