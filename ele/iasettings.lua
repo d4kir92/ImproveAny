@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.13" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.14" )
 }
 
 
@@ -234,18 +234,16 @@ function ImproveAny:UpdateRaidFrameSize()
 				local index = 1
 				local frameNum = 1
 				local filter = nil
+				
 				while ( frameNum <= 10 ) do
 					if frame.displayedUnit then
 						local buffName = UnitBuff(frame.displayedUnit, index, filter)
 						if ( buffName ) then
-							if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
-								local buffFrame = _G[frame:GetName() .. "Buff" .. i]
-								if buffFrame then
-									buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
-								end
-								CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
-								frameNum = frameNum + 1
+							local buffFrame = _G[frame:GetName() .. "Buff" .. i]
+							if buffFrame then
+								buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
 							end
+							frameNum = frameNum + 1
 						else
 							break
 						end
@@ -260,9 +258,7 @@ function ImproveAny:UpdateRaidFrameSize()
 				local index = 1
 				local frameNum = 1
 				local filter = nil
-				local maxDebuffs = frame.maxDebuffs
-				--Show both Boss buffs & debuffs in the debuff location
-				--First, we go through all the debuffs looking for any boss flagged ones.
+				
 				while ( frameNum <= 10 ) do
 					if frame.displayedUnit then
 						local debuffName = UnitDebuff(frame.displayedUnit, index, filter)
@@ -271,11 +267,7 @@ function ImproveAny:UpdateRaidFrameSize()
 							if debuffFrame then
 								debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
 							end
-							CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false)
 							frameNum = frameNum + 1
-							--Boss debuffs are about twice as big as normal debuffs, so display one less.
-							local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE)/debuffFrame.baseSize
-							maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
 						else
 							break
 						end

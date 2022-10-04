@@ -49,13 +49,16 @@ function ImproveAny:InitRaidFrames()
 
 	function ImproveAny:RFAddBuffs( frame )
 		if frame.buffFrames then
-			for i = 4, 10 do
-				if _G[frame:GetName() .. "Buff" .. i] == nil then
-					_G[frame:GetName() .. "Buff" .. i] = CreateFrame( "Button", frame:GetName() .. "Buff" .. i, frame, "CompactBuffTemplate" )
-					local buff = _G[frame:GetName() .. "Buff" .. i]
-					buff:SetSize(40, 40)
-					buff:SetPoint( "RIGHT", _G[frame:GetName() .. "Buff" .. (i-1)], "LEFT", 0, 0 )
-					buff:Hide()
+			if _G[frame:GetName() .. "Buff" .. 1] then
+				local sw, sh = _G[frame:GetName() .. "Buff" .. 1]:GetSize()
+				for i = 4, 10 do
+					if _G[frame:GetName() .. "Buff" .. i] == nil then
+						_G[frame:GetName() .. "Buff" .. i] = CreateFrame( "Button", frame:GetName() .. "Buff" .. i, frame, "CompactBuffTemplate" )
+						local buff = _G[frame:GetName() .. "Buff" .. i]
+						buff:SetSize( sw, sh )
+						buff:SetPoint( "RIGHT", _G[frame:GetName() .. "Buff" .. (i-1)], "LEFT", 0, 0 )
+						buff:Hide()
+					end
 				end
 			end
 		end
@@ -63,13 +66,16 @@ function ImproveAny:InitRaidFrames()
 
 	function ImproveAny:RFAddDebuffs( frame )
 		if frame.debuffFrames then
-			local sw, sh = _G[frame:GetName() .. "Debuff" .. 1]:GetSize()
-			for i = 4, 10 do
-				if _G[frame:GetName() .. "Debuff" .. i] == nil then
-					local debuff = CreateFrame( "Button", frame:GetName() .. "Buff" .. i, frame, "CompactDebuffTemplate" )
-					debuff:SetSize(sw, sh)
-					debuff:SetPoint( "RIGHT", _G[frame:GetName() .. "Debuff" .. (i-1)], "LEFT", 0, 0 )
-					debuff:Hide()
+			if _G[frame:GetName() .. "Debuff" .. 1] then
+				local sw, sh = _G[frame:GetName() .. "Debuff" .. 1]:GetSize()
+				for i = 4, 10 do
+					if _G[frame:GetName() .. "Debuff" .. i] == nil then
+						_G[frame:GetName() .. "Debuff" .. i] = CreateFrame( "Button", frame:GetName() .. "Debuff" .. i, frame, "CompactDebuffTemplate" )
+						local debuff = _G[frame:GetName() .. "Debuff" .. i]
+						debuff:SetSize( sw, sh )
+						debuff:SetPoint( "RIGHT", _G[frame:GetName() .. "Debuff" .. (i-1)], "LEFT", 0, 0 )
+						debuff:Hide()
+					end
 				end
 			end
 		end
