@@ -20,7 +20,20 @@ C_Timer.After( 0.01, function()
 			end )
 			
 			if ImproveAny:IsEnabled( "REPHIDEARTWORK", false ) then
+				hooksecurefunc( ReputationWatchBar, "SetHeight", function( self, h )
+					if self.iasetheight then return end
+					self.iasetheight = true
+					self:SetHeight( 15 )
+					self.iasetheight = false
+				end )
 				ReputationWatchBar:SetHeight( 15 )
+				
+				hooksecurefunc( ReputationWatchBar.StatusBar, "SetHeight", function( self, h )
+					if self.iasetheight then return end
+					self.iasetheight = true
+					self:SetHeight( 15 )
+					self.iasetheight = false
+				end )
 				ReputationWatchBar.StatusBar:SetHeight( 15 )
 				
 				for i = 0, 3 do

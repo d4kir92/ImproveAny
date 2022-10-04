@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.9" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.4.10" )
 }
 
 
@@ -81,6 +81,7 @@ local posy = -4
 local cas = {}
 local cbs = {}
 local dds = {}
+local ebs = {}
 local sls = {}
 
 local function IASetPos( ele, key, x )
@@ -147,6 +148,27 @@ local function AddCheckBox( x, key, val, func )
 	else
 		cbs[key]:Hide()
 	end
+end
+
+function IAAddEditBox( x, key, val, func )
+	ebs[key] = CreateFrame( "EditBox", "ebs[" .. key .. "]", IASettings.SC, "InputBoxTemplate" )
+	ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
+	ebs[key]:SetSize( 360, 24 )
+	ebs[key]:SetAutoFocus( false )
+	ebs[key]:SetText( IAGV( key, val ) )
+	ebs[key]:SetScript( "OnTextChanged", function( self, ... )
+		IASV( key, ebs[key]:GetText() )
+
+		if func then
+			func()
+		end
+	end )
+
+	ebs[key].f = ebs[key]:CreateFontString( nil, nil, "GameFontNormal" )
+	ebs[key].f:SetPoint( "LEFT", ebs[key], "LEFT", 0, 16 )
+	ebs[key].f:SetText( IAGT( key ) )
+
+	IASetPos( ebs[key], key, x + 8 )
 end
 
 function IACreateSlider( x, key, val, func, vmin, vmax, steps )
@@ -371,6 +393,8 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "REPHIDEARTWORK", true )
 
 		AddCategory( "UNITFRAMES" )
+		IAAddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
+		IAAddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )
 		AddCheckBox( 4, "RAIDFRAMEMOREBUFFS", true )
 		IACreateSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
 		IACreateSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )

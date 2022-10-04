@@ -54,6 +54,8 @@ function IALang_enUS()
 		["REPHIDEARTWORK"] = "Reputation Bar Hide Artwork",
 
 		["UNITFRAMES"] = "UnitFrames",
+		["RFHIDEBUFFIDSINCOMBAT"] = "Hide BuffIds for Raidframe (In Combat)",
+		["RFHIDEBUFFIDSINNOTCOMBAT"] = "Hide BuffIds for Raidframe (Outside of Combat)",
 		["RAIDFRAMEMOREBUFFS"] = "Raidframe more Buffs",
 		["BUFFSCALE"] = "Buff-Scale",
 		["DEBUFFSCALE"] = "Debuff-Scale",
