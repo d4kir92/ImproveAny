@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.1" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.2" )
 }
 
 
@@ -387,16 +387,18 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "REPPERCENT", true )
 		AddCheckBox( 24, "REPHIDEARTWORK", true )
 
-		AddCategory( "UNITFRAMES" )
-		IAAddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
-		IAAddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )
-		AddCheckBox( 4, "RAIDFRAMEMOREBUFFS", true )
-		IACreateSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
-		IACreateSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
-		local options = DefaultCompactMiniFrameSetUpOptions
-		AddCheckBox( 4, "OVERWRITERAIDFRAMESIZE", false )
-		IACreateSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
-		IACreateSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+		if IABUILD ~= "RETAIL" then
+			AddCategory( "UNITFRAMES" )
+			IAAddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
+			IAAddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )
+			AddCheckBox( 4, "RAIDFRAMEMOREBUFFS", true )
+			IACreateSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+			IACreateSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+			local options = DefaultCompactMiniFrameSetUpOptions
+			AddCheckBox( 4, "OVERWRITERAIDFRAMESIZE", false )
+			IACreateSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+			IACreateSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+		end
 
 		AddCategory( "EXTRAS" )
 		AddCheckBox( 4, "MONEYBAR", true )
