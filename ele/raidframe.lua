@@ -244,8 +244,10 @@ function ImproveAny:InitRaidFrames()
 				end
 
 				for i = frameNum, 10 do
-					local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
-					buffFrame:Hide()
+					local buffFrame = _G[frame:GetName() .. "Buff" .. i]
+					if buffFrame then
+						buffFrame:Hide()
+					end
 				end
 			end
 		end )
@@ -253,6 +255,10 @@ function ImproveAny:InitRaidFrames()
 
 	if CompactUnitFrame_UpdateDebuffs then
 		hooksecurefunc( "CompactUnitFrame_UpdateDebuffs", function( frame )
+			if frame:GetName() == nil then
+				return
+			end
+
 			if ImproveAny:IsEnabled( "RAIDFRAMEMOREBUFFS", true ) then
 				ImproveAny:RFAddDebuffs( frame )
 				
@@ -368,8 +374,10 @@ function ImproveAny:InitRaidFrames()
 				end
 
 				for i = frameNum, 10 do
-					local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
-					debuffFrame:Hide()
+					local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
+					if debuffFrame then
+						debuffFrame:Hide()
+					end
 				end
 			end
 		end )
