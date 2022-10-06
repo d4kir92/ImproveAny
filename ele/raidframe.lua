@@ -5,6 +5,18 @@ function ImproveAny:InitRaidFrames()
 	if IABUILD ~= "RETAIL" then
 		local raidFrames = {}
 
+		function ImproveAny:IsCompactRaidFrame( frame )
+			if frame == nil then
+				return false
+			end
+			if frame.buffFrames then
+				if string.find( frame:GetName(), "CompactUnitFrame" ) then
+					return true
+				end
+			end
+			return false
+		end
+
 		function ImproveAny:RFModifySetSize( frame )
 			if frame == nil then 
 				return
@@ -33,9 +45,10 @@ function ImproveAny:InitRaidFrames()
 
 		if CompactUnitFrame_UpdateAll then
 			hooksecurefunc( "CompactUnitFrame_UpdateAll", function( frame )
-				if frame == nil then 
+				if not ImproveAny:IsCompactRaidFrame( frame ) then
 					return
 				end
+
 				if not ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) then
 					return
 				end
@@ -49,7 +62,11 @@ function ImproveAny:InitRaidFrames()
 		end
 
 		function ImproveAny:RFAddBuffs( frame )
-			if frame:GetName() and frame.setup == nil then
+			if not ImproveAny:IsCompactRaidFrame( frame ) then
+				return
+			end
+
+			if frame.GetName and frame:GetName() and frame.setup == nil then
 				frame.setup = true
 
 				hooksecurefunc( _G[frame:GetName() .. "Buff" .. 1], "SetSize", function( self, w, h )
@@ -90,6 +107,10 @@ function ImproveAny:InitRaidFrames()
 		end
 
 		function ImproveAny:RFAddDebuffs( frame )
+			if not ImproveAny:IsCompactRaidFrame( frame ) then
+				return
+			end
+
 			if frame.debuffFrames then
 				if _G[frame:GetName() .. "Debuff" .. 1] then
 					local sw, sh = _G[frame:GetName() .. "Debuff" .. 1]:GetSize()
@@ -109,11 +130,13 @@ function ImproveAny:InitRaidFrames()
 
 		if CompactUnitFrame_HideAllBuffs then
 			hooksecurefunc( "CompactUnitFrame_HideAllBuffs", function( frame )
-				if frame == nil then
+				if not ImproveAny:IsCompactRaidFrame( frame ) then
 					return
 				end
-				ImproveAny:RFAddBuffs( frame )
-				if frame:GetName() then
+
+				if frame then
+					ImproveAny:RFAddBuffs( frame )
+
 					for i = 1, 10 do
 						local buff = _G[frame:GetName() .. "Buff" .. i]
 						if buff then
@@ -126,11 +149,12 @@ function ImproveAny:InitRaidFrames()
 
 		if CompactUnitFrame_HideAllDebuffs then
 			hooksecurefunc( "CompactUnitFrame_HideAllDebuffs", function( frame )
-				if frame == nil then
+				if not ImproveAny:IsCompactRaidFrame( frame ) then
 					return
 				end
+
 				ImproveAny:RFAddDebuffs( frame )
-				if frame:GetName() then
+				if frame then
 					for i = 1, 10 do
 						local debuff = _G[frame:GetName() .. "Debuff" .. i]
 						if debuff then
@@ -214,7 +238,7 @@ function ImproveAny:InitRaidFrames()
 
 		if CompactUnitFrame_UpdateBuffs then
 			hooksecurefunc( "CompactUnitFrame_UpdateBuffs", function( frame )
-				if frame:GetName() == nil then
+				if not ImproveAny:IsCompactRaidFrame( frame ) then
 					return
 				end
 
@@ -256,7 +280,7 @@ function ImproveAny:InitRaidFrames()
 
 		if CompactUnitFrame_UpdateDebuffs then
 			hooksecurefunc( "CompactUnitFrame_UpdateDebuffs", function( frame )
-				if frame:GetName() == nil then
+				if not ImproveAny:IsCompactRaidFrame( frame ) then
 					return
 				end
 
