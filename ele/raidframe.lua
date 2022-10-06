@@ -44,21 +44,23 @@ function ImproveAny:InitRaidFrames()
 		end
 
 		if CompactUnitFrame_UpdateAll then
-			hooksecurefunc( "CompactUnitFrame_UpdateAll", function( frame )
-				if not ImproveAny:IsCompactRaidFrame( frame ) then
-					return
-				end
+			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) then
+				hooksecurefunc( "CompactUnitFrame_UpdateAll", function( frame )
+					if not ImproveAny:IsCompactRaidFrame( frame ) then
+						return
+					end
 
-				if not ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) then
-					return
-				end
+					if not ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) then
+						return
+					end
 
-				if not tContains( raidFrames, frame ) then
-					tinsert( raidFrames, frame )
+					if not tContains( raidFrames, frame ) then
+						tinsert( raidFrames, frame )
 
-					ImproveAny:RFModifySetSize( frame )
-				end
-			end )
+						ImproveAny:RFModifySetSize( frame )
+					end
+				end )
+			end
 		end
 
 		function ImproveAny:RFAddBuffs( frame )
