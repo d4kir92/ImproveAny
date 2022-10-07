@@ -230,6 +230,7 @@ function ImproveAny:InitChat()
 			end
 		end
 
+		local delay = 0.3
 		local lf = CreateFrame( "Frame", "IALevelFrame" )
 		lf:RegisterEvent( "GROUP_ROSTER_UPDATE" )
 		lf:RegisterEvent( "CHAT_MSG_RAID" )
@@ -243,17 +244,17 @@ function ImproveAny:InitChat()
 		lf:RegisterEvent( "CHAT_MSG_SYSTEM" )
 		lf:SetScript( "OnEvent", function( self, event, ... )
 			if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
-				IAGuildScan()
+				C_Timer.After( delay, IAGuildScan )
 			elseif event == "PLAYER_LEVEL_UP" then
 				levelTab[UnitName( "player" ) .. "-" .. GetRealmName()] = UnitLevel( "player" )
 			elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
-				IAWhoScan()
+				C_Timer.After( delay, IAWhoScan )
 			elseif event == "FRIENDLIST_UPDATE" then
-				IAFriendScan()
+				C_Timer.After( delay, IAFriendScan )
 			elseif event == "RAID_ROSTER_UPDATE" or event == "CHAT_MSG_RAID" then
-				IARaidScan()
+				C_Timer.After( delay, IARaidScan )
 			elseif event == "GROUP_ROSTER_UPDATE" then
-				IAPartyScan()
+				C_Timer.After( delay, IAPartyScan )
 			else
 				ImproveAny:MSG( "Missing Event: " .. event )
 			end
