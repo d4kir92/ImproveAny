@@ -115,9 +115,11 @@ function ImproveAny:InitDurabilityFrame()
 						v.tt = CreateFrame("GameTooltip")
 						v.tt:ClearLines()
 					end
-					local cost = select(3, v.tt:SetInventoryItem("player", id))
-					
-					costs = costs + cost
+					if v.tt.SetInventoryItem then
+						local cost = select(3, v.tt:SetInventoryItem("player", id))
+						
+						costs = costs + cost
+					end
 				end
 
 				if costs > 0 then

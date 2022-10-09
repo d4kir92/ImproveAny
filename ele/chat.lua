@@ -197,11 +197,19 @@ function ImproveAny:InitChat()
 
 		function IAPartyScan()
 			local max = GetNumSubgroupMembers or GetNumPartyMembers
+			local success = true
 			for i = 1, max() do
 				local name, realm = UnitName( "party" .. i )
 				if name then
-					IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
+					if UnitLevel( "party" .. i ) == 0 then
+						success = false
+					else
+						IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
+					end
 				end
+			end
+			if not success then
+				C_Timer.After( 0.1, IAPartyScan )
 			end
 		end
 
@@ -230,7 +238,7 @@ function ImproveAny:InitChat()
 			end
 		end
 
-		local delay = 0.3
+		local delay = 0.5
 		local lf = CreateFrame( "Frame", "IALevelFrame" )
 		lf:RegisterEvent( "GROUP_ROSTER_UPDATE" )
 		lf:RegisterEvent( "CHAT_MSG_RAID" )

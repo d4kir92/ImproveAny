@@ -155,8 +155,9 @@ function ImproveAny:InitRaidFrames()
 					return
 				end
 
-				ImproveAny:RFAddDebuffs( frame )
 				if frame then
+					ImproveAny:RFAddDebuffs( frame )
+
 					for i = 1, 10 do
 						local debuff = _G[frame:GetName() .. "Debuff" .. i]
 						if debuff then
@@ -238,6 +239,43 @@ function ImproveAny:InitRaidFrames()
 			debuffFrame:Show()
 		end
 
+		if CompactUnitFrame_UtilShouldDisplayBuff then
+			local oldInCombatIds = ""
+			local inCombatIds = {}
+		
+			local oldInNotCombatIds = ""
+			local inNotCombatIds = {}
+			function IA_CompactUnitFrame_UtilShouldDisplayBuff( unit, index, filter )
+				local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter)
+
+				local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
+
+				if oldInCombatIds ~= IAGV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
+					oldInCombatIds = IAGV( "RFHIDEBUFFIDSINCOMBAT", "" )
+					inCombatIds = {strsplit(",", oldInCombatIds)}
+				end
+		
+				if oldInNotCombatIds ~= IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
+					oldInNotCombatIds = IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
+					inNotCombatIds = {strsplit(",", oldInNotCombatIds)}
+				end
+		
+				if InCombatLockdown() and tContains( inCombatIds, spellId .. "" ) then
+					return false
+				end
+
+				if not InCombatLockdown() and tContains( inNotCombatIds, spellId .. "" ) then
+					return false
+				end
+
+				if ( hasCustom ) then
+					return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"))
+				else
+					return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId)
+				end
+			end
+		end
+
 		if CompactUnitFrame_UpdateBuffs then
 			hooksecurefunc( "CompactUnitFrame_UpdateBuffs", function( frame )
 				if not ImproveAny:IsCompactRaidFrame( frame ) then
@@ -254,7 +292,7 @@ function ImproveAny:InitRaidFrames()
 						if frame.displayedUnit then
 							local buffName = UnitBuff(frame.displayedUnit, index, filter)
 							if ( buffName ) then
-								if ( CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
+								if ( IA_CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) ) then
 									local buffFrame =  _G[frame:GetName() .. "Buff" .. frameNum]
 									if buffFrame then
 										IA_CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
@@ -423,44 +461,6 @@ function ImproveAny:InitRaidFrames()
 				old2 = IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
 				local text = string.gsub( old1, ",", "\n" )
 				ImproveAny:MSG( "[HIDE-BUFFS] Hide Buffs Outside of Combat changed to: " .. text )
-			end
-		end
-
-		if CompactUnitFrame_UtilShouldDisplayBuff then
-			local oldInCombatIds = ""
-			local inCombatIds = {}
-		
-			local oldInNotCombatIds = ""
-			local inNotCombatIds = {}
-			
-			function CompactUnitFrame_UtilShouldDisplayBuff( unit, index, filter )
-				local name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, canApplyAura = UnitBuff(unit, index, filter)
-
-				local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
-
-				if oldInCombatIds ~= IAGV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
-					oldInCombatIds = IAGV( "RFHIDEBUFFIDSINCOMBAT", "" )
-					inCombatIds = {strsplit(",", oldInCombatIds)}
-				end
-		
-				if oldInNotCombatIds ~= IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
-					oldInNotCombatIds = IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
-					inNotCombatIds = {strsplit(",", oldInNotCombatIds)}
-				end
-		
-				if InCombatLockdown() and tContains( inCombatIds, spellId .. "" ) then
-					return false
-				end
-
-				if not InCombatLockdown() and tContains( inNotCombatIds, spellId .. "" ) then
-					return false
-				end
-
-				if ( hasCustom ) then
-					return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"))
-				else
-					return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId)
-				end
 			end
 		end
 	end
