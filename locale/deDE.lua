@@ -26,6 +26,7 @@ function IALang_deDE()
 		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap-Zoom-Schaltflächen ausblenden",
 		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad", ["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
 		["MINIMAPSHAPESQUARE"] = "Quadratische Minimap",
+		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Minimap-Knöpfe verschiebbar machen",
 
 		["ITEMLEVEL"] = "Element-Ebene",
 		["ITEMLEVELNUMBER"] = "ItemLevel-Nummer",

@@ -34,6 +34,7 @@ function IALang_enUS()
 		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap Hide Zoom Buttons",
 		["MINIMAPSCROLLZOOM"] = "Minimap Zoom with Mousewheel",
 		["MINIMAPSHAPESQUARE"] = "Square Minimap",
+		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Make minimap buttons movable",
 
 		["ITEMLEVEL"] = "ItemLevel",
 		["ITEMLEVELNUMBER"] = "ItemLevel Number",

@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.8" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.9" )
 }
 
 
@@ -366,7 +366,8 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 24, "MINIMAPHIDEZOOMBUTTONS", true, ImproveAny.UpdateMinimapSettings )
 		AddCheckBox( 24, "MINIMAPSCROLLZOOM", true, ImproveAny.UpdateMinimapSettings )
 		AddCheckBox( 24, "MINIMAPSHAPESQUARE", true, ImproveAny.UpdateMinimapSettings )
-
+		AddCheckBox( 4, "MINIMAPMINIMAPBUTTONSMOVABLE", true, ImproveAny.UpdateMinimapSettings )
+		
 		AddCategory( "ITEMLEVEL" )
 		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )
 		AddCheckBox( 4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons )

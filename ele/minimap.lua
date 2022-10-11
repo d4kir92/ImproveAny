@@ -71,10 +71,6 @@ function ImproveAny:UpdateMinimapSettings()
 				MinimapBorder:SetParent( IAHIDDEN )
 			end
 
-			if Minimap.Border then
-				Minimap.Border:SetParent( IAHIDDEN )
-			end
-
 			if MiniMapWorldMapButton then
 				if MiniMapWorldMapButton:GetNormalTexture():GetTexture() == 452113 then -- "Interface\\minimap\\UI-Minimap-WorldMapSquare"
 					MiniMapWorldMapButton:SetNormalTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
@@ -82,8 +78,14 @@ function ImproveAny:UpdateMinimapSettings()
 				end
 			end
 		elseif not ImproveAny:IsEnabled( "MINIMAP", true ) or not ImproveAny:IsEnabled( "MINIMAPSHAPESQUARE", true ) then
-			if Minimap.Border then
-				Minimap.Border:SetParent( Minimap )
+			if GetMinimapShape() == "ROUND" then
+				if MinimapBorder then
+					MinimapBorder:SetParent( Minimap )
+				end
+			else
+				if MinimapBorder then
+					MinimapBorder:SetParent( IAHIDDEN )
+				end
 			end
 		end
 	end )
@@ -115,6 +117,8 @@ function ImproveAny:InitMinimap()
 		C_Timer.After( 0.3, function()
 			local IAMMBtnsBliz = {}
 			function IAConvertToMinimapButton( name, hide )
+				if not ImproveAny:IsEnabled( "MINIMAPMINIMAPBUTTONSMOVABLE", true ) then return end
+
 				local btn = _G[name]
 				if btn then
 					if hide then
@@ -151,16 +155,18 @@ function ImproveAny:InitMinimap()
 						end
 			
 						if btn.moving then
+							local scale = Minimap:GetScale()
+							
 							if GetMinimapShape() == "ROUND" then
 								local Xpoa, Ypoa = GetCursorPosition()
-								local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
+								local Xmin, Ymin = Minimap:GetLeft() * scale, Minimap:GetBottom() * scale
 								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + 70
 								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - 70
 								myIconPos = math.deg(math.atan2(Ypoa, Xpoa))
-			
+								
 								local ofsx = (-80 * cos(myIconPos))
 								local ofsy = (80 * sin(myIconPos))
-			
+								
 								IATAB[name .. "ofsx"] = ofsx
 								IATAB[name .. "ofsy"] = ofsy
 			
@@ -171,23 +177,25 @@ function ImproveAny:InitMinimap()
 								local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
 								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + 70
 								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - 70
-			
-								if Ypoa >= radius or Ypoa <= -radius then
-									Xpoa = IAMathC( Xpoa, -radius, radius )
+								
+								local dist = radius
+
+								if Ypoa >= dist or Ypoa <= -dist then
+									Xpoa = IAMathC( Xpoa, -dist, dist )
 								else
 									if Xpoa > 0 then
-										Xpoa = radius
+										Xpoa = dist
 									else
-										Xpoa = -radius
+										Xpoa = -dist
 									end
 								end
-								if Xpoa >= radius or Xpoa <= -radius then
-									Ypoa = IAMathC( Ypoa, -radius, radius )
+								if Xpoa >= dist or Xpoa <= -dist then
+									Ypoa = IAMathC( Ypoa, -dist, dist )
 								else
 									if Ypoa > 0 then
-										Ypoa = radius
+										Ypoa = dist
 									else
-										Ypoa = -radius
+										Ypoa = -dist
 									end
 								end
 								
