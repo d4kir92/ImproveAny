@@ -42,7 +42,7 @@ SlashCmdList["RL"] = function(msg)
 	C_UI.Reload()
 end
 
-SLASH_IMPROVEANY1 = "/improveany"
+SLASH_IMPROVEANY1, SLASH_IMPROVEANY2 = "/improve", "/improveany"
 SlashCmdList["IMPROVEANY"] = function(msg)
 	ImproveAny:ToggleSettings()
 end
