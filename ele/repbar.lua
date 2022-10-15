@@ -40,11 +40,21 @@ C_Timer.After( 0.01, function()
 					local art = ReputationWatchBar.StatusBar["WatchBarTexture" .. i]
 					local art2 = ReputationWatchBar.StatusBar["XPBarTexture" .. i]
 					if art then
-						art.Show = art.Hide
+						hooksecurefunc( art, "Show", function( self )
+							if self.iahide then return end
+							self.iahide = true
+							self:Hide()
+							self.iahide = false
+						end )
 						art:Hide()
 					end
 					if art2 then
-						art2.Show = art.Hide
+						hooksecurefunc( art2, "Show", function( self )
+							if self.iahide then return end
+							self.iahide = true
+							self:Hide()
+							self.iahide = false
+						end )
 						art2:Hide()
 					end
 				end

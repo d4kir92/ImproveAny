@@ -7,7 +7,12 @@ function ImproveAny:InitWorldMapFrame()
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 		if WorldMapFrame.BlackoutFrame then
-			WorldMapFrame.BlackoutFrame.Show = WorldMapFrame.BlackoutFrame.Hide
+			hooksecurefunc( WorldMapFrame.BlackoutFrame, "Show", function( self )
+				if self.iahide then return end
+				self.iahide = true
+				self:Hide()
+				self.iahide = false
+			end )
 			WorldMapFrame.BlackoutFrame:Hide()
 		end
 
