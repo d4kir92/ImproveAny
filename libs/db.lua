@@ -5,10 +5,10 @@ local COL_R = "|cFFFF0000"
 local COL_Y = "|cFFFFFF00"
 
 function ImproveAny:MSG( msg )
-	print( "|cff3FC7EB" .. "[ImproveAny]|r " .. COL_Y .. msg )
+	print( "|cff3FC7EB" .. "[ImproveAny |T136033:16:16:0:0|t]|r " .. COL_Y .. msg )
 end
 function ImproveAny:MSG_Error( msg )
-	print( "|cff3FC7EB" .. "[ImproveAny] " .. COL_R .. "[ERROR] |r|r" .. msg )
+	print( "|cff3FC7EB" .. "[ImproveAny |T136033:16:16:0:0|t]|r " .. COL_R .. "[ERROR] |r" .. msg )
 		
 end
 
