@@ -2,6 +2,18 @@
 local AddOnName, ImproveAny = ...
 
 function ImproveAny:InitChat()
+	local chatTypes = {}
+	for i, v in pairs( _G ) do
+		if string.find( i, "CHAT_MSG_" ) and not tContains( chatTypes, i ) then
+			tinsert( chatTypes, i )
+		end
+	end
+	for type in next, getmetatable( ChatTypeInfo ).__index do
+		if not tContains( chatTypes, "CHAT_MSG_" .. type ) then
+			tinsert( chatTypes, "CHAT_MSG_" .. type )
+		end
+	end
+
 	if ImproveAny:IsEnabled( "CHAT", true ) then
 		function IAChatOnlyBig( str )
 			local res = string.gsub(str, "[^%u-]", "" )
@@ -366,8 +378,8 @@ function ImproveAny:InitChat()
 			return false, IAChatAddItemIcons( msg, 1 ), author, ...
 		end
 
-		for type in next, getmetatable(ChatTypeInfo).__index do
-			ChatFrame_AddMessageEventFilter("CHAT_MSG_" .. type, IAIconsFilter)
+		for i, type in pairs( chatTypes ) do
+			ChatFrame_AddMessageEventFilter( type, IAIconsFilter )
 		end
 
 
@@ -508,13 +520,6 @@ function ImproveAny:InitChat()
 				InviteUnit( name )
 			else
 				OrgSetHyperlink( self, link )
-			end
-		end
-
-		local chatTypes = {}
-		for i, v in pairs( _G ) do
-			if string.find( i, "CHAT_MSG_" ) then
-				tinsert( chatTypes, i )
 			end
 		end
 
