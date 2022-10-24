@@ -196,38 +196,40 @@ f:SetScript( "OnEvent", FastLooting )
 
 
 
-for _,frame in pairs{ GameTooltip, ItemRefTooltip, WhatevahTooltip } do
-	frame:SetScript( "OnTooltipSetItem", function( tt )
-		local _, itemLink = tt:GetItem()
-		if itemLink then	
-			local itemId = tonumber(strmatch(itemLink, 'item:(%d*)'))
-			if itemId then
-				local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, price, classID, _, _, expacID, _, _ = GetItemInfo( itemId )
-				if price and tt.shownMoneyFrames == nil then
-					if price > 0 and GetItemCount and GetCoinTextureString then
-						local count = GetItemCount( itemId )
-						if ImproveAny:IsEnabled( "SELLPRICE", false ) then
-							if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
-								tt:AddDoubleLine( AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString( price ) )
-								tt:AddDoubleLine( SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString( price * count ) )
-							else
-								tt:AddDoubleLine( SELL_PRICE .. ":", GetCoinTextureString( price ) )
+if OnTooltipSetItem and OnTooltipSetSpell then
+	for _,frame in pairs{ GameTooltip, ItemRefTooltip, WhatevahTooltip } do
+		frame:SetScript( "OnTooltipSetItem", function( tt )
+			local _, itemLink = tt:GetItem()
+			if itemLink then	
+				local itemId = tonumber(strmatch(itemLink, 'item:(%d*)'))
+				if itemId then
+					local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, price, classID, _, _, expacID, _, _ = GetItemInfo( itemId )
+					if price and tt.shownMoneyFrames == nil then
+						if price > 0 and GetItemCount and GetCoinTextureString then
+							local count = GetItemCount( itemId )
+							if ImproveAny:IsEnabled( "SELLPRICE", false ) then
+								if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
+									tt:AddDoubleLine( AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString( price ) )
+									tt:AddDoubleLine( SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString( price * count ) )
+								else
+									tt:AddDoubleLine( SELL_PRICE .. ":", GetCoinTextureString( price ) )
+								end
 							end
+						else
+							--tt:AddDoubleLine(ITEM_UNSELLABLE)
 						end
-					else
-						--tt:AddDoubleLine(ITEM_UNSELLABLE)
 					end
 				end
 			end
-		end
-	end )
+		end )
 
-	frame:SetScript( "OnTooltipSetSpell", function( tt ) 
-		local spellName, spellID = tt:GetSpell()
-		if spellID then
-			if ImproveAny:IsEnabled( "SETTINGS", false ) then
-				tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
-			end
-		end 
-	end )
+		frame:SetScript( "OnTooltipSetSpell", function( tt ) 
+			local spellName, spellID = tt:GetSpell()
+			if spellID then
+				if ImproveAny:IsEnabled( "SETTINGS", false ) then
+					tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
+				end
+			end 
+		end )
+	end
 end
