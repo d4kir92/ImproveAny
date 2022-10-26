@@ -56,14 +56,14 @@ function ImproveAny:InitBags()
 			end)
 
 			C_Timer.After( 1, function()
-				if MABagBar then
+				if IABUILDNR < 100000 and MABagBar then
 					local sw, sh = MABagBar:GetSize()
 					sw = sw + 4 * br
 
 					IABagBar = CreateFrame( "FRAME", "IABagBar", MABagBar )
 					IABagBar:SetSize( sw - sh, sh )
 					IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", -sh - (sh / 2) - 2 * br, 0 )
-
+					
 					BagToggle = CreateFrame( "BUTTON", "BagToggle", MABagBar )
 					BagToggle:SetSize( sh * 0.5, sh * 0.8 )
 					BagToggle:SetPoint( "LEFT", MABagBar, "RIGHT", -sh * 1.5 - br, 0 )
