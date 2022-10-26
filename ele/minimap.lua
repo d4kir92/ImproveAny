@@ -18,12 +18,18 @@ function ImproveAny:UpdateMinimapSettings()
 		if MinimapBorderTop then
 			MinimapBorderTop:Hide()
 		end
+		if MinimapCompassTexture then
+			MinimapCompassTexture:Hide()
+		end
 	else
 		if MinimapBorder then
 			MinimapBorder:Show()
 		end
 		if MinimapBorderTop then
 			MinimapBorderTop:Show()
+		end
+		if MinimapCompassTexture then
+			MinimapCompassTexture:Show()
 		end
 	end
 	if ImproveAny:IsEnabled( "MINIMAP", true ) and ImproveAny:IsEnabled( "MINIMAPHIDEZOOMBUTTONS", true ) then

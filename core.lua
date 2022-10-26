@@ -8,7 +8,7 @@ end
 
 IABUILDNR = select(4, GetBuildInfo())
 IABUILD = "CLASSIC"
-if IABUILDNR > 90000 then
+if IABUILDNR >= 100000 then
 	IABUILD = "RETAIL"
 elseif IABUILDNR > 29999 then
 	IABUILD = "WRATH"

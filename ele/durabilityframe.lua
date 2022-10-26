@@ -107,17 +107,15 @@ function ImproveAny:InitDurabilityFrame()
 
 			if DurabilityFrame.text4 then
 				local costs = 0
-				
 				for i, v in pairs(IACHARSLOTS) do
 					local id = v:GetID()
 
 					if v.tt == nil then
-						v.tt = CreateFrame("GameTooltip")
+						v.tt = CreateFrame( "GameTooltip", "TEST" .. i, DurabilityFrame )
 						v.tt:ClearLines()
 					end
-					if v.tt.SetInventoryItem then
+					if v.tt and v.tt.SetInventoryItem then
 						local cost = select(3, v.tt:SetInventoryItem("player", id))
-						
 						costs = costs + cost
 					end
 				end
@@ -136,14 +134,14 @@ function ImproveAny:InitDurabilityFrame()
 		DurabilityFrame.Think()
 
 		if DurabilityFrame.SetAlerts ~= nil then
-			hooksecurefunc(DurabilityFrame, "SetAlerts", function()
+			hooksecurefunc( DurabilityFrame, "SetAlerts", function()
 				DurabilityFrame:Show()
 				for index, value in ipairs( INVENTORY_ALERT_STATUS_SLOTS ) do
 					if ( not value.showSeparate ) or value.slot == "Weapon" then
 						getglobal("Durability" .. value.slot):Show()
 					end
 				end
-			end)
+			end )
 			DurabilityFrame:SetAlerts()
 		elseif DurabilityFrame_SetAlerts ~= nil then
 			local oldalerts = DurabilityFrame_SetAlerts
