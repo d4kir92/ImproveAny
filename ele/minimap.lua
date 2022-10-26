@@ -76,6 +76,9 @@ function ImproveAny:UpdateMinimapSettings()
 			if MinimapBorder then
 				MinimapBorder:SetParent( IAHIDDEN )
 			end
+			if MinimapCompassTexture then
+				MinimapCompassTexture:SetParent( IAHIDDEN )
+			end
 
 			if MiniMapWorldMapButton then
 				if MiniMapWorldMapButton:GetNormalTexture():GetTexture() == 452113 then -- "Interface\\minimap\\UI-Minimap-WorldMapSquare"
@@ -83,14 +86,20 @@ function ImproveAny:UpdateMinimapSettings()
 					MiniMapWorldMapButton:SetPushedTexture( "Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare" )
 				end
 			end
-		elseif not ImproveAny:IsEnabled( "MINIMAP", true ) or not ImproveAny:IsEnabled( "MINIMAPSHAPESQUARE", true ) then
+		else
 			if GetMinimapShape() == "ROUND" then
 				if MinimapBorder then
 					MinimapBorder:SetParent( Minimap )
 				end
+				if MinimapCompassTexture then
+					MinimapCompassTexture:SetParent( Minimap )
+				end
 			else
 				if MinimapBorder then
 					MinimapBorder:SetParent( IAHIDDEN )
+				end
+				if MinimapCompassTexture then
+					MinimapCompassTexture:SetParent( IAHIDDEN )
 				end
 			end
 		end
@@ -136,11 +145,11 @@ function ImproveAny:InitMinimap()
 
 					local radius = 80
 					if IABUILDNR >= 100000 then
-						radius = 100
+						radius = 110
 					end
 					local pos = random( 0, 360 )
-					local ofsx = ( -80 * cos( pos ) )
-					local ofsy = ( 80 * sin( pos ) )
+					local ofsx = ( -radius * cos( pos ) )
+					local ofsy = ( radius * sin( pos ) )
 					IATAB[name .. "ofsx"] = IATAB[name .. "ofsx"] or ofsx
 					IATAB[name .. "ofsy"] = IATAB[name .. "ofsy"] or ofsy
 
@@ -166,12 +175,12 @@ function ImproveAny:InitMinimap()
 							if GetMinimapShape() == "ROUND" then
 								local Xpoa, Ypoa = GetCursorPosition()
 								local Xmin, Ymin = Minimap:GetLeft() * scale, Minimap:GetBottom() * scale
-								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + 70
-								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - 70
+								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius
+								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - radius
 								myIconPos = math.deg(math.atan2(Ypoa, Xpoa))
 								
-								local ofsx = (-80 * cos(myIconPos))
-								local ofsy = (80 * sin(myIconPos))
+								local ofsx = (-radius * cos(myIconPos))
+								local ofsy = (radius * sin(myIconPos))
 								
 								IATAB[name .. "ofsx"] = ofsx
 								IATAB[name .. "ofsy"] = ofsy
@@ -181,8 +190,8 @@ function ImproveAny:InitMinimap()
 							else
 								local Xpoa, Ypoa = GetCursorPosition()
 								local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
-								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + 70
-								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - 70
+								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius
+								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - radius
 								
 								local dist = radius
 
@@ -271,6 +280,7 @@ function ImproveAny:InitMinimap()
 			if select(4, GetBuildInfo()) < 100000 then
 				IAConvertToMinimapButton( "GameTimeFrame", true ) -- Calendar
 			end
+			IAConvertToMinimapButton( "ExpansionLandingPageMinimapButton" ) -- Sanctum
 			IAConvertToMinimapButton( "GarrisonLandingPageMinimapButton" ) -- Sanctum
 			IAConvertToMinimapButton( "QueueStatusMinimapButton" ) -- LFG
 			if MiniMapInstanceDifficulty then

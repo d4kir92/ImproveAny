@@ -44,8 +44,6 @@ cle:SetScript( "OnEvent", function( eventName)
 		if amount then
 			cle.tabhot[tonumber( amount )] = select( 3, GetSpellInfo( spellId ) )
 		end
-	else
-		--print(subevent) -- DEBUG
 	end
 end )
 
