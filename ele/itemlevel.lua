@@ -235,8 +235,8 @@ function ImproveAny:InitItemLevel()
 			if IFThink and IFThink.UpdateItemInfos then
 				IFThink.UpdateItemInfos()
 			end
-			if ContainerFrame_UpdateAll then
-				ContainerFrame_UpdateAll()
+			if IAUpdateBags then
+				IAUpdateBags()
 			end
 		end)
 
@@ -339,39 +339,56 @@ function ImproveAny:InitItemLevel()
 
 		
 		-- BAGS
-		if ContainerFrame_Update then
-			hooksecurefunc("ContainerFrame_Update", function(self)
-				local id = self:GetID()
-				local name = self:GetName()
-				local size = self.size
-
+		function IAUpdateBags()
+			local tab = {}
+			if ContainerFrameUtil_EnumerateContainerFrames then
+				_, tab = ContainerFrameUtil_EnumerateContainerFrames()
+			else
+				for i = 1, 20 do
+					tinsert( tab, _G["ContainerFrame" .. i] )
+				end
+			end
+			for x, bag in pairs( tab ) do
+				local id = x - 1
+				local name = bag:GetName()
+				local size = GetContainerNumSlots( id )
+				
 				for i=1, size do
 					local bid = size - i + 1
 					local SLOT = _G[name .. 'Item' .. bid]
-					local slotLink = GetContainerItemLink(id, i)
-					IAAddIlvl(SLOT, i)
+					if GetCVarBool( "combinedBags" ) then
+						SLOT = _G["ContainerFrame" .. x .. 'Item' .. bid]
+					end
+					if SLOT then
+						local slotLink = GetContainerItemLink(id, i)
+						IAAddIlvl(SLOT, i)
 
-					if slotLink and GetDetailedItemLevelInfo then
-						local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo(slotLink)
-						local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
-						local color = ITEM_QUALITY_COLORS[rarity]
-						if ilvl and color then
-							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
-								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
-									SLOT.text:SetText(color.hex .. ilvl)
+						if slotLink and GetDetailedItemLevelInfo then
+							local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo(slotLink)
+							local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
+							local color = ITEM_QUALITY_COLORS[rarity]
+							if ilvl and color then
+								if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
+									if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
+										SLOT.text:SetText(color.hex .. ilvl)
+									else
+										SLOT.text:SetText("")
+									end
+									local alpha = IAGlowAlpha
+									if color.r == 1 and color.g == 1 and color.b == 1 then
+										alpha = alpha - 0.2
+									end
+									if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+										SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+									else
+										SLOT.border:SetVertexColor(1, 1, 1, 0)
+									end
+									--SLOT.info:Show()
 								else
 									SLOT.text:SetText("")
-								end
-								local alpha = IAGlowAlpha
-								if color.r == 1 and color.g == 1 and color.b == 1 then
-									alpha = alpha - 0.2
-								end
-								if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
-									SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
-								else
 									SLOT.border:SetVertexColor(1, 1, 1, 0)
+									--SLOT.info:Hide()
 								end
-								--SLOT.info:Show()
 							else
 								SLOT.text:SetText("")
 								SLOT.border:SetVertexColor(1, 1, 1, 0)
@@ -382,14 +399,17 @@ function ImproveAny:InitItemLevel()
 							SLOT.border:SetVertexColor(1, 1, 1, 0)
 							--SLOT.info:Hide()
 						end
-					else
-						SLOT.text:SetText("")
-						SLOT.border:SetVertexColor(1, 1, 1, 0)
-						--SLOT.info:Hide()
 					end
 				end
-			end)
+			end
 		end
+		IAUpdateBags()
+
+		local frame = CreateFrame("FRAME")
+		frame:RegisterEvent( "BAG_UPDATE" )
+		frame:SetScript( "OnEvent", function(self,event)
+			IAUpdateBags()
+		end )
 	end
 
 	if IABUILD ~= "RETAIL" then

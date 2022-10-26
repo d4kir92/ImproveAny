@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.18" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.19" )
 }
 
 
@@ -216,8 +216,8 @@ function ImproveAny:UpdateILVLIcons()
 	if IFThink and IFThink.UpdateItemInfos then
 		IFThink.UpdateItemInfos()
 	end
-	if ContainerFrame_UpdateAll then
-		ContainerFrame_UpdateAll()
+	if IAUpdateBags then
+		IAUpdateBags()
 	end
 end
 
