@@ -42,7 +42,7 @@ function IALang_enUS()
 
 		["XPBAR"] = "XPBar",
 		["XPLEVEL"] = "Character Level",
-		["XPNUMBER"] = "XP Nummer",
+		["XPNUMBER"] = "XP Number",
 		["XPPERCENT"] = "XP Percent",
 		["XPMISSING"] = "Missing XP",
 		["XPEXHAUSTION"] = "XP Exhaustion",
@@ -50,7 +50,7 @@ function IALang_enUS()
 		["XPHIDEARTWORK"] = "XPBar Hide Artwork",
 
 		["REPBAR"] = "Reputation Bar",
-		["REPNUMBER"] = "Reputation Nummer",
+		["REPNUMBER"] = "Reputation Number",
 		["REPPERCENT"] = "Reputation Percent",
 		["REPHIDEARTWORK"] = "Reputation Bar Hide Artwork",
 
