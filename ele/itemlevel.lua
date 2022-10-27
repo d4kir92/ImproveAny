@@ -73,23 +73,6 @@ function IAAddIlvl(SLOT, i)
 		end
 
 		SLOT.border:SetPoint("CENTER")
-
-		function SLOT.info:UpdateVisible()
-			SLOT.info.vis = SLOT.info.vis or false
-			
-			if MouseIsOver( SLOT.info ) ~= SLOT.info.vis then
-				SLOT.info.vis = MouseIsOver( SLOT.info )
-
-				if SLOT.info.vis then
-					SLOT.info:SetAlpha( 0 )
-				else
-					SLOT.info:SetAlpha( 1 )
-				end
-			end
-
-			C_Timer.After( 0.04, SLOT.info.UpdateVisible )
-		end
-		SLOT.info:UpdateVisible()
 	end
 end
 
@@ -339,7 +322,9 @@ function ImproveAny:InitItemLevel()
 
 		
 		-- BAGS
+		local once = true
 		function IAUpdateBags()
+			once = false
 			local tab = {}
 			if ContainerFrameUtil_EnumerateContainerFrames then
 				_, tab = ContainerFrameUtil_EnumerateContainerFrames()
@@ -403,12 +388,17 @@ function ImproveAny:InitItemLevel()
 				end
 			end
 		end
-		IAUpdateBags()
-
+		
 		local frame = CreateFrame("FRAME")
 		frame:RegisterEvent( "BAG_UPDATE" )
-		frame:SetScript( "OnEvent", function(self,event)
+		frame:SetScript( "OnEvent", function( self, event )
 			IAUpdateBags()
+		end )
+
+		C_Timer.After( 4, function()
+			if once then
+				IAUpdateBags()
+			end
 		end )
 	end
 
