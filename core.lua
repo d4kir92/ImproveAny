@@ -71,7 +71,7 @@ function ImproveAny:Event( event, ... )
 			ImproveAny:InitDurabilityFrame()
 		end
 		ImproveAny:InitItemLevel()
-		--[[ImproveAny:InitMinimap()
+		ImproveAny:InitMinimap()
 		ImproveAny:InitMoneyBar()
 		ImproveAny:InitTokenBar()
 		ImproveAny:InitSkillBars()
@@ -92,7 +92,7 @@ function ImproveAny:Event( event, ... )
 			end
 		end
 
-		ImproveAny:InitRaidFrames()]]
+		ImproveAny:InitRaidFrames()
 
 		C_Timer.After( 1, function()
 			for i = 2.6, 4.1, 0.1 do
