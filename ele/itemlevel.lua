@@ -344,7 +344,7 @@ function ImproveAny:InitItemLevel()
 					if GetCVarBool( "combinedBags" ) then
 						SLOT = _G["ContainerFrame" .. x .. 'Item' .. bid]
 					end
-					if SLOT then
+					if SLOT and SLOT.text and SLOT.border then
 						local slotLink = GetContainerItemLink(id, i)
 						IAAddIlvl(SLOT, i)
 
