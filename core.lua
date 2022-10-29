@@ -82,6 +82,7 @@ function ImproveAny:Event( event, ... )
 			ImproveAny:InitWorldMapFrame()
 		end
 		ImproveAny:InitXPBar()
+		ImproveAny:InitSuperTrackedFrame()
 		
 		ImproveAny:InitIASettings()
 
