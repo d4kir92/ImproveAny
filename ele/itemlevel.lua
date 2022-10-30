@@ -60,7 +60,7 @@ function IAAddIlvl( SLOT, i )
 		SLOT.iaborder = SLOT.iainfo:CreateTexture("SLOT.iaborder", "OVERLAY")
 		SLOT.iaborder:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
 		SLOT.iaborder:SetBlendMode( "ADD" )
-		SLOT.iaborder:SetAlpha( 2 )
+		SLOT.iaborder:SetAlpha( 1 )
 
 		SLOT.iatext:SetPoint( "TOP", SLOT.iainfo, "TOP", 0, -slotbry )
 		SLOT.iatexth:SetPoint( "BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry )
