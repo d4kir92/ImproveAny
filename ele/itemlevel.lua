@@ -376,30 +376,42 @@ function ImproveAny:InitItemLevel()
 				tinsert( tab, _G["ContainerFrame" .. i] )
 			end
 
+			if ContainerFrameCombinedBags and ContainerFrameCombinedBags.iasetup == nil then
+				ContainerFrameCombinedBags.iasetup = true
+				ContainerFrameCombinedBags:HookScript( "OnShow", function( self )
+					IAUpdateBags()
+				end )
+			end
+
 			for x, bag in pairs( tab ) do
+				if bag.iasetup == nil then
+					bag.iasetup = true
+
+					bag:HookScript( "OnShow", function( self )
+						ImproveAny:UpdateBag( bag, x - 1 )
+					end )
+				end
 				ImproveAny:UpdateBag( bag, x - 1 )
 			end
 		end
 		
 		local frame = CreateFrame("FRAME")
-		frame:RegisterEvent("BAG_OPEN");
-		frame:RegisterEvent("BAG_CLOSED");
-		frame:RegisterEvent("QUEST_ACCEPTED");
-		frame:RegisterEvent("UNIT_QUEST_LOG_CHANGED");
-		frame:RegisterEvent("BAG_UPDATE");
-		frame:RegisterEvent("UNIT_INVENTORY_CHANGED");
-		frame:RegisterEvent("ITEM_LOCK_CHANGED");
-		frame:RegisterEvent("BAG_UPDATE_COOLDOWN");
-		frame:RegisterEvent("DISPLAY_SIZE_CHANGED");
-		frame:RegisterEvent("INVENTORY_SEARCH_UPDATE");
-		frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED");
-		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED");
+		frame:RegisterEvent("BAG_OPEN")
+		frame:RegisterEvent("BAG_CLOSED")
+		frame:RegisterEvent("QUEST_ACCEPTED")
+		frame:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
+		frame:RegisterEvent("BAG_UPDATE")
+		frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+		frame:RegisterEvent("ITEM_LOCK_CHANGED")
+		frame:RegisterEvent("BAG_UPDATE_COOLDOWN")
+		frame:RegisterEvent("DISPLAY_SIZE_CHANGED")
+		frame:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+		frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
+		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
 		frame:SetScript( "OnEvent", function( self, event )
 			IAUpdateBags()
 		end )
-		for i = 1, 10, 0.1 do
-			C_Timer.After( i, IAUpdateBags )
-		end
+		IAUpdateBags()
 	end
 
 	if IABUILD ~= "RETAIL" then
