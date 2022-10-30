@@ -15,6 +15,8 @@ function IALang_enUS()
 
 		["GENERAL"] = "General",
 		["SHOWMINIMAPBUTTON"] = "Show Minimap Button",
+		["WORLDTEXTSCALE"] = "World Text Scale",
+		["MAXZOOM"] = "Max Zoom Distance",
 
 		["QUICKGAMEPLAY"] = "Quick Gameplay",
 		["FASTLOOTING"] = "Fast Looting",

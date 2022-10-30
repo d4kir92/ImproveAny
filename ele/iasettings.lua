@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.23" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.24" )
 }
 
 
@@ -207,7 +207,7 @@ function IACreateSlider( x, key, val, func, vmin, vmax, steps )
 			end
 		end
 	end)
-
+	posy = posy - 10
 	IASetPos( sls[key], key, x )
 end
 
@@ -345,7 +345,9 @@ function ImproveAny:InitIASettings()
 		AddCategory( "GENERAL" )
 		AddCheckBox( 4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton )
 		IASetPos( dds["FONT"], "FONT" )
-
+		IACreateSlider( 4, "WORLDTEXTSCALE", 1.2, ImproveAny.UpdateWorldTextScale, 0.4, 1.6, 0.1 )
+		IACreateSlider( 4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1 )
+		
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
 

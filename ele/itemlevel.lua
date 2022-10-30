@@ -36,43 +36,43 @@ local IACharSlots = {
 	--"Bag3Slot"
 }
 
-function IAAddIlvl(SLOT, i)
-	if SLOT and SLOT.info == nil then
+function IAAddIlvl( SLOT, i )
+	if SLOT and SLOT.iainfo == nil then
 		local name = ""
 		if SLOT.GetName then
 			name = SLOT:GetName() .. "."
 		end
 
-		SLOT.info = CreateFrame( "FRAME", name .. "info", SLOT )
-		SLOT.info:SetSize( SLOT:GetSize() )
-		SLOT.info:SetPoint( "CENTER", SLOT, "CENTER", 0, 0 )
-		SLOT.info:SetFrameLevel( 50 )
-		SLOT.info:EnableMouse( false )
+		SLOT.iainfo = CreateFrame( "FRAME", name .. ".iainfo", SLOT )
+		SLOT.iainfo:SetSize( SLOT:GetSize() )
+		SLOT.iainfo:SetPoint( "CENTER", SLOT, "CENTER", 0, 0 )
+		SLOT.iainfo:SetFrameLevel( 50 )
+		SLOT.iainfo:EnableMouse( false )
 
-		SLOT.text = SLOT.info:CreateFontString(nil, "OVERLAY")
-		SLOT.text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE")
-		SLOT.text:SetShadowOffset(1, -1)
+		SLOT.iatext = SLOT.iainfo:CreateFontString(nil, "OVERLAY")
+		SLOT.iatext:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE")
+		SLOT.iatext:SetShadowOffset(1, -1)
 
-		SLOT.texth = SLOT.info:CreateFontString(nil, "OVERLAY")
-		SLOT.texth:SetFont(STANDARD_TEXT_FONT, 9, "THINOUTLINE")
-		SLOT.texth:SetShadowOffset(1, -1)
+		SLOT.iatexth = SLOT.iainfo:CreateFontString(nil, "OVERLAY")
+		SLOT.iatexth:SetFont(STANDARD_TEXT_FONT, 9, "THINOUTLINE")
+		SLOT.iatexth:SetShadowOffset(1, -1)
 
-		SLOT.border = SLOT.info:CreateTexture("SLOT.border", "OVERLAY")
-		SLOT.border:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
-		SLOT.border:SetBlendMode("ADD")
-		SLOT.border:SetAlpha(IAGlowAlpha)
+		SLOT.iaborder = SLOT.iainfo:CreateTexture("SLOT.iaborder", "OVERLAY")
+		SLOT.iaborder:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
+		SLOT.iaborder:SetBlendMode( "ADD" )
+		SLOT.iaborder:SetAlpha( 2 )
 
-		SLOT.text:SetPoint( "TOP", SLOT.info, "TOP", 0, -slotbry )
-		SLOT.texth:SetPoint( "BOTTOM", SLOT.info, "BOTTOM", 0, slotbry )
+		SLOT.iatext:SetPoint( "TOP", SLOT.iainfo, "TOP", 0, -slotbry )
+		SLOT.iatexth:SetPoint( "BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry )
 
 		local NormalTexture = _G[SLOT:GetName() .. "NormalTexture"]
 		if NormalTexture then
 			local sw, sh = NormalTexture:GetSize()
-			SLOT.border:SetWidth(sw)
-			SLOT.border:SetHeight(sh)
+			SLOT.iaborder:SetWidth(sw)
+			SLOT.iaborder:SetHeight(sh)
 		end
 
-		SLOT.border:SetPoint("CENTER")
+		SLOT.iaborder:SetPoint("CENTER")
 	end
 end
 
@@ -96,7 +96,7 @@ function ImproveAny:InitItemLevel()
 				local id = i
 				i = i - 1
 				local SLOT = _G["Character" .. slot]
-				if SLOT and SLOT.text ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
+				if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
 					local ItemID = GetInventoryItemLink("PLAYER", SLOT:GetID()) or GetInventoryItemID("PLAYER", SLOT:GetID())
 					if ItemID ~= nil and GetDetailedItemLevelInfo then
 						local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo(ItemID)
@@ -106,23 +106,23 @@ function ImproveAny:InitItemLevel()
 						if current and maximum then
 							local per = current / maximum
 							if current == maximum then -- 100%
-								SLOT.texth:SetTextColor(0,	1,		0,	1)
+								SLOT.iatexth:SetTextColor(0,	1,		0,	1)
 							elseif per == 0.0 then -- = 0%, black
-								SLOT.texth:SetTextColor(0,	0,		0,	1)
+								SLOT.iatexth:SetTextColor(0,	0,		0,	1)
 							elseif per < 0.1 then -- < 10%, red
-								SLOT.texth:SetTextColor(1,	0,		0,	1)
+								SLOT.iatexth:SetTextColor(1,	0,		0,	1)
 							elseif per < 0.3 then -- < 30%, orange
-								SLOT.texth:SetTextColor(1,	0.65,	0,	1)
+								SLOT.iatexth:SetTextColor(1,	0.65,	0,	1)
 							elseif per < 1 then -- < 100%, red
-								SLOT.texth:SetTextColor(1,	1,		0,	1)
+								SLOT.iatexth:SetTextColor(1,	1,		0,	1)
 							end
 							if current ~= maximum then
-								SLOT.texth:SetText( string.format("%0.0f", current / maximum * 100) .. "%" )
+								SLOT.iatexth:SetText( string.format("%0.0f", current / maximum * 100) .. "%" )
 							else
-								SLOT.texth:SetText( "" )
+								SLOT.iatexth:SetText( "" )
 							end
 						else
-							SLOT.texth:SetText( "" )
+							SLOT.iatexth:SetText( "" )
 						end
 						if ilvl and color then
 							if slot == "AmmoSlot" then
@@ -140,35 +140,31 @@ function ImproveAny:InitItemLevel()
 							end
 							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
 								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
-									SLOT.text:SetText( color.hex .. ilvl )
+									SLOT.iatext:SetText( color.hex .. ilvl )
 								end
 								local alpha = IAGlowAlpha
 								if color.r == 1 and color.g == 1 and color.b == 1 then
 									alpha = alpha - 0.2
 								end
-								if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
-									SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+								if rarity and rarity > 1 and ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+									SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 								else
-									SLOT.border:SetVertexColor(1, 1, 1, 0)
+									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 								end
-								--SLOT.info:Show()
 							else
-								SLOT.text:SetText("")
-								SLOT.texth:SetText("")
-								SLOT.border:SetVertexColor(1, 1, 1, 0)
-								--SLOT.info:Hide()
+								SLOT.iatext:SetText("")
+								SLOT.iatexth:SetText("")
+								SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 							end
 						else
-							SLOT.text:SetText("")
-							SLOT.texth:SetText("")
-							SLOT.border:SetVertexColor(1, 1, 1, 0)
-							--SLOT.info:Hide()
+							SLOT.iatext:SetText("")
+							SLOT.iatexth:SetText("")
+							SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 						end
 					else
-						SLOT.text:SetText("")
-						SLOT.texth:SetText("")
-						SLOT.border:SetVertexColor(1, 1, 1, 0)
-						--SLOT.info:Hide()
+						SLOT.iatext:SetText("")
+						SLOT.iatexth:SetText("")
+						SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 					end
 				end
 			end
@@ -242,7 +238,7 @@ function ImproveAny:InitItemLevel()
 					local sum = 0
 					for i, slot in pairs(IACharSlots) do
 						local SLOT = _G["Inspect" .. slot]
-						if SLOT and SLOT.text ~= nil and GetInventoryItemLink then
+						if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink then
 							local ItemID = GetInventoryItemLink("TARGET", SLOT:GetID()) --GetInventoryItemID("PLAYER", SLOT:GetID())
 							if ItemID and GetDetailedItemLevelInfo then
 								local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo(ItemID)
@@ -256,32 +252,28 @@ function ImproveAny:InitItemLevel()
 									end
 									if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
 										if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
-											SLOT.text:SetText(color.hex .. ilvl)
+											SLOT.iatext:SetText(color.hex .. ilvl)
 										end
 										local alpha = IAGlowAlpha
 										if color.r == 1 and color.g == 1 and color.b == 1 then
 											alpha = alpha - 0.2
 										end
-										if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
-											SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+										if rarity and rarity > 1 and ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+											SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 										else
-											SLOT.border:SetVertexColor(1, 1, 1, 0)
+											SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 										end
-										--SLOT.info:Show()
 									else
-										SLOT.text:SetText("")
-										SLOT.border:SetVertexColor(1, 1, 1, 0)
-										--SLOT.info:Hide()
+										SLOT.iatext:SetText("")
+										SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 									end
 								else
-									SLOT.text:SetText("")
-									SLOT.border:SetVertexColor(1, 1, 1, 0)
-									--SLOT.info:Hide()
+									SLOT.iatext:SetText("")
+									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 								end
 							else
-								SLOT.text:SetText("")
-								SLOT.border:SetVertexColor(1, 1, 1, 0)
-								--SLOT.info:Hide()
+								SLOT.iatext:SetText("")
+								SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 							end
 						end
 					end
@@ -344,45 +336,43 @@ function ImproveAny:InitItemLevel()
 					if GetCVarBool( "combinedBags" ) then
 						SLOT = _G["ContainerFrame" .. x .. 'Item' .. bid]
 					end
-					if SLOT and SLOT.text and SLOT.border then
-						local slotLink = GetContainerItemLink(id, i)
-						IAAddIlvl(SLOT, i)
+					if SLOT then
+						local slotLink = GetContainerItemLink( id, i )
+						IAAddIlvl( SLOT, i )
 
 						if slotLink and GetDetailedItemLevelInfo then
-							local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo(slotLink)
+							local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo( slotLink )
 							local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
 							local color = ITEM_QUALITY_COLORS[rarity]
+
 							if ilvl and color then
 								if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
 									if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
-										SLOT.text:SetText(color.hex .. ilvl)
+										SLOT.iatext:SetText(color.hex .. ilvl)
 									else
-										SLOT.text:SetText("")
+										SLOT.iatext:SetText("")
 									end
 									local alpha = IAGlowAlpha
 									if color.r == 1 and color.g == 1 and color.b == 1 then
 										alpha = alpha - 0.2
 									end
-									if ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
-										SLOT.border:SetVertexColor(color.r, color.g, color.b, alpha)
+
+									if rarity and rarity > 1 and ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+										SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 									else
-										SLOT.border:SetVertexColor(1, 1, 1, 0)
+										SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 									end
-									--SLOT.info:Show()
 								else
-									SLOT.text:SetText("")
-									SLOT.border:SetVertexColor(1, 1, 1, 0)
-									--SLOT.info:Hide()
+									SLOT.iatext:SetText("")
+									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 								end
 							else
-								SLOT.text:SetText("")
-								SLOT.border:SetVertexColor(1, 1, 1, 0)
-								--SLOT.info:Hide()
+								SLOT.iatext:SetText("")
+								SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 							end
 						else
-							SLOT.text:SetText("")
-							SLOT.border:SetVertexColor(1, 1, 1, 0)
-							--SLOT.info:Hide()
+							SLOT.iatext:SetText("")
+							SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 						end
 					end
 				end
@@ -412,11 +402,13 @@ function ImproveAny:InitItemLevel()
 		BagItemAutoSortButton = CreateFrame("Button", "BagItemAutoSortButton", ContainerFrame1)
 		BagItemAutoSortButton:SetSize(16, 16)
 		BagItemAutoSortButton:SetPoint("TOPLEFT", ContainerFrame1, "TOPLEFT", 164, -30)
+
 		--[[
 		BagItemAutoSortButton:SetNormalTexture("bags-button-autosort-up")
 		BagItemAutoSortButton:SetPushedTexture("bags-button-autosort-down")
 		BagItemAutoSortButton:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square")
 		]]
+
 		BagItemAutoSortButton:SetScript("OnClick", function(self, ...)
 			PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 			if SortBags then
