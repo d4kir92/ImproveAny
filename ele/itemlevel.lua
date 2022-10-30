@@ -315,55 +315,44 @@ function ImproveAny:InitItemLevel()
 		
 		-- BAGS
 		local once = true
-		function IAUpdateBags()
-			once = false
-			local tab = {}
-			if ContainerFrameUtil_EnumerateContainerFrames then
-				_, tab = ContainerFrameUtil_EnumerateContainerFrames()
-			else
-				for i = 1, 20 do
-					tinsert( tab, _G["ContainerFrame" .. i] )
-				end
+		function ImproveAny:UpdateBag( bag, id )
+			local name = bag:GetName()
+			local bagID = bag:GetID()
+			if GetCVarBool( "combinedBags" ) then
+				bagID = id
 			end
-			for x, bag in pairs( tab ) do
-				local id = x - 1
-				local name = bag:GetName()
-				local size = GetContainerNumSlots( id )
-				
-				for i=1, size do
-					local bid = size - i + 1
-					local SLOT = _G[name .. 'Item' .. bid]
-					if GetCVarBool( "combinedBags" ) then
-						SLOT = _G["ContainerFrame" .. x .. 'Item' .. bid]
-					end
-					if SLOT then
-						local slotLink = GetContainerItemLink( id, i )
-						IAAddIlvl( SLOT, i )
+			local size = GetContainerNumSlots( bagID )
 
-						if slotLink and GetDetailedItemLevelInfo then
-							local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo( slotLink )
-							local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
-							local color = ITEM_QUALITY_COLORS[rarity]
+			for i = 1, size do
+				local SLOT = _G[name .. "Item" .. i]
+				if GetCVarBool( "combinedBags" ) then
+					SLOT = _G[name .. "Item" .. i]
+				end
+				if SLOT then
+					local slotID = size - i  + 1
+					local slotLink = GetContainerItemLink( bagID, slotID )
+					IAAddIlvl( SLOT, slotID )
 
-							if ilvl and color then
-								if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
-									if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
-										SLOT.iatext:SetText(color.hex .. ilvl)
-									else
-										SLOT.iatext:SetText("")
-									end
-									local alpha = IAGlowAlpha
-									if color.r == 1 and color.g == 1 and color.b == 1 then
-										alpha = alpha - 0.2
-									end
+					if slotLink and GetDetailedItemLevelInfo then
+						local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo( slotLink )
+						local ilvl, _, baseilvl = GetDetailedItemLevelInfo(slotLink)
+						local color = ITEM_QUALITY_COLORS[rarity]
 
-									if rarity and rarity > 1 and ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
-										SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
-									else
-										SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
-									end
+						if ilvl and color then
+							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
+								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
+									SLOT.iatext:SetText(color.hex .. ilvl)
 								else
 									SLOT.iatext:SetText("")
+								end
+								local alpha = IAGlowAlpha
+								if color.r == 1 and color.g == 1 and color.b == 1 then
+									alpha = alpha - 0.2
+								end
+
+								if rarity and rarity > 1 and ImproveAny:IsEnabled( "ITEMLEVELBORDER", true ) then
+									SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
+								else
 									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 								end
 							else
@@ -374,22 +363,43 @@ function ImproveAny:InitItemLevel()
 							SLOT.iatext:SetText("")
 							SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 						end
+					else
+						SLOT.iatext:SetText("")
+						SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 					end
 				end
 			end
 		end
+		function IAUpdateBags()
+			local tab = {}
+			for i = 1, 20 do
+				tinsert( tab, _G["ContainerFrame" .. i] )
+			end
+
+			for x, bag in pairs( tab ) do
+				ImproveAny:UpdateBag( bag, x - 1 )
+			end
+		end
 		
 		local frame = CreateFrame("FRAME")
-		frame:RegisterEvent( "BAG_UPDATE" )
+		frame:RegisterEvent("BAG_OPEN");
+		frame:RegisterEvent("BAG_CLOSED");
+		frame:RegisterEvent("QUEST_ACCEPTED");
+		frame:RegisterEvent("UNIT_QUEST_LOG_CHANGED");
+		frame:RegisterEvent("BAG_UPDATE");
+		frame:RegisterEvent("UNIT_INVENTORY_CHANGED");
+		frame:RegisterEvent("ITEM_LOCK_CHANGED");
+		frame:RegisterEvent("BAG_UPDATE_COOLDOWN");
+		frame:RegisterEvent("DISPLAY_SIZE_CHANGED");
+		frame:RegisterEvent("INVENTORY_SEARCH_UPDATE");
+		frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED");
+		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED");
 		frame:SetScript( "OnEvent", function( self, event )
 			IAUpdateBags()
 		end )
-
-		C_Timer.After( 4, function()
-			if once then
-				IAUpdateBags()
-			end
-		end )
+		for i = 1, 10, 0.1 do
+			C_Timer.After( i, IAUpdateBags )
+		end
 	end
 
 	if IABUILD ~= "RETAIL" then
