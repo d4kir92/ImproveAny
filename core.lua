@@ -54,6 +54,35 @@ IAHIDDEN:Hide()
 
 
 
+local IAMaxZoom = 5
+function ImproveAny:GetMaxZoom()
+	return IAMaxZoom
+end
+for i = 2.6, 5.0, 0.1 do
+	ConsoleExec( "cameraDistanceMaxZoomFactor " .. i )
+end
+IAMaxZoom = tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) )
+
+function ImproveAny:UpdateMaxZoom()
+	ConsoleExec( "cameraDistanceMaxZoomFactor " .. IAGV( "MAXZOOM", ImproveAny:GetMaxZoom() ) )
+end
+
+function ImproveAny:UpdateWorldTextScale()
+	ConsoleExec( "WorldTextScale " .. IAGV( "WORLDTEXTSCALE", 1.2 ) )
+end
+
+function ImproveAny:CheckCVars()
+	if IAGV( "MAXZOOM", ImproveAny:GetMaxZoom() ) ~= tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) ) then
+		ImproveAny:UpdateMaxZoom()
+	end
+	if IAGV( "WORLDTEXTSCALE", 1.2 ) ~= tonumber( GetCVar( "WorldTextScale" ) ) then
+		ImproveAny:UpdateMaxZoom()
+	end
+	C_Timer.After( 1, ImproveAny.CheckCVars )
+end
+
+
+
 function ImproveAny:Event( event, ... )
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
@@ -94,13 +123,6 @@ function ImproveAny:Event( event, ... )
 		end
 
 		ImproveAny:InitRaidFrames()
-
-		C_Timer.After( 1, function()
-			for i = 2.6, 4.1, 0.1 do
-				ConsoleExec( "cameraDistanceMaxZoomFactor " .. i )
-			end
-			ConsoleExec( "WorldTextScale " .. 1.2 )
-		end )
 
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then
@@ -169,6 +191,12 @@ function ImproveAny:Event( event, ... )
 				IAMMBTN:Hide("ImproveAnyMinimapIcon")
 			end
 		end
+
+
+		ImproveAny:UpdateMaxZoom()
+		ImproveAny:UpdateWorldTextScale()
+
+		ImproveAny:CheckCVars()
 	end
 end
 

@@ -7,6 +7,8 @@ function IALang_deDE()
 
 		["GENERAL"] = "Allgemein",
 		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
+		["WORLDTEXTSCALE"] = "Welttext Skala",
+		["MAXZOOM"] = "Maximale Zoomstufe",
 
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",
