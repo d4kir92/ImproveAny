@@ -311,7 +311,19 @@ function ImproveAny:InitItemLevel()
 		end
 		IAWaitForInspectFrame()
 		
+		function IAGetContainerNumSlots( bagID )
+			if C_Container and C_Container.GetContainerNumSlots then
+				return C_Container.GetContainerNumSlots( bagID )
+			end
+			return GetContainerNumSlots( bagID )
+		end
 
+		function IAGetContainerItemLink( bagID, slotID )
+			if C_Container and C_Container.GetContainerItemLink then
+				return C_Container.GetContainerItemLink( bagID, slotID )
+			end
+			return GetContainerItemLink( bagID, slotID )
+		end
 		
 		-- BAGS
 		local once = true
@@ -321,7 +333,8 @@ function ImproveAny:InitItemLevel()
 			if GetCVarBool( "combinedBags" ) then
 				bagID = id
 			end
-			local size = GetContainerNumSlots( bagID )
+
+			local size = IAGetContainerNumSlots( bagID )
 
 			for i = 1, size do
 				local SLOT = _G[name .. "Item" .. i]
@@ -330,7 +343,7 @@ function ImproveAny:InitItemLevel()
 				end
 				if SLOT then
 					local slotID = size - i  + 1
-					local slotLink = GetContainerItemLink( bagID, slotID )
+					local slotLink = IAGetContainerItemLink( bagID, slotID )
 					IAAddIlvl( SLOT, slotID )
 
 					if slotLink and GetDetailedItemLevelInfo then
