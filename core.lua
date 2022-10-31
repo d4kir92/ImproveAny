@@ -68,15 +68,15 @@ function ImproveAny:UpdateMaxZoom()
 end
 
 function ImproveAny:UpdateWorldTextScale()
-	ConsoleExec( "WorldTextScale " .. IAGV( "WORLDTEXTSCALE", 1.2 ) )
+	ConsoleExec( "WorldTextScale " .. IAGV( "WORLDTEXTSCALE", 1.0 ) )
 end
 
 function ImproveAny:CheckCVars()
 	if IAGV( "MAXZOOM", ImproveAny:GetMaxZoom() ) ~= tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) ) then
 		ImproveAny:UpdateMaxZoom()
 	end
-	if IAGV( "WORLDTEXTSCALE", 1.2 ) ~= tonumber( GetCVar( "WorldTextScale" ) ) then
-		ImproveAny:UpdateMaxZoom()
+	if IAGV( "WORLDTEXTSCALE", 1.0 ) ~= tonumber( GetCVar( "WorldTextScale" ) ) then
+		ImproveAny:UpdateWorldTextScale()
 	end
 	C_Timer.After( 1, ImproveAny.CheckCVars )
 end
