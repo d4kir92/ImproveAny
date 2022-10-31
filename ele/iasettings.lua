@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.28" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.29" )
 }
 
 
@@ -150,64 +150,67 @@ local function AddCheckBox( x, key, val, func )
 	end
 end
 
-function IAAddEditBox( x, key, val, func )
-	ebs[key] = CreateFrame( "EditBox", "ebs[" .. key .. "]", IASettings.SC, "InputBoxTemplate" )
-	ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
-	ebs[key]:SetSize( 360, 24 )
-	ebs[key]:SetAutoFocus( false )
-	ebs[key].text = IAGV( key, val )
-	ebs[key]:SetText( IAGV( key, val ) )
-	ebs[key]:SetScript( "OnTextChanged", function( self, ... )
-		if self.text ~= ebs[key]:GetText() then
-			IASV( key, ebs[key]:GetText() )
+local function AddEditBox( x, key, val, func )
+	if ebs[key] == nil then
+		ebs[key] = CreateFrame( "EditBox", "ebs[" .. key .. "]", IASettings.SC, "InputBoxTemplate" )
+		ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
+		ebs[key]:SetSize( 360, 24 )
+		ebs[key]:SetAutoFocus( false )
+		ebs[key].text = IAGV( key, val )
+		ebs[key]:SetText( IAGV( key, val ) )
+		ebs[key]:SetScript( "OnTextChanged", function( self, ... )
+			if self.text ~= ebs[key]:GetText() then
+				IASV( key, ebs[key]:GetText() )
 
-			if func then
-				func()
+				if func then
+					func()
+				end
 			end
-		end
-	end )
+		end )
 
-	ebs[key].f = ebs[key]:CreateFontString( nil, nil, "GameFontNormal" )
-	ebs[key].f:SetPoint( "LEFT", ebs[key], "LEFT", 0, 16 )
-	ebs[key].f:SetText( IAGT( key ) )
-
+		ebs[key].f = ebs[key]:CreateFontString( nil, nil, "GameFontNormal" )
+		ebs[key].f:SetPoint( "LEFT", ebs[key], "LEFT", 0, 16 )
+		ebs[key].f:SetText( IAGT( key ) )
+	end
 	IASetPos( ebs[key], key, x + 8 )
 end
 
-function IACreateSlider( x, key, val, func, vmin, vmax, steps )
-	sls[key] = CreateFrame("Slider", nil, IASettings.SC, "OptionsSliderTemplate")
+local function AddSlider( x, key, val, func, vmin, vmax, steps )
+	if sls[key] == nil then
+		sls[key] = CreateFrame( "Slider", "sls[" .. key .. "]", IASettings.SC, "OptionsSliderTemplate" )
 
-	sls[key]:SetWidth( IASettings.SC:GetWidth() - 30 - x )
-	sls[key]:SetPoint("TOPLEFT", x + 5, posy )
+		sls[key]:SetWidth( IASettings.SC:GetWidth() - 30 - x )
+		sls[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x + 5, posy )
 
-	sls[key].Low:SetText(vmin)
-	sls[key].High:SetText(vmax)
+		sls[key].Low:SetText(vmin)
+		sls[key].High:SetText(vmax)
 
-	sls[key].Text:SetText(IAGT(key) .. ": " .. IAGV( key, val ) )
+		sls[key].Text:SetText(IAGT(key) .. ": " .. IAGV( key, val ) )
 
-	sls[key]:SetMinMaxValues(vmin, vmax)
-	sls[key]:SetObeyStepOnDrag(true)
-	sls[key]:SetValueStep(steps)
+		sls[key]:SetMinMaxValues(vmin, vmax)
+		sls[key]:SetObeyStepOnDrag(true)
+		sls[key]:SetValueStep(steps)
 
-	sls[key]:SetValue(  IAGV( key, val ) )
+		sls[key]:SetValue(  IAGV( key, val ) )
 
-	sls[key]:SetScript("OnValueChanged", function(self, val)
-		--val = val - val % steps
-		val = tonumber( string.format( "%" .. steps .. "f", val ) )
-		if val and val ~= IAGV( key ) then
-			IASV( key, val )
-			sls[key].Text:SetText( IAGT( key ) .. ": " .. val )
+		sls[key]:SetScript("OnValueChanged", function(self, val)
+			--val = val - val % steps
+			val = tonumber( string.format( "%" .. steps .. "f", val ) )
+			if val and val ~= IAGV( key ) then
+				IASV( key, val )
+				sls[key].Text:SetText( IAGT( key ) .. ": " .. val )
 
-			if func then
-				func()
+				if func then
+					func()
+				end
+
+				if IASettings.save then
+					IASettings.save:Enable()
+				end
 			end
-
-			if IASettings.save then
-				IASettings.save:Enable()
-			end
-		end
-	end)
-	posy = posy - 10
+		end)
+		posy = posy - 10
+	end
 	IASetPos( sls[key], key, x )
 end
 
@@ -345,8 +348,8 @@ function ImproveAny:InitIASettings()
 		AddCategory( "GENERAL" )
 		AddCheckBox( 4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton )
 		IASetPos( dds["FONT"], "FONT" )
-		IACreateSlider( 4, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1 )
-		IACreateSlider( 4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1 )
+		AddSlider( 4, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1 )
+		AddSlider( 4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1 )
 		
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
@@ -394,15 +397,15 @@ function ImproveAny:InitIASettings()
 
 		if IABUILD ~= "RETAIL" then
 			AddCategory( "UNITFRAMES" )
-			IAAddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
-			IAAddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )
+			AddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
+			AddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )
 			AddCheckBox( 4, "RAIDFRAMEMOREBUFFS", true )
-			IACreateSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
-			IACreateSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+			AddSlider( 24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
+			AddSlider( 24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1 )
 			local options = DefaultCompactMiniFrameSetUpOptions
 			AddCheckBox( 4, "OVERWRITERAIDFRAMESIZE", false )
-			IACreateSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
-			IACreateSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+			AddSlider( 24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
+			AddSlider( 24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10 )
 		end
 
 		AddCategory( "EXTRAS" )
