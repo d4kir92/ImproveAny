@@ -197,6 +197,61 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:UpdateWorldTextScale()
 
 		ImproveAny:CheckCVars()
+
+		if ImproveAny:IsEnabled( "HIDEPVPBADGE", false ) then
+			if PlayerFrame and PlayerFrame.PlayerFrameContent and PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual then
+				hooksecurefunc( PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigePortrait, "Show", function( self )
+					self:Hide()
+				end )
+				PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigePortrait:Hide()
+
+				hooksecurefunc( PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigeBadge, "Show", function( self )
+					self:Hide()
+				end )
+				PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigeBadge:Hide()
+			end
+			if TargetFrame and TargetFrame.TargetFrameContent and TargetFrame.TargetFrameContent.TargetFrameContentContextual then
+				hooksecurefunc( TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait, "Show", function( self )
+					self:Hide()
+				end )
+				TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait:Hide()
+
+				hooksecurefunc( TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge, "Show", function( self )
+					self:Hide()
+				end )
+				TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge:Hide()
+			end
+			if FocusFrame and FocusFrame.TargetFrameContent and FocusFrame.TargetFrameContent.TargetFrameContentContextual then
+				hooksecurefunc( FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait, "Show", function( self )
+					self:Hide()
+				end )
+				FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait:Hide()
+
+				hooksecurefunc( FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge, "Show", function( self )
+					self:Hide()
+				end )
+				FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge:Hide()
+			end
+
+			if PlayerPVPIcon then
+				hooksecurefunc( PlayerPVPIcon, "Show", function( self )
+					self:Hide()
+				end )
+				PlayerPVPIcon:Hide()
+			end
+			if TargetFrameTextureFramePVPIcon then
+				hooksecurefunc( TargetFrameTextureFramePVPIcon, "Show", function( self )
+					self:Hide()
+				end )
+				TargetFrameTextureFramePVPIcon:Hide()
+			end
+			if FocusFrameTextureFramePVPIcon then
+				hooksecurefunc( FocusFrameTextureFramePVPIcon, "Show", function( self )
+					self:Hide()
+				end )
+				FocusFrameTextureFramePVPIcon:Hide()
+			end
+		end
 	end
 end
 

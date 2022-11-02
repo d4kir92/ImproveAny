@@ -9,6 +9,7 @@ function IALang_deDE()
 		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
 		["WORLDTEXTSCALE"] = "Welttext Skala",
 		["MAXZOOM"] = "Maximale Zoomstufe",
+		["HIDEPVPBADGE"] = "PVP-Abzeichen-Symbole ausblenden",
 
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",

@@ -17,6 +17,7 @@ function IALang_enUS()
 		["SHOWMINIMAPBUTTON"] = "Show Minimap Button",
 		["WORLDTEXTSCALE"] = "World Text Scale",
 		["MAXZOOM"] = "Max Zoom Distance",
+		["HIDEPVPBADGE"] = "Hide PVP Badge Icons",
 
 		["QUICKGAMEPLAY"] = "Quick Gameplay",
 		["FASTLOOTING"] = "Fast Looting",
