@@ -197,7 +197,7 @@ function IAAddStatusBar( func, args )
 end
 
 function ImproveAny:InitSkillBars()
-	if ImproveAny:IsEnabled( "SKILLBARS", true ) then
+	if ImproveAny:IsEnabled( "SKILLBARS", true ) and IABUILD ~= "RETAIL" then
 		IAAddStatusBar( IAGetWeaponSkillData, 16 )
 		IAAddStatusBar( IAGetWeaponSkillData, 17 )
 		IAAddStatusBar( IAGetWeaponSkillData, 18 )
