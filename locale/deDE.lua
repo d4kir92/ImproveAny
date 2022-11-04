@@ -10,7 +10,10 @@ function IALang_deDE()
 		["WORLDTEXTSCALE"] = "Welttext Skala",
 		["MAXZOOM"] = "Maximale Zoomstufe",
 		["HIDEPVPBADGE"] = "PVP-Abzeichen-Symbole ausblenden",
-
+		["TOP_OFFSET"] = "Fenster Anker Abstand - Oben",
+		["LEFT_OFFSET"] = "Fenster Anker Abstand - Links",
+		["PANEl_SPACING_X"] = "Fenster Abstand",
+		
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",
 

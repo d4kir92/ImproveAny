@@ -123,6 +123,8 @@ function ImproveAny:Event( event, ... )
 		end
 
 		ImproveAny:InitRaidFrames()
+		
+		ImproveAny:UpdateUIParentAttribute()
 
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then
