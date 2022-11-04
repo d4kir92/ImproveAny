@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.34" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.35" )
 }
 
 
@@ -285,9 +285,9 @@ function ImproveAny:UpdateRaidFrameSize()
 end
 
 function ImproveAny:UpdateUIParentAttribute()
-	local topOffset = IAGV( "TOP_OFFSET", 10 )
-	local leftOffset = IAGV( "LEFT_OFFSET", 10 )
-	local panelSpacingX = IAGV( "PANEl_SPACING_X", 10 )
+	local topOffset = IAGV( "TOP_OFFSET", 116 )
+	local leftOffset = IAGV( "LEFT_OFFSET", 16 )
+	local panelSpacingX = IAGV( "PANEl_SPACING_X", 32 )
 	UIParent:SetAttribute( "TOP_OFFSET", -topOffset )
 	UIParent:SetAttribute( "LEFT_OFFSET", leftOffset )
 	--UIParent:SetAttribute("CENTER_OFFSET", 400)
