@@ -18,7 +18,12 @@ function IALang_enUS()
 		["WORLDTEXTSCALE"] = "World Text Scale",
 		["MAXZOOM"] = "Max Zoom Distance",
 		["HIDEPVPBADGE"] = "Hide PVP Badge Icons",
-
+		["TOP_OFFSET"] = "Frame Anchor Spacing - Top",
+		["LEFT_OFFSET"] = "Frame Anchor Spacing - Left",
+		["PANEl_SPACING_X"] = "Frame Spacing",
+		["BAGSAMESIZE"] = "All Bags Same Size",
+		["BAGSIZE"] = "Bag size",
+		
 		["QUICKGAMEPLAY"] = "Quick Gameplay",
 		["FASTLOOTING"] = "Fast Looting",
 

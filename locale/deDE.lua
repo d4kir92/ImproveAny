@@ -13,6 +13,8 @@ function IALang_deDE()
 		["TOP_OFFSET"] = "Fenster Anker Abstand - Oben",
 		["LEFT_OFFSET"] = "Fenster Anker Abstand - Links",
 		["PANEl_SPACING_X"] = "Fenster Abstand",
+		["BAGSAMESIZE"] = "Alle Taschen gleich groß",
+		["BAGSIZE"] = "Taschengröße",
 		
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",

@@ -215,7 +215,7 @@ function ImproveAny:InitItemLevel()
 				IFThink.UpdateItemInfos()
 			end
 			if IAUpdateBags then
-				IAUpdateBags()
+				IAUpdateBagsIlvl()
 			end
 		end)
 
@@ -383,7 +383,7 @@ function ImproveAny:InitItemLevel()
 				end
 			end
 		end
-		function IAUpdateBags()
+		function IAUpdateBagsIlvl()
 			local tab = {}
 			for i = 1, 20 do
 				tinsert( tab, _G["ContainerFrame" .. i] )
@@ -392,7 +392,7 @@ function ImproveAny:InitItemLevel()
 			if ContainerFrameCombinedBags and ContainerFrameCombinedBags.iasetup == nil then
 				ContainerFrameCombinedBags.iasetup = true
 				ContainerFrameCombinedBags:HookScript( "OnShow", function( self )
-					IAUpdateBags()
+					IAUpdateBagsIlvl()
 				end )
 			end
 
@@ -422,9 +422,9 @@ function ImproveAny:InitItemLevel()
 		frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
 		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
 		frame:SetScript( "OnEvent", function( self, event )
-			IAUpdateBags()
+			IAUpdateBagsIlvl()
 		end )
-		IAUpdateBags()
+		IAUpdateBagsIlvl()
 	end
 
 	if IABUILD ~= "RETAIL" then

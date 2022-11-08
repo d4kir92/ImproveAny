@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.35" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.36" )
 }
 
 
@@ -220,7 +220,7 @@ function ImproveAny:UpdateILVLIcons()
 		IFThink.UpdateItemInfos()
 	end
 	if IAUpdateBags then
-		IAUpdateBags()
+		IAUpdateBagsIlvl()
 	end
 end
 
@@ -366,6 +366,9 @@ function ImproveAny:InitIASettings()
 		AddSlider( 4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 600.0, 1 )
 		AddSlider( 4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 400.0, 1 )
 		AddSlider( 4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1 )
+		
+		AddCheckBox( 4, "BAGSAMESIZE", true )
+		AddSlider( 24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1 )
 		
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
