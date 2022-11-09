@@ -433,7 +433,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "SKILLBARS", true )
 		AddCheckBox( 4, "CASTBAR", true )
 		AddCheckBox( 4, "DURABILITY", true )
-		AddSlider( 4, "HIDEDURATIONBELOW", 50, nil, 5, 100, 5 )
+		AddSlider( 24, "HIDEDURATIONBELOW", 50, nil, 5, 100, 5 )
 		AddCheckBox( 4, "BAGS", true )
 		AddCheckBox( 4, "WORLDMAP", true )
 	end
