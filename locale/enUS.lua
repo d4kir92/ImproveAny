@@ -77,7 +77,8 @@ function IALang_enUS()
 		["TOKENBAR"] = "Token Bar",
 		["SKILLBARS"] = "Skillbars (Professions, Weaponskills)",
 		["CASTBAR"] = "Castbar",
-		["DURABILITY"] = "Durability (Shows ItemLevel, Repaircosts)",
+		["DURABILITY"] = "Durability (Shows ItemLevel, Repaircosts)",		
+		["HIDEDURATIONBELOW"] = "show duration picture below:",
 		["BAGS"] = "Show Freespace for each Bag",
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
 	}
