@@ -70,6 +70,7 @@ function IALang_deDE()
 		["SKILLBARS"] = "Skillbars (Berufe, Waffenfertigkeiten)",
 		["CASTBAR"] = "Zauberleiste (Castbar)",
 		["DURABILITY"] = "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)",
+		["HIDEDURATIONBELOW"] = "verstecke duration bild unter:",
 		["BAGS"] = "Freiraum für jede Tasche anzeigen",
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
 	}
