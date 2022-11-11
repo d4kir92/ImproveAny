@@ -77,8 +77,10 @@ function ImproveAny:InitDurabilityFrame()
 				end
 			end
 
-			if not DurabilityFrame:IsVisible() then
+			if perc <= IAGV( "HIDEDURATIONBELOW", 30 ) then
 				DurabilityFrame:Show()
+			else
+				DurabilityFrame:Hide()
 			end
 
 			if DurabilityFrame.text2 and DurabilityFrame.text3 then
