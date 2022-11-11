@@ -29,12 +29,15 @@ function IAUpdateBagsTable()
 	IABAGSTryAdd( "MainMenuBarBackpackButton" )
 end
 
+local BAGThink = CreateFrame( "FRAME", "BAGThink" )
+function BAGThink.UpdateItemInfos()
+	--
+end
+
 function ImproveAny:InitBags()
 	local BagThinker = CreateFrame( "FRAME", "BagThinker", UIParent)
 
 	if CharacterBag0Slot then
-		local BAGThink = CreateFrame( "FRAME", "BAGThink" )
-
 		local br = 3
 		
 		for i, slot in pairs( BAGS ) do

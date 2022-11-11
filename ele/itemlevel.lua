@@ -135,11 +135,13 @@ function ImproveAny:InitItemLevel()
 								end
 							end
 							if i ~= 4 and i ~= 19 and i ~= 20 then -- ignore: shirt, tabard, ammo
-								count = count + 1
-								sum = sum + ilvl
+								if ilvl and ilvl > 1 then
+									count = count + 1
+									sum = sum + ilvl
+								end
 							end
 							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
-								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
+								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and ilvl and ilvl > 1 then
 									SLOT.iatext:SetText( color.hex .. ilvl )
 								end
 								local alpha = IAGlowAlpha
@@ -172,7 +174,7 @@ function ImproveAny:InitItemLevel()
 			if count > 0 then
 				local max = 16 -- when only IAnhand
 				if GetInventoryItemID("PLAYER", 17) then
-					local t1, t2, rarity, ilvl, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo(GetInventoryItemLink("PLAYER", 17))
+					local t1, t2, rarity, ilvl, t5, t6, t7, t8, t9, t10, t11, t12, t13 = GetItemInfo( GetInventoryItemLink("PLAYER", 17) )
 					if t1 then -- when 2x 1handed
 						max = 17
 					end
@@ -247,11 +249,13 @@ function ImproveAny:InitItemLevel()
 
 								if ImproveAny:IsEnabled( "ITEMLEVEL", true ) and ilvl and color then
 									if i ~= 4 and i ~= 19 and i ~= 20 then -- ignore: shirt, tabard, ammo
-										count = count + 1
-										sum = sum + ilvl
+										if ilvl and ilvl > 1 then
+											count = count + 1
+											sum = sum + ilvl
+										end
 									end
 									if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
-										if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) then
+										if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and ilvl and ilvl > 1 then
 											SLOT.iatext:SetText(color.hex .. ilvl)
 										end
 										local alpha = IAGlowAlpha
@@ -353,7 +357,7 @@ function ImproveAny:InitItemLevel()
 
 						if ilvl and color then
 							if ImproveAny:IsEnabled( "ITEMLEVEL", true ) then
-								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) then
+								if ImproveAny:IsEnabled( "ITEMLEVELNUMBER", true ) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) and ilvl and ilvl > 1 then
 									SLOT.iatext:SetText(color.hex .. ilvl)
 								else
 									SLOT.iatext:SetText("")
