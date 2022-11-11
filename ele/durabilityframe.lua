@@ -26,28 +26,35 @@ local IACHARSLOTS = {
 
 function ImproveAny:InitDurabilityFrame()
 	C_Timer.After( 1, function()
-		DurabilityFrame.text = DurabilityFrame:CreateFontString(nil)
-		DurabilityFrame.text:SetFont(STANDARD_TEXT_FONT, 10, "")
-		DurabilityFrame.text:SetPoint("TOP", DurabilityFrame, "TOP", 0, 10)
-		DurabilityFrame.text:SetText("101%")
+		ILVLFRAME = CreateFrame( "FRAME", "ILVLFRAME", UIParent )
+		ILVLFRAME:SetSize( DurabilityFrame:GetSize() )
+		ILVLFRAME:SetPoint( DurabilityFrame:GetPoint() )
+		ILVLFRAME:SetScale( DurabilityFrame:GetScale() )
 
-		DurabilityFrame.text2 = DurabilityFrame:CreateFontString(nil)
-		DurabilityFrame.text2:SetFont(STANDARD_TEXT_FONT, 10, "")
-		DurabilityFrame.text2:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -10)
-		DurabilityFrame.text2:SetText("")
-		DurabilityFrame.text2:SetTextColor(1.0, 1.0, 0.1)
+		ILVLFRAME.textilvloverall = ILVLFRAME:CreateFontString(nil)
+		ILVLFRAME.textilvloverall:SetFont(STANDARD_TEXT_FONT, 10, "")
+		ILVLFRAME.textilvloverall:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -10)
+		ILVLFRAME.textilvloverall:SetText("")
+		ILVLFRAME.textilvloverall:SetTextColor(1.0, 1.0, 0.1)
 
-		DurabilityFrame.text3 = DurabilityFrame:CreateFontString(nil)
-		DurabilityFrame.text3:SetFont(STANDARD_TEXT_FONT, 10, "")
-		DurabilityFrame.text3:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -22)
-		DurabilityFrame.text3:SetText("")
-		DurabilityFrame.text3:SetTextColor(1.0, 1.0, 0.1)
+		ILVLFRAME.textilvlequipped = ILVLFRAME:CreateFontString(nil)
+		ILVLFRAME.textilvlequipped:SetFont(STANDARD_TEXT_FONT, 10, "")
+		ILVLFRAME.textilvlequipped:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -22)
+		ILVLFRAME.textilvlequipped:SetText("")
+		ILVLFRAME.textilvlequipped:SetTextColor(1.0, 1.0, 0.1)
+		
+		
+		
+		DurabilityFrame.textperc = DurabilityFrame:CreateFontString(nil)
+		DurabilityFrame.textperc:SetFont(STANDARD_TEXT_FONT, 10, "")
+		DurabilityFrame.textperc:SetPoint("TOP", DurabilityFrame, "TOP", 0, 10)
+		DurabilityFrame.textperc:SetText("101%")
 
-		DurabilityFrame.text4 = DurabilityFrame:CreateFontString(nil)
-		DurabilityFrame.text4:SetFont(STANDARD_TEXT_FONT, 10, "")
-		DurabilityFrame.text4:SetPoint("TOP", DurabilityFrame, "TOP", 0, 22)
-		DurabilityFrame.text4:SetText("")
-		DurabilityFrame.text4:SetTextColor(1.0, 1.0, 0.1)
+		DurabilityFrame.textrepaircosts = DurabilityFrame:CreateFontString(nil)
+		DurabilityFrame.textrepaircosts:SetFont(STANDARD_TEXT_FONT, 10, "")
+		DurabilityFrame.textrepaircosts:SetPoint("TOP", DurabilityFrame, "TOP", 0, 22)
+		DurabilityFrame.textrepaircosts:SetText("")
+		DurabilityFrame.textrepaircosts:SetTextColor(1.0, 1.0, 0.1)
 
 		function DurabilityFrame.Think()
 			local ccur = 0
@@ -64,26 +71,26 @@ function ImproveAny:InitDurabilityFrame()
 			if cmax > 0 then
 				perc = IAMathR(ccur / cmax * 100, 1)
 
-				if DurabilityFrame.text ~= nil then
-					DurabilityFrame.text:SetText(perc .. "%")
+				if DurabilityFrame.textperc ~= nil then
+					DurabilityFrame.textperc:SetText(perc .. "%")
 
 					if perc > 50 then
-						DurabilityFrame.text:SetTextColor(0.1, 1.0, 0.1)
+						DurabilityFrame.textperc:SetTextColor(0.1, 1.0, 0.1)
 					elseif perc > 30 then
-						DurabilityFrame.text:SetTextColor(1.0, 1.0, 0.1)
+						DurabilityFrame.textperc:SetTextColor(1.0, 1.0, 0.1)
 					else
-						DurabilityFrame.text:SetTextColor(1.0, 0.1, 0.1)
+						DurabilityFrame.textperc:SetTextColor(1.0, 0.1, 0.1)
 					end
 				end
 			end
 
-			if perc <= IAGV( "HIDEDURATIONBELOW", 30 ) then
+			if perc <= IAGV( "SHOWDURABILITYUNDER", 100 ) then
 				DurabilityFrame:Show()
 			else
 				DurabilityFrame:Hide()
 			end
 
-			if DurabilityFrame.text2 and DurabilityFrame.text3 then
+			if ILVLFRAME.textilvloverall and ILVLFRAME.textilvlequipped then
 				local overall, equipped = IAILVL, IAILVL
 				if GetAverageItemLevel then
 					overall, equipped = GetAverageItemLevel()
@@ -92,22 +99,22 @@ function ImproveAny:InitDurabilityFrame()
 				end
 				if overall and equipped then
 					if tonumber(overall) == tonumber(equipped) then
-						DurabilityFrame.text2:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
-						DurabilityFrame.text3:SetText("")
+						ILVLFRAME.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
+						ILVLFRAME.textilvlequipped:SetText("")
 					else
-						DurabilityFrame.text2:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
-						DurabilityFrame.text3:SetText(equipped .. " " .. ITEM_LEVEL_ABBR)
+						ILVLFRAME.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
+						ILVLFRAME.textilvlequipped:SetText(equipped .. " " .. ITEM_LEVEL_ABBR)
 					end
 				else
-					DurabilityFrame.text2:SetText("")
-					DurabilityFrame.text3:SetText("")
+					ILVLFRAME.textilvloverall:SetText("")
+					ILVLFRAME.textilvlequipped:SetText("")
 				end
-			elseif DurabilityFrame.text2 and DurabilityFrame.text3 then
-				DurabilityFrame.text2:SetText("")
-				DurabilityFrame.text3:SetText("")
+			elseif ILVLFRAME.textilvloverall and ILVLFRAME.textilvlequipped then
+				ILVLFRAME.textilvloverall:SetText("")
+				ILVLFRAME.textilvlequipped:SetText("")
 			end
 
-			if DurabilityFrame.text4 then
+			if DurabilityFrame.textrepaircosts then
 				local costs = 0
 				for i, v in pairs(IACHARSLOTS) do
 					local id = v:GetID()
@@ -123,12 +130,12 @@ function ImproveAny:InitDurabilityFrame()
 				end
 
 				if costs > 0 then
-					DurabilityFrame.text4:SetText(GetCoinTextureString(costs))
+					DurabilityFrame.textrepaircosts:SetText(GetCoinTextureString(costs))
 				else
-					DurabilityFrame.text4:SetText("")
+					DurabilityFrame.textrepaircosts:SetText("")
 				end
-			elseif DurabilityFrame.text4 then
-				DurabilityFrame.text4:SetText("")
+			elseif DurabilityFrame.textrepaircosts then
+				DurabilityFrame.textrepaircosts:SetText("")
 			end
 
 			C_Timer.After( 1.0, DurabilityFrame.Think )

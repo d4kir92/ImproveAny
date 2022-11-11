@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.37" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.38" )
 }
 
 
@@ -433,7 +433,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "SKILLBARS", true )
 		AddCheckBox( 4, "CASTBAR", true )
 		AddCheckBox( 4, "DURABILITY", true )
-		AddSlider( 24, "HIDEDURATIONBELOW", 50, nil, 5, 100, 5 )
+		AddSlider( 24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5 )
 		AddCheckBox( 4, "BAGS", true )
 		AddCheckBox( 4, "WORLDMAP", true )
 	end
