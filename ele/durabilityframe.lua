@@ -92,8 +92,10 @@ function ImproveAny:InitDurabilityFrame()
 
 			if perc <= IAGV( "SHOWDURABILITYUNDER", 100 ) then
 				DurabilityFrame:Show()
+				ILVLFRAME:Show()
 			else
 				DurabilityFrame:Hide()
+				ILVLFRAME:Hide()
 			end
 
 			if ILVLFRAME.textilvloverall and ILVLFRAME.textilvlequipped then
