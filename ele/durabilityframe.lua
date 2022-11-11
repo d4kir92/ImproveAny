@@ -27,9 +27,15 @@ local IACHARSLOTS = {
 function ImproveAny:InitDurabilityFrame()
 	C_Timer.After( 1, function()
 		ILVLFRAME = CreateFrame( "FRAME", "ILVLFRAME", UIParent )
-		ILVLFRAME:SetSize( DurabilityFrame:GetSize() )
-		ILVLFRAME:SetPoint( DurabilityFrame:GetPoint() )
-		ILVLFRAME:SetScale( DurabilityFrame:GetScale() )
+		if DurabilityFrame:GetSize() then
+			ILVLFRAME:SetSize( DurabilityFrame:GetSize() )
+		end
+		if DurabilityFrame:GetPoint() then
+			ILVLFRAME:SetPoint( DurabilityFrame:GetPoint() )
+		end
+		if DurabilityFrame:GetScale() then
+			ILVLFRAME:SetScale( DurabilityFrame:GetScale() )
+		end
 
 		ILVLFRAME.textilvloverall = ILVLFRAME:CreateFontString(nil)
 		ILVLFRAME.textilvloverall:SetFont(STANDARD_TEXT_FONT, 10, "")
