@@ -67,6 +67,7 @@ function IALang_deDE()
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Geldleiste",
 		["TOKENBAR"] = "Wertmarkenleiste",
+		["IAILVLBAR"] = "Gegenstandsstufeleiste (Itemlevel)",
 		["SKILLBARS"] = "Skillbars (Berufe, Waffenfertigkeiten)",
 		["CASTBAR"] = "Zauberleiste (Castbar)",
 		["DURABILITY"] = "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)",

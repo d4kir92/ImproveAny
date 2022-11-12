@@ -75,6 +75,7 @@ function IALang_enUS()
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Money Bar",
 		["TOKENBAR"] = "Token Bar",
+		["IAILVLBAR"] = "Itemlevel Bar",
 		["SKILLBARS"] = "Skillbars (Professions, Weaponskills)",
 		["CASTBAR"] = "Castbar",
 		["DURABILITY"] = "Durability (Shows ItemLevel, Repaircosts)",		
