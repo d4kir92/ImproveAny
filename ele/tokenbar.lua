@@ -49,14 +49,17 @@ function GetTokenList()
 end
 
 IATokenBar = CreateFrame( "FRAME", "IATokenBar", UIParent )
-IATokenBar:SetSize( 180, 20 )
-IATokenBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 130 )
 
 function ImproveAny:InitTokenBar()
 	if ImproveAny:IsEnabled( "TOKENBAR", true ) then
+		IATokenBar:SetSize( 180, 20 )
+		IATokenBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 130 )
+		IATokenBar:EnableMouse(true)
+
 		IATokenBar.text = IATokenBar:CreateFontString( nil, "ARTWORK" )
 		IATokenBar.text:SetFont( STANDARD_TEXT_FONT, 12, "THINOUTLINE" )
 		IATokenBar.text:SetPoint( "CENTER", IATokenBar, "CENTER", 0, 0 )
+		IATokenBar.text:SetText( "ImproveAny - Tokenbar" )
 
 		IATokenBar:RegisterEvent( "CURRENCY_DISPLAY_UPDATE" )
 		IATokenBar:SetScript("OnEvent", function(self, ...)

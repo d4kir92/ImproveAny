@@ -25,32 +25,7 @@ local IACHARSLOTS = {
 }
 
 function ImproveAny:InitDurabilityFrame()
-	C_Timer.After( 1, function()
-		ILVLFRAME = CreateFrame( "FRAME", "ILVLFRAME", UIParent )
-		if DurabilityFrame:GetSize() then
-			ILVLFRAME:SetSize( DurabilityFrame:GetSize() )
-		end
-		if DurabilityFrame:GetPoint() then
-			ILVLFRAME:SetPoint( DurabilityFrame:GetPoint() )
-		end
-		if DurabilityFrame:GetScale() then
-			ILVLFRAME:SetScale( DurabilityFrame:GetScale() )
-		end
-
-		ILVLFRAME.textilvloverall = ILVLFRAME:CreateFontString(nil)
-		ILVLFRAME.textilvloverall:SetFont(STANDARD_TEXT_FONT, 10, "")
-		ILVLFRAME.textilvloverall:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -10)
-		ILVLFRAME.textilvloverall:SetText("")
-		ILVLFRAME.textilvloverall:SetTextColor(1.0, 1.0, 0.1)
-
-		ILVLFRAME.textilvlequipped = ILVLFRAME:CreateFontString(nil)
-		ILVLFRAME.textilvlequipped:SetFont(STANDARD_TEXT_FONT, 10, "")
-		ILVLFRAME.textilvlequipped:SetPoint("BOTTOM", DurabilityFrame, "BOTTOM", 0, -22)
-		ILVLFRAME.textilvlequipped:SetText("")
-		ILVLFRAME.textilvlequipped:SetTextColor(1.0, 1.0, 0.1)
-		
-		
-		
+	C_Timer.After( 1, function()		
 		DurabilityFrame.textperc = DurabilityFrame:CreateFontString(nil)
 		DurabilityFrame.textperc:SetFont(STANDARD_TEXT_FONT, 10, "")
 		DurabilityFrame.textperc:SetPoint("TOP", DurabilityFrame, "TOP", 0, 10)
@@ -94,30 +69,6 @@ function ImproveAny:InitDurabilityFrame()
 				DurabilityFrame:Show()
 			else
 				DurabilityFrame:Hide()
-			end
-
-			if ILVLFRAME.textilvloverall and ILVLFRAME.textilvlequipped then
-				local overall, equipped = IAILVL, IAILVL
-				if GetAverageItemLevel then
-					overall, equipped = GetAverageItemLevel()
-					overall = string.format("%.2f", overall)
-					equipped = string.format("%.2f", equipped)
-				end
-				if overall and equipped then
-					if tonumber(overall) == tonumber(equipped) then
-						ILVLFRAME.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
-						ILVLFRAME.textilvlequipped:SetText("")
-					else
-						ILVLFRAME.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
-						ILVLFRAME.textilvlequipped:SetText(equipped .. " " .. ITEM_LEVEL_ABBR)
-					end
-				else
-					ILVLFRAME.textilvloverall:SetText("")
-					ILVLFRAME.textilvlequipped:SetText("")
-				end
-			elseif ILVLFRAME.textilvloverall and ILVLFRAME.textilvlequipped then
-				ILVLFRAME.textilvloverall:SetText("")
-				ILVLFRAME.textilvlequipped:SetText("")
 			end
 
 			if DurabilityFrame.textrepaircosts then

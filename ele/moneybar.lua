@@ -4,11 +4,13 @@ local AddOnName, ImproveAny = ...
 local fontSize = 12
 
 IAMoneyBar = CreateFrame( "FRAME", "IAMoneyBar", UIParent )
-IAMoneyBar:SetSize( 180, 30 )
-IAMoneyBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100 )
 
 function ImproveAny:InitMoneyBar()
 	if ImproveAny:IsEnabled( "MONEYBAR", true ) then
+		IAMoneyBar:SetSize( 180, 30 )
+		IAMoneyBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100 )
+		IAMoneyBar:EnableMouse(true)
+		
 		local oldMoney = GetMoney()
 		local ts = 0
 		local oldDir = ""
@@ -30,6 +32,9 @@ function ImproveAny:InitMoneyBar()
 			oldMoney = GetMoney()
 		end )
 		IAMoneyBar.Reset:Hide()
+		function IAMoneyBar.Reset:GetMAEle()
+			return IAMoneyBar
+		end
 
 		IAMoneyBar:SetScript( "OnEnter", function( self ) 
 			IAMoneyBar.Reset:Show()

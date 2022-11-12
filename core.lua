@@ -103,6 +103,7 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitMinimap()
 		ImproveAny:InitMoneyBar()
 		ImproveAny:InitTokenBar()
+		ImproveAny:InitIAILVLBar()
 		ImproveAny:InitSkillBars()
 		if ImproveAny:IsEnabled( "BAGS", true ) then
 			ImproveAny:InitBags()
