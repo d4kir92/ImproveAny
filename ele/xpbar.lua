@@ -4,6 +4,9 @@ local AddOnName, ImproveAny = ...
 local textc = "|cFF00FF00" -- Colored
 local textw = "|r" -- "WHITE"
 local maxlevel = 60
+function IAGetMaxLevel()
+	return maxlevel
+end
 
 local XPS = 0
 function IAGetXPPerSec()
@@ -188,7 +191,7 @@ function ImproveAny:InitXPBar()
 						if text ~= "" then
 							text = text .. "    "
 						end
-						text = text .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. maxlevel .. textw
+						text = text .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. IAGetMaxLevel() .. textw
 					end
 
 					if ImproveAny:IsEnabled( "XPNUMBER", true ) then
