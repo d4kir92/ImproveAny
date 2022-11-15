@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.46" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.47" )
 }
 
 
@@ -306,7 +306,7 @@ end
 
 function ImproveAny:InitIASettings()
 	IASettings = CreateFrame( "Frame", "IASettings", UIParent, "BasicFrameTemplate" )
-	IASettings:SetSize( 420, 420 )
+	IASettings:SetSize( 500, 500 )
 	IASettings:SetPoint( "CENTER", UIParent, "CENTER", 0, 0 )
 
 	IASettings:SetFrameStrata( "HIGH" )
@@ -478,6 +478,12 @@ function ImproveAny:InitIASettings()
 	IASettings.reload:SetScript("OnClick", function()
 		C_UI.Reload()
 	end)
+
+	IASettings.DISCORD = CreateFrame( "EditBox", "IASettings" .. ".DISCORD", IASettings, "InputBoxTemplate" )
+	IASettings.DISCORD:SetText( "discord.gg/zWvQKDjDEC" )
+	IASettings.DISCORD:SetSize( 160, 24 )
+	IASettings.DISCORD:SetPoint("TOPLEFT", IASettings, "TOPLEFT", IASettings:GetWidth() - 160 - 8, -IASettings:GetHeight() + 24 + 4 )
+	IASettings.DISCORD:SetAutoFocus( false )
 
 
 
