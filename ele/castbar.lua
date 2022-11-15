@@ -7,40 +7,52 @@ local f = CreateFrame("FRAME")
 f.update = 0.1
 
 function ImproveAny:InitCastBar()
-	if CastingBarFrame then -- OLD CastBar
-		hooksecurefunc(CastingBarFrame.Border, "Show", function(self, ...)
+	local castbar = CastingBarFrame
+	local height = 24
+	if PlayerCastingBarFrame then
+		castbar = PlayerCastingBarFrame
+		height = 16
+	end
+	if castbar then -- OLD CastBar
+		hooksecurefunc(castbar.Border, "Show", function(self, ...)
 			if true then
 				self:Hide()
 			end
 		end)
 		if true then
-			CastingBarFrame.Border:Hide()
+			castbar.Border:Hide()
 		end
 
 		if true then
-			CastingBarFrame.Flash:SetParent( IAHIDDEN )
+			castbar.Flash:SetParent( IAHIDDEN )
 
-			CastingBarFrame.Text:SetFont(STANDARD_TEXT_FONT, 10, "")
-			CastingBarFrame.Text:ClearAllPoints()
-			CastingBarFrame.Text:SetPoint("CENTER", CastingBarFrame, "CENTER", 0, 0)
+			if PlayerCastingBarFrame then
+				castbar.Text:SetFont( STANDARD_TEXT_FONT, 10, "" )
+				castbar.Text:ClearAllPoints()
+				castbar.Text:SetPoint( "CENTER", castbar, "CENTER", 0, -14 )
+			else
+				castbar.Text:SetFont( STANDARD_TEXT_FONT, 10, "" )
+				castbar.Text:ClearAllPoints()
+				castbar.Text:SetPoint( "CENTER", castbar, "CENTER", 0, 0 )
+			end
 
-			CastingBarFrame:SetHeight(24)
-			CastingBarFrame.Spark:SetHeight(24)
-			CastingBarFrame.Border:SetHeight(96)
-			CastingBarFrame.Border:ClearAllPoints()
-			CastingBarFrame.Border:SetPoint("CENTER", CastingBarFrame, "CENTER", 0, 0)
+			castbar:SetHeight(height)
+			castbar.Spark:SetHeight(height)
+			castbar.Border:SetHeight(96)
+			castbar.Border:ClearAllPoints()
+			castbar.Border:SetPoint("CENTER", castbar, "CENTER", 0, 0)
 
-			CastingBarFrame.icon = CastingBarFrame:CreateTexture(nil, "ARTWORK")
-			CastingBarFrame.icon:SetSize(24, 24)
-			CastingBarFrame.icon:SetPoint("RIGHT", CastingBarFrame, "LEFT", 0, 0)
-			CastingBarFrame.icon:SetTexCoord( br, 1 - br, br, 1 - br )
+			castbar.icon = castbar:CreateTexture(nil, "ARTWORK")
+			castbar.icon:SetSize(height, height)
+			castbar.icon:SetPoint("RIGHT", castbar, "LEFT", 0, 0)
+			castbar.icon:SetTexCoord( br, 1 - br, br, 1 - br )
 
-			CastingBarFrame.timer = CastingBarFrame:CreateFontString(nil)
-			CastingBarFrame.timer:SetFont(STANDARD_TEXT_FONT, 10, "")
-			CastingBarFrame.timer:SetPoint("CENTER", CastingBarFrame, "RIGHT", 12, 0)
+			castbar.timer = castbar:CreateFontString(nil)
+			castbar.timer:SetFont(STANDARD_TEXT_FONT, 10, "")
+			castbar.timer:SetPoint("CENTER", castbar, "RIGHT", 12, 0)
 
 			f:HookScript( "OnUpdate", function(self, elapsed)
-				if CastingBarFrame.timer ~= nil then
+				if castbar.timer ~= nil then
 					if self.update and self.update < elapsed then
 						local name, text, texture = nil, nil, nil
 						if UnitCastingInfo ~= nil then
@@ -59,16 +71,16 @@ function ImproveAny:InitCastBar()
 						if IABUILD ~= "RETAIL" and texture == 136235 then
 							texture = 136243 -- 136192
 						end
-						if CastingBarFrame.icon ~= nil and CastingBarFrame.icon:GetTexture() ~= texture then
-							CastingBarFrame.icon:SetTexture(texture)
+						if castbar.icon ~= nil and castbar.icon:GetTexture() ~= texture then
+							castbar.icon:SetTexture(texture)
 						end
 
-						if CastingBarFrame.casting then
-							CastingBarFrame.timer:SetText(format("%2.1f", max(CastingBarFrame.maxValue - CastingBarFrame.value, 0)))
-						elseif CastingBarFrame.channeling then
-							CastingBarFrame.timer:SetText(format("%.1f", max(CastingBarFrame.value, 0)))
+						if castbar.casting then
+							castbar.timer:SetText(format("%2.1f", max(castbar.maxValue - castbar.value, 0)))
+						elseif castbar.channeling then
+							castbar.timer:SetText(format("%.1f", max(castbar.value, 0)))
 						else
-							CastingBarFrame.timer:SetText("")
+							castbar.timer:SetText("")
 						end
 						self.update = 0.1
 					else

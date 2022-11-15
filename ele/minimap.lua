@@ -113,13 +113,15 @@ function ImproveAny:InitMinimap()
 
 	function IASHAPE(msg)
 		msg = msg:upper()
-		if msg == "SQUARE" then
-			minimapshape = msg
-			Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_square]])
-			
-		elseif msg == "ROUND" then
-			minimapshape = msg
-			Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_round]])
+		if minimapshape ~= msg then
+			if msg == "SQUARE" then
+				minimapshape = msg
+				Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_square]])
+				
+			elseif msg == "ROUND" then
+				minimapshape = msg
+				Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_round]])
+			end
 		end
 	end
 	ImproveAny:UpdateMinimapSettings()
