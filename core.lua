@@ -16,7 +16,7 @@ elseif IABUILDNR > 19999 then
 	IABUILD = "TBC"
 end
 
-function IAMathC( val, vmin, vmax )
+function ImproveAny:MathC( val, vmin, vmax )
 	if val == nil then
 		return 0
 	end
@@ -64,18 +64,18 @@ end
 IAMaxZoom = tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) )
 
 function ImproveAny:UpdateMaxZoom()
-	ConsoleExec( "cameraDistanceMaxZoomFactor " .. IAGV( "MAXZOOM", ImproveAny:GetMaxZoom() ) )
+	ConsoleExec( "cameraDistanceMaxZoomFactor " .. ImproveAny:GV( "MAXZOOM", ImproveAny:GetMaxZoom() ) )
 end
 
 function ImproveAny:UpdateWorldTextScale()
-	ConsoleExec( "WorldTextScale " .. IAGV( "WORLDTEXTSCALE", 1.0 ) )
+	ConsoleExec( "WorldTextScale " .. ImproveAny:GV( "WORLDTEXTSCALE", 1.0 ) )
 end
 
 function ImproveAny:CheckCVars()
-	if IAGV( "MAXZOOM", ImproveAny:GetMaxZoom() ) ~= tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) ) then
+	if ImproveAny:GV( "MAXZOOM", ImproveAny:GetMaxZoom() ) ~= tonumber( GetCVar( "cameraDistanceMaxZoomFactor" ) ) then
 		ImproveAny:UpdateMaxZoom()
 	end
-	if IAGV( "WORLDTEXTSCALE", 1.0 ) ~= tonumber( GetCVar( "WorldTextScale" ) ) then
+	if ImproveAny:GV( "WORLDTEXTSCALE", 1.0 ) ~= tonumber( GetCVar( "WorldTextScale" ) ) then
 		ImproveAny:UpdateWorldTextScale()
 	end
 	C_Timer.After( 1, ImproveAny.CheckCVars )
@@ -176,8 +176,8 @@ function ImproveAny:Event( event, ... )
 			OnTooltipShow = function(tooltip)
 				if not tooltip or not tooltip.AddLine then return end
 				tooltip:AddLine( "ImproveAny")
-				tooltip:AddLine( IAGT( "MMBTNLEFT" ) )
-				tooltip:AddLine( IAGT( "MMBTNRIGHT" ) )
+				tooltip:AddLine( ImproveAny:GT( "MMBTNLEFT" ) )
+				tooltip:AddLine( ImproveAny:GT( "MMBTNRIGHT" ) )
 			end,
 		})
 		if ImproveAnyMinimapIcon then
@@ -266,7 +266,7 @@ f.incombat = false
 
 
 local ts = 0
-function FastLooting()
+function ImproveAny:FastLooting()
     if GetTime() - ts >= 0.2 and ImproveAny:IsEnabled( "FASTLOOTING", true ) then
         ts = GetTime()
         if GetCVarBool( "autoLootDefault" ) ~= IsModifiedClick( "AUTOLOOTTOGGLE" ) then
@@ -280,7 +280,7 @@ end
 
 local f = CreateFrame( "Frame" )
 f:RegisterEvent( "LOOT_READY" )
-f:SetScript( "OnEvent", FastLooting )
+f:SetScript( "OnEvent", ImproveAny.FastLooting )
 
 
 

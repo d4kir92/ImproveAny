@@ -4,21 +4,21 @@ local AddOnName, ImproveAny = ...
 local textc = "|cFF00FF00" -- Colored
 local textw = "|r" -- "WHITE"
 local maxlevel = 60
-function IAGetMaxLevel()
+function ImproveAny:GetMaxLevel()
 	return maxlevel
 end
 
 local XPS = 0
-function IAGetXPPerSec()
+function ImproveAny:GetXPPerSec()
 	return XPS
 end
 local XPH = 0
-function IAGetXPPerHour()
+function ImproveAny:GetXPPerHour()
 	return XPH
 end
 
-local HOUR = string.iareplace( COOLDOWN_DURATION_HOURS, "%d ", "" )
-HOUR = string.iareplace( HOUR, "%d", "" )
+local HOUR = ImproveAny:ReplaceStr( COOLDOWN_DURATION_HOURS, "%d ", "" )
+HOUR = ImproveAny:ReplaceStr( HOUR, "%d", "" )
 
 local inCombat = false
 local f  = CreateFrame( "FRAME" )
@@ -36,7 +36,7 @@ local ts = 0
 local totalxp = 0
 local lastxp = UnitXP( "PLAYER" )
 local lastxpmax = UnitXPMax( "PLAYER" )
-function IAXPPerHourLoop()
+function ImproveAny:XPPerHourLoop()
 	if inCombat or true then
 		ts = ts + 0.2
 	end
@@ -98,7 +98,7 @@ function IAXPPerHourLoop()
 		end
 	end
 
-	C_Timer.After( 0.2, IAXPPerHourLoop )
+	C_Timer.After( 0.2, ImproveAny.XPPerHourLoop )
 end
 
 function ImproveAny:InitXPBar()
@@ -107,7 +107,7 @@ function ImproveAny:InitXPBar()
 			lastxp = UnitXP( "PLAYER" )
 			lastxpmax = UnitXPMax( "PLAYER" )
 
-			IAXPPerHourLoop()
+			ImproveAny:XPPerHourLoop()
 		end )
 
 		C_Timer.After( 0.01, function()
@@ -175,8 +175,8 @@ function ImproveAny:InitXPBar()
 							currXP = UnitTrialXP("player")
 						end
 					end
-					local xps = IAGetXPPerSec()
-					local xph = IAGetXPPerHour()
+					local xps = ImproveAny:GetXPPerSec()
+					local xph = ImproveAny:GetXPPerHour()
 					local per = currXP / maxBar
 					local percent = per * 100
 					local missingXp = (maxBar - currXP)
@@ -191,14 +191,14 @@ function ImproveAny:InitXPBar()
 						if text ~= "" then
 							text = text .. "    "
 						end
-						text = text .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. IAGetMaxLevel() .. textw
+						text = text .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. ImproveAny:GetMaxLevel() .. textw
 					end
 
 					if ImproveAny:IsEnabled( "XPNUMBER", true ) then
 						if text ~= "" then
 							text = text .. "    "
 						end
-						text = text .. XP .. ": " .. textc .. IAFormatValue(currXP) .. textw .. "/" .. textc .. IAFormatValue(maxBar)
+						text = text .. XP .. ": " .. textc .. ImproveAny:FormatValue(currXP) .. textw .. "/" .. textc .. ImproveAny:FormatValue(maxBar)
 					end
 					if ImproveAny:IsEnabled( "XPPERCENT", true ) then
 						if ImproveAny:IsEnabled( "XPNUMBER", true ) then
@@ -225,7 +225,7 @@ function ImproveAny:InitXPBar()
 							if text ~= "" then
 								text = text .. "    "
 							end
-							text = text .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. IAFormatValue( GetXPExhaustion() ) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
+							text = text .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. ImproveAny:FormatValue( GetXPExhaustion() ) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
 						end
 					end
 
@@ -233,7 +233,7 @@ function ImproveAny:InitXPBar()
 						if text ~= "" then
 							text = text .. "    "
 						end
-						text = text .. ADDON_MISSING .. ": " .. textc .. IAFormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
+						text = text .. ADDON_MISSING .. ": " .. textc .. ImproveAny:FormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
 					end
 
 					if ImproveAny:IsEnabled( "XPXPPERHOUR", true ) then
@@ -245,7 +245,7 @@ function ImproveAny:InitXPBar()
 
 					if ImproveAny:IsEnabled( "XPXPPERHOUR", true ) then
 						if xph > 0 then
-							text = text .. "    " .. textc .. IAFormatValue( xph, xph <= 5000 and 1 or 0 ) .. textw .. " " .. textw .. XP .. "/" .. HOUR
+							text = text .. "    " .. textc .. ImproveAny:FormatValue( xph, xph <= 5000 and 1 or 0 ) .. textw .. " " .. textw .. XP .. "/" .. HOUR
 						end
 					end
 

@@ -30,13 +30,13 @@ function ImproveAny:InitSuperTrackedFrame()
 			SuperTrackedFrame.DistanceTime:SetFont( STANDARD_TEXT_FONT, 10, "" )
 			SuperTrackedFrame.DistanceTime:SetPoint( "TOP", SuperTrackedFrame, "BOTTOM", 0, -12 )
 		end
-		SuperTrackedFrame.DistanceTime:SetText( "LOADING" )
+		SuperTrackedFrame.DistanceTime:SetText( "LOADING (IA)" )
 		SuperTrackedFrame.DistanceTime:SetTextColor(SuperTrackedFrame.DistanceText:GetTextColor())
 		SuperTrackedFrame.DistanceTime:SetShadowOffset(SuperTrackedFrame.DistanceText:GetShadowOffset())
 
-		if C_Navigation or WMP_Dist then
-			FLOAT_SPELL_DURATION_SEC = string.iareplace( INT_SPELL_DURATION_SEC, "%d", "%0.0f" )
-			FLOAT_SPELL_DURATION_MIN = string.iareplace( INT_SPELL_DURATION_MIN, "%d", "%0.1f" )
+		if C_Navigation or WMPGetDistance then
+			FLOAT_SPELL_DURATION_SEC = ImproveAny:ReplaceStr( INT_SPELL_DURATION_SEC, "%d", "%0.0f" )
+			FLOAT_SPELL_DURATION_MIN = ImproveAny:ReplaceStr( INT_SPELL_DURATION_MIN, "%d", "%0.1f" )
 
 			local lastDist = 0
 			local lastDistPerSec = 0
@@ -45,8 +45,11 @@ function ImproveAny:InitSuperTrackedFrame()
 			local scale = 10
 			local cd = 1 / scale
 			function IAThinkSuperTrackedFrame()
-				local distance = WMP_Dist 
-				if C_Navigation then
+				local distance = 0
+				if WMPGetDistance then
+					distance = WMPGetDistance()
+				end
+				if C_Navigation and C_Navigation.GetDistancethen then
 					distance = C_Navigation.GetDistance()
 				end
 				local distDif = lastDist - distance
@@ -54,7 +57,7 @@ function ImproveAny:InitSuperTrackedFrame()
 				distPerSec = floor( distPerSec )
 
 				if distPerSec ~= 0 then
-					distPerSec = IALerp( lastDistPerSec, distPerSec, 0.2 )
+					distPerSec = ImproveAny:Lerp( lastDistPerSec, distPerSec, 0.2 )
 					timeToTarget = distance / distPerSec
 				else
 					timeToTarget = 0

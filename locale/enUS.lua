@@ -1,14 +1,15 @@
 -- enUS English
 
-LANG_IA = LANG_IA or {}
+local AddOnName, ImproveAny = ...
 
-function IAUpdateLanguageTab( tab )
+function ImproveAny:UpdateLanguageTab( tab )
+	local lang = ImproveAny:GetLangTab()
 	for i, v in pairs( tab ) do
-		LANG_IA[i] = v
+		lang[i] = v
 	end
 end
 
-function IALang_enUS()
+function ImproveAny:Lang_enUS()
 	local tab = {
 		["MMBTNLEFT"] = "Left Click => Options",
 		["MMBTNRIGHT"] = "Right Click => Hide Minimap Button",
@@ -84,5 +85,5 @@ function IALang_enUS()
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
 	}
 
-	IAUpdateLanguageTab( tab )
+	ImproveAny:UpdateLanguageTab( tab )
 end

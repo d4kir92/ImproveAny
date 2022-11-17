@@ -36,7 +36,7 @@ local IACharSlots = {
 	--"Bag3Slot"
 }
 
-function IAAddIlvl( SLOT, i )
+function ImproveAny:AddIlvl( SLOT, i )
 	if SLOT and SLOT.iainfo == nil then
 		local name = ""
 		if SLOT.GetName then
@@ -86,7 +86,7 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.ilvl:SetText(ITEM_LEVEL_ABBR .. ": ?")
 
 		for i, slot in pairs(IACharSlots) do
-			IAAddIlvl( _G["Character" .. slot], i )
+			ImproveAny:AddIlvl( _G["Character" .. slot], i )
 		end
 
 		function PDThink.UpdateItemInfos()
@@ -232,7 +232,7 @@ function ImproveAny:InitItemLevel()
 				InspectPaperDollFrame.ilvl:SetText(ITEM_LEVEL_ABBR .. ": ?")
 
 				for i, slot in pairs(IACharSlots) do
-					IAAddIlvl(_G["Inspect" .. slot], i )
+					ImproveAny:AddIlvl(_G["Inspect" .. slot], i )
 				end
 
 				function IFThink.UpdateItemInfos()
@@ -348,7 +348,7 @@ function ImproveAny:InitItemLevel()
 				if SLOT then
 					local slotID = size - i  + 1
 					local slotLink = IAGetContainerItemLink( bagID, slotID )
-					IAAddIlvl( SLOT, slotID )
+					ImproveAny:AddIlvl( SLOT, slotID )
 
 					if slotLink and GetDetailedItemLevelInfo then
 						local t1, t2, rarity, t4, t5, t6, t7, t8, t9, t10, t11, classID, subclassID = GetItemInfo( slotLink )

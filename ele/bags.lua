@@ -8,7 +8,7 @@ local BAGS = {
 	"CharacterBag0Slot"
 }
 
-function IABAGSTryAdd( fra, index )
+function ImproveAny:BAGSTryAdd( fra, index )
 	if _G[fra] == nil then
 		return
 	end
@@ -21,12 +21,12 @@ function IABAGSTryAdd( fra, index )
 	end
 end
 
-function IAUpdateBagsTable()
-	IABAGSTryAdd( "CharacterReagentBag0Slot", 1 )
-	IABAGSTryAdd( "KeyRingButton", 1 )
-	IABAGSTryAdd( "BagBarExpandToggle", #BAGS + 1 )
-	IABAGSTryAdd( "BagToggle", #BAGS )
-	IABAGSTryAdd( "MainMenuBarBackpackButton" )
+function ImproveAny:UpdateBagsTable()
+	ImproveAny:BAGSTryAdd( "CharacterReagentBag0Slot", 1 )
+	ImproveAny:BAGSTryAdd( "KeyRingButton", 1 )
+	ImproveAny:BAGSTryAdd( "BagBarExpandToggle", #BAGS + 1 )
+	ImproveAny:BAGSTryAdd( "BagToggle", #BAGS )
+	ImproveAny:BAGSTryAdd( "MainMenuBarBackpackButton" )
 end
 
 local BAGThink = CreateFrame( "FRAME", "BAGThink" )
@@ -51,14 +51,14 @@ function ImproveAny:InitBags()
 		end
 
 		function BAGThink.UpdateItemInfos()
-			IAUpdateBagsTable()
+			ImproveAny:UpdateBagsTable()
 
 			local sum = 0
 			for i, slot in pairs(BAGS) do
 				local SLOT = _G[slot]
 				local COUNT = _G[slot .. "Count"]
 				if SLOT and ImproveAny:IsEnabled( "BAGSAMESIZE", true ) then
-					local size = IAGV( "BAGSIZE", 30 )
+					local size = ImproveAny:GV( "BAGSIZE", 30 )
 					local scale = size / 30
 					if SLOT == BagToggle then
 						SLOT:SetSize( size * 0.5, size * 0.8 )

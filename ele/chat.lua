@@ -391,8 +391,10 @@ function ImproveAny:InitChat()
 
 		local function IAHookFunc( key )
 			local org = _G[key]
-			_G[key] = function( ... )
-				return IAAddLinks( org( ... ) ) 
+			if org then
+				hooksecurefunc( key, function( ... )
+					return IAAddLinks( org( ... ) ) 
+				end )
 			end
 		end
 		IAHookFunc("GetBNPlayerCommunityLink") 
@@ -431,12 +433,14 @@ function ImproveAny:InitChat()
 			end
 		end
 
-		function ChatFrame_ResolvePrefixedChannelName( communityChannel )
-			local prefix, communityChannel = communityChannel:match("(%d+. )(.*)")
-			if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
-				return IAChatOnlyBig( communityChannel )
-			else
-				return prefix..ChatFrame_ResolveChannelName(communityChannel)
+		if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
+			function ChatFrame_ResolvePrefixedChannelName( communityChannel )
+				local prefix, communityChannel = communityChannel:match("(%d+. )(.*)")
+				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
+					return IAChatOnlyBig( communityChannel )
+				else
+					return prefix .. ChatFrame_ResolveChannelName(communityChannel)
+				end
 			end
 		end
 

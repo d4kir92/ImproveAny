@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local tab = {}
-function GetTokenList()
+function ImproveAny:GetTokenList()
 	tab = {}
 	local max = 1
 	if GetCurrencyListSize then
@@ -63,13 +63,13 @@ function ImproveAny:InitTokenBar()
 
 		IATokenBar:RegisterEvent( "CURRENCY_DISPLAY_UPDATE" )
 		IATokenBar:SetScript("OnEvent", function(self, ...)
-			GetTokenList()
+			ImproveAny:GetTokenList()
 		end)
 		if TokenFrame_Update then
 			hooksecurefunc( "TokenFrame_Update", function()
-				GetTokenList()
+				ImproveAny:GetTokenList()
 			end )
 		end
-		GetTokenList()
+		ImproveAny:GetTokenList()
 	end
 end

@@ -2,13 +2,13 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.49" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.50" )
 }
 
 
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
-IAOldFonts = IAOldFonts or {}
+local IAOldFonts = {}
 
 local BlizDefaultFonts = {
 	"STANDARD_TEXT_FONT",
@@ -40,16 +40,16 @@ local BlizFontObjects = {
 	GameTooltipHeader, System_IME,
 }
 
-local function IASaveOld( ele )
+function ImproveAny:SaveOldFonts( ele )
 	if IAOldFonts[ ele ] == nil then
 		IAOldFonts[ ele ] = _G[ ele ]
 	end
 end
 
-function IAFonts()
+function ImproveAny:Fonts()
 	for i, fontName in pairs( BlizDefaultFonts ) do
-		IASaveOld( fontName )
-		if IAGV( "fontName", "Default" ) == "Default" then
+		ImproveAny:SaveOldFonts( fontName )
+		if ImproveAny:GV( "fontName", "Default" ) == "Default" then
 			_G[fontName] = IAOldFonts[fontName]
 		else
 			_G[fontName] = font
@@ -67,7 +67,7 @@ function IAFonts()
 
 			oldSize = ForcedFontSize[i] or oldSize
 			
-			if IAGV( "fontName", "Default" ) == "Default" then
+			if ImproveAny:GV( "fontName", "Default" ) == "Default" then
 				FontObject:SetFont( IAOldFonts[i], oldSize, oldStyle )
 			else
 				FontObject:SetFont( font, oldSize, oldStyle )
@@ -107,7 +107,7 @@ local function AddCategory( key )
 
 		ca.f = ca:CreateFontString( nil, nil, "GameFontNormal" )
 		ca.f:SetPoint( "LEFT", ca, "LEFT", 0, 0 )
-		ca.f:SetText( IAGT( key ) )
+		ca.f:SetText( ImproveAny:GT( key ) )
 	end
 
 	IASetPos( cas[key], key )
@@ -136,11 +136,11 @@ local function AddCheckBox( x, key, val, func )
 
 		cb.f = cb:CreateFontString( nil, nil, "GameFontNormal" )
 		cb.f:SetPoint( "LEFT", cb, "RIGHT", 0, 0 )
-		cb.f:SetText( IAGT( key ) )
+		cb.f:SetText( ImproveAny:GT( key ) )
 	end
 
 	cbs[key]:ClearAllPoints()
-	if strfind( strlower( key ), strlower( searchStr ) ) or strfind( strlower( IAGT( key ) ), strlower( searchStr ) ) then
+	if strfind( strlower( key ), strlower( searchStr ) ) or strfind( strlower( ImproveAny:GT( key ) ), strlower( searchStr ) ) then
 		cbs[key]:Show()
 
 		cbs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
@@ -156,11 +156,11 @@ local function AddEditBox( x, key, val, func )
 		ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
 		ebs[key]:SetSize( 360, 24 )
 		ebs[key]:SetAutoFocus( false )
-		ebs[key].text = IAGV( key, val )
-		ebs[key]:SetText( IAGV( key, val ) )
+		ebs[key].text = ImproveAny:GV( key, val )
+		ebs[key]:SetText( ImproveAny:GV( key, val ) )
 		ebs[key]:SetScript( "OnTextChanged", function( self, ... )
 			if self.text ~= ebs[key]:GetText() then
-				IASV( key, ebs[key]:GetText() )
+				ImproveAny:SV( key, ebs[key]:GetText() )
 
 				if func then
 					func()
@@ -170,7 +170,7 @@ local function AddEditBox( x, key, val, func )
 
 		ebs[key].f = ebs[key]:CreateFontString( nil, nil, "GameFontNormal" )
 		ebs[key].f:SetPoint( "LEFT", ebs[key], "LEFT", 0, 16 )
-		ebs[key].f:SetText( IAGT( key ) )
+		ebs[key].f:SetText( ImproveAny:GT( key ) )
 	end
 	IASetPos( ebs[key], key, x + 8 )
 end
@@ -185,20 +185,20 @@ local function AddSlider( x, key, val, func, vmin, vmax, steps )
 		sls[key].Low:SetText(vmin)
 		sls[key].High:SetText(vmax)
 
-		sls[key].Text:SetText(IAGT(key) .. ": " .. IAGV( key, val ) )
+		sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:GV( key, val ) )
 
 		sls[key]:SetMinMaxValues(vmin, vmax)
 		sls[key]:SetObeyStepOnDrag(true)
 		sls[key]:SetValueStep(steps)
 
-		sls[key]:SetValue( IAGV( key, val ) )
+		sls[key]:SetValue( ImproveAny:GV( key, val ) )
 
 		sls[key]:SetScript("OnValueChanged", function(self, val)
 			--val = val - val % steps
 			val = tonumber( string.format( "%" .. steps .. "f", val ) )
-			if val and val ~= IAGV( key ) then
-				IASV( key, val )
-				sls[key].Text:SetText( IAGT( key ) .. ": " .. val )
+			if val and val ~= ImproveAny:GV( key ) then
+				ImproveAny:SV( key, val )
+				sls[key].Text:SetText( ImproveAny:GT( key ) .. ": " .. val )
 
 				if func then
 					func()
@@ -229,8 +229,8 @@ function ImproveAny:UpdateRaidFrameSize()
 		local frame = _G["CompactRaidFrame" .. i]
 		if frame then
 			local options = DefaultCompactMiniFrameSetUpOptions
-			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
-				frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) )
+			if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and ImproveAny:GV( "RAIDFRAMEW", options.width ) and ImproveAny:GV( "RAIDFRAMEH", options.height ) then
+				frame:SetSize( ImproveAny:GV( "RAIDFRAMEW", options.width ), ImproveAny:GV( "RAIDFRAMEH", options.height ) )
 			end
 
 			if true then
@@ -244,7 +244,7 @@ function ImproveAny:UpdateRaidFrameSize()
 						if ( buffName ) then
 							local buffFrame = _G[frame:GetName() .. "Buff" .. i]
 							if buffFrame then
-								buffFrame:SetScale( IAGV( "BUFFSCALE", 0.8 ) )
+								buffFrame:SetScale( ImproveAny:GV( "BUFFSCALE", 0.8 ) )
 							end
 							frameNum = frameNum + 1
 						else
@@ -268,7 +268,7 @@ function ImproveAny:UpdateRaidFrameSize()
 						if ( debuffName ) then
 							local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
 							if debuffFrame then
-								debuffFrame:SetScale( IAGV( "DEBUFFSCALE", 1 ) )
+								debuffFrame:SetScale( ImproveAny:GV( "DEBUFFSCALE", 1 ) )
 							end
 							frameNum = frameNum + 1
 						else
@@ -285,9 +285,9 @@ function ImproveAny:UpdateRaidFrameSize()
 end
 
 function ImproveAny:UpdateUIParentAttribute()
-	local topOffset = IAGV( "TOP_OFFSET", 116 )
-	local leftOffset = IAGV( "LEFT_OFFSET", 16 )
-	local panelSpacingX = IAGV( "PANEl_SPACING_X", 32 )
+	local topOffset = ImproveAny:GV( "TOP_OFFSET", 116 )
+	local leftOffset = ImproveAny:GV( "LEFT_OFFSET", 16 )
+	local panelSpacingX = ImproveAny:GV( "PANEl_SPACING_X", 32 )
 	UIParent:SetAttribute( "TOP_OFFSET", -topOffset )
 	UIParent:SetAttribute( "LEFT_OFFSET", leftOffset )
 	--UIParent:SetAttribute("CENTER_OFFSET", 400)
@@ -347,13 +347,13 @@ function ImproveAny:InitIASettings()
 				["parent"]= IASettings.SC,
 				["title"] = "Ui Font",
 				["items"]= { "Default", "Prototype" },
-				["defaultVal"] = IAGV( "fontName", "Default" ), 
+				["defaultVal"] = ImproveAny:GV( "fontName", "Default" ), 
 				["changeFunc"] = function( dropdown_frame, dropdown_val )
-					IASV( "fontName", dropdown_val )
-					IAFonts()
+					ImproveAny:SV( "fontName", dropdown_val )
+					ImproveAny:Fonts()
 				end
 			}
-			dds["FONT"] = IACreateDropdown( fontNames, posy )
+			dds["FONT"] = ImproveAny:CreateDropdown( fontNames, posy )
 		end
 		
 		AddCategory( "GENERAL" )

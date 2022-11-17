@@ -1,10 +1,14 @@
 
 local AddOnName, ImproveAny = ...
 
-LANG_IA = LANG_IA or {}
+local ialang = {}
+function ImproveAny:GetLangTab()
+	return ialang
+end
 
-function IAGT( str )
-	local result = LANG_IA[str]
+function ImproveAny:GT( str )
+	local tab = ImproveAny:GetLangTab()
+	local result = tab[str]
 	if result ~= nil then
 		return result
 	else
@@ -13,12 +17,12 @@ function IAGT( str )
 	end
 end
 
-function IAUpdateLanguage()
-	IALang_enUS()
+function ImproveAny:UpdateLanguage()
+	ImproveAny:Lang_enUS()
 	if GetLocale() == "deDE" then
-		IALang_deDE()
+		ImproveAny:Lang_deDE()
 	elseif GetLocale() == "enUS" then
-		IALang_enUS()
+		ImproveAny:Lang_enUS()
 	end
 end
-IAUpdateLanguage()
+ImproveAny:UpdateLanguage()

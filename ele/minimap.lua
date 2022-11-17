@@ -198,7 +198,7 @@ function ImproveAny:InitMinimap()
 								local dist = radius
 
 								if Ypoa >= dist or Ypoa <= -dist then
-									Xpoa = IAMathC( Xpoa, -dist, dist )
+									Xpoa = ImproveAny:MathC( Xpoa, -dist, dist )
 								else
 									if Xpoa > 0 then
 										Xpoa = dist
@@ -207,7 +207,7 @@ function ImproveAny:InitMinimap()
 									end
 								end
 								if Xpoa >= dist or Xpoa <= -dist then
-									Ypoa = IAMathC( Ypoa, -dist, dist )
+									Ypoa = ImproveAny:MathC( Ypoa, -dist, dist )
 								else
 									if Ypoa > 0 then
 										Ypoa = dist

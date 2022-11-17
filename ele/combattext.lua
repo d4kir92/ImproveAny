@@ -48,10 +48,10 @@ cle:SetScript( "OnEvent", function( eventName)
 end )
 
 local IATabBuffs = {}
-function IAInitCombatText()
+function ImproveAny:InitCombatText()
 	local max = NUM_COMBAT_TEXT_LINES or 1
 	for i = 1, max do
-		str = _G["CombatText" .. i]
+		local str = _G["CombatText" .. i]
 		if str and str.initsettext == nil then
 			str.initsettext = true
 
@@ -112,6 +112,6 @@ function IAInitCombatText()
 		end
 	end
 
-	C_Timer.After( 0.1, IAInitCombatText )
+	C_Timer.After( 0.1, ImproveAny.InitCombatText )
 end
-IAInitCombatText()
+ImproveAny:InitCombatText()

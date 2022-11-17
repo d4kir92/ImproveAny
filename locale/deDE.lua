@@ -1,6 +1,8 @@
 -- deDE German Deutsch
 
-function IALang_deDE()
+local AddOnName, ImproveAny = ...
+
+function ImproveAny:Lang_deDE()
 	local tab = {
 		["MMBTNLEFT"] = "Linksklick => Optionen",
 		["MMBTNRIGHT"] = "Rechtsklick => Minimapknopf verstecken",
@@ -76,5 +78,5 @@ function IALang_deDE()
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
 	}
 
-	IAUpdateLanguageTab( tab )
+	ImproveAny:UpdateLanguageTab( tab )
 end

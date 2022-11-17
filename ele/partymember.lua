@@ -7,7 +7,7 @@ local XPAPIPREFIX = "ImproveAnyXPAPI"
 local iadebugxpbar = false
 local iaxpready = false
 
-function IAUnitName(unit)
+function ImproveAny:UnitName(unit)
 	if UnitExists(unit) then
 		local name, realm = UnitName(unit)
 		if realm and realm ~= "" then
@@ -21,33 +21,33 @@ function IAUnitName(unit)
 	end
 end
 
-function IAUnitXP(unit)
-	local target = IAUnitName(unit)
+function ImproveAny:UnitXP(unit)
+	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXP( "player" )
 	end
-	if IAGV( "XPTAB" ) and IAGV( "XPTAB" )[target] and IAGV( "XPTAB" )[target]["XP"] then
-		return tonumber( IAGV( "XPTAB" )[target]["XP"] )
+	if ImproveAny:GV( "XPTAB" ) and ImproveAny:GV( "XPTAB" )[target] and ImproveAny:GV( "XPTAB" )[target]["XP"] then
+		return tonumber( ImproveAny:GV( "XPTAB" )[target]["XP"] )
 	end
 	return 0
 end
 
-function IAUnitXPMax(unit)
-	local target = IAUnitName(unit)
+function ImproveAny:UnitXPMax(unit)
+	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXPMax( "player" )
 	end
-	if IAGV( "XPTAB" ) and IAGV( "XPTAB" )[target] and IAGV( "XPTAB" )[target]["XPMAX"] then
-		return tonumber( IAGV( "XPTAB" )[target]["XPMAX"] )
+	if ImproveAny:GV( "XPTAB" ) and ImproveAny:GV( "XPTAB" )[target] and ImproveAny:GV( "XPTAB" )[target]["XPMAX"] then
+		return tonumber( ImproveAny:GV( "XPTAB" )[target]["XPMAX"] )
 	end
 	return 1
 end
 
-function IAUpdatePartyXPAPI()
+function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
-		local target = IAUnitName("PARTY" .. i)
-		if target and IAGV( "XPTAB" )[target] == nil then
-			IAGV( "XPTAB" )[target] = {}
+		local target = ImproveAny:UnitName("PARTY" .. i)
+		if target and ImproveAny:GV( "XPTAB" )[target] == nil then
+			ImproveAny:GV( "XPTAB" )[target] = {}
 		end
 	end
 
@@ -62,14 +62,14 @@ end
 local function OnEventXP(self, event, ...)
 	if event == "CHAT_MSG_ADDON" then
 	local prefix, values, channel, target = ...
-	if prefix == XPPREFIX and IAGV( "XPTAB" ) then -- new xp values
+	if prefix == XPPREFIX and ImproveAny:GV( "XPTAB" ) then -- new xp values
 		local xp, xpmax = string.split(";", values)
-		if IAGV( "XPTAB" )[target] == nil then
-			IAGV( "XPTAB" )[target] = {}
+		if ImproveAny:GV( "XPTAB" )[target] == nil then
+			ImproveAny:GV( "XPTAB" )[target] = {}
 		end
-		IAGV( "XPTAB" )[target]["XP"] = xp
-		IAGV( "XPTAB" )[target]["XPMAX"] = xpmax
-		IAGV( "XPTAB" )[target]["useapi"] = true -- it uses the api
+		ImproveAny:GV( "XPTAB" )[target]["XP"] = xp
+		ImproveAny:GV( "XPTAB" )[target]["XPMAX"] = xpmax
+		ImproveAny:GV( "XPTAB" )[target]["useapi"] = true -- it uses the api
 	elseif prefix == XPAPIPREFIX then
 		if values == "Ping" then -- PING
 			local message = "Pong" -- "answer to ping"
@@ -79,10 +79,10 @@ local function OnEventXP(self, event, ...)
 				C_ChatInfo.SendAddonMessage(XPAPIPREFIX, message, "PARTY")
 			end
 		else -- PONG
-			if IAGV( "XPTAB" )[target] == nil then
-				IAGV( "XPTAB" )[target] = {}
+			if ImproveAny:GV( "XPTAB" )[target] == nil then
+				ImproveAny:GV( "XPTAB" )[target] = {}
 			end
-			IAGV( "XPTAB" )[target]["useapi"] = true -- received answer
+			ImproveAny:GV( "XPTAB" )[target]["useapi"] = true -- received answer
 		end
 	end
 	elseif event == "PLAYER_ENTERING_WORLD" then
@@ -91,8 +91,8 @@ local function OnEventXP(self, event, ...)
 			C_ChatInfo.RegisterAddonMessagePrefix(XPPREFIX)
 			C_ChatInfo.RegisterAddonMessagePrefix(XPAPIPREFIX)
 
-			if IAGV( "XPTAB" ) == nil then
-				IASV( "XPTAB", {} )
+			if ImproveAny:GV( "XPTAB" ) == nil then
+				ImproveAny:SV( "XPTAB", {} )
 			end
 
 			for i = 1, 4 do
@@ -233,21 +233,21 @@ local function OnEventXP(self, event, ...)
 					local c = GetQuestDifficultyColor( PartyFrameXPBar.levelText:GetText() )
 					PartyFrameXPBar.levelText:SetTextColor( c.r, c.g, c.b, 1 )
 
-					if IAGV( "nochanges" ) == nil then
-						IASV( "nochanges", false )
+					if ImproveAny:GV( "nochanges" ) == nil then
+						ImproveAny:SV( "nochanges", false )
 					end
 
 					function PartyFrameXPBar.think()
-						if UnitExists("PARTY" .. i) and UnitLevel("PARTY" .. i) < IAGetMaxLevel() then
+						if UnitExists("PARTY" .. i) and UnitLevel("PARTY" .. i) < ImproveAny:GetMaxLevel() then
 							PartyFrameXPBar:Show()
 							
 							local c = GetQuestDifficultyColor( UnitLevel("PARTY" .. i) )
 							PartyFrameXPBar.levelText:SetText( UnitLevel("PARTY" .. i) )
 							PartyFrameXPBar.levelText:SetTextColor( c.r, c.g, c.b, 1 )
 
-							local xp = IAUnitXP( "PARTY" .. i, 0 )
-							local xpmax = IAUnitXPMax( "PARTY" .. i, 1 )
-							if ( xp > 0 or xpmax > 1 ) and not IAGV( "nochanges" ) then
+							local xp = ImproveAny:UnitXP( "PARTY" .. i, 0 )
+							local xpmax = ImproveAny:UnitXPMax( "PARTY" .. i, 1 )
+							if ( xp > 0 or xpmax > 1 ) and not ImproveAny:GV( "nochanges" ) then
 								local per = xp / xpmax
 								PartyFrameXPBar.textureBar:SetWidth( per * PartyFrameXPBar:GetWidth() - 4 )
 				
@@ -299,7 +299,7 @@ local function OnEventXP(self, event, ...)
 	if event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE" or event == "PLAYER_XP_UPDATE" then
 		if iaxpready then
 			if event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE" then
-				IAUpdatePartyXPAPI() -- "connect to the party members"
+				ImproveAny:UpdatePartyXPAPI() -- "connect to the party members"
 			end
 			local message = UnitXP("PLAYER") .. ";" .. UnitXPMax("PLAYER") -- send xp
 

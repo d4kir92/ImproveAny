@@ -1,7 +1,7 @@
 
 local AddOnName, ImproveAny = ...
 
-function IAMathC( val, vmin, vmax )
+function ImproveAny:MathC( val, vmin, vmax )
 	if val == nil then
 		return 0
 	end
@@ -20,13 +20,13 @@ function IAMathC( val, vmin, vmax )
 	end
 end
 
-function IAMathR( val, dec )
+function ImproveAny:MathR( val, dec )
 	val = val or 0
 	dec = dec or 0
 	return tonumber( string.format( "%0." .. dec .. "f", val ) )
 end
 
-function IAFormatValue( val, dec )
+function ImproveAny:FormatValue( val, dec )
 	dec = dec or 1
 	if val < 1000 then return ("%." .. 0 .. "f"):format(val)
 	elseif val < 1000000 then return ("%." .. dec .. "fk"):format(val/1000)
@@ -35,11 +35,11 @@ function IAFormatValue( val, dec )
 	else return ("%." .. dec .. "ft"):format(val/1000000000000) end
 end
 
-function IALerp(pos1, pos2, perc)
+function ImproveAny:Lerp(pos1, pos2, perc)
 	return ( 1 - perc ) * pos1 + perc * pos2
 end
 
-function string.iareplace( text, old, new )
+function ImproveAny:ReplaceStr( text, old, new )
 	if text == nil then
 		return ""
 	end

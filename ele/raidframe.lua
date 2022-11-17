@@ -34,8 +34,8 @@ function ImproveAny:InitRaidFrames()
 					if self.iasetsize then return end
 					self.iasetsize = true
 					local options = DefaultCompactMiniFrameSetUpOptions
-					if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and IAGV( "RAIDFRAMEW", options.width ) and IAGV( "RAIDFRAMEH", options.height ) then
-						frame:SetSize( IAGV( "RAIDFRAMEW", options.width ), IAGV( "RAIDFRAMEH", options.height ) )
+					if ImproveAny:IsEnabled( "OVERWRITERAIDFRAMESIZE", false ) and ImproveAny:GV( "RAIDFRAMEW", options.width ) and ImproveAny:GV( "RAIDFRAMEH", options.height ) then
+						frame:SetSize( ImproveAny:GV( "RAIDFRAMEW", options.width ), ImproveAny:GV( "RAIDFRAMEH", options.height ) )
 					end
 					self.iasetsize = false
 				end )
@@ -250,13 +250,13 @@ function ImproveAny:InitRaidFrames()
 
 				local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
 
-				if oldInCombatIds ~= IAGV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
-					oldInCombatIds = IAGV( "RFHIDEBUFFIDSINCOMBAT", "" )
+				if oldInCombatIds ~= ImproveAny:GV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
+					oldInCombatIds = ImproveAny:GV( "RFHIDEBUFFIDSINCOMBAT", "" )
 					inCombatIds = {strsplit(",", oldInCombatIds)}
 				end
 		
-				if oldInNotCombatIds ~= IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
-					oldInNotCombatIds = IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
+				if oldInNotCombatIds ~= ImproveAny:GV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
+					oldInNotCombatIds = ImproveAny:GV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
 					inNotCombatIds = {strsplit(",", oldInNotCombatIds)}
 				end
 		
@@ -451,14 +451,14 @@ function ImproveAny:InitRaidFrames()
 		local old1 = ""
 		local old2 = ""
 		function ImproveAny:ShowMsgForBuffs()
-			if old1 ~= IAGV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
-				old1 = IAGV( "RFHIDEBUFFIDSINCOMBAT", "" )
+			if old1 ~= ImproveAny:GV( "RFHIDEBUFFIDSINCOMBAT", "" ) then
+				old1 = ImproveAny:GV( "RFHIDEBUFFIDSINCOMBAT", "" )
 				local text = string.gsub( old1, ",", "\n" )
 				ImproveAny:MSG( "[HIDE-BUFFS] Hide Buffs In Combat changed to: \n" .. text )
 			end
 
-			if old2 ~= IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
-				old2 = IAGV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
+			if old2 ~= ImproveAny:GV( "RFHIDEBUFFIDSINNOTCOMBAT", "" ) then
+				old2 = ImproveAny:GV( "RFHIDEBUFFIDSINNOTCOMBAT", "" )
 				local text = string.gsub( old1, ",", "\n" )
 				ImproveAny:MSG( "[HIDE-BUFFS] Hide Buffs Outside of Combat changed to: " .. text )
 			end

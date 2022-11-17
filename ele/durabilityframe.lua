@@ -50,7 +50,7 @@ function ImproveAny:InitDurabilityFrame()
 			end
 			local perc = 0
 			if cmax > 0 then
-				perc = IAMathR(ccur / cmax * 100, 1)
+				perc = ImproveAny:MathR(ccur / cmax * 100, 1)
 
 				if DurabilityFrame.textperc ~= nil then
 					DurabilityFrame.textperc:SetText(perc .. "%")
@@ -65,7 +65,7 @@ function ImproveAny:InitDurabilityFrame()
 				end
 			end
 
-			if perc <= IAGV( "SHOWDURABILITYUNDER", 100 ) then
+			if perc <= ImproveAny:GV( "SHOWDURABILITYUNDER", 100 ) then
 				DurabilityFrame:Show()
 			else
 				DurabilityFrame:Hide()
