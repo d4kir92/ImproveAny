@@ -9,6 +9,7 @@ function ImproveAny:Lang_deDE()
 
 		["GENERAL"] = "Allgemein",
 		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
+		["UIFONT"] = "Ui Schriftart",
 		["WORLDTEXTSCALE"] = "Welttext Skala",
 		["MAXZOOM"] = "Maximale Zoomstufe",
 		["HIDEPVPBADGE"] = "PVP-Abzeichen-Symbole ausblenden",

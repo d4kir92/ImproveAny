@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.54" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.55" )
 }
 
 
@@ -345,7 +345,7 @@ function ImproveAny:InitIASettings()
 			local fontNames = {
 				["name"] = "fontNames",
 				["parent"]= IASettings.SC,
-				["title"] = "Ui Font",
+				["title"] = "UIFONT",
 				["items"]= { "Default", "Prototype" },
 				["defaultVal"] = ImproveAny:GV( "fontName", "Default" ), 
 				["changeFunc"] = function( dropdown_frame, dropdown_val )

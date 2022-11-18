@@ -16,6 +16,7 @@ function ImproveAny:Lang_enUS()
 
 		["GENERAL"] = "General",
 		["SHOWMINIMAPBUTTON"] = "Show Minimap Button",
+		["UIFONT"] = "Ui Font",
 		["WORLDTEXTSCALE"] = "World Text Scale",
 		["MAXZOOM"] = "Max Zoom Distance",
 		["HIDEPVPBADGE"] = "Hide PVP Badge Icons",
