@@ -7,7 +7,7 @@ local XPAPIPREFIX = "ImproveAnyXPAPI"
 local iadebugxpbar = false
 local iaxpready = false
 
-function ImproveAny:UnitName(unit)
+function ImproveAny_UnitName( unit )
 	if UnitExists(unit) then
 		local name, realm = UnitName(unit)
 		if realm and realm ~= "" then
@@ -21,8 +21,8 @@ function ImproveAny:UnitName(unit)
 	end
 end
 
-function ImproveAny:UnitXP(unit)
-	local target = ImproveAny:UnitName(unit)
+function ImproveAny_UnitXP( unit )
+	local target = ImproveAny_UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXP( "player" )
 	end
@@ -32,8 +32,8 @@ function ImproveAny:UnitXP(unit)
 	return 0
 end
 
-function ImproveAny:UnitXPMax(unit)
-	local target = ImproveAny:UnitName(unit)
+function ImproveAny_UnitXPMax( unit )
+	local target = ImproveAny_UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXPMax( "player" )
 	end
@@ -45,7 +45,7 @@ end
 
 function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
-		local target = ImproveAny:UnitName("PARTY" .. i)
+		local target = ImproveAny_UnitName("PARTY" .. i)
 		if target and ImproveAny:GV( "XPTAB" )[target] == nil then
 			ImproveAny:GV( "XPTAB" )[target] = {}
 		end
@@ -245,8 +245,8 @@ local function OnEventXP(self, event, ...)
 							PartyFrameXPBar.levelText:SetText( UnitLevel("PARTY" .. i) )
 							PartyFrameXPBar.levelText:SetTextColor( c.r, c.g, c.b, 1 )
 
-							local xp = ImproveAny:UnitXP( "PARTY" .. i, 0 )
-							local xpmax = ImproveAny:UnitXPMax( "PARTY" .. i, 1 )
+							local xp = ImproveAny_UnitXP( "PARTY" .. i, 0 )
+							local xpmax = ImproveAny_UnitXPMax( "PARTY" .. i, 1 )
 							if ( xp > 0 or xpmax > 1 ) and not ImproveAny:GV( "nochanges" ) then
 								local per = xp / xpmax
 								PartyFrameXPBar.textureBar:SetWidth( per * PartyFrameXPBar:GetWidth() - 4 )
