@@ -446,15 +446,6 @@ function ImproveAny:InitChat()
 
 
 
-
-
-
-
-
-
-
-
-
 		-- URLs / IPs / Emails
 		local patterns = {
 			"[htps:/]*%w+%.%w[%w%.%/%+%-%_%#%?%=]*"

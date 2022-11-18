@@ -34,7 +34,7 @@ function ImproveAny:InitSuperTrackedFrame()
 		SuperTrackedFrame.DistanceTime:SetTextColor(SuperTrackedFrame.DistanceText:GetTextColor())
 		SuperTrackedFrame.DistanceTime:SetShadowOffset(SuperTrackedFrame.DistanceText:GetShadowOffset())
 
-		if C_Navigation or WMPGetDistance then
+		if C_Navigation or WorldMapPin_GetDistance then
 			FLOAT_SPELL_DURATION_SEC = ImproveAny:ReplaceStr( INT_SPELL_DURATION_SEC, "%d", "%0.0f" )
 			FLOAT_SPELL_DURATION_MIN = ImproveAny:ReplaceStr( INT_SPELL_DURATION_MIN, "%d", "%0.1f" )
 
@@ -46,8 +46,8 @@ function ImproveAny:InitSuperTrackedFrame()
 			local cd = 1 / scale
 			function IAThinkSuperTrackedFrame()
 				local distance = 0
-				if WMPGetDistance then
-					distance = WMPGetDistance()
+				if WorldMapPin_GetDistance then
+					distance = WorldMapPin_GetDistance()
 				end
 				if C_Navigation and C_Navigation.GetDistancethen then
 					distance = C_Navigation.GetDistance()
