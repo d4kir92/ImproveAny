@@ -82,10 +82,12 @@ function ImproveAny:CheckCVars()
 end
 
 
-
+SetCVar( "ScriptErrors", 1 )
 function ImproveAny:Event( event, ... )
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
+		
+		SetCVar( "ScriptErrors", 1 )
 
 		if IsAddOnLoaded("D4KiR MoveAndImprove") then
 			ImproveAny:MSG( "DON'T use MoveAndImprove, when you use ImproveAny" )
