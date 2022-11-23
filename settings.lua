@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.56" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.57" )
 }
 
 
@@ -154,7 +154,7 @@ local function AddEditBox( x, key, val, func )
 	if ebs[key] == nil then
 		ebs[key] = CreateFrame( "EditBox", "ebs[" .. key .. "]", IASettings.SC, "InputBoxTemplate" )
 		ebs[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x, posy )
-		ebs[key]:SetSize( 360, 24 )
+		ebs[key]:SetSize( IASettings:GetWidth() - 40, 24 )
 		ebs[key]:SetAutoFocus( false )
 		ebs[key].text = ImproveAny:GV( key, val )
 		ebs[key]:SetText( ImproveAny:GV( key, val ) )
@@ -441,7 +441,7 @@ function ImproveAny:InitIASettings()
 
 	IASettings.Search = CreateFrame( "EditBox", "IASettings_Search", IASettings, "InputBoxTemplate" )
 	IASettings.Search:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 12, -26 )
-	IASettings.Search:SetSize( 400, 24 )
+	IASettings.Search:SetSize( IASettings:GetWidth() - 22 - 100, 24 )
 	IASettings.Search:SetAutoFocus( false )
 	IASettings.Search:SetScript( "OnTextChanged", function( self, ... )
 		searchStr = IASettings.Search:GetText()
@@ -453,7 +453,7 @@ function ImproveAny:InitIASettings()
 	IASettings.SF:SetPoint( "BOTTOMRIGHT", IASettings, -32, 24 + 8 )
 
 	IASettings.SC = CreateFrame( "Frame", "IASettings_SC", IASettings.SF )
-	IASettings.SC:SetSize( 400, 400 )
+	IASettings.SC:SetSize( IASettings.SF:GetSize() )
 	IASettings.SC:SetPoint( "TOPLEFT", IASettings.SF, "TOPLEFT", 0, 0 )
 
 	IASettings.SF:SetScrollChild( IASettings.SC )

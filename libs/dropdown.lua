@@ -6,8 +6,8 @@ local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 function ImproveAny:CreateDropdown( opts )
 	local CB = LibDD:Create_UIDropDownMenu( opts.name, opts.parent )
 	LibDD:UIDropDownMenu_SetWidth( CB, 120 )
-	LibDD:UIDropDownMenu_SetText( CB, ImproveAny:GV( opts.name, opts.defaultVal ) )
-	LibDD:UIDropDownMenu_Initialize(CB, function(self, level, menuList)
+	LibDD:UIDropDownMenu_SetText( CB, opts.defaultVal )
+	LibDD:UIDropDownMenu_Initialize( CB, function( self, level, menuList )
 		local tab = {}
 		for i, v in pairs( opts.items ) do
 			local info = LibDD:UIDropDownMenu_CreateInfo()
@@ -18,7 +18,7 @@ function ImproveAny:CreateDropdown( opts )
 		end
 	end)
 	function CB:SetValue( newValue )
-		ImproveAny:SV( opts.name, newValue )
+		opts.changeFunc( CB, newValue )
 		LibDD:UIDropDownMenu_SetText( CB, newValue )
 		CloseDropDownMenus()
 	end
@@ -27,7 +27,7 @@ function ImproveAny:CreateDropdown( opts )
 	local text = CB:CreateFontString(nil, "ARTWORK")
 	text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
 	text:SetPoint("LEFT", CB, "RIGHT", 0, 4)
-	text:SetText(ImproveAny:GT(opts.title))
+	text:SetText( ImproveAny:GT(opts.title) )
 
     return CB
 end

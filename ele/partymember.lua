@@ -7,7 +7,7 @@ local XPAPIPREFIX = "ImproveAnyXPAPI"
 local iadebugxpbar = false
 local iaxpready = false
 
-function ImproveAny_UnitName( unit )
+function ImproveAny:UnitName( unit )
 	if UnitExists(unit) then
 		local name, realm = UnitName(unit)
 		if realm and realm ~= "" then
@@ -22,7 +22,7 @@ function ImproveAny_UnitName( unit )
 end
 
 function ImproveAny_UnitXP( unit )
-	local target = ImproveAny_UnitName(unit)
+	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXP( "player" )
 	end
@@ -33,7 +33,7 @@ function ImproveAny_UnitXP( unit )
 end
 
 function ImproveAny_UnitXPMax( unit )
-	local target = ImproveAny_UnitName(unit)
+	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXPMax( "player" )
 	end
@@ -45,7 +45,7 @@ end
 
 function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
-		local target = ImproveAny_UnitName("PARTY" .. i)
+		local target = ImproveAny:UnitName("PARTY" .. i)
 		if target and ImproveAny:GV( "XPTAB" )[target] == nil then
 			ImproveAny:GV( "XPTAB" )[target] = {}
 		end

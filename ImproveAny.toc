@@ -1,5 +1,5 @@
 ## Interface: 100002
-## Version: 0.5.56
+## Version: 0.5.57
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -27,7 +27,6 @@ ele/castbar.lua
 ele/chat.lua
 ele/combattext.lua
 ele/durabilityframe.lua
-ele/iasettings.lua
 ele/ilvlbar.lua
 ele/itemlevel.lua
 ele/minimap.lua
@@ -40,4 +39,5 @@ ele/supertrackedframe.lua
 ele/tokenbar.lua
 ele/worldmapframe.lua
 ele/xpbar.lua
+settings.lua
 core.lua
