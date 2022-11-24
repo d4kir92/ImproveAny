@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.58" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.59" )
 }
 
 
@@ -488,6 +488,8 @@ function ImproveAny:InitIASettings()
 	IASettings.showerrors:SetScript("OnClick", function()
 		if GetCVar( "ScriptErrors" ) == "0" then
 			SetCVar( "ScriptErrors", 1 )
+
+			C_UI.Reload()
 		end
 		IASettings:UpdateShowErrors()
 	end)
