@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.57" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.58" )
 }
 
 
@@ -299,14 +299,16 @@ function ImproveAny:ToggleSettings()
 	ImproveAny:SetEnabled( "SETTINGS", not ImproveAny:IsEnabled( "SETTINGS", false ) )
 	if ImproveAny:IsEnabled( "SETTINGS", false ) then
 		IASettings:Show()
+		IASettings:UpdateShowErrors()
 	else
 		IASettings:Hide()
+		IASettings:UpdateShowErrors()
 	end
 end
 
 function ImproveAny:InitIASettings()
 	IASettings = CreateFrame( "Frame", "IASettings", UIParent, "BasicFrameTemplate" )
-	IASettings:SetSize( 500, 500 )
+	IASettings:SetSize( 550, 500 )
 	IASettings:SetPoint( "CENTER", UIParent, "CENTER", 0, 0 )
 
 	IASettings:SetFrameStrata( "HIGH" )
@@ -479,6 +481,26 @@ function ImproveAny:InitIASettings()
 		C_UI.Reload()
 	end)
 
+	IASettings.showerrors = CreateFrame( "BUTTON", "IASettings" .. ".showerrors", IASettings, "UIPanelButtonTemplate" )
+	IASettings.showerrors:SetSize( 120, 24 )
+	IASettings.showerrors:SetPoint( "TOPLEFT", IASettings, "TOPLEFT", 4 + 120 + 4 + 120 + 4, -IASettings:GetHeight() + 24 + 4 )
+	IASettings.showerrors:SetText( "Show Errors" )
+	IASettings.showerrors:SetScript("OnClick", function()
+		if GetCVar( "ScriptErrors" ) == "0" then
+			SetCVar( "ScriptErrors", 1 )
+		end
+		IASettings:UpdateShowErrors()
+	end)
+
+	function IASettings:UpdateShowErrors()
+		if GetCVar( "ScriptErrors" ) == "0" then
+			IASettings.showerrors:Show()
+		else
+			IASettings.showerrors:Hide()
+		end
+	end
+	IASettings:UpdateShowErrors()
+	
 	IASettings.DISCORD = CreateFrame( "EditBox", "IASettings" .. ".DISCORD", IASettings, "InputBoxTemplate" )
 	IASettings.DISCORD:SetText( "discord.gg/zWvQKDjDEC" )
 	IASettings.DISCORD:SetSize( 160, 24 )
