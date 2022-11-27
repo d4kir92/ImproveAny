@@ -1,6 +1,24 @@
 
 local AddOnName, ImproveAny = ...
 
+local BuildNr = select(4, GetBuildInfo())
+local Build = "CLASSIC"
+if BuildNr >= 100000 then
+	Build = "RETAIL"
+elseif BuildNr > 29999 then
+	Build = "WRATH"
+elseif BuildNr > 19999 then
+	Build = "TBC"
+end
+
+function ImproveAny:GetWoWBuildNr()
+	return BuildNr
+end
+
+function ImproveAny:GetWoWBuild()
+	return Build
+end
+
 local COL_R = "|cFFFF0000"
 local COL_Y = "|cFFFFFF00"
 

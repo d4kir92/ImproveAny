@@ -94,7 +94,7 @@ function ImproveAny:InitBags()
 		end)
 
 		C_Timer.After( 1, function()
-			if IABUILDNR < 100000 and MABagBar then
+			if ImproveAny:GetWoWBuild() ~= "RETAIL" and MABagBar then
 				local sw, sh = MABagBar:GetSize()
 				sw = sw + 4 * br
 

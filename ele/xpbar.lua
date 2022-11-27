@@ -111,10 +111,10 @@ function ImproveAny:InitXPBar()
 		end )
 
 		C_Timer.After( 0.01, function()
-			if IABUILD == "TBC" then
+			if ImproveAny:GetWoWBuild() == "TBC" then
 				maxlevel = 70
 			end
-			if IABUILD == "WRATH" then
+			if ImproveAny:GetWoWBuild() == "WRATH" then
 				maxlevel = 80
 			end
 			if GetMaxLevelForPlayerExpansion then

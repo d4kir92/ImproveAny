@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.59" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.60" )
 }
 
 
@@ -389,7 +389,7 @@ function ImproveAny:InitIASettings()
 		AddCategory( "MINIMAP" )
 		AddCheckBox( 4, "MINIMAP", true, ImproveAny.UpdateMinimapSettings )
 		AddCheckBox( 24, "MINIMAPHIDEBORDER", true, ImproveAny.UpdateMinimapSettings )
-		if IABUILDNR < 100000 then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCheckBox( 24, "MINIMAPHIDEZOOMBUTTONS", true, ImproveAny.UpdateMinimapSettings )
 		end
 		AddCheckBox( 24, "MINIMAPSCROLLZOOM", true, ImproveAny.UpdateMinimapSettings )
@@ -400,23 +400,25 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )
 		AddCheckBox( 4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons )
 
-		AddCategory( "XPBAR" )
-		AddCheckBox( 4, "XPBAR", true )
-		AddCheckBox( 24, "XPLEVEL", false )
-		AddCheckBox( 24, "XPNUMBER", true )
-		AddCheckBox( 24, "XPPERCENT", true )
-		AddCheckBox( 24, "XPMISSING", true )
-		AddCheckBox( 24, "XPEXHAUSTION", true )
-		AddCheckBox( 24, "XPXPPERHOUR", true )
-		AddCheckBox( 24, "XPHIDEARTWORK", true )
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+			AddCategory( "XPBAR" )
+			AddCheckBox( 4, "XPBAR", true )
+			AddCheckBox( 24, "XPLEVEL", false )
+			AddCheckBox( 24, "XPNUMBER", true )
+			AddCheckBox( 24, "XPPERCENT", true )
+			AddCheckBox( 24, "XPMISSING", true )
+			AddCheckBox( 24, "XPEXHAUSTION", true )
+			AddCheckBox( 24, "XPXPPERHOUR", true )
+			AddCheckBox( 24, "XPHIDEARTWORK", true )
 
-		AddCategory( "REPBAR" )
-		AddCheckBox( 4, "REPBAR", true )
-		AddCheckBox( 24, "REPNUMBER", true )
-		AddCheckBox( 24, "REPPERCENT", true )
-		AddCheckBox( 24, "REPHIDEARTWORK", true )
+			AddCategory( "REPBAR" )
+			AddCheckBox( 4, "REPBAR", true )
+			AddCheckBox( 24, "REPNUMBER", true )
+			AddCheckBox( 24, "REPPERCENT", true )
+			AddCheckBox( 24, "REPHIDEARTWORK", true )
+		end
 
-		if IABUILD ~= "RETAIL" then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory( "UNITFRAMES" )
 			AddEditBox( 4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs )
 			AddEditBox( 4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs )

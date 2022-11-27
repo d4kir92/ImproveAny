@@ -179,7 +179,7 @@ function ImproveAny:InitItemLevel()
 						max = 17
 					end
 				end
-				if IABUILD == "RETAIL" then
+				if ImproveAny:GetWoWBuild() == "RETAIL" then
 					max = max - 1
 				end
 
@@ -290,7 +290,7 @@ function ImproveAny:InitItemLevel()
 								max = 17
 							end
 						end
-						if IABUILD == "RETAIL" then
+						if ImproveAny:GetWoWBuild() == "RETAIL" then
 							max = max - 1
 						end
 						IAILVLINSPECT = string.format("%0.2f", sum / max)
@@ -431,7 +431,7 @@ function ImproveAny:InitItemLevel()
 		IAUpdateBagsIlvl()
 	end
 
-	if IABUILD ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		-- Bag Searchbar
 		BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")
 		BagItemSearchBox:SetSize(110, 18)

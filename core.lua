@@ -6,16 +6,6 @@ SlashCmdList["RL"] = function(msg)
 	C_UI.Reload()
 end
 
-IABUILDNR = select(4, GetBuildInfo())
-IABUILD = "CLASSIC"
-if IABUILDNR >= 100000 then
-	IABUILD = "RETAIL"
-elseif IABUILDNR > 29999 then
-	IABUILD = "WRATH"
-elseif IABUILDNR > 19999 then
-	IABUILD = "TBC"
-end
-
 function ImproveAny:MathC( val, vmin, vmax )
 	if val == nil then
 		return 0

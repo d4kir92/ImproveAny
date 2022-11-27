@@ -146,7 +146,7 @@ function ImproveAny:InitMinimap()
 					btn:SetUserPlaced( false )
 
 					local radius = 80
-					if IABUILDNR >= 100000 then
+					if ImproveAny:GetWoWBuild() == "RETAIL" then
 						radius = 110
 					end
 					local pos = random( 0, 360 )
@@ -250,7 +250,7 @@ function ImproveAny:InitMinimap()
 				MinimapToggleButton:Hide()
 			end
 
-			if IABUILDNR < 100000 then
+			if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 				if TimeManagerClockButton then
 					local clocktexture = select( 1, TimeManagerClockButton:GetRegions() )
 					if clocktexture and clocktexture.SetTexture then
@@ -290,7 +290,7 @@ function ImproveAny:InitMinimap()
 			end
 			--IAConvertToMinimapButton( "MiniMapInstanceDifficulty" ) -- RAIDSize, not moveable somehow
 
-			if IABUILD ~= "RETAIL" and MiniMapTracking then -- breaks retail if not checked
+			if ImproveAny:GetWoWBuild() ~= "RETAIL" and MiniMapTracking then -- breaks retail if not checked
 				IAConvertToMinimapButton( "MiniMapTracking" ) -- Tracking
 			end
 

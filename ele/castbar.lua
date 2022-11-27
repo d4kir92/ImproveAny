@@ -68,7 +68,7 @@ function ImproveAny:InitCastBar()
 							name, text, texture = ChannelInfo()
 						end
 						
-						if IABUILD ~= "RETAIL" and texture == 136235 then
+						if ImproveAny:GetWoWBuild() ~= "RETAIL" and texture == 136235 then
 							texture = 136243 -- 136192
 						end
 						if castbar.icon ~= nil and castbar.icon:GetTexture() ~= texture then

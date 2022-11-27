@@ -11,13 +11,6 @@ local skillIds = {}
 local jobs = {}
 local subTypes = {}
 
-if IABUILD ~= "RETAIL" then
-	IASkills = CreateFrame( "FRAME", "IASkills", UIParent )
-	IASkills:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 520, 0 )
-	IASkills:SetSize( sw, 6 * sh )
-	IASkills.bars = {}
-end
-
 local function IAGetSkillData( name )
 	local itemcur = nil
 	local itemmax = nil
@@ -195,7 +188,14 @@ function ImproveAny:AddStatusBar( func, args )
 end
 
 function ImproveAny:InitSkillBars()
-	if ImproveAny:IsEnabled( "SKILLBARS", true ) and IABUILD ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+		IASkills = CreateFrame( "FRAME", "IASkills", UIParent )
+		IASkills:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 520, 0 )
+		IASkills:SetSize( sw, 6 * sh )
+		IASkills.bars = {}
+	end
+	
+	if ImproveAny:IsEnabled( "SKILLBARS", true ) and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		ImproveAny:AddStatusBar( IAGetWeaponSkillData, 16 )
 		ImproveAny:AddStatusBar( IAGetWeaponSkillData, 17 )
 		ImproveAny:AddStatusBar( IAGetWeaponSkillData, 18 )

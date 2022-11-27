@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 function ImproveAny:InitRaidFrames()
-	if IABUILD ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		local raidFrames = {}
 
 		function ImproveAny:IsCompactRaidFrame( frame )
