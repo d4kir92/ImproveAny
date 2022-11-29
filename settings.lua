@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.60" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.61" )
 }
 
 
@@ -284,15 +284,31 @@ function ImproveAny:UpdateRaidFrameSize()
 	end
 end
 
+hooksecurefunc( UIParent, "SetAttribute", function( self, key, value )
+	if self.iasetattribute then return end
+	self.iasetattribute = true
+	if key == "TOP_OFFSET" then
+		local topOffset = ImproveAny:GV( "TOP_OFFSET", 116 )
+		self:SetAttribute( "TOP_OFFSET", -topOffset )
+	elseif key == "LEFT_OFFSET" then
+		local leftOffset = ImproveAny:GV( "LEFT_OFFSET", 16 )
+		self:SetAttribute( "LEFT_OFFSET", leftOffset )
+	elseif key == "PANEl_SPACING_X" then
+		local panelSpacingX = ImproveAny:GV( "PANEl_SPACING_X", 32 )
+		self:SetAttribute( "PANEl_SPACING_X", panelSpacingX )
+	end
+	self.iasetattribute = false
+end )
+
 function ImproveAny:UpdateUIParentAttribute()
-	local topOffset = ImproveAny:GV( "TOP_OFFSET", 116 )
-	local leftOffset = ImproveAny:GV( "LEFT_OFFSET", 16 )
-	local panelSpacingX = ImproveAny:GV( "PANEl_SPACING_X", 32 )
-	UIParent:SetAttribute( "TOP_OFFSET", -topOffset )
-	UIParent:SetAttribute( "LEFT_OFFSET", leftOffset )
-	--UIParent:SetAttribute("CENTER_OFFSET", 400)
-	--UIParent:SetAttribute("RIGHT_OFFSET", 400)
-	UIParent:SetAttribute( "PANEl_SPACING_X", panelSpacingX )
+	if not InCombatLockdown() then
+		local topOffset = ImproveAny:GV( "TOP_OFFSET", 116 )
+		local leftOffset = ImproveAny:GV( "LEFT_OFFSET", 16 )
+		local panelSpacingX = ImproveAny:GV( "PANEl_SPACING_X", 32 )
+		UIParent:SetAttribute( "TOP_OFFSET", -topOffset )
+		UIParent:SetAttribute( "LEFT_OFFSET", leftOffset )
+		UIParent:SetAttribute( "PANEl_SPACING_X", panelSpacingX )
+	end
 end
 
 function ImproveAny:ToggleSettings()
