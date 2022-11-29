@@ -74,6 +74,7 @@ function ImproveAny:Lang_deDE()
 		["SKILLBARS"] = "Skillbars (Berufe, Waffenfertigkeiten)",
 		["CASTBAR"] = "Zauberleiste (Castbar)",
 		["DURABILITY"] = "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)",
+		["MICROMENUCOLORED"] = "Mikro Menü eingefärbt",
 		["SHOWDURABILITYUNDER"] = "Zeige Haltbarkeit, wenn unter",
 		["BAGS"] = "Freiraum für jede Tasche anzeigen",
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",

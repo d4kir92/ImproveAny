@@ -101,6 +101,7 @@ function ImproveAny:Event( event, ... )
 		end
 		ImproveAny:InitXPBar()
 		ImproveAny:InitSuperTrackedFrame()
+		ImproveAny:InitMicroMenu()
 		
 		ImproveAny:InitIASettings()
 

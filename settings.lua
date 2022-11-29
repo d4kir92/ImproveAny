@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.62" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.63" )
 }
 
 
@@ -454,6 +454,9 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "SKILLBARS", true )
 		AddCheckBox( 4, "CASTBAR", true )
 		AddCheckBox( 4, "DURABILITY", true )
+		if ImproveAny:GetWoWBuild() == "RETAIL"  then
+			AddCheckBox( 4, "MICROMENUCOLORED", true )
+		end
 		AddSlider( 24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5 )
 		AddCheckBox( 4, "BAGS", true )
 		AddCheckBox( 4, "WORLDMAP", true )
