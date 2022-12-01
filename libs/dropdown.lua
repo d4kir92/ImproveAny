@@ -31,7 +31,7 @@ function ImproveAny:CreateDropdown( opts )
 
     return CB]]
 
-	local Menu = LibStub("LibDropDown"):NewButton(opts.parent, "MyMenuButton")
+	local Menu = LibStub("LibDropDown"):NewButton(opts.parent, opts.name )
 	Menu:SetPoint("TOPLEFT", 0, -4)
 	Menu:SetJustifyH("LEFT")
 	Menu:SetStyle("DEFAULT")

@@ -85,6 +85,7 @@ function ImproveAny:Lang_enUS()
 		["SHOWDURABILITYUNDER"] = "Show Durability, when under:",
 		["BAGS"] = "Show Freespace for each Bag",
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
+		["BAGMODE"] = "Bag Mode",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

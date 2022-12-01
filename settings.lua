@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.64" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.65" )
 }
 
 
@@ -387,7 +387,22 @@ function ImproveAny:InitIASettings()
 		
 		AddCheckBox( 4, "BAGSAMESIZE", true )
 		AddSlider( 24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1 )
-		
+		if dds["BAGMODE"] == nil then
+			local bagModes = {
+				["name"] = "BAGMODE",
+				["parent"]= IASettings.SC,
+				["title"] = "BAGMODE",
+				["items"]= { "RETAIL", "CLASSIC", "ONEBAG" },
+				["defaultVal"] = ImproveAny:GV( "BAGMODE", "RETAIL" ), 
+				["changeFunc"] = function( dropdown_frame, dropdown_val )
+					ImproveAny:SV( "BAGMODE", dropdown_val )
+					ImproveAny:Fonts()
+				end 
+			}
+			dds["BAGMODE"] = ImproveAny:CreateDropdown( bagModes, posy )
+		end
+		IASetPos( dds["BAGMODE"], "BAGMODE" )
+
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
 

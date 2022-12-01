@@ -78,6 +78,7 @@ function ImproveAny:Lang_deDE()
 		["SHOWDURABILITYUNDER"] = "Zeige Haltbarkeit, wenn unter",
 		["BAGS"] = "Freiraum für jede Tasche anzeigen",
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
+		["BAGMODE"] = "Taschen Modus",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
