@@ -179,13 +179,7 @@ function ImproveAny:InitBags()
 			elseif ImproveAny:GV( "BAGMODE", "RETAIL" ) == "CLASSIC" then
 				local SLOT = _G["BagBarExpandToggle"]
 				if SLOT then
-					hooksecurefunc( SLOT, "Show", function( self )
-						if self.iashow then return end
-						self.iashow = true
-						self:Hide()
-						self.iashow = false							
-					end )
-					SLOT:Hide()
+					SLOT:SetParent( IAHIDDEN )
 					ImproveAny:BAGSTryRemove( "BagBarExpandToggle" )
 				end
 				
@@ -229,13 +223,7 @@ function ImproveAny:InitBags()
 				for i, slot in pairs( BAGS ) do
 					local SLOT = _G[slot]
 					if SLOT and slot ~= "MainMenuBarBackpackButton" then
-						hooksecurefunc( SLOT, "Show", function( self )
-							if self.iashow then return end
-							self.iashow = true
-							self:Hide()
-							self.iashow = false							
-						end )
-						SLOT:Hide()
+						SLOT:SetParent( IAHIDDEN )
 					end
 				end
 
