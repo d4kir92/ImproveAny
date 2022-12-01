@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.66" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.67" )
 }
 
 
@@ -397,6 +397,9 @@ function ImproveAny:InitIASettings()
 				["changeFunc"] = function( dropdown_frame, dropdown_val )
 					ImproveAny:SV( "BAGMODE", dropdown_val )
 					ImproveAny:Fonts()
+					if IASettings.save then
+						IASettings.save:Enable()
+					end
 				end 
 			}
 			dds["BAGMODE"] = ImproveAny:CreateDropdown( bagModes, posy )

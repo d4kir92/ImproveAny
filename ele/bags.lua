@@ -111,18 +111,18 @@ function ImproveAny:InitBags()
 		end)
 
 		C_Timer.After( 1, function()
-			IABagBar = CreateFrame( "FRAME", "IABagBar", MABagBar )
+			IABagBar = CreateFrame( "FRAME", "IABagBar", MABagBar or UIParent )
 		
 			if ImproveAny:GV( "BAGMODE", "RETAIL" ) == "RETAIL" then
 				if ImproveAny:GetWoWBuild() ~= "RETAIL" and MABagBar then
 					local sw, sh = MABagBar:GetSize()
 					sw = sw + 4 * br
 					IABagBar:SetSize( sw - sh, sh )
-					IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", -sh - (sh / 2) - 2 * br, 0 )
+					IABagBar:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", -sh - (sh / 2) - 2 * br, 0 )
 						
-					BagToggle = CreateFrame( "BUTTON", "BagToggle", MABagBar )
+					BagToggle = CreateFrame( "BUTTON", "BagToggle", MABagBar or UIParent )
 					BagToggle:SetSize( sh * 0.5, sh * 0.8 )
-					BagToggle:SetPoint( "LEFT", MABagBar, "RIGHT", -sh * 1.5 - br, 0 )
+					BagToggle:SetPoint( "LEFT", MABagBar or UIParent, "RIGHT", -sh * 1.5 - br, 0 )
 
 					BagToggle.show = true
 
@@ -157,7 +157,7 @@ function ImproveAny:InitBags()
 								SLOT:SetParent( IABagBar )
 								SLOT:ClearAllPoints()
 								if oldslot then
-									SLOT:SetPoint( "LEFT", oldslot, "RIGHT", br, 0 )
+									SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - _G[slot]:GetWidth(), 0 )
 								else
 									SLOT:SetPoint( "LEFT", IABagBar, "LEFT", 0, 0 )
 								end
@@ -198,7 +198,7 @@ function ImproveAny:InitBags()
 							SLOT:SetParent( IABagBar )
 							SLOT:ClearAllPoints()
 							if oldslot then
-								SLOT:SetPoint( "LEFT", oldslot, "RIGHT", br, 0 )
+								SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - _G[slot]:GetWidth(), 0 )
 							else
 								SLOT:SetPoint( "LEFT", IABagBar, "LEFT", 0, 0 )
 							end
@@ -209,15 +209,19 @@ function ImproveAny:InitBags()
 						local SLOT = _G[slot]
 						if SLOT then
 							SLOT:ClearAllPoints()
-							SLOT:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+							SLOT:SetPoint( "RIGHT", IABagBar, "RIGHT", 0, 0 )
 						end
 					end
 				end
 				if sw > 0 and sh > 0 then
 					sw = sw + ( count - 1 ) * br
 					IABagBar:SetSize( sw, sh )
-					IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
-					MABagBar:SetSize( sw, sh )
+					if MABagBar then
+						IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+						MABagBar:SetSize( sw, sh )
+					else
+						IABagBar:SetPoint( "TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0 )
+					end
 				end
 			elseif ImproveAny:GV( "BAGMODE", "RETAIL" ) == "ONEBAG" then
 				for i, slot in pairs( BAGS ) do
@@ -231,11 +235,14 @@ function ImproveAny:InitBags()
 				if SLOT then
 					local sw, sh = SLOT:GetSize()
 					IABagBar:SetSize( sw, sh )
-					IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
-					MABagBar:SetSize( sw, sh )
-
+					if MABagBar then
+						IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+						MABagBar:SetSize( sw, sh )
+					else
+						IABagBar:SetPoint( "TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0 )
+					end
 					SLOT:ClearAllPoints()
-					SLOT:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+					SLOT:SetPoint( "RIGHT", IABagBar, "RIGHT", 0, 0 )
 				end
 			else
 				ImproveAny:MSG( "BAGMODE NOT FOUND: " .. ImproveAny:GV( "BAGMODE", "RETAIL" ) )
