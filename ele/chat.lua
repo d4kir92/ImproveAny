@@ -392,7 +392,7 @@ function ImproveAny:InitChat()
 			return IAChatAddItemIcons( str, 1 )
 		end
 
-		local function IAHookFunc( key )
+		local function IAHookFunc( key ) -- buggy
 			local org = _G[key]
 			if org then
 				_G[key] = function( ... )
@@ -407,15 +407,16 @@ function ImproveAny:InitChat()
 		end
 		--IAHookFunc("GetBNPlayerCommunityLink") 
 		--IAHookFunc("GetBNPlayerLink") 
-		IAHookFunc("GetGMLink") 
-		IAHookFunc("GetPlayerCommunityLink") 
-		IAHookFunc("GetPlayerLink") 
+
+		--IAHookFunc("GetGMLink") 
+		--IAHookFunc("GetPlayerCommunityLink") 
+		--IAHookFunc("GetPlayerLink") 
 
 
 
 		-- Change
 		local oldstrs = {}
-		function IAUpdateChatChannels()
+		local function IAUpdateChatChannels()
 			local c = 1
 			for i, v in pairs(_G) do
 				if type(v) == "string" and string.find(i, "CHAT_", 1, true) and string.find(i, "_GET", 1, true) then
@@ -439,6 +440,9 @@ function ImproveAny:InitChat()
 					end
 				end
 			end
+		end
+		if IAUpdateChatChannels then
+			IAUpdateChatChannels()
 		end
 
 		if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then

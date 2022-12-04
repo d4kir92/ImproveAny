@@ -107,9 +107,6 @@ function ImproveAny:Event( event, ... )
 
 		if ImproveAny:IsEnabled( "CHAT", true ) then
 			ImproveAny:InitChat()
-			if IAUpdateChatChannels then
-				IAUpdateChatChannels()
-			end
 		end
 
 		ImproveAny:InitRaidFrames()
