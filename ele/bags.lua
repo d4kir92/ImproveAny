@@ -115,15 +115,13 @@ function ImproveAny:InitBags()
 		
 			if ImproveAny:GV( "BAGMODE", "RETAIL" ) == "RETAIL" then
 				if ImproveAny:GetWoWBuild() ~= "RETAIL" and MABagBar then
-					local sw, sh = MABagBar:GetSize()
-					sw = sw + 4 * br
-					IABagBar:SetSize( sw - sh, sh )
-					IABagBar:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", -sh - (sh / 2) - 2 * br, 0 )
-						
 					BagToggle = CreateFrame( "BUTTON", "BagToggle", MABagBar or UIParent )
-					BagToggle:SetSize( sh * 0.5, sh * 0.8 )
-					BagToggle:SetPoint( "LEFT", MABagBar or UIParent, "RIGHT", -sh * 1.5 - br, 0 )
-
+					local mainBag = _G["MainMenuBarBackpackButton"]
+					if mainBag then
+						local w, h = mainBag:GetSize()
+						BagToggle:SetSize( h * 0.5, h * 0.8 )
+					end
+					ImproveAny:BAGSTryAdd( "BagToggle", #BAGS )
 					BagToggle.show = true
 
 					BagToggle:SetHighlightTexture( "Interface\\Buttons\\UI-Common-MouseHilight" )
@@ -149,32 +147,51 @@ function ImproveAny:InitBags()
 						BagToggle:UpdateIcon()
 					end )
 
+					local sw = 0
+					local sh = 0
+					local count = 0
 					local oldslot = nil
 					for i, slot in pairs( BAGS ) do
-						if slot ~= "MainMenuBarBackpackButton" then
-							local SLOT = _G[slot]
-							if SLOT then
-								SLOT:SetParent( IABagBar )
+						local SLOT = _G[slot]
+						if SLOT then
+							count = count + 1
+							sw = sw + _G[slot]:GetWidth()
+							if sh < _G[slot]:GetHeight() then
+								sh = _G[slot]:GetHeight()
+							end
+
+							if slot ~= "MainMenuBarBackpackButton" then
+								local SLOT = _G[slot]
+								if slot ~= "BagToggle" then
+									SLOT:SetParent( IABagBar )
+								end
 								SLOT:ClearAllPoints()
+								
 								if oldslot then
-									SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - _G[slot]:GetWidth(), 0 )
+									SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - SLOT:GetWidth(), 0 )
 								else
 									SLOT:SetPoint( "LEFT", IABagBar, "LEFT", 0, 0 )
 								end
 
 								oldslot = SLOT
-							end
-						else
-							local SLOT = _G[slot]
-							if SLOT then
+							else
 								SLOT:ClearAllPoints()
-								SLOT:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+								SLOT:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", 0, 0 )
 							end
 						end
 					end
+					
+					sw = sw + ( count - 1 ) * br
+					
+					BagToggle:SetPoint( "LEFT", MABagBar or UIParent, "RIGHT", -sh * 1.5 - br, 0 )
+					BagToggle:SetSize( sh * 0.5, sh * 0.8 )
+					
+					IABagBar:SetSize( sw, sh )
+					IABagBar:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", 0, 0 )
 
-					local isw, ish = IABagBar:GetSize()
-					MABagBar:SetSize( isw + br + sh * 0.5 + br + sh, ish )
+					if MABagBar then
+						MABagBar:SetSize( sw, sh )
+					end
 				end
 			elseif ImproveAny:GV( "BAGMODE", "RETAIL" ) == "CLASSIC" then
 				local SLOT = _G["BagBarExpandToggle"]
@@ -198,7 +215,7 @@ function ImproveAny:InitBags()
 							SLOT:SetParent( IABagBar )
 							SLOT:ClearAllPoints()
 							if oldslot then
-								SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - _G[slot]:GetWidth(), 0 )
+								SLOT:SetPoint( "LEFT", IABagBar, "LEFT", sw + (i - 1) * br - SLOT:GetWidth(), 0 )
 							else
 								SLOT:SetPoint( "LEFT", IABagBar, "LEFT", 0, 0 )
 							end
@@ -217,7 +234,7 @@ function ImproveAny:InitBags()
 					sw = sw + ( count - 1 ) * br
 					IABagBar:SetSize( sw, sh )
 					if MABagBar then
-						IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+						IABagBar:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", 0, 0 )
 						MABagBar:SetSize( sw, sh )
 					else
 						IABagBar:SetPoint( "TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0 )
@@ -236,7 +253,7 @@ function ImproveAny:InitBags()
 					local sw, sh = SLOT:GetSize()
 					IABagBar:SetSize( sw, sh )
 					if MABagBar then
-						IABagBar:SetPoint( "RIGHT", MABagBar, "RIGHT", 0, 0 )
+						IABagBar:SetPoint( "RIGHT", MABagBar or UIParent, "RIGHT", 0, 0 )
 						MABagBar:SetSize( sw, sh )
 					else
 						IABagBar:SetPoint( "TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0 )
