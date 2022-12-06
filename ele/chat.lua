@@ -15,24 +15,29 @@ function ImproveAny:InitChat()
 	end
 
 	if ImproveAny:IsEnabled( "CHAT", true ) then
-		function IAChatOnlyBig( str )
+		function IAChatOnlyBig( str, imax )
+			if str == nil then
+				return nil
+			end
+
+			local smax = imax or 3
+			
 			local res = string.gsub(str, "[^%u-]", "" )
 
-			if #res > 3 then -- shorten
-				res = string.sub( res, 1, 3 )
+			if #res > smax then -- shorten
+				res = string.sub( res, 1, smax )
 			end
-			if #str <= 3 then -- 1-3 => upper
+			if #str <= smax then -- 1-3 => upper
 				res = string.upper( res )
 			end
-
+			
 			if #res <= 0 then -- no upper?
-				if #str <= 3 then
+				if #str <= smax then
 					res = string.upper( str )
 				else
 					res = string.gsub(str, "[^%l-]", "" )
-					res = string.sub( res, 1, 1 )
+					res = string.sub( res, 1, smax )
 					res = string.upper( res )
-					--res = IAChatOnlyBig( res )
 				end
 			end
 
@@ -413,46 +418,66 @@ function ImproveAny:InitChat()
 		--IAHookFunc("GetPlayerLink") 
 
 
+		local hooks = {}
 
-		-- Change
-		local oldstrs = {}
-		local function IAUpdateChatChannels()
-			local c = 1
-			for i, v in pairs(_G) do
-				if type(v) == "string" and string.find(i, "CHAT_", 1, true) and string.find(i, "_GET", 1, true) then
-					c = c + 1
-					local lang = string.sub( i, 6 )
-					lang = string.sub( lang, 1, string.len( lang ) - 4 )
-					if _G[lang] then
-						if oldstrs[i] == nil then
-							oldstrs[i] = _G[i]
-						end
+		local function Abbreviate(channel)
+			-- Replaces channel name from the table above, or uses channel numbers
+			return channel
+		end
 
-						if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
-							if lang == "CHANNEL" then
-								_G[i] = "%s: "
-							else
-								_G[i] = "[" .. IAChatOnlyBig( _G[lang] ) .. "] %s: "
-							end
-						elseif oldstrs[i] then
-							_G[i] = oldstrs[i]
-						end
+		local count = 0
+		local msg = nil
+		local function AddMessage(self, message, ...)
+			local chanName = nil
+			local chanFormat = nil
+			local sear = message:gsub( '|', '')
+			sear = sear:gsub( 'h%[', ':' )
+			sear = sear:gsub( '%]h', ':' )
+			local _, channel, _, channelName, chanIndex = string.split( ":", sear )
+			
+			if channel == "channel" then
+				local s1 = channelName:find( '%[' )
+				if s1 then
+					local s2 = channelName:find( '%]' )
+					if s2 then
+						channelName = channelName:sub( s1 + 1, s2 - 1 )
+					end
+				end
+				chanName = channelName
+			end
+
+			if channel then
+				chanName = chanName or _G["CHAT_MSG_" .. channel]
+
+				local chanFormat = _G["CHAT_" .. channel .. "_GET"] 
+				if chanFormat == nil and channelName then
+					chanFormat = _G["CHAT_" .. channelName .. "_GET"]
+				end
+				if chanFormat == nil and chanIndex then
+					chanFormat = _G["CHAT_" .. chanIndex .. "_GET"]
+				end
+				if chanFormat then
+					chanFormat = chanFormat:gsub( '%s', '' )
+					message = message:gsub( chanFormat, ':' )
+				end
+
+				if chanName then
+					message = ImproveAny:ReplaceStr( message, chanName, IAChatOnlyBig( chanName ) )
+				elseif channelName then
+					chanName = _G["CHAT_MSG_" .. channelName]
+					if chanName then
+						message = "[" .. IAChatOnlyBig( chanName, 1 ) .. "] " .. message
 					end
 				end
 			end
+			return hooks[self](self, message, ...)
 		end
-		if IAUpdateChatChannels then
-			IAUpdateChatChannels()
-		end
-
-		if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
-			function ChatFrame_ResolvePrefixedChannelName( communityChannel )
-				local prefix, communityChannel = communityChannel:match("(%d+. )(.*)")
-				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
-					return IAChatOnlyBig( communityChannel )
-				else
-					return prefix .. ChatFrame_ResolveChannelName(communityChannel)
-				end
+		
+		for index = 1, NUM_CHAT_WINDOWS do
+			if(index ~= 2) then
+				local frame = _G['ChatFrame'..index]
+				hooks[frame] = frame.AddMessage
+				frame.AddMessage = AddMessage
 			end
 		end
 

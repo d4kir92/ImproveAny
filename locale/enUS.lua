@@ -86,6 +86,7 @@ function ImproveAny:Lang_enUS()
 		["BAGS"] = "Show Freespace for each Bag",
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
 		["BAGMODE"] = "Bag Mode",
+		["STATUSBARWIDTH"] = "Status Bar Width (XPbar, Reputationbar)",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

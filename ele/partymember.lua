@@ -21,7 +21,7 @@ function ImproveAny:UnitName( unit )
 	end
 end
 
-function ImproveAny_UnitXP( unit )
+function ImproveAny:UnitXP( unit )
 	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXP( "player" )
@@ -32,7 +32,7 @@ function ImproveAny_UnitXP( unit )
 	return 0
 end
 
-function ImproveAny_UnitXPMax( unit )
+function ImproveAny:UnitXPMax( unit )
 	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit( unit, "player" ) then
 		return UnitXPMax( "player" )
@@ -245,8 +245,8 @@ local function OnEventXP(self, event, ...)
 							PartyFrameXPBar.levelText:SetText( UnitLevel("PARTY" .. i) )
 							PartyFrameXPBar.levelText:SetTextColor( c.r, c.g, c.b, 1 )
 
-							local xp = ImproveAny_UnitXP( "PARTY" .. i, 0 )
-							local xpmax = ImproveAny_UnitXPMax( "PARTY" .. i, 1 )
+							local xp = ImproveAny:UnitXP( "PARTY" .. i, 0 )
+							local xpmax = ImproveAny:UnitXPMax( "PARTY" .. i, 1 )
 							if ( xp > 0 or xpmax > 1 ) and not ImproveAny:GV( "nochanges" ) then
 								local per = xp / xpmax
 								PartyFrameXPBar.textureBar:SetWidth( per * PartyFrameXPBar:GetWidth() - 4 )

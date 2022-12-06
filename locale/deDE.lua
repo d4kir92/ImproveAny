@@ -79,6 +79,7 @@ function ImproveAny:Lang_deDE()
 		["BAGS"] = "Freiraum für jede Tasche anzeigen",
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
 		["BAGMODE"] = "Taschen Modus",
+		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

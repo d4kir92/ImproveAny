@@ -1,43 +1,21 @@
 
 local AddOnName, ImproveAny = ...
 
-SLASH_RL1 = "/rl"
-SlashCmdList["RL"] = function(msg)
-	C_UI.Reload()
-end
+RegisterNewSlashCommand(
+	function()
+		ImproveAny:ToggleSettings()
+	end,
+	"improve",
+	"improveany"
+)
 
-function ImproveAny:MathC( val, vmin, vmax )
-	if val == nil then
-		return 0
-	end
-	if vmin == nil then
-		return 0
-	end
-	if vmax == nil then
-		return 1
-	end
-	if val < vmin then
-		return vmin
-	elseif val > vmax then
-		return vmax
-	else
-		return val
-	end
-end
-
-
-
-SLASH_RL1 = "/rl"
-SlashCmdList["RL"] = function(msg)
-	C_UI.Reload()
-end
-
-SLASH_IMPROVEANY1, SLASH_IMPROVEANY2 = "/improve", "/improveany"
-SlashCmdList["IMPROVEANY"] = function(msg)
-	ImproveAny:ToggleSettings()
-end
-
-
+RegisterNewSlashCommand(
+	function()
+		C_UI.Reload()
+	end,
+	"rl",
+	"rl"
+)
 
 IAHIDDEN = CreateFrame( "FRAME", "IAHIDDEN" )
 IAHIDDEN:Hide()
@@ -112,6 +90,8 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitRaidFrames()
 		
 		ImproveAny:UpdateUIParentAttribute()
+		
+		ImproveAny:UpdateStatusBar()
 
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then

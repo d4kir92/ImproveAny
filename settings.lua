@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.71" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.72" )
 }
 
 
@@ -311,6 +311,20 @@ function ImproveAny:UpdateUIParentAttribute()
 	end
 end
 
+function ImproveAny:UpdateStatusBar()
+	local w = ImproveAny:GV( "STATUSBARWIDTH", 565 )
+	if StatusTrackingBarManager then
+		StatusTrackingBarManager:SetWidth( w )
+		StatusTrackingBarManager.TopBarFrameTexture:SetWidth( w + 5 )
+		StatusTrackingBarManager.BottomBarFrameTexture:SetWidth( w + 5 )
+		for i, v in pairs( {StatusTrackingBarManager:GetChildren()} ) do
+			v:SetWidth( w )
+			v.OverlayFrame:SetWidth( w )
+			v.StatusBar:SetWidth( w )
+		end
+	end
+end
+
 function ImproveAny:ToggleSettings()
 	ImproveAny:SetEnabled( "SETTINGS", not ImproveAny:IsEnabled( "SETTINGS", false ) )
 	if ImproveAny:IsEnabled( "SETTINGS", false ) then
@@ -384,6 +398,10 @@ function ImproveAny:InitIASettings()
 		AddSlider( 4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 600.0, 1 )
 		AddSlider( 4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 400.0, 1 )
 		AddSlider( 4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1 )
+		
+		if StatusTrackingBarManager then
+			AddSlider( 4, "STATUSBARWIDTH", 565, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5 )
+		end
 		
 		AddCheckBox( 4, "BAGSAMESIZE", true )
 		AddSlider( 24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1 )
