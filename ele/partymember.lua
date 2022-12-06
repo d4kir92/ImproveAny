@@ -43,6 +43,11 @@ function ImproveAny:UnitXPMax( unit )
 	return 1
 end
 
+function ImproveAny:InitPartyFrames()
+	IATAB.UnitXP = ImproveAny.UnitXP
+	IATAB.UnitXPMax = ImproveAny.UnitXPMax
+end
+
 function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
 		local target = ImproveAny:UnitName("PARTY" .. i)

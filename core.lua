@@ -88,6 +88,7 @@ function ImproveAny:Event( event, ... )
 		end
 
 		ImproveAny:InitRaidFrames()
+		ImproveAny:InitPartyFrames()
 		
 		ImproveAny:UpdateUIParentAttribute()
 		
