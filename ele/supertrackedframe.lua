@@ -43,13 +43,13 @@ function ImproveAny:InitSuperTrackedFrame()
 			local distPerSec = 0
 			local timeToTarget = 0
 			local scale = 10
-			local cd = 1 / scale
+			local cd = 0.1
 			function IAThinkSuperTrackedFrame()
 				local distance = 0
 				if WorldMapPin_GetDistance then
 					distance = WorldMapPin_GetDistance()
 				end
-				if C_Navigation and C_Navigation.GetDistancethen then
+				if C_Navigation and C_Navigation.GetDistance then
 					distance = C_Navigation.GetDistance()
 				end
 				local distDif = lastDist - distance
