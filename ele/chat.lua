@@ -294,7 +294,7 @@ function ImproveAny:InitChat()
 		IARaidScan()
 		IAGuildScan()
 
-		function IAChatAddItemIcons( msg, c )
+		local function IAChatAddPlayerIcons( msg, c )
 			if c >= 40 then
 				return msg
 			end
@@ -305,24 +305,10 @@ function ImproveAny:InitChat()
 			local itemString = select(3, strfind(msg, "|Z(.+)|z"))
 
 			if itemString then
-				local type = select( 1, string.split( ":", itemString ) )
+				local typ = select( 1, string.split( ":", itemString ) )
 				local id = select( 2, string.split( ":", itemString ) )
 
-				if type == "item" then
-					itemTexture = GetItemIcon(id)
-					if itemTexture then
-						if ImproveAny:IsEnabled( "ITEMICONS", true ) then
-							msg = string.gsub(msg, "(|Z)", "|T" .. itemTexture .. ":0|t" .. "|X", 1)
-							msg = string.gsub(msg, "(|z)", "|x", 1)
-
-							return IAChatAddItemIcons( msg, c + 1 )
-						else
-							msg = IAResetMsg( msg )
-						end
-					else
-						msg = IAResetMsg( msg )
-					end
-				elseif type == "player" or type == "playerCommunity" or type == "playerGM" then
+				if typ == "player" or typ == "playerCommunity" or typ == "playerGM" then
 					local guid = IAGetGUID( id )
 					if guid then
 						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
@@ -344,13 +330,13 @@ function ImproveAny:InitChat()
 								msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]" )
 							end
 
-							msg = string.gsub( msg, "%[", "" )
-							msg = string.gsub( msg, "%]", "" )
+							msg = string.gsub( msg, "%[", "", 1 )
+							msg = string.gsub( msg, "%]", "", 1 )
 
 							msg = string.gsub( msg, "(|Z)", res .. "[|c" .. hex .. "|X", 1 )
 							msg = string.gsub( msg, "(|z)", "|r]|x", 1 )
 
-							return IAChatAddItemIcons( msg, c + 1 )
+							return IAChatAddPlayerIcons( msg, c + 1 )
 						else
 							msg = IAResetMsg( msg )
 						end
@@ -358,12 +344,47 @@ function ImproveAny:InitChat()
 						-- NPC TALK
 						msg = IAResetMsg( msg )
 					end
-				elseif type == "ccpCustomLink" then
-					msg = IAResetMsg( msg )
-				elseif type == "BNplayer" or type == "BNplayerCommunity" then
-					msg = IAResetMsg( msg )
 				else
-					--IAMSG( "SEND TO DEV => UNKNOWN CHAT TYPE: " .. tostring( type ) )
+					msg = IAResetMsg( msg )
+				end
+			end
+
+			msg = string.gsub(msg, "(|X)", "|H")
+			msg = string.gsub(msg, "(|y)", "|h")
+			msg = string.gsub(msg, "(|x)", "|h")
+
+			return msg
+		end
+
+		local function IAChatAddItemIcons( msg, c )
+			if c >= 40 then
+				return msg
+			end
+			msg = string.gsub(msg, "(|H)", "|Z", 1)
+			msg = string.gsub(msg, "(|h)", "|y", 1)
+			msg = string.gsub(msg, "(|h)", "|z", 1)
+
+			local itemString = select(3, strfind(msg, "|Z(.+)|z"))
+
+			if itemString then
+				local typ = select( 1, string.split( ":", itemString ) )
+				local id = select( 2, string.split( ":", itemString ) )
+
+				if typ == "item" then
+					itemTexture = GetItemIcon(id)
+					if itemTexture then
+						if ImproveAny:IsEnabled( "ITEMICONS", true ) then
+							msg = string.gsub(msg, "(|Z)", "|T" .. itemTexture .. ":0|t" .. "|X", 1)
+							msg = string.gsub(msg, "(|z)", "|x", 1)
+
+							return IAChatAddItemIcons( msg, c + 1 )
+						else
+							msg = IAResetMsg( msg )
+						end
+					else
+						msg = IAResetMsg( msg )
+					end
+				else
 					msg = IAResetMsg( msg )
 				end
 			end
@@ -391,40 +412,8 @@ function ImproveAny:InitChat()
 		end
 
 
-
-		-- Class/Race Icons
-		local function IAAddLinks(str)
-			return IAChatAddItemIcons( str, 1 )
-		end
-
-		local function IAHookFunc( key ) -- buggy
-			local org = _G[key]
-			if org then
-				_G[key] = function( ... )
-					return IAAddLinks( org( ... ) ) 
-				end
-				--[[
-				hooksecurefunc( key, function( ... ) -- Dont work, because cant return
-					return IAAddLinks( org( ... ) ) 
-				end 
-				]]
-			end
-		end
-		--IAHookFunc("GetBNPlayerCommunityLink") 
-		--IAHookFunc("GetBNPlayerLink") 
-
-		--IAHookFunc("GetGMLink") 
-		--IAHookFunc("GetPlayerCommunityLink") 
-		--IAHookFunc("GetPlayerLink") 
-
-
+		
 		local hooks = {}
-
-		local function Abbreviate(channel)
-			-- Replaces channel name from the table above, or uses channel numbers
-			return channel
-		end
-
 		local count = 0
 		local msg = nil
 		local function AddMessage(self, message, ...)
@@ -460,13 +449,16 @@ function ImproveAny:InitChat()
 					chanFormat = chanFormat:gsub( '%s', '' )
 					message = message:gsub( chanFormat, ':' )
 				end
-
-				if chanName then
-					message = ImproveAny:ReplaceStr( message, chanName, IAChatOnlyBig( chanName ) )
-				elseif channelName then
-					chanName = _G["CHAT_MSG_" .. channelName]
+				
+				message = IAChatAddPlayerIcons( message, 1 )
+				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
 					if chanName then
-						message = "[" .. IAChatOnlyBig( chanName, 1 ) .. "] " .. message
+						message = ImproveAny:ReplaceStr( message, chanName, IAChatOnlyBig( chanName ) )
+					elseif channelName then
+						chanName = _G["CHAT_MSG_" .. channelName]
+						if chanName then
+							message = "[" .. IAChatOnlyBig( chanName, 1 ) .. "] " .. message
+						end
 					end
 				end
 			end
