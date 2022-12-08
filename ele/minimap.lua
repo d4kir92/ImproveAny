@@ -116,11 +116,11 @@ function ImproveAny:InitMinimap()
 		if minimapshape ~= msg then
 			if msg == "SQUARE" then
 				minimapshape = msg
-				Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_square]])
+				Minimap:SetMaskTexture("Interface\\AddOns\\ImproveAny\\media\\minimap_mask_square")
 				
 			elseif msg == "ROUND" then
 				minimapshape = msg
-				Minimap:SetMaskTexture([[Interface\AddOns\ImproveAny\media\minimap_mask_round]])
+				Minimap:SetMaskTexture("Interface\\AddOns\\ImproveAny\\media\\minimap_mask_round")
 			end
 		end
 	end

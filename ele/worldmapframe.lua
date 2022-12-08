@@ -3,10 +3,13 @@ local AddOnName, ImproveAny = ...
 
 function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame then
+
 		if WorldMapFrame.ScrollContainer.Child.TiledBackground then
+			print("HIDE ScrollContainer")
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 		if WorldMapFrame.BlackoutFrame then
+			print("HIDE BLACK")
 			hooksecurefunc( WorldMapFrame.BlackoutFrame, "Show", function( self )
 				if self.iahide then return end
 				self.iahide = true
@@ -15,11 +18,13 @@ function ImproveAny:InitWorldMapFrame()
 			end )
 			WorldMapFrame.BlackoutFrame:Hide()
 		end
-
-		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x,y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-			local s = WorldMapFrame:GetScale()
-			return x/s, y/s
+		
+		if WorldMapFrame.ScrollContainer.GetCursorPosition == nil then
+			WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+				local x,y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+				local s = WorldMapFrame:GetScale()
+				return x/s, y/s
+			end
 		end
 
 		if MABUILD ~= "RETAIL" then -- TBC, ERA
