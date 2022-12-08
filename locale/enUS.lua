@@ -87,6 +87,8 @@ function ImproveAny:Lang_enUS()
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
 		["BAGMODE"] = "Bag Mode",
 		["STATUSBARWIDTH"] = "Status Bar Width (XPbar, Reputationbar)",
+		["UIFONTINDEX"] = "Font",
+		["BAGMODEINDEX"] = "Bag mode",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

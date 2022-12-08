@@ -112,7 +112,7 @@ function ImproveAny:InitBags()
 
 		C_Timer.After( 1, function()
 			IABagBar = CreateFrame( "FRAME", "IABagBar", MABagBar or UIParent )
-		
+			
 			if ImproveAny:GV( "BAGMODE", "RETAIL" ) == "RETAIL" then
 				if ImproveAny:GetWoWBuild() ~= "RETAIL" and MABagBar then
 					BagToggle = CreateFrame( "BUTTON", "BagToggle", MABagBar or UIParent )

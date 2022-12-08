@@ -80,6 +80,8 @@ function ImproveAny:Lang_deDE()
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
 		["BAGMODE"] = "Taschen Modus",
 		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",
+		["UIFONTINDEX"] = "Schriftart",
+		["BAGMODEINDEX"] = "Taschen Modus",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

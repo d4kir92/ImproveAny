@@ -57,8 +57,6 @@ function ImproveAny:XPPerHourLoop()
 	end
 	if gainedxp > 0 then
 		totalxp = totalxp + gainedxp
-	elseif gainedxp < 0 then
-		print("ERROR", gainedxp)
 	end
 	lastxp = curxp
 	lastxpmax = curxpmax

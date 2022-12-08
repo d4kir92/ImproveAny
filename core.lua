@@ -86,6 +86,8 @@ function ImproveAny:Event( event, ... )
 		
 		ImproveAny:InitSlash()
 		ImproveAny:InitDB()
+		
+		ImproveAny:Fonts()
 
 		if ImproveAny:IsEnabled( "CASTBAR", true ) then
 			ImproveAny:InitCastBar()

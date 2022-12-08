@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.75" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.76" )
 }
 
 
@@ -46,7 +46,12 @@ function ImproveAny:SaveOldFonts( ele )
 	end
 end
 
+local IAFONTS = { "Default", "Prototype" }
 function ImproveAny:Fonts()
+	local index = ImproveAny:GV( "UIFONTINDEX", 1 )
+	local val = IAFONTS[index]
+	ImproveAny:SV( "fontName", val )
+
 	for i, fontName in pairs( BlizDefaultFonts ) do
 		ImproveAny:SaveOldFonts( fontName )
 		if ImproveAny:GV( "fontName", "Default" ) == "Default" then
@@ -76,6 +81,13 @@ function ImproveAny:Fonts()
 	end
 end
 
+local IABAGMODES = { "RETAIL", "CLASSIC", "ONEBAG" }
+function ImproveAny:UpdateBagMode()
+	local index = ImproveAny:GV( "BAGMODEINDEX", 1 )
+	local val = IABAGMODES[index]
+	ImproveAny:SV( "BAGMODE", val )
+end
+
 local searchStr = ""
 local posy = -4
 local cas = {}
@@ -85,6 +97,10 @@ local ebs = {}
 local sls = {}
 
 local function IASetPos( ele, key, x )
+	if ele == nil then
+		return false
+	end
+
 	ele:ClearAllPoints()
 	if strfind( strlower( key ), strlower( searchStr ) ) then
 		ele:Show()
@@ -97,6 +113,7 @@ local function IASetPos( ele, key, x )
 	else
 		ele:Hide()
 	end
+	return true
 end
 
 local function AddCategory( key )
@@ -182,24 +199,39 @@ local function AddSlider( x, key, val, func, vmin, vmax, steps )
 		sls[key]:SetWidth( IASettings.SC:GetWidth() - 30 - x )
 		sls[key]:SetPoint( "TOPLEFT", IASettings.SC, "TOPLEFT", x + 5, posy )
 
-		sls[key].Low:SetText(vmin)
-		sls[key].High:SetText(vmax)
+		if type( vmin ) == "number" then
+			sls[key].Low:SetText( vmin )
+			sls[key].High:SetText( vmax )
+			sls[key]:SetMinMaxValues(vmin, vmax)
+			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:GV( key, val ) )
+		else
+			sls[key].Low:SetText( "" )
+			sls[key].High:SetText( "" )
+			sls[key]:SetMinMaxValues( 1, #vmin )
+			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:GV( key, val )] )
+		end
 
-		sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:GV( key, val ) )
-
-		sls[key]:SetMinMaxValues(vmin, vmax)
+		
 		sls[key]:SetObeyStepOnDrag(true)
-		sls[key]:SetValueStep(steps)
+		if steps then
+			sls[key]:SetValueStep(steps)
+		end
 
 		sls[key]:SetValue( ImproveAny:GV( key, val ) )
 
 		sls[key]:SetScript("OnValueChanged", function(self, val)
 			--val = val - val % steps
-			val = tonumber( string.format( "%" .. steps .. "f", val ) )
+			if steps then
+				val = tonumber( string.format( "%" .. steps .. "f", val ) )
+			end
 			if val and val ~= ImproveAny:GV( key ) then
-				ImproveAny:SV( key, val )
-				sls[key].Text:SetText( ImproveAny:GT( key ) .. ": " .. val )
-
+				if type( vmin ) == "number" then
+					ImproveAny:SV( key, val )
+					sls[key].Text:SetText( ImproveAny:GT( key ) .. ": " .. val )
+				else
+					ImproveAny:SV( key, val )
+					sls[key].Text:SetText( ImproveAny:GT( key ) .. ": " .. vmin[val] )
+				end
 				if func then
 					func()
 				end
@@ -371,26 +403,11 @@ function ImproveAny:InitIASettings()
 		local _, class = UnitClass( "PLAYER" )
 		
 		local sh = 24
-		posy = -4
+		posy = -8
 
-		if dds["FONT"] == nil then
-			local fontNames = {
-				["name"] = "fontNames",
-				["parent"]= IASettings.SC,
-				["title"] = "UIFONT",
-				["items"]= { "Default", "Prototype" },
-				["defaultVal"] = ImproveAny:GV( "fontName", "Default" ), 
-				["changeFunc"] = function( dropdown_frame, dropdown_val )
-					ImproveAny:SV( "fontName", dropdown_val )
-					ImproveAny:Fonts()
-				end
-			}
-			dds["FONT"] = ImproveAny:CreateDropdown( fontNames, posy )
-		end
-		
 		AddCategory( "GENERAL" )
 		AddCheckBox( 4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton )
-		IASetPos( dds["FONT"], "FONT" )
+		AddSlider( 4, "UIFONTINDEX", 1, ImproveAny.Fonts, IAFONTS, nil, 1 )
 		AddSlider( 4, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1 )
 		AddSlider( 4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1 )
 		AddCheckBox( 4, "HIDEPVPBADGE", false )
@@ -405,25 +422,8 @@ function ImproveAny:InitIASettings()
 		
 		AddCheckBox( 4, "BAGSAMESIZE", true )
 		AddSlider( 24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1 )
-		if dds["BAGMODE"] == nil then
-			local bagModes = {
-				["name"] = "BAGMODE",
-				["parent"]= IASettings.SC,
-				["title"] = "BAGMODE",
-				["items"]= { "RETAIL", "CLASSIC", "ONEBAG" },
-				["defaultVal"] = ImproveAny:GV( "BAGMODE", "RETAIL" ), 
-				["changeFunc"] = function( dropdown_frame, dropdown_val )
-					ImproveAny:SV( "BAGMODE", dropdown_val )
-					ImproveAny:Fonts()
-					if IASettings.save then
-						IASettings.save:Enable()
-					end
-				end 
-			}
-			dds["BAGMODE"] = ImproveAny:CreateDropdown( bagModes, posy )
-		end
-		IASetPos( dds["BAGMODE"], "BAGMODE" )
-
+		AddSlider( 24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1 )
+		
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
 
