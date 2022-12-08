@@ -5,11 +5,15 @@ function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame then
 
 		if WorldMapFrame.ScrollContainer.Child.TiledBackground then
-			print("HIDE ScrollContainer")
+			hooksecurefunc( WorldMapFrame.ScrollContainer.Child.TiledBackground, "Show", function( self )
+				if self.iahide then return end
+				self.iahide = true
+				self:Hide()
+				self.iahide = false
+			end )
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 		if WorldMapFrame.BlackoutFrame then
-			print("HIDE BLACK")
 			hooksecurefunc( WorldMapFrame.BlackoutFrame, "Show", function( self )
 				if self.iahide then return end
 				self.iahide = true
