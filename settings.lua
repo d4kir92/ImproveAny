@@ -2,12 +2,12 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.80" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.81" )
 }
 
 
 
---[[local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
+local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
 local IAOldFonts = {}
 
 local BlizDefaultFonts = {
@@ -19,25 +19,25 @@ local BlizDefaultFonts = {
 }
 
 local BlizFontObjects = {
-	SystemFont_NamePlateCastBar, SystemFont_NamePlateFixed, SystemFont_LargeNamePlateFixed, SystemFont_World, SystemFont_World_ThickOutline,
+	"SystemFont_NamePlateCastBar", "SystemFont_NamePlateFixed", "SystemFont_LargeNamePlateFixed", "SystemFont_World", "SystemFont_World_ThickOutline",
 
-	SystemFont_Outline_Small, SystemFont_Outline, SystemFont_InverseShadow_Small, SystemFont_Med2, SystemFont_Med3, SystemFont_Shadow_Med3,
-	SystemFont_Huge1, SystemFont_Huge1_Outline, SystemFont_OutlineThick_Huge2, SystemFont_OutlineThick_Huge4, SystemFont_OutlineThick_WTF,
-	NumberFont_GameNormal, NumberFont_Shadow_Small, NumberFont_OutlineThick_Mono_Small, NumberFont_Shadow_Med, NumberFont_Normal_Med, 
-	NumberFont_Outline_Med, NumberFont_Outline_Large, NumberFont_Outline_Huge, Fancy22Font, QuestFont_Huge, QuestFont_Outline_Huge,
-	QuestFont_Super_Huge, QuestFont_Super_Huge_Outline, SplashHeaderFont, Game11Font, Game12Font, Game13Font, Game13FontShadow,
-	Game15Font, Game18Font, Game20Font, Game24Font, Game27Font, Game30Font, Game32Font, Game36Font, Game48Font, Game48FontShadow,
-	Game60Font, Game72Font, Game11Font_o1, Game12Font_o1, Game13Font_o1, Game15Font_o1, QuestFont_Enormous, DestinyFontLarge,
-	CoreAbilityFont, DestinyFontHuge, QuestFont_Shadow_Small, MailFont_Large, SpellFont_Small, InvoiceFont_Med, InvoiceFont_Small,
-	Tooltip_Med, Tooltip_Small, AchievementFont_Small, ReputationDetailFont, FriendsFont_Normal, FriendsFont_Small, FriendsFont_Large,
-	FriendsFont_UserText, GameFont_Gigantic, ChatBubbleFont, Fancy16Font, Fancy18Font, Fancy20Font, Fancy24Font, Fancy27Font, Fancy30Font,
-	Fancy32Font, Fancy48Font, SystemFont_NamePlate, SystemFont_LargeNamePlate, GameFontNormal, 
+	"SystemFont_Outline_Small", "SystemFont_Outline", "SystemFont_InverseShadow_Small", "SystemFont_Med2", "SystemFont_Med3", "SystemFont_Shadow_Med3",
+	"SystemFont_Huge1", "SystemFont_Huge1_Outline", "SystemFont_OutlineThick_Huge2", "SystemFont_OutlineThick_Huge4", "SystemFont_OutlineThick_WTF",
+	"NumberFont_GameNormal", "NumberFont_Shadow_Small", "NumberFont_OutlineThick_Mono_Small", "NumberFont_Shadow_Med", "NumberFont_Normal_Med", 
+	"NumberFont_Outline_Med", "NumberFont_Outline_Large", "NumberFont_Outline_Huge", "Fancy22Font", "QuestFont_Huge", "QuestFont_Outline_Huge",
+	"QuestFont_Super_Huge", "QuestFont_Super_Huge_Outline", "SplashHeaderFont", "Game11Font", "Game12Font", "Game13Font", "Game13FontShadow",
+	"Game15Font", "Game18Font", "Game20Font", "Game24Font", "Game27Font", "Game30Font", "Game32Font", "Game36Font", "Game48Font", "Game48FontShadow",
+	"Game60Font", "Game72Font", "Game11Font_o1", "Game12Font_o1", "Game13Font_o1", "Game15Font_o1", "QuestFont_Enormous", "DestinyFontLarge",
+	"CoreAbilityFont", "DestinyFontHuge", "QuestFont_Shadow_Small", "MailFont_Large", "SpellFont_Small", "InvoiceFont_Med", "InvoiceFont_Small",
+	"Tooltip_Med", "Tooltip_Small", "AchievementFont_Small", "ReputationDetailFont", "FriendsFont_Normal", "FriendsFont_Small", "FriendsFont_Large",
+	"FriendsFont_UserText", "GameFont_Gigantic", "ChatBubbleFont", "Fancy16Font", "Fancy18Font", "Fancy20Font", "Fancy24Font", "Fancy27Font", "Fancy30Font",
+	"Fancy32Font", "Fancy48Font", "SystemFont_NamePlate", "SystemFont_LargeNamePlate", "GameFontNormal", 
 
-	SystemFont_Tiny2, SystemFont_Tiny, SystemFont_Shadow_Small, SystemFont_Small, SystemFont_Small2, SystemFont_Shadow_Small2, SystemFont_Shadow_Med1_Outline,
-	SystemFont_Shadow_Med1, QuestFont_Large, SystemFont_Large, SystemFont_Shadow_Large_Outline, SystemFont_Shadow_Med2, SystemFont_Shadow_Large, 
-	SystemFont_Shadow_Large2, SystemFont_Shadow_Huge1, SystemFont_Huge2, SystemFont_Shadow_Huge2, SystemFont_Shadow_Huge3, SystemFont_Shadow_Outline_Huge3,
-	SystemFont_Shadow_Outline_Huge2, SystemFont_Med1, SystemFont_WTF2, SystemFont_Outline_WTF2, 
-	GameTooltipHeader, System_IME,
+	"SystemFont_Tiny2", "SystemFont_Tiny", "SystemFont_Shadow_Small", "SystemFont_Small", "SystemFont_Small2", "SystemFont_Shadow_Small2", "SystemFont_Shadow_Med1_Outline",
+	"SystemFont_Shadow_Med1", "QuestFont_Large", "SystemFont_Large", "SystemFont_Shadow_Large_Outline", "SystemFont_Shadow_Med2", "SystemFont_Shadow_Large", 
+	"SystemFont_Shadow_Large2", "SystemFont_Shadow_Huge1", "SystemFont_Huge2", "SystemFont_Shadow_Huge2", "SystemFont_Shadow_Huge3", "SystemFont_Shadow_Outline_Huge3",
+	"SystemFont_Shadow_Outline_Huge2", "SystemFont_Med1", "SystemFont_WTF2", "SystemFont_Outline_WTF2", 
+	"GameTooltipHeader", "System_IME",
 }
 
 function ImproveAny:SaveOldFonts( ele )
@@ -55,17 +55,18 @@ function ImproveAny:Fonts()
 	for i, fontName in pairs( BlizDefaultFonts ) do
 		ImproveAny:SaveOldFonts( fontName )
 		if ImproveAny:GV( "fontName", "Default" ) == "Default" then
-			_G[fontName] = IAOldFonts[fontName]
+			--_G[fontName] = IAOldFonts[fontName] -- TAINTS
 		else
-			_G[fontName] = font
+			--_G[fontName] = font -- TAINTS
 		end
 	end
 
 	local ForcedFontSize = {10, 14, 20, 64, 64}
  
-	for i, FontObject in pairs( BlizFontObjects ) do
-		if FontObject and FontObject.GetFont then
-			local oldFont, oldSize, oldStyle = FontObject:GetFont()
+	for i, fontName in pairs( BlizFontObjects ) do
+		local fontObject = _G[fontName]
+		if fontObject and fontObject.GetFont then
+			local oldFont, oldSize, oldStyle = fontObject:GetFont()
 			if IAOldFonts[i] == nil then
 				IAOldFonts[i] = oldFont
 			end
@@ -73,13 +74,13 @@ function ImproveAny:Fonts()
 			oldSize = ForcedFontSize[i] or oldSize
 			
 			if ImproveAny:GV( "fontName", "Default" ) == "Default" then
-				FontObject:SetFont( IAOldFonts[i], oldSize, oldStyle )
+				fontObject:SetFont( IAOldFonts[i], oldSize, oldStyle )
 			else
-				FontObject:SetFont( font, oldSize, oldStyle )
+				fontObject:SetFont( font, oldSize, oldStyle )
 			end
 		end
 	end
-end]]
+end
 
 local IABAGMODES = { "RETAIL", "CLASSIC", "ONEBAG" }
 function ImproveAny:UpdateBagMode()

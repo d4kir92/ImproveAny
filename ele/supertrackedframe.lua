@@ -9,7 +9,6 @@ function ImproveAny:InitSuperTrackedFrame()
 	if SuperTrackedFrame then
 		if SuperTrackedFrame.GetTargetAlphaBaseValue then
 			local fAlpha = SuperTrackedFrame.GetTargetAlphaBaseValue
-
 			function SuperTrackedFrame:GetTargetAlphaBaseValue()
 				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
 					return 0.5
@@ -44,7 +43,7 @@ function ImproveAny:InitSuperTrackedFrame()
 			local timeToTarget = 0
 			local scale = 10
 			local cd = 0.1
-			function IAThinkSuperTrackedFrame()
+			function ImproveAny:ThinkSuperTrackedFrame()
 				local distance = 0
 				if WorldMapPin_GetDistance then
 					distance = WorldMapPin_GetDistance()
@@ -82,9 +81,9 @@ function ImproveAny:InitSuperTrackedFrame()
 
 				lastDistPerSec = distPerSec
 				lastDist = distance
-				C_Timer.After( cd, IAThinkSuperTrackedFrame )
+				C_Timer.After( cd, ImproveAny.ThinkSuperTrackedFrame )
 			end
-			IAThinkSuperTrackedFrame()
+			ImproveAny:ThinkSuperTrackedFrame()
 		end
 	end
 end
