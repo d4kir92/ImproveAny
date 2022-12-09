@@ -527,8 +527,7 @@ function ImproveAny:InitChat()
 			hasEditBox = true
 		}
 
-		local OrgSetHyperlink = ItemRefTooltip.SetHyperlink
-		function ItemRefTooltip:SetHyperlink( link )
+		hooksecurefunc( ItemRefTooltip, "SetHyperlink", function( self, link )
 			local poi = string.find( link, ":", 0, true )
 			local typ =  string.sub( link, 1, poi - 1 )
 			if typ == "url" then
@@ -541,11 +540,13 @@ function ImproveAny:InitChat()
 				GuildInvite( name )
 			elseif typ == "inv" then
 				local name = string.sub( link, poi + 1 )
-				InviteUnit( name )
-			else
-				OrgSetHyperlink( self, link )
+				if C_PartyInfo then
+					C_PartyInfo.InviteUnit(name)
+				else
+					InviteUnit( name )
+				end
 			end
-		end
+		end )
 
 		for i, type in pairs( chatTypes ) do
 			ChatFrame_AddMessageEventFilter( type, IAConvertMessage )
