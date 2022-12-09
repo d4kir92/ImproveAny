@@ -2,12 +2,12 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.79" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.80" )
 }
 
 
 
-local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
+--[[local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
 local IAOldFonts = {}
 
 local BlizDefaultFonts = {
@@ -79,7 +79,7 @@ function ImproveAny:Fonts()
 			end
 		end
 	end
-end
+end]]
 
 local IABAGMODES = { "RETAIL", "CLASSIC", "ONEBAG" }
 function ImproveAny:UpdateBagMode()

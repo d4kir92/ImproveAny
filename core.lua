@@ -87,7 +87,7 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitSlash()
 		ImproveAny:InitDB()
 
-		if ImproveAny:GV( "fontName", "Default" ) ~= "Default" then
+		if ImproveAny:GV( "fontName", "Default" ) ~= "Default" and ImproveAny.Fonts then
 			ImproveAny:Fonts()
 		end
 
