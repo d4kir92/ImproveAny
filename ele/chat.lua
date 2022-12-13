@@ -8,9 +8,9 @@ function ImproveAny:InitChat()
 			tinsert( chatTypes, i )
 		end
 	end
-	for type in next, getmetatable( ChatTypeInfo ).__index do
-		if not tContains( chatTypes, "CHAT_MSG_" .. type ) then
-			tinsert( chatTypes, "CHAT_MSG_" .. type )
+	for typ in next, getmetatable( ChatTypeInfo ).__index do
+		if not tContains( chatTypes, "CHAT_MSG_" .. typ ) then
+			tinsert( chatTypes, "CHAT_MSG_" .. typ )
 		end
 	end
 
@@ -397,21 +397,6 @@ function ImproveAny:InitChat()
 		end
 
 
-
-		-- Item Icons
-		function IAIconsFilter( self, event, msg, author, ... )
-			local guid = select( 10, ... )
-			if author and guid then
-				PLYCache[author] = guid
-			end
-			return false, IAChatAddItemIcons( msg, 1 ), author, ...
-		end
-
-		for i, type in pairs( chatTypes ) do
-			ChatFrame_AddMessageEventFilter( type, IAIconsFilter )
-		end
-
-
 		
 		local hooks = {}
 		local count = 0
@@ -452,6 +437,10 @@ function ImproveAny:InitChat()
 				
 				message = IAChatAddPlayerIcons( message, 1 )
 				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
+					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
+					if leaderChannel then
+						message = ImproveAny:ReplaceStr( message, leaderChannel, IAChatOnlyBig( leaderChannel ) )
+					end
 					if chanName then
 						message = ImproveAny:ReplaceStr( message, chanName, IAChatOnlyBig( chanName ) )
 					elseif channelName then
@@ -471,6 +460,21 @@ function ImproveAny:InitChat()
 				hooks[frame] = frame.AddMessage
 				frame.AddMessage = AddMessage
 			end
+		end
+
+
+
+		-- Item Icons
+		function IAIconsFilter( self, event, msg, author, ... )
+			local guid = select( 10, ... )
+			if author and guid then
+				PLYCache[author] = guid
+			end
+			return false, IAChatAddItemIcons( msg, 1 ), author, ...
+		end
+
+		for i, typ in pairs( chatTypes ) do
+			ChatFrame_AddMessageEventFilter( typ, IAIconsFilter )
 		end
 
 
@@ -548,8 +552,8 @@ function ImproveAny:InitChat()
 			end
 		end )
 
-		for i, type in pairs( chatTypes ) do
-			ChatFrame_AddMessageEventFilter( type, IAConvertMessage )
+		for i, typ in pairs( chatTypes ) do
+			ChatFrame_AddMessageEventFilter( typ, IAConvertMessage )
 		end
 	end
 end
