@@ -133,7 +133,7 @@ function ImproveAny:InitMinimap()
 		
 		C_Timer.After( 0.3, function()
 			local IAMMBtnsBliz = {}
-			function IAConvertToMinimapButton( name, hide )
+			function ImproveAny:ConvertToMinimapButton( name, hide )
 				if not ImproveAny:IsEnabled( "MINIMAPMINIMAPBUTTONSMOVABLE", true ) then return end
 
 				local btn = _G[name]
@@ -141,7 +141,8 @@ function ImproveAny:InitMinimap()
 					if hide then
 						tinsert( IAMMBtnsBliz, btn )
 					end
-			
+					
+					btn:SetParent( Minimap )
 					btn:SetMovable( true )
 					btn:SetUserPlaced( false )
 
@@ -159,13 +160,16 @@ function ImproveAny:InitMinimap()
 						if btn.maiinit == nil then
 							btn.maiinit = true
 							hooksecurefunc( btn, "SetPoint", function()
-								if self.maipoint then return end
-								self.maipoint = true
-			
-								btn:ClearAllPoints()
-								btn:SetPoint( "CENTER", Minimap, "CENTER",  IATAB[name .. "ofsx"],  IATAB[name .. "ofsy"] )
+								if self.ia_setpoint_mmbtn then return end
+								self.ia_setpoint_mmbtn = true
+
+								self:SetParent( Minimap )
+								self:SetMovable( true )
+								self:SetUserPlaced( false )
+								self:ClearAllPoints()
+								self:SetPoint( "CENTER", Minimap, "CENTER",  IATAB[name .. "ofsx"],  IATAB[name .. "ofsy"] )
 								
-								self.maipoint = false
+								self.ia_setpoint_mmbtn = false
 							end )
 							btn:ClearAllPoints()
 							btn:SetPoint( "CENTER", Minimap, "CENTER", IATAB[name .. "ofsx"],  IATAB[name .. "ofsy"] )
@@ -271,48 +275,60 @@ function ImproveAny:InitMinimap()
 
 			-- Blizzard Minimap Buttons Dragging
 			-- ALL
-			IAConvertToMinimapButton( "MiniMapWorldMapButton", true ) -- WorldMap
-			IAConvertToMinimapButton( "MiniMapMailFrame" ) -- Mail
+			ImproveAny:ConvertToMinimapButton( "MiniMapWorldMapButton", true ) -- WorldMap
+			ImproveAny:ConvertToMinimapButton( "MiniMapMailFrame" ) -- Mail
 
 			-- Retail
-			IAConvertToMinimapButton( "MiniMapTrackingButton" ) -- Tracking
+			ImproveAny:ConvertToMinimapButton( "MiniMapTrackingButton" ) -- Tracking
 			if GameTimeFrame then
 				GameTimeFrame:SetFrameLevel( 10 )
 			end
 			if select(4, GetBuildInfo()) < 100000 then
-				IAConvertToMinimapButton( "GameTimeFrame", true ) -- Calendar
+				ImproveAny:ConvertToMinimapButton( "GameTimeFrame", true ) -- Calendar
 			end
-			IAConvertToMinimapButton( "ExpansionLandingPageMinimapButton" ) -- Sanctum
-			IAConvertToMinimapButton( "GarrisonLandingPageMinimapButton" ) -- Sanctum
-			IAConvertToMinimapButton( "QueueStatusMinimapButton" ) -- LFG
+			ImproveAny:ConvertToMinimapButton( "ExpansionLandingPageMinimapButton" ) -- Sanctum
+			ImproveAny:ConvertToMinimapButton( "GarrisonLandingPageMinimapButton" ) -- Sanctum
+			ImproveAny:ConvertToMinimapButton( "QueueStatusMinimapButton" ) -- LFG
 			if MiniMapInstanceDifficulty then
 				MiniMapInstanceDifficulty:SetParent( Minimap )
 			end
-			--IAConvertToMinimapButton( "MiniMapInstanceDifficulty" ) -- RAIDSize, not moveable somehow
+			--ImproveAny:ConvertToMinimapButton( "MiniMapInstanceDifficulty" ) -- RAIDSize, not moveable somehow
 
 			if ImproveAny:GetWoWBuild() ~= "RETAIL" and MiniMapTracking then -- breaks retail if not checked
-				IAConvertToMinimapButton( "MiniMapTracking" ) -- Tracking
+				ImproveAny:ConvertToMinimapButton( "MiniMapTracking" ) -- Tracking
 			end
 
 			-- Classic ERA
-			IAConvertToMinimapButton( "MiniMapTrackingFrame" ) -- Tracking
-			IAConvertToMinimapButton( "MiniMapLFGFrame" ) -- LFG
+			ImproveAny:ConvertToMinimapButton( "MiniMapTrackingFrame" ) -- Tracking
+			ImproveAny:ConvertToMinimapButton( "MiniMapLFGFrame" ) -- LFG
 			-- Blizzard Minimap Buttons Dragging
 
-			IAConvertToMinimapButton( "MiniMapBattlefieldFrame" ) -- PVP
+			ImproveAny:ConvertToMinimapButton( "MiniMapBattlefieldFrame" ) -- PVP
 
 
-			IAConvertToMinimapButton( "MinimapZoomIn" )
-			IAConvertToMinimapButton( "MinimapZoomOut" )
-			IAConvertToMinimapButton( "CodexBrowserIcon" )
+			ImproveAny:ConvertToMinimapButton( "MinimapZoomIn" )
+			ImproveAny:ConvertToMinimapButton( "MinimapZoomOut" )
+			ImproveAny:ConvertToMinimapButton( "CodexBrowserIcon" )
+
+			local mmBtnsNames = {
+				"LibDBIcon",
+				"BtWQuests",
+				"MinimapButton",
+			}
 
 			-- ADDONS
 			local mmbtns = {}
 			function IAUpdateMMBtns()
 				for i, child in pairs({Minimap:GetChildren()}) do
-					if not tContains( mmbtns, child ) and child:GetName() and strfind(child:GetName(), "LibDBIcon") then
-						tinsert( mmbtns, child )
-						IAConvertToMinimapButton( child:GetName() )
+					if not tContains( mmbtns, child ) and child:GetName() then
+						for x, w in pairs( mmBtnsNames ) do
+							if strfind( child:GetName(), w ) then
+								if not tContains( mmbtns, child ) then
+									tinsert( mmbtns, child )
+									ImproveAny:ConvertToMinimapButton( child:GetName() )
+								end
+							end
+						end
 					end
 				end
 
