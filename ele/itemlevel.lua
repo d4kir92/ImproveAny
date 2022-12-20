@@ -316,10 +316,31 @@ function ImproveAny:InitItemLevel()
 		IAWaitForInspectFrame()
 		
 		function IAGetContainerNumSlots( bagID )
+			local cur = 0
 			if C_Container and C_Container.GetContainerNumSlots then
-				return C_Container.GetContainerNumSlots( bagID )
+				cur = C_Container.GetContainerNumSlots( bagID )
+			else
+				cur = GetContainerNumSlots( bagID )
 			end
-			return GetContainerNumSlots( bagID )
+
+			local max = cur
+			if bagId == Enum.BagIndex.Backpack and not IsAccountSecured() then
+				max = cur + 4
+			end
+
+			return max, cur
+		end
+
+		function ContainerFrame_GetContainerNumSlots(bagId)
+			local currentNumSlots = C_Container.GetContainerNumSlots(bagId);
+			local maxNumSlots = currentNumSlots;
+		
+			if bagId == Enum.BagIndex.Backpack and not IsAccountSecured() then
+				-- If your account isn't secured then the max number of slots you can have in your backpack is 4 more than your current
+				maxNumSlots = currentNumSlots + 4;
+			end
+		
+			return maxNumSlots, currentNumSlots;
 		end
 
 		function IAGetContainerItemLink( bagID, slotID )
@@ -339,7 +360,6 @@ function ImproveAny:InitItemLevel()
 			end
 
 			local size = IAGetContainerNumSlots( bagID )
-
 			for i = 1, size do
 				local SLOT = _G[name .. "Item" .. i]
 				if GetCVarBool( "combinedBags" ) then
@@ -467,3 +487,13 @@ function ImproveAny:InitItemLevel()
 		
 	end
 end
+
+--[[
+C_Timer.After( 4, function()
+	for i = 1, 20 do
+		local SLOT = _G["ContainerFrame" .. 1 .. "Item" .. i]
+		local slotLink = C_Container.GetContainerItemLink( 0, SLOT:GetID() )
+		print(i, SLOT:GetID(), slotLink)
+	end
+end )
+]]
