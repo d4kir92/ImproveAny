@@ -324,7 +324,7 @@ function ImproveAny:InitItemLevel()
 			end
 
 			local max = cur
-			if bagId == Enum.BagIndex.Backpack and not IsAccountSecured() then
+			if bagID == Enum.BagIndex.Backpack and not IsAccountSecured() then
 				max = cur + 4
 			end
 
@@ -487,13 +487,3 @@ function ImproveAny:InitItemLevel()
 		
 	end
 end
-
---[[
-C_Timer.After( 4, function()
-	for i = 1, 20 do
-		local SLOT = _G["ContainerFrame" .. 1 .. "Item" .. i]
-		local slotLink = C_Container.GetContainerItemLink( 0, SLOT:GetID() )
-		print(i, SLOT:GetID(), slotLink)
-	end
-end )
-]]
