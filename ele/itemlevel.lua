@@ -331,18 +331,6 @@ function ImproveAny:InitItemLevel()
 			return max, cur
 		end
 
-		function ContainerFrame_GetContainerNumSlots(bagId)
-			local currentNumSlots = C_Container.GetContainerNumSlots(bagId);
-			local maxNumSlots = currentNumSlots;
-		
-			if bagId == Enum.BagIndex.Backpack and not IsAccountSecured() then
-				-- If your account isn't secured then the max number of slots you can have in your backpack is 4 more than your current
-				maxNumSlots = currentNumSlots + 4;
-			end
-		
-			return maxNumSlots, currentNumSlots;
-		end
-
 		function IAGetContainerItemLink( bagID, slotID )
 			if C_Container and C_Container.GetContainerItemLink then
 				return C_Container.GetContainerItemLink( bagID, slotID )
