@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.84" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.85" )
 }
 
 
@@ -348,12 +348,20 @@ function ImproveAny:UpdateStatusBar()
 	local w = ImproveAny:GV( "STATUSBARWIDTH", 565 )
 	if StatusTrackingBarManager then
 		StatusTrackingBarManager:SetWidth( w )
-		StatusTrackingBarManager.TopBarFrameTexture:SetWidth( w + 5 )
-		StatusTrackingBarManager.BottomBarFrameTexture:SetWidth( w + 5 )
+		if StatusTrackingBarManager.TopBarFrameTexture then
+			StatusTrackingBarManager.TopBarFrameTexture:SetWidth( w + 5 )
+		end
+		if StatusTrackingBarManager.BottomBarFrameTexture then
+			StatusTrackingBarManager.BottomBarFrameTexture:SetWidth( w + 5 )
+		end
 		for i, v in pairs( {StatusTrackingBarManager:GetChildren()} ) do
 			v:SetWidth( w )
-			v.OverlayFrame:SetWidth( w )
-			v.StatusBar:SetWidth( w )
+			if v.OverlayFrame then
+				v.OverlayFrame:SetWidth( w )
+			end
+			if v.StatusBar then
+				v.StatusBar:SetWidth( w )
+			end
 		end
 	end
 end
