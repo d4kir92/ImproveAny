@@ -322,9 +322,9 @@ function ImproveAny:InitItemLevel()
 			else
 				cur = GetContainerNumSlots( bagID )
 			end
-
+			
 			local max = cur
-			if bagID == Enum.BagIndex.Backpack and not IsAccountSecured() then
+			if bagID == 0 and not IsAccountSecured() then
 				max = cur + 4
 			end
 
