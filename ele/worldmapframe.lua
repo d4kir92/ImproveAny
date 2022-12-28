@@ -3,14 +3,14 @@ local AddOnName, ImproveAny = ...
 
 function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame then		
-		if WorldMapFrame.ScrollContainer.GetCursorPosition == nil then
-			WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-				local x,y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-				local s = WorldMapFrame:GetScale()
-				return x/s, y/s
-			end
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function( f )
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition( f )
+			local s = WorldMapFrame:GetScale()
+			return x / s, y / s
 		end
-
+	end
+	
+	if WorldMapFrame then
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then -- TBC, ERA
 			if WorldMapFrame.BlackoutFrame then
 				hooksecurefunc( WorldMapFrame.BlackoutFrame, "Show", function( self )
@@ -32,7 +32,7 @@ function ImproveAny:InitWorldMapFrame()
 				WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 			end
 
-			WorldMapFrame.ScrollContainer:HookScript("OnMouseWheel", function(self, delta)
+			WorldMapFrame.ScrollContainer:HookScript( "OnMouseWheel", function(self, delta)
 				local x, y = self:GetNormalizedCursorPosition()
 				local nextZoomOutScale, nextZoomInScale = self:GetCurrentZoomRange()
 				if delta == 1 then
@@ -44,7 +44,7 @@ function ImproveAny:InitWorldMapFrame()
 						self:InstantPanAndZoom( nextZoomOutScale, x, y )
 					end
 				end
-			end)
+			end )
 		end
 	end
 end

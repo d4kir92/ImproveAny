@@ -530,8 +530,9 @@ function ImproveAny:InitChat()
 				end,
 			hasEditBox = true
 		}
-
-		hooksecurefunc( ItemRefTooltip, "SetHyperlink", function( self, link )
+		
+		local OldSetHyperlink = ItemRefTooltip.SetHyperlink
+		function ItemRefTooltip:SetHyperlink( link, ... )
 			local poi = string.find( link, ":", 0, true )
 			local typ =  string.sub( link, 1, poi - 1 )
 			if typ == "url" then
@@ -549,8 +550,10 @@ function ImproveAny:InitChat()
 				else
 					InviteUnit( name )
 				end
+			else
+				OldSetHyperlink( link, ... )
 			end
-		end )
+		end
 
 		for i, typ in pairs( chatTypes ) do
 			ChatFrame_AddMessageEventFilter( typ, IAConvertMessage )
