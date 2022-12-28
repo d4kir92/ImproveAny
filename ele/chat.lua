@@ -531,8 +531,10 @@ function ImproveAny:InitChat()
 			hasEditBox = true
 		}
 		
-		local OldSetHyperlink = ItemRefTooltip.SetHyperlink
-		function ItemRefTooltip:SetHyperlink( link, ... )
+
+
+		-- SetHyperLink
+		function ImproveAny:SetHyperlink( link )
 			local poi = string.find( link, ":", 0, true )
 			local typ =  string.sub( link, 1, poi - 1 )
 			if typ == "url" then
@@ -540,9 +542,11 @@ function ImproveAny:InitChat()
 				local tab = {}
 				tab.url = url
 				StaticPopup_Show( "CLICK_LINK_URL", "", "", tab )
+				return true
 			elseif typ == "ginv" then
 				local name = string.sub( link, poi + 1 )
 				GuildInvite( name )
+				return true
 			elseif typ == "inv" then
 				local name = string.sub( link, poi + 1 )
 				if C_PartyInfo then
@@ -550,10 +554,31 @@ function ImproveAny:InitChat()
 				else
 					InviteUnit( name )
 				end
-			else
-				OldSetHyperlink( link, ... )
+				return true
 			end
+			return false
 		end
+
+		if ImproveAny:GetWoWBuild() == "RETAIL" then
+
+			hooksecurefunc( ItemRefTooltip, "SetHyperlink", function( self, link, ... )
+				ImproveAny:SetHyperlink( link )
+			end )
+
+		else
+
+			ItemRefTooltip.OldSetHyperlink = ItemRefTooltip.SetHyperlink
+			function ItemRefTooltip:SetHyperlink( link, ... )
+				local worked = ImproveAny:SetHyperlink( link )
+				if not worked then
+					ItemRefTooltip:OldSetHyperlink( link, ... )
+				end
+			end
+			
+		end
+		-- SetHyperLink
+
+
 
 		for i, typ in pairs( chatTypes ) do
 			ChatFrame_AddMessageEventFilter( typ, IAConvertMessage )
