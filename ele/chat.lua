@@ -438,6 +438,10 @@ function ImproveAny:InitChat()
 				message = IAChatAddPlayerIcons( message, 1 )
 				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
 					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
+					if leaderChannel == nil then
+						leaderChannel = _G[channel .. "_LEADER"]
+					end
+					
 					if leaderChannel then
 						message = ImproveAny:ReplaceStr( message, leaderChannel, IAChatOnlyBig( leaderChannel ) )
 					end

@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.90" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.91" )
 }
 
 
@@ -505,6 +505,9 @@ function ImproveAny:InitIASettings()
 		AddSlider( 24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5 )
 		AddCheckBox( 4, "BAGS", true )
 		AddCheckBox( 4, "WORLDMAP", true )
+
+		AddCheckBox( 4, "TOOLTIPSELLPRICE", true )
+		AddCheckBox( 4, "TOOLTIPEXPANSION", true )
 	end
 
 	IASettings.Search = CreateFrame( "EditBox", "IASettings_Search", IASettings, "InputBoxTemplate" )

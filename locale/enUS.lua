@@ -89,6 +89,9 @@ function ImproveAny:Lang_enUS()
 		["STATUSBARWIDTH"] = "Status Bar Width (XPbar, Reputationbar)",
 		["UIFONTINDEX"] = "Font",
 		["BAGMODEINDEX"] = "Bag mode",
+
+		["TOOLTIPSELLPRICE"] = "Tooltip - Sellprice",
+		["TOOLTIPEXPANSION"] = "Tooltip - Game-Expansion",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

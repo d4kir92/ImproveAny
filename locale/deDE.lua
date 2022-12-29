@@ -82,6 +82,9 @@ function ImproveAny:Lang_deDE()
 		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",
 		["UIFONTINDEX"] = "Schriftart",
 		["BAGMODEINDEX"] = "Taschen Modus",
+
+		["TOOLTIPSELLPRICE"] = "Tooltip - Verkaufspreis",
+		["TOOLTIPEXPANSION"] = "Tooltip - Spiel-Erweiterung",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
