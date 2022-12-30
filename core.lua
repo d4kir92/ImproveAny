@@ -257,12 +257,12 @@ function ImproveAny:Event( event, ... )
 
 		-- overload the base function for ItemRefTooltip with a custom routine
 		local function OnTooltipSetItem( tt, data )
-			local spellName, spellID = tt:GetSpell()
+			--[[local spellName, spellID = tt:GetSpell()
 			if spellID then
 				if ImproveAny:IsEnabled( "SETTINGS", false ) then
 					tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
 				end
-			end 
+			end]]
 
 			local _, itemLink = tt:GetItem()
 		
@@ -308,12 +308,12 @@ function ImproveAny:Event( event, ... )
 			for _,frame in pairs{ GameTooltip, ItemRefTooltip, WhatevahTooltip } do
 				if frame and frame.OnTooltipSetItem then
 					frame:SetScript( "OnTooltipSetItem", function( tt )
-						local spellName, spellID = tt:GetSpell()
+						--[[local spellName, spellID = tt:GetSpell()
 						if spellID then
 							if ImproveAny:IsEnabled( "SETTINGS", false ) then
 								tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
 							end
-						end 
+						end]]
 						
 						local _, itemLink = tt:GetItem()
 						if itemLink then	
