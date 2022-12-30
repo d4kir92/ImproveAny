@@ -353,6 +353,41 @@ function ImproveAny:Event( event, ... )
 				end )
 			end
 		end
+
+
+
+		local ids = {}
+		ids[138019] = 1 	-- Mythic Legion				Added in patch 7.1.5.23360
+		ids[158923] = 1 	-- Mythic BFA 					Added in patch 8.0.1.26903
+		ids[180653] = 1 	-- Mythic SL, DF 				Added in patch 9.0.1.36216
+		ids[151086] = 1 	-- Mythic Invitational Keystone	Added in patch 9.2.0.42698
+		ids[186159] = 1 	-- Mythic DF? 					Added in patch 10.0.0.44592
+
+		local MythicAuto = CreateFrame( "Frame" )
+		MythicAuto:RegisterEvent( "ADDON_LOADED" )
+		MythicAuto:SetScript( "OnEvent", function( self, event, addon )
+			if addon ~= "Blizzard_ChallengesUI" then
+				return
+			end
+
+			if ChallengesKeystoneFrame then
+
+				ChallengesKeystoneFrame:HookScript( "OnShow", function()
+					for bagId = 0, Constants.InventoryConstants.NumBagSlots do
+						for slotId = 1, C_Container.GetContainerNumSlots( bagId ) do
+							local id = C_Container.GetContainerItemID( bagId, slotId )
+							if id and ids[id] then
+								return C_Container.UseContainerItem( bagId, slotId )
+							end
+						end
+					end
+				end )
+
+				self:UnregisterEvent( event )
+				
+			end
+		end)
+
 	end
 end
 
