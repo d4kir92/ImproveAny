@@ -256,53 +256,80 @@ function ImproveAny:Event( event, ... )
 		end
 
 		-- overload the base function for ItemRefTooltip with a custom routine
+		local tts = {
+			GameTooltip,
+			ItemRefTooltip,
+			ItemRefShoppingTooltip1,
+			ItemRefShoppingTooltip2,
+			ShoppingTooltip1,
+			ShoppingTooltip2,
+			EmbeddedItemTooltip,
+		}
 		local function OnTooltipSetItem( tt, data )
-			--[[local spellName, spellID = tt:GetSpell()
+			if not tContains( tts, tt ) then
+				return
+			end
+
+			local spellID = nil
+			local itemId = nil
+			if tt.GetTooltipData then
+				local tooltipData = tt:GetTooltipData()
+				if tooltipData and tooltipData.id then -- type -> 0 = item, 1 = spell 
+					if tooltipData.type == 0 then -- item
+						itemId = tooltipData.id
+					elseif tooltipData.type == 1 then -- spell
+						spellID = tooltipData.id
+					end
+					
+				end
+			else
+				if tt.GetSpell then
+					_, spellID = tt:GetSpell()
+				else
+					local _, itemLink = tt:GetItem()
+					if itemLink then
+						itemId = string.match( itemLink, "item:(%d*)" )
+					end
+				end
+			end
+
 			if spellID then
 				if ImproveAny:IsEnabled( "SETTINGS", false ) then
 					tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
 				end
-			end]]
-
-			local _, itemLink = tt:GetItem()
-		
-			if not itemLink then
-				return
-			end
-		
-			local itemId = tonumber(strmatch(itemLink, 'item:(%d*)'))
-			if not itemId then
-				return
 			end
 
-			local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, price, classID, _, _, expacID, _, _ = GetItemInfo( itemId )
-			if expacID and ImproveAny:IsEnabled( "TOOLTIPEXPANSION", true ) then
-				local textcolor = "|cFFFF1111"
-				if expacID >= 8 then
-					textcolor = "|cFF11FF11"
-				end
-				if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
-					tt:AddDoubleLine( format(ERR_REQUIRES_EXPANSION_S, ""), textcolor .. _G["EXPANSION_NAME" .. expacID] )
-				end
-			end
-			if price and tt.shownMoneyFrames == nil then
-				if price > 0 and GetItemCount and GetCoinTextureString then
-					local count = GetItemCount( itemId )
-					if ImproveAny:IsEnabled( "TOOLTIPSELLPRICE", false ) then
-						if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
-							tt:AddDoubleLine( AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString( price ) )
-							tt:AddDoubleLine( SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString( price * count ) )
-						else
-							tt:AddDoubleLine( SELL_PRICE .. ":", GetCoinTextureString( price ) )
-						end
+			if itemId then
+				local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, price, classID, _, _, expacID, _, _ = GetItemInfo( itemId )
+				if expacID and ImproveAny:IsEnabled( "TOOLTIPEXPANSION", true ) then
+					local textcolor = "|cFFFF1111"
+					if expacID >= 8 then
+						textcolor = "|cFF11FF11"
 					end
-				else
-					--tt:AddDoubleLine(ITEM_UNSELLABLE)
+					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
+						tt:AddDoubleLine( format(ERR_REQUIRES_EXPANSION_S, ""), textcolor .. _G["EXPANSION_NAME" .. expacID] )
+					end
+				end
+				if price and tt.shownMoneyFrames == nil then
+					if price > 0 and GetItemCount and GetCoinTextureString then
+						local count = GetItemCount( itemId )
+						if ImproveAny:IsEnabled( "TOOLTIPSELLPRICE", false ) then
+							if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
+								tt:AddDoubleLine( AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString( price ) )
+								tt:AddDoubleLine( SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString( price * count ) )
+							else
+								tt:AddDoubleLine( SELL_PRICE .. ":", GetCoinTextureString( price ) )
+							end
+						end
+					else
+						--tt:AddDoubleLine(ITEM_UNSELLABLE)
+					end
 				end
 			end
 		end
 		if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall then
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, OnTooltipSetItem)
+			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, OnTooltipSetItem)
 		end
 		if OnTooltipSetItem then
 			for _,frame in pairs{ GameTooltip, ItemRefTooltip, WhatevahTooltip } do
