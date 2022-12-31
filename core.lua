@@ -303,7 +303,7 @@ function ImproveAny:Event( event, ... )
 				local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, price, classID, _, _, expacID, _, _ = GetItemInfo( itemId )
 				if expacID and ImproveAny:IsEnabled( "TOOLTIPEXPANSION", true ) then
 					local textcolor = "|cFFFF1111"
-					if expacID >= 8 then
+					if expacID >= GetExpansionLevel() then
 						textcolor = "|cFF11FF11"
 					end
 					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
