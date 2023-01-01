@@ -92,6 +92,9 @@ function ImproveAny:Lang_enUS()
 
 		["TOOLTIPSELLPRICE"] = "Tooltip - Sellprice",
 		["TOOLTIPEXPANSION"] = "Tooltip - Game-Expansion",
+
+		["ADDEDIN"] = "Added in:",
+		["EXPANSION"] = "%s%s",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

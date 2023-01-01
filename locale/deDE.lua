@@ -85,6 +85,9 @@ function ImproveAny:Lang_deDE()
 
 		["TOOLTIPSELLPRICE"] = "Tooltip - Verkaufspreis",
 		["TOOLTIPEXPANSION"] = "Tooltip - Spiel-Erweiterung",
+
+		["ADDEDIN"] = "Hinzugefügt in:",
+		["EXPANSION"] = "%s%s",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

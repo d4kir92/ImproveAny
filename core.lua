@@ -307,7 +307,7 @@ function ImproveAny:Event( event, ... )
 						textcolor = "|cFF11FF11"
 					end
 					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
-						tt:AddDoubleLine( format(ERR_REQUIRES_EXPANSION_S, ""), textcolor .. _G["EXPANSION_NAME" .. expacID] )
+						tt:AddDoubleLine( ImproveAny:GT( "ADDEDIN" ), format( ImproveAny:GT( "EXPANSION" ), textcolor, _G["EXPANSION_NAME" .. expacID] ) )
 					end
 				end
 				if price and tt.shownMoneyFrames == nil then
