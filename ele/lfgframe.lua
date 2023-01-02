@@ -414,9 +414,13 @@ function ImproveAny:InitLFGFrame()
 			text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
 		end
 
-		local lang = ImproveAny:GetFlagString( name, text )
+		if text then
+			self.Name:SetText( text )
+		end
+
+		local lang = ImproveAny:GetFlagString( name, self.ActivityName:GetText() )
 		if lang then
-			self.Name:SetText( lang )
+			self.ActivityName:SetText( lang )
 		end
 	end)
 end
