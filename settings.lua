@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.5.97" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.0" )
 }
 
 
@@ -508,6 +508,12 @@ function ImproveAny:InitIASettings()
 
 		AddCheckBox( 4, "TOOLTIPSELLPRICE", true )
 		AddCheckBox( 4, "TOOLTIPEXPANSION", true )
+
+		AddCheckBox( 4, "LFGSHOWLANGUAGEFLAG", true )
+		AddCheckBox( 4, "LFGSHOWCLASSICON", true )
+		AddCheckBox( 4, "LFGSHOWOVERALLSCORE", true )
+		AddCheckBox( 4, "LFGSHOWDUNGEONSCORE", true )
+		AddCheckBox( 4, "LFGSHOWDUNGEONKEY", true )
 	end
 
 	IASettings.Search = CreateFrame( "EditBox", "IASettings_Search", IASettings, "InputBoxTemplate" )

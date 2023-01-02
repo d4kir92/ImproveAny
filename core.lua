@@ -122,6 +122,8 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:InitRaidFrames()
 		ImproveAny:InitPartyFrames()
 	
+		ImproveAny:InitLFGFrame()
+
 		ImproveAny:UpdateUIParentAttribute()
 		
 		ImproveAny:UpdateStatusBar()

@@ -88,6 +88,12 @@ function ImproveAny:Lang_deDE()
 
 		["ADDEDIN"] = "Hinzugefügt in:",
 		["EXPANSION"] = "%s%s",
+
+		["LFGSHOWLANGUAGEFLAG"] = "LFG - Sprachflaggen anzeigen",
+		["LFGSHOWCLASSICON"] = "LFG - Klassensymbole anzeigen",
+		["LFGSHOWOVERALLSCORE"] = "LFG - Gesamtwertung anzeigen",
+		["LFGSHOWDUNGEONSCORE"] = "LFG - Dungeonwertung anzeigen",
+		["LFGSHOWDUNGEONKEY"] = "LFG - Dungeonstein anzeigen",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

@@ -157,6 +157,10 @@ function ImproveAny:InitChat()
 			classes["EVOKER"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:0:129:0:129|t"
 		end)
 
+		function ImproveAny:GetClassIcon( class )
+			return classes[class] 
+		end
+
 		local PLYCache = {}
 		local function IAGetGUID( name )
 			return PLYCache[name]
@@ -312,13 +316,13 @@ function ImproveAny:InitChat()
 					local guid = IAGetGUID( id )
 					if guid then
 						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
-						if engClass and engRace and gender and races[engRace .. gender] and classes[engClass] then
+						if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon( engClass ) then
 							local res = ""
 							if ImproveAny:IsEnabled( "RACEICONS", false ) then
 								res = res .. races[engRace .. gender]
 							end
 							if ImproveAny:IsEnabled( "CLASSICONS", true ) then
-								res = res .. classes[engClass]
+								res = res .. ImproveAny:GetClassIcon( engClass )
 							end
 							local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
 							if GetClassColor then

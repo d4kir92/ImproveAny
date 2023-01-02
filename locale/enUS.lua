@@ -95,6 +95,12 @@ function ImproveAny:Lang_enUS()
 
 		["ADDEDIN"] = "Added in:",
 		["EXPANSION"] = "%s%s",
+
+		["LFGSHOWLANGUAGEFLAG"] = "LFG - Show Language Flag",
+		["LFGSHOWCLASSICON"] = "LFG - Show Class Icon",
+		["LFGSHOWOVERALLSCORE"] = "LFG - Show Overall Score",
+		["LFGSHOWDUNGEONSCORE"] = "LFG - Show Dungeon Score",
+		["LFGSHOWDUNGEONKEY"] = "LFG - Show Dungeon Key",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
