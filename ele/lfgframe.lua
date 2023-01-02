@@ -263,7 +263,7 @@ if portal == "EU" then
 		"Голдринн",			--"Goldrinn",
 		"Гордунни", 		--"Gordunni",
 		"Седогрив",			--"Greymane",
-		"Гром",				--"Grom",
+		"Гром",--"Grom",
 		"Ревущий фьорд",	--"Howling Fjord",
 		"Корольлич",	 	--"Lich King",
 		"Разувий",			--"Razuvious",
@@ -287,6 +287,262 @@ if portal == "EU" then
 		"Nemesis",
 		"Pozzo dell'Eternità",
 	}
+elseif portal == "US" then
+	IMPORTREALMS["US"] = {}
+	IMPORTREALMS["US"]["enUS"] = {
+		"Aegwynn",
+		"Aerie Peak",
+		"Agamaggan",
+		"Aggramar",
+		"Akama",
+		"Alexstrasza",
+		"Alleria",
+		"Altar of Storms",
+		"Alterac Mountains",
+		"Andorhal",
+		"Anetheron",
+		"Antonidas",
+		"Anub'arak",
+		"Anvilmar",
+		"Arathor",
+		"Archimonde",
+		"Area 52",
+		"Argent Dawn",
+		"Arthas",
+		"Arygos",
+		"Auchindoun",
+		"Azgalor",
+		"Azjol-Nerub",
+		"Azshara",
+		"Azuremyst",
+		"Baelgun",
+		"Balnazzar",
+		"Black Dragonflight",
+		"Blackhand",
+		"Blackrock",
+		"Blackwater Raiders",
+		"Blackwing Lair",
+		"Blade's Edge",
+		"Bladefist",
+		"Bleeding Hollow",
+		"Blood Furnace",
+		"Bloodhoof",
+		"Bloodscalp",
+		"Bonechewer",
+		"Borean Tundra",
+		"Boulderfist",
+		"Bronzebeard",
+		"Burning Blade",
+		"Burning Legion",
+		"Cairne",
+		"Cenarion Circle",
+		"Cenarius",
+		"Cho'gall",
+		"Chromaggus",
+		"Coilfang",
+		"Crushridge",
+		"Daggerspine",
+		"Dalaran",
+		"Dalvengyr",
+		"Dark Iron",
+		"Darkspear",
+		"Darrowmere",
+		"Dawnbringer",
+		"Deathwing",
+		"Demon Soul",
+		"Dentarg",
+		"Destromath",
+		"Dethecus",
+		"Detheroc",
+		"Doomhammer",
+		"Draenor",
+		"Dragonblight",
+		"Dragonmaw",
+		"Drak'Tharon",
+		"Drak'thul",
+		"Draka",
+		"Drenden",
+		"Dunemaul",
+		"Durotan",
+		"Duskwood",
+		"Earthen Ring",
+		"Echo Isles",
+		"Eitrigg",
+		"Eldre'Thalas",
+		"Elune",
+		"Emerald Dream",
+		"Eonar",
+		"Eredar",
+		"Executus",
+		"Exodar",
+		"Farstriders",
+		"Feathermoon",
+		"Fenris",
+		"Firetree",
+		"Fizzcrank",
+		"Frostmane",
+		"Frostwolf",
+		"Galakrond",
+		"Garithos",
+		"Garona",
+		"Garrosh",
+		"Ghostlands",
+		"Gilneas",
+		"Gnomeregan",
+		"Gorefiend",
+		"Gorgonnash",
+		"Greymane",
+		"Grizzly Hills",
+		"Gul'dan",
+		"Gurubashi",
+		"Hakkar",
+		"Haomarush",
+		"Hellscream",
+		"Hydraxis",
+		"Hyjal",
+		"Icecrown",
+		"Illidan",
+		"Jaedenar",
+		"Kael'thas",
+		"Kalecgos",
+		"Kargath",
+		"Kel'Thuzad",
+		"Khadgar",
+		"Khaz Modan",
+		"Kil'jaeden",
+		"Kilrogg",
+		"Kirin Tor",
+		"Korgath",
+		"Korialstrasz",
+		"Kul Tiras",
+		"Laughing Skull",
+		"Lethon",
+		"Lightbringer",
+		"Lightning's Blade",
+		"Lightninghoof",
+		"Llane",
+		"Lothar",
+		"Madoran",
+		"Maelstrom",
+		"Magtheridon",
+		"Maiev",
+		"Mal'Ganis",
+		"Malfurion",
+		"Malorne",
+		"Malygos",
+		"Mannoroth",
+		"Medivh",
+		"Misha",
+		"Mok'Nathal",
+		"Moon Guard",
+		"Moonrunner",
+		"Mug'thol",
+		"Muradin",
+		"Nathrezim",
+		"Nazgrel",
+		"Nazjatar",
+		"Ner'zhul",
+		"Nesingwary",
+		"Nordrassil",
+		"Norgannon",
+		"Onyxia",
+		"Perenolde",
+		"Proudmoore",
+		"Quel'dorei",
+		"Ravencrest",
+		"Ravenholdt",
+		"Rexxar",
+		"Rivendare",
+		"Runetotem",
+		"Sargeras",
+		"Scarlet Crusade",
+		"Scilla",
+		"Sen'jin",
+		"Sentinels",
+		"Shadow Council",
+		"Shadowmoon",
+		"Shadowsong",
+		"Shandris",
+		"Shattered Halls",
+		"Shattered Hand",
+		"Shu'halo",
+		"Silver Hand",
+		"Silvermoon",
+		"Sisters of Elune",
+		"Skullcrusher",
+		"Skywall",
+		"Smolderthorn",
+		"Spinebreaker",
+		"Spirestone",
+		"Staghelm",
+		"Steamwheedle Cartel",
+		"Stonemaul",
+		"Stormrage",
+		"Stormreaver",
+		"Stormscale",
+		"Suramar",
+		"Tanaris",
+		"Terenas",
+		"Terokkar",
+		"The Forgotten Coast",
+		"The Scryers",
+		"The Underbog",
+		"The Venture Co",
+		"Thorium Brotherhood",
+		"Thrall",
+		"Thunderhorn",
+		"Thunderlord",
+		"Tichondrius",
+		"Tortheldrin",
+		"Trollbane",
+		"Turalyon",
+		"Twisting Nether",
+		"Uldaman",
+		"Uldum",
+		"Undermine",
+		"Ursin",
+		"Uther",
+		"Vashj",
+		"Vek'nilash",
+		"Velen",
+		"Warsong",
+		"Whisperwind",
+		"Wildhammer",
+		"Windrunner",
+		"Winterhoof",
+		"Wyrmrest Accord",
+		"Ysera",
+		"Ysondre",
+		"Zangarmarsh",
+		"Zul'jin",
+		"Zuluhed",
+	}
+	IMPORTREALMS["US"]["oceanic"] = {
+		"Aman'Thul",
+		"Barthilas",
+		"Caelestrasz",
+		"Dath'Remar",
+		"Dreadmaul",
+		"Frostmourne",
+		"Gundrak",
+		"Jubei'Thos",
+		"Khaz'goroth",
+		"Nagrand",
+		"Saurfang",
+		"Thaurissan",
+	}
+	IMPORTREALMS["US"]["ptBR"] = {
+		"Azralon",
+		"Gallywix",
+		"Goldrinn",
+		"Nemesis",
+		"Tol Barad",
+	}
+	IMPORTREALMS["US"]["esMX"] = {
+		"Drakkari",
+		"Quel'Thalas",
+		"Ragnaros",
+	}
 end
 
 local REALMS = {}
@@ -294,10 +550,11 @@ REALMS[portal] = {}
 for lang, realmTab in pairs( IMPORTREALMS[portal] ) do
 	for i, realmName in pairs(  realmTab ) do
 		realmName = string.gsub( realmName, "%s+", "" )
+		realmName = string.gsub( realmName, "%-", "" )
 		if REALMS[portal][realmName] == nil then
 			REALMS[portal][realmName] = lang
 		else
-			print("EXISTS ALREADY", realmName)
+			print(">>> EXISTS ALREADY", realmName)
 		end
 	end
 end
@@ -316,17 +573,17 @@ function ImproveAny:GetRealmLang( name )
 		realmName = GetRealmName()
 	end
 	realmName = string.gsub( realmName, "%s+", "" )
+	realmName = string.gsub( realmName, "%-", "" )
 
 	local portal = GetCVar( "portal" )
 	if REALMS[portal] == nil then
-		print("WRONG PORTAL")
 		return nil
 	end
 
 	if REALMS[portal][realmName] then
 		return REALMS[portal][realmName]
 	else
-		print( format( "NOT FOUND [%s]", realmName ) )
+		ImproveAny:MSG( format( "MISSING REALM [%s], please Send to Developer", realmName ) )
 	end
 
 	return nil
@@ -342,85 +599,91 @@ function ImproveAny:GetFlagString( realmName, text )
 end
 
 function ImproveAny:InitLFGFrame()
-	hooksecurefunc("LFGListApplicationViewer_UpdateApplicantMember", function(member, id, index)
-		local name, class, localizedClass, level, itemLevel, honorLevel, tank, healer, damage, assignedRole, relationship, dungeonScore, pvpItemLevel = C_LFGList.GetApplicantMemberInfo( id, index )
-		local stats = C_LFGList.GetApplicantMemberStats( id, index )
+	if LFGListApplicationViewer_UpdateApplicantMember then
+		hooksecurefunc( "LFGListApplicationViewer_UpdateApplicantMember", function( member, id, index )
+			local name, class, localizedClass, level, itemLevel, honorLevel, tank, healer, damage, assignedRole, relationship, dungeonScore, pvpItemLevel = C_LFGList.GetApplicantMemberInfo( id, index )
+			local stats = C_LFGList.GetApplicantMemberStats( id, index )
 
-		local activeEntryInfo = C_LFGList.GetActiveEntryInfo();
-		if ( not activeEntryInfo ) then
-			return;
-		end
+			local activeEntryInfo = C_LFGList.GetActiveEntryInfo();
+			if ( not activeEntryInfo ) then
+				return;
+			end
 
-		if name == nil then
-			return
-		end
+			if name == nil then
+				return
+			end
 
-		local name = member.Name:GetText()
-		local text = ""
+			local name = member.Name:GetText()
+			local text = ""
 
-		local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing( id, index, activeEntryInfo.activityID )
-		
-		local dungeonRating = bestDungeonScoreForListing.mapScore
-		if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and dungeonRating and dungeonRating > 0 then 
-			local r, g, b, hex = GetClassColor( class )
-			local color = C_ChallengeMode.GetDungeonScoreRarityColor( dungeonRating )
-			text = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r " .. text
-		end
+			local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing( id, index, activeEntryInfo.activityID )
+			
+			local dungeonRating = bestDungeonScoreForListing.mapScore
+			if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and dungeonRating and dungeonRating > 0 then 
+				local r, g, b, hex = GetClassColor( class )
+				local color = C_ChallengeMode.GetDungeonScoreRarityColor( dungeonRating )
+				text = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r " .. text
+			end
 
-		local dungeonKey = bestDungeonScoreForListing.bestRunLevel
-		if ImproveAny:IsEnabled( "LFGSHOWDUNGEONKEY", true ) and dungeonKey then
-			text = dungeonKey .. " " .. text
-		end
+			local dungeonKey = bestDungeonScoreForListing.bestRunLevel
+			if ImproveAny:IsEnabled( "LFGSHOWDUNGEONKEY", true ) and dungeonKey then
+				text = dungeonKey .. " " .. text
+			end
 
-		if ImproveAny:IsEnabled( "LFGSHOWCLASSICON", true ) then
-			text = text .. ImproveAny:GetClassIcon( class )
-		end
+			if ImproveAny:IsEnabled( "LFGSHOWCLASSICON", true ) then
+				text = text .. ImproveAny:GetClassIcon( class )
+			end
 
-		text = text .. name
+			text = text .. name
 
-		local server = ""
-		local s, e = string.find( name, "-" )
-		if s then
-			server = strsub( name, s + 1 )
-		else
-			server = GetRealmName()
-		end
+			local server = ""
+			local s, e = string.find( name, "-" )
+			if s then
+				server = strsub( name, s + 1 )
+			else
+				server = GetRealmName()
+			end
 
-		local lang = ImproveAny:GetFlagString( server, text )
+			local lang = ImproveAny:GetFlagString( server, text )
 
-		if lang then
-			member.Name:SetText( lang )
-		end
-	end)
+			if lang then
+				member.Name:SetText( lang )
+			end
+		end )
+	end
 
-	hooksecurefunc("LFGListSearchEntry_Update", function(self, ...)
-		local sri = C_LFGList.GetSearchResultInfo(self.resultID)
-		local name = sri.leaderName
-		
-		local text = self.Name:GetText()
+	if LFGListSearchEntry_Update then
+		hooksecurefunc( "LFGListSearchEntry_Update", function( self, ... )
+			local sri = C_LFGList.GetSearchResultInfo(self.resultID)
+			local name = sri.leaderName
+			
+			local text = self.Name:GetText()
 
-		if sri.IsWarMode  then
-			text = "[WM] " .. text
-		end
-		if sri.requiredItemLevel > 0 then
-			text = "[ilvl: " .. sri.requiredItemLevel .. "] " .. text
-		end
-		if ImproveAny:IsEnabled( "LFGSHOWOVERALLSCORE", true ) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
-			local color = C_ChallengeMode.GetDungeonScoreRarityColor( sri.leaderOverallDungeonScore )
-			text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
-		end
-		if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
-			local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor( sri.leaderDungeonScoreInfo.mapScore )
-			text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
-		end
+			if sri.isWarMode then
+				text = "[WM] " .. text
+			end
+			if sri.requiredItemLevel > 0 then
+				text = "[ilvl: " .. sri.requiredItemLevel .. "+] " .. text
+			end
+			if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then -- only when its for dungeon
+				if ImproveAny:IsEnabled( "LFGSHOWOVERALLSCORE", true ) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
+					local color = C_ChallengeMode.GetDungeonScoreRarityColor( sri.leaderOverallDungeonScore )
+					text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+				end
+				if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
+					local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor( sri.leaderDungeonScoreInfo.mapScore )
+					text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
+				end
+			end
 
-		if text then
-			self.Name:SetText( text )
-		end
+			if text then
+				self.Name:SetText( text )
+			end
 
-		local lang = ImproveAny:GetFlagString( name, self.ActivityName:GetText() )
-		if lang then
-			self.ActivityName:SetText( lang )
-		end
-	end)
+			local lang = ImproveAny:GetFlagString( name, self.ActivityName:GetText() )
+			if lang then
+				self.ActivityName:SetText( lang )
+			end
+		end )
+	end
 end
