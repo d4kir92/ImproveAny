@@ -263,7 +263,7 @@ if portal == "EU" then
 		"Голдринн",			--"Goldrinn",
 		"Гордунни", 		--"Gordunni",
 		"Седогрив",			--"Greymane",
-		"Гром",--"Grom",
+		"Гром",				--"Grom",
 		"Ревущий фьорд",	--"Howling Fjord",
 		"Корольлич",	 	--"Lich King",
 		"Разувий",			--"Razuvious",
@@ -569,8 +569,6 @@ function ImproveAny:GetRealmLang( name )
 	local s1, e1 = string.find( realmName, "-" )
 	if s1 and e1 then
 		realmName = string.sub( realmName, e1 + 1 )
-	else
-		realmName = GetRealmName()
 	end
 	realmName = string.gsub( realmName, "%s+", "" )
 	realmName = string.gsub( realmName, "%-", "" )
@@ -613,7 +611,7 @@ function ImproveAny:InitLFGFrame()
 				return
 			end
 
-			local name = member.Name:GetText()
+			local dName = member.Name:GetText()
 			local text = ""
 
 			local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing( id, index, activeEntryInfo.activityID )
@@ -634,10 +632,13 @@ function ImproveAny:InitLFGFrame()
 				text = text .. ImproveAny:GetClassIcon( class )
 			end
 
-			text = text .. name
+			text = text .. dName
 
+
+			
 			local server = ""
 			local s, e = string.find( name, "-" )
+			
 			if s then
 				server = strsub( name, s + 1 )
 			else
