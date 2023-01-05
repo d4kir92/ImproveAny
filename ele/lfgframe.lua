@@ -669,11 +669,15 @@ function ImproveAny:InitLFGFrame()
 			if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then -- only when its for dungeon
 				if ImproveAny:IsEnabled( "LFGSHOWOVERALLSCORE", true ) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
 					local color = C_ChallengeMode.GetDungeonScoreRarityColor( sri.leaderOverallDungeonScore )
-					text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+					if color then
+						text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+					end
 				end
 				if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
 					local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor( sri.leaderDungeonScoreInfo.mapScore )
-					text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
+					if color then
+						text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
+					end
 				end
 			end
 
