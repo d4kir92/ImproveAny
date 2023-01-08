@@ -547,14 +547,16 @@ end
 
 local REALMS = {}
 REALMS[portal] = {}
-for lang, realmTab in pairs( IMPORTREALMS[portal] ) do
-	for i, realmName in pairs(  realmTab ) do
-		realmName = string.gsub( realmName, "%s+", "" )
-		realmName = string.gsub( realmName, "%-", "" )
-		if REALMS[portal][realmName] == nil then
-			REALMS[portal][realmName] = lang
-		else
-			print(">>> EXISTS ALREADY", realmName)
+if IMPORTREALMS[portal] then
+	for lang, realmTab in pairs( IMPORTREALMS[portal] ) do
+		for i, realmName in pairs(  realmTab ) do
+			realmName = string.gsub( realmName, "%s+", "" )
+			realmName = string.gsub( realmName, "%-", "" )
+			if REALMS[portal][realmName] == nil then
+				REALMS[portal][realmName] = lang
+			else
+				print(">>> EXISTS ALREADY", realmName)
+			end
 		end
 	end
 end
