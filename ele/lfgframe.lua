@@ -622,7 +622,11 @@ function ImproveAny:InitLFGFrame()
 			if ImproveAny:IsEnabled( "LFGSHOWDUNGEONSCORE", true ) and dungeonRating and dungeonRating > 0 then 
 				local r, g, b, hex = GetClassColor( class )
 				local color = C_ChallengeMode.GetDungeonScoreRarityColor( dungeonRating )
-				text = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r " .. text
+				if color then
+					text = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r " .. text
+				else
+					text = dungeonRating .. " ".. text
+				end
 			end
 
 			local dungeonKey = bestDungeonScoreForListing.bestRunLevel
