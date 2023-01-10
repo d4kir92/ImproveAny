@@ -389,12 +389,11 @@ function ImproveAny:InitChat()
 		local function AddMessage( self, message, ... )
 			local chanName = nil
 			local chanFormat = nil
-			local sear = message:gsub( '|', '')
+			local sear = message:gsub( '|', '' )
 			sear = sear:gsub( 'h%[', ':' )
 			sear = sear:gsub( '%]h', ':' )
 			local _, channel, _, channelName, chanIndex = string.split( ":", sear )
-			
-			if channel == "channel" and channelName then
+			if channel and channel == "channel" and channelName then
 				local s1 = channelName:find( '%[' )
 				if s1 then
 					local s2 = channelName:find( '%]' )
@@ -425,7 +424,7 @@ function ImproveAny:InitChat()
 					if leaderChannel == nil then
 						leaderChannel = _G[channel .. "_LEADER"]
 					end
-					
+
 					if leaderChannel then
 						message = ImproveAny:ReplaceStr( message, leaderChannel, IAChatOnlyBig( leaderChannel ) )
 					end
