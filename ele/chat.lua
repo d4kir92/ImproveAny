@@ -299,63 +299,44 @@ function ImproveAny:InitChat()
 		IAGuildScan()
 
 		local function IAChatAddPlayerIcons( msg, c )
-			if c >= 40 then
-				return msg
-			end
-			msg = string.gsub(msg, "(|H)", "|Z", 1)
-			msg = string.gsub(msg, "(|h)", "|y", 1)
-			msg = string.gsub(msg, "(|h)", "|z", 1)
-
-			local itemString = select(3, strfind(msg, "|Z(.+)|z"))
-
-			if itemString then
-				local typ = select( 1, string.split( ":", itemString ) )
-				local id = select( 2, string.split( ":", itemString ) )
-
-				if typ == "player" or typ == "playerCommunity" or typ == "playerGM" then
-					local guid = IAGetGUID( id )
-					if guid then
-						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
-						if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon( engClass ) then
-							local res = ""
-							if ImproveAny:IsEnabled( "RACEICONS", false ) then
-								res = res .. races[engRace .. gender]
-							end
-							if ImproveAny:IsEnabled( "CLASSICONS", true ) then
-								res = res .. ImproveAny:GetClassIcon( engClass )
-							end
-							local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
-							if GetClassColor then
-								r, g, b, hex = GetClassColor(engClass)
-							end
-
-							local level = IAGetLevel( name, realm )
-							if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
-								msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]" )
-							end
-
-							msg = string.gsub( msg, "%[", "", 1 )
-							msg = string.gsub( msg, "%]", "", 1 )
-
-							msg = string.gsub( msg, "(|Z)", res .. "[|c" .. hex .. "|X", 1 )
-							msg = string.gsub( msg, "(|z)", "|r]|x", 1 )
-
-							return IAChatAddPlayerIcons( msg, c + 1 )
-						else
-							msg = IAResetMsg( msg )
-						end
-					else
-						-- NPC TALK
-						msg = IAResetMsg( msg )
-					end
-				else
-					msg = IAResetMsg( msg )
+			local links = {}
+			for i = 1, string.len( msg ) do
+				local s1, e1, itemString = strfind( msg, "|H(.+)|h", i )
+				if not tContains( links, itemString ) then
+					table.insert( links, itemString )
 				end
 			end
 
-			msg = string.gsub(msg, "(|X)", "|H")
-			msg = string.gsub(msg, "(|y)", "|h")
-			msg = string.gsub(msg, "(|x)", "|h")
+			for i, itemString in pairs( links ) do
+				local newString = itemString
+				if newString then
+					local typ = select( 1, string.split( ":", newString ) )
+					local id = select( 2, string.split( ":", newString ) )
+					if typ == "player" or typ == "playerCommunity" or typ == "playerGM" then
+						local guid = IAGetGUID( id )
+						if guid then
+							local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
+							if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon( engClass ) then
+								if ImproveAny:IsEnabled( "RACEICONS", false ) then
+									msg = races[engRace .. gender] .. msg
+								end
+								if ImproveAny:IsEnabled( "CLASSICONS", true ) then
+									msg = string.gsub( msg, "%[|c", ImproveAny:GetClassIcon( engClass ) .. "%[|c", 1 )
+								end
+								local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
+								if GetClassColor then
+									r, g, b, hex = GetClassColor( engClass )
+								end
+								
+								local level = IAGetLevel( name, realm )
+								if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
+									msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
+								end
+							end
+						end
+					end
+				end
+			end
 
 			return msg
 		end
@@ -405,7 +386,7 @@ function ImproveAny:InitChat()
 		local hooks = {}
 		local count = 0
 		local msg = nil
-		local function AddMessage(self, message, ...)
+		local function AddMessage( self, message, ... )
 			local chanName = nil
 			local chanFormat = nil
 			local sear = message:gsub( '|', '')
@@ -413,7 +394,7 @@ function ImproveAny:InitChat()
 			sear = sear:gsub( '%]h', ':' )
 			local _, channel, _, channelName, chanIndex = string.split( ":", sear )
 			
-			if channel == "channel" then
+			if channel == "channel" and channelName then
 				local s1 = channelName:find( '%[' )
 				if s1 then
 					local s2 = channelName:find( '%]' )
@@ -439,7 +420,6 @@ function ImproveAny:InitChat()
 					message = message:gsub( chanFormat, ':' )
 				end
 				
-				message = IAChatAddPlayerIcons( message, 1 )
 				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
 					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
 					if leaderChannel == nil then
@@ -458,15 +438,18 @@ function ImproveAny:InitChat()
 						end
 					end
 				end
+				message = IAChatAddPlayerIcons( message, 1 )
 			end
 			return hooks[self](self, message, ...)
 		end
-		
+
 		for index = 1, NUM_CHAT_WINDOWS do
-			if(index ~= 2) then
-				local frame = _G['ChatFrame'..index]
-				hooks[frame] = frame.AddMessage
-				frame.AddMessage = AddMessage
+			if index ~= 2 then
+				local frame = _G['ChatFrame' .. index]
+				if frame then
+					hooks[frame] = frame.AddMessage
+					frame.AddMessage = AddMessage
+				end
 			end
 		end
 

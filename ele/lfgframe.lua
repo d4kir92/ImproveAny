@@ -555,7 +555,7 @@ if IMPORTREALMS[portal] then
 			if REALMS[portal][realmName] == nil then
 				REALMS[portal][realmName] = lang
 			else
-				print(">>> EXISTS ALREADY", realmName)
+				print( ">>> EXISTS ALREADY", realmName )
 			end
 		end
 	end
@@ -640,7 +640,7 @@ function ImproveAny:InitLFGFrame()
 			
 			local server = ""
 			local s, e = string.find( name, "-" )
-			
+
 			if s then
 				server = strsub( name, s + 1 )
 			else
@@ -659,6 +659,10 @@ function ImproveAny:InitLFGFrame()
 		hooksecurefunc( "LFGListSearchEntry_Update", function( self, ... )
 			local sri = C_LFGList.GetSearchResultInfo(self.resultID)
 			local name = sri.leaderName
+			
+			if name == nil then
+				return
+			end
 			
 			local text = self.Name:GetText()
 
@@ -687,7 +691,16 @@ function ImproveAny:InitLFGFrame()
 				self.Name:SetText( text )
 			end
 
-			local lang = ImproveAny:GetFlagString( name, self.ActivityName:GetText() )
+			local server = ""
+			local s, e = string.find( name, "-" )
+			
+			if s then
+				server = strsub( name, s + 1 )
+			else
+				server = GetRealmName()
+			end
+
+			local lang = ImproveAny:GetFlagString( server, self.ActivityName:GetText() )
 			if lang then
 				self.ActivityName:SetText( lang )
 			end
