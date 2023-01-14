@@ -163,6 +163,13 @@ function ImproveAny:Event( event, ... )
 			end
 		end
 
+		if ExtraActionButton1 and ExtraActionButton1.style and ImproveAny:IsEnabled( "HIDEEXTRAACTIONBUTTONARTWORK", false ) then
+			hooksecurefunc( ExtraActionButton1.style, "Show", function( self, ... )
+				self:Hide()
+			end )
+			ExtraActionButton1.style:Hide()
+		end
+
 		local ImproveAnyMinimapIcon = LibStub("LibDataBroker-1.1"):NewDataObject("ImproveAnyMinimapIcon", {
 			type = "data source",
 			text = "ImproveAnyMinimapIcon",

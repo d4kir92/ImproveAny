@@ -94,6 +94,8 @@ function ImproveAny:Lang_deDE()
 		["LFGSHOWOVERALLSCORE"] = "LFG - Gesamtwertung anzeigen",
 		["LFGSHOWDUNGEONSCORE"] = "LFG - Dungeonwertung anzeigen",
 		["LFGSHOWDUNGEONKEY"] = "LFG - Dungeonstein anzeigen",
+
+		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Extra-Aktionknopf Kunst ausblenden",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.9" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.10" )
 }
 
 
@@ -460,6 +460,10 @@ function ImproveAny:InitIASettings()
 		AddCategory( "ITEMLEVEL" )
 		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )
 		AddCheckBox( 4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons )
+
+		if ExtraActionButton1 and ExtraActionButton1.style then
+			AddCheckBox( 4, "HIDEEXTRAACTIONBUTTONARTWORK", false )
+		end
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory( "XPBAR" )

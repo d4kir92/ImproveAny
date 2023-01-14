@@ -101,6 +101,8 @@ function ImproveAny:Lang_enUS()
 		["LFGSHOWOVERALLSCORE"] = "LFG - Show Overall Score",
 		["LFGSHOWDUNGEONSCORE"] = "LFG - Show Dungeon Score",
 		["LFGSHOWDUNGEONKEY"] = "LFG - Show Dungeon Key",
+
+		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Hide Extra Action Button Artwork",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
