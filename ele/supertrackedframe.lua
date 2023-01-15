@@ -17,6 +17,16 @@ function ImproveAny:InitSuperTrackedFrame()
 				end
 			end
 		end
+		if SuperTrackedFrame.GetTargetAlpha then
+			local fAlpha = SuperTrackedFrame.GetTargetAlpha
+			function SuperTrackedFrame:GetTargetAlpha()
+				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
+					return 0.5
+				else
+					return fAlpha(self)
+				end
+			end
+		end
 		
 		if SuperTrackedFrame.DistanceText == nil then
 			SuperTrackedFrame.DistanceText = WorldSpacePin.text
