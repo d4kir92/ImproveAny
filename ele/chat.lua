@@ -317,12 +317,13 @@ function ImproveAny:InitChat()
 						if guid then
 							local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
 							if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon( engClass ) then
+								if ImproveAny:IsEnabled( "CLASSICONS", true ) then
+									msg = ImproveAny:GetClassIcon( engClass ) .. msg
+								end
 								if ImproveAny:IsEnabled( "RACEICONS", false ) then
 									msg = races[engRace .. gender] .. msg
 								end
-								if ImproveAny:IsEnabled( "CLASSICONS", true ) then
-									msg = string.gsub( msg, "%[|c", ImproveAny:GetClassIcon( engClass ) .. "%[|c", 1 )
-								end
+
 								local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
 								if GetClassColor then
 									r, g, b, hex = GetClassColor( engClass )
