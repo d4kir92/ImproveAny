@@ -2,21 +2,19 @@
 local AddOnName, ImproveAny = ...
 
 function ImproveAny:InitWorldMapFrame()
-	if WorldMapFrame then	
+	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then	
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function( f )
-			WorldMapFrame.ScrollContainer.GetCursorPosition = function( f )
-				local x, y = MapCanvasScrollControllerMixin.GetCursorPosition( f )
-				local scale = WorldMapFrame:GetScale()
-				if not IsAddOnLoaded( "Mapster" ) or ImproveAny:GetWoWBuild() == "RETAIL" then
-					return x / scale, y / scale
-				else
-					local reverseEffectiveScale = 1 / UIParent:GetEffectiveScale();
-					return x / scale * reverseEffectiveScale, y / scale * reverseEffectiveScale
-				end
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition( f )
+			local scale = WorldMapFrame:GetScale()
+			if not IsAddOnLoaded( "Mapster" ) then
+				return x / scale, y / scale
+			else
+				local reverseEffectiveScale = 1 / UIParent:GetEffectiveScale();
+				return x / scale * reverseEffectiveScale, y / scale * reverseEffectiveScale
 			end
 		end
 	end
-	
+
 	if WorldMapFrame then
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then -- TBC, ERA
 			if WorldMapFrame.BlackoutFrame then
