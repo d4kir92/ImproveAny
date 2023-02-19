@@ -103,6 +103,8 @@ function ImproveAny:Lang_enUS()
 		["LFGSHOWDUNGEONKEY"] = "LFG - Show Dungeon Key",
 
 		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Hide Extra Action Button Artwork",
+
+		["IAPingFrame"] = "Ping Bar",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.17" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.18" )
 }
 
 
@@ -461,10 +461,6 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons )
 		AddCheckBox( 4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons )
 
-		if ExtraActionButton1 and ExtraActionButton1.style then
-			AddCheckBox( 4, "HIDEEXTRAACTIONBUTTONARTWORK", false )
-		end
-
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory( "XPBAR" )
 			AddCheckBox( 4, "XPBAR", true )
@@ -518,6 +514,11 @@ function ImproveAny:InitIASettings()
 		AddCheckBox( 4, "LFGSHOWOVERALLSCORE", true )
 		AddCheckBox( 4, "LFGSHOWDUNGEONSCORE", true )
 		AddCheckBox( 4, "LFGSHOWDUNGEONKEY", true )
+		if ExtraActionButton1 and ExtraActionButton1.style then
+			AddCheckBox( 4, "HIDEEXTRAACTIONBUTTONARTWORK", false )
+		end
+
+		AddCheckBox( 4, "IAPingFrame", true )
 	end
 
 	IASettings.Search = CreateFrame( "EditBox", "IASettings_Search", IASettings, "InputBoxTemplate" )

@@ -39,7 +39,7 @@ function ImproveAny:Lang_deDE()
 		["MINIMAPSHAPESQUARE"] = "Quadratische Minimap",
 		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Minimap-Knöpfe verschiebbar machen",
 
-		["ITEMLEVEL"] = "Element-Ebene",
+		["ITEMLEVEL"] = "ItemLevel",
 		["ITEMLEVELNUMBER"] = "ItemLevel-Nummer",
 		["ITEMLEVELBORDER"] = "ItemLevel Umrandung",
 
@@ -96,6 +96,8 @@ function ImproveAny:Lang_deDE()
 		["LFGSHOWDUNGEONKEY"] = "LFG - Dungeonstein anzeigen",
 
 		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Extra-Aktionknopf Kunst ausblenden",
+
+		["IAPingFrame"] = "Ping Leiste",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
