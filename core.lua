@@ -127,6 +127,7 @@ function ImproveAny:Event( event, ... )
 		ImproveAny:UpdateUIParentAttribute()
 		
 		ImproveAny:UpdateStatusBar()
+		ImproveAny:InitIAPingFrame()
 
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then

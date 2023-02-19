@@ -1,5 +1,5 @@
 ## Interface: 11403
-## Version: 0.6.16
+## Version: 0.6.17
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -31,6 +31,7 @@ ele/micromenu.lua
 ele/minimap.lua
 ele/moneybar.lua
 ele/partymember.lua
+ele/pingframe.lua
 ele/raidframe.lua
 ele/repbar.lua
 ele/skillbars.lua
