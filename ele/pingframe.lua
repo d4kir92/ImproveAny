@@ -6,7 +6,7 @@ local config_update = 1
 function ImproveAny:InitIAPingFrame()
 	if ImproveAny:IsEnabled( "IAPingFrame", true ) then
 		IAPingFrame = CreateFrame( "Frame", "IAPingFrame", UIParent )
-		IAPingFrame:SetSize( 200, 20 )
+		IAPingFrame:SetSize( 100, 20 )
 		IAPingFrame:SetPoint( "TOPLEFT", UIParent, "TOPLEFT", 10, -10 )
 		
 		IAPingFrame.ping = IAPingFrame:CreateFontString( "IAPingFrame.ping", "BACKGROUND" )
@@ -15,7 +15,16 @@ function ImproveAny:InitIAPingFrame()
 
 		function IAFPSThink()
 			local down, up, lagHome, lagWorld = GetNetStats();
-			IAPingFrame.ping:SetText( format( "|cff3FC7EBPing|r: %3dms (H) %3dms (W)", lagHome, lagWorld ) )
+			local dif = abs( lagHome - lagWorld )
+			local lagNorm = lagHome + dif
+			if lagWorld < lagHome then
+				lagNorm = lagWorld + dif
+			end
+			if dif > 10 then
+				IAPingFrame.ping:SetText( format( "|cff3FC7EBPing|r: %4dms (H) %4dms (W)", lagHome, lagWorld ) )
+			else
+				IAPingFrame.ping:SetText( format( "|cff3FC7EBPing|r: %4dms", lagNorm ) )
+			end
 			C_Timer.After( config_update, IAFPSThink )
 		end
 		IAFPSThink()
