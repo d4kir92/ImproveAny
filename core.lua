@@ -128,6 +128,7 @@ function ImproveAny:Event( event, ... )
 		
 		ImproveAny:UpdateStatusBar()
 		ImproveAny:InitIAPingFrame()
+		ImproveAny:InitIACoordsFrame()
 
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then

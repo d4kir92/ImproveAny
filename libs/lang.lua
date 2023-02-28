@@ -11,9 +11,11 @@ function ImproveAny:GT( str )
 	local result = tab[str]
 	if result ~= nil then
 		return result
-	else
+	elseif str then
 		ImproveAny:MSG( format( "Missing Translation: %s", str ) )
 		return str
+	else
+		print( "MISSING STR", str )
 	end
 end
 

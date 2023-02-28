@@ -52,4 +52,78 @@ function ImproveAny:InitWorldMapFrame()
 			end )
 		end
 	end
+
+	function ImproveAny:GetBestPosXY( unit )
+		local mapID = C_Map.GetBestMapForUnit( unit )
+		if mapID and unit then
+			local mapPos = C_Map.GetPlayerMapPosition( mapID, unit )
+			if mapPos then
+				return mapPos:GetXY()
+			end
+		end
+		return 0, 0
+	end
+
+	if WorldMapFrame and WorldMapFrame.ScrollContainer then
+		local fontsize = 6
+		local fontdist = 10
+		if ImproveAny:GetWoWBuild() == "RETAIL" then
+			fontsize = 30
+			fontdist = 70
+		end
+
+		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame( "FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child )
+		WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( 200, 60 )
+		WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
+		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameLevel( 1000 )
+		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameStrata( "FULLSCREEN_DIALOG" )
+
+		WorldMapFrame.ScrollContainer.Child.plycoords.f = WorldMapFrame.ScrollContainer.Child.plycoords:CreateFontString( "plycoords.f", "OVERLAY", "GameFontNormal" )
+		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText( "TEST" )
+		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
+		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetPoint( "CENTER" )
+		WorldMapFrame.ScrollContainer.Child.plycoords:HookScript( "OnUpdate", function()
+			local x, y = ImproveAny:GetBestPosXY( "PLAYER" )
+			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
+			if x and y then
+				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
+				WorldMapFrame.ScrollContainer.Child.plycoords:ClearAllPoints()
+				WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist )
+				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize, "")
+				
+				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText( format( "%0.1f, %0.1f", x * 100, y * 100 ) )
+				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
+				local fh = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringHeight()
+				WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( fw, fh )
+			end
+		end )
+
+
+
+		WorldMapFrame.ScrollContainer.Child.curcoords = CreateFrame( "FRAME", "curcoords", WorldMapFrame.ScrollContainer.Child )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetSize( 200, 60 )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameLevel( 1000 )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameStrata( "FULLSCREEN_DIALOG" )
+		
+		WorldMapFrame.ScrollContainer.Child.curcoords.f = WorldMapFrame.ScrollContainer.Child.curcoords:CreateFontString( "curcoords.f", "OVERLAY", "GameFontNormal" )
+		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText( "TEST" )
+		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
+		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetPoint( "CENTER" )
+		WorldMapFrame.ScrollContainer.Child.curcoords:HookScript( "OnUpdate", function()
+			local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
+			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
+			if x and y then
+				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
+				WorldMapFrame.ScrollContainer.Child.curcoords:ClearAllPoints()
+				WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist )
+				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize, "")
+				
+				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText( format( "%0.1f, %0.1f", x * 100, y * 100 ) )
+				local fw = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringWidth()
+				local fh = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringHeight()
+				WorldMapFrame.ScrollContainer.Child.curcoords:SetSize( fw, fh )
+			end
+		end )
+	end
 end

@@ -98,6 +98,9 @@ function ImproveAny:Lang_deDE()
 		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Extra-Aktionknopf Kunst ausblenden",
 
 		["IAPingFrame"] = "Ping Leiste",
+
+		["COORDS"] = "Koordinaten",
+		["IACoordsFrame"] = "Koordinatenfenster",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )

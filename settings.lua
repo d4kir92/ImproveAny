@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.19" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.20" )
 }
 
 
@@ -435,6 +435,8 @@ function ImproveAny:InitIASettings()
 		
 		AddCategory( "QUICKGAMEPLAY" )
 		AddCheckBox( 4, "FASTLOOTING", true )
+		AddCheckBox( 4, "COORDS", true )
+		AddCheckBox( 4, "IACoordsFrame", true )
 
 		AddCategory( "COMBAT" )
 		AddCheckBox( 4, "COMBATTEXTICONS", true )

@@ -105,6 +105,9 @@ function ImproveAny:Lang_enUS()
 		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Hide Extra Action Button Artwork",
 
 		["IAPingFrame"] = "Ping Bar",
+
+		["COORDS"] = "Coords",
+		["IACoordsFrame"] = "Coords Frame",
 	}
 
 	ImproveAny:UpdateLanguageTab( tab )
