@@ -2,7 +2,7 @@
 local AddOnName, ImproveAny = ...
 
 local config = {
-	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.20" )
+	["title"] = format( "ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.21" )
 }
 
 
@@ -440,7 +440,9 @@ function ImproveAny:InitIASettings()
 
 		AddCategory( "COMBAT" )
 		AddCheckBox( 4, "COMBATTEXTICONS", true )
-
+		AddSlider( 4, "COMBATTEXTX", 0, nil, -600, 600, 10 )
+		AddSlider( 4, "COMBATTEXTY", 0, nil, -250, 250, 10 )
+		
 		AddCategory( "CHAT" )
 		AddCheckBox( 4, "CHAT", true )
 		AddCheckBox( 24, "SHORTCHANNELS", true )

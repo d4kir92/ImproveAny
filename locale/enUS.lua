@@ -31,6 +31,8 @@ function ImproveAny:Lang_enUS()
 
 		["COMBAT"] = "Combat",
 		["COMBATTEXTICONS"] = "CombatText Icons",
+		["COMBATTEXTX"] = "CombatText Position X",
+		["COMBATTEXTY"] = "CombatText Position Y",
 
 		["CHAT"] = "Chat",
 		["SHORTCHANNELS"] = "Short Chat Channels",

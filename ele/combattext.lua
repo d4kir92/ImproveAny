@@ -22,9 +22,39 @@ elseif MAX_TALENT_TIERS and NUM_TALENT_COLUMNS then
 	end
 end
 
+local osx = 0
+local osy = 0
+local oex = 0
+local oey = 0
+local setup = true
+function ImproveAny:UpdateCombatTextPos()
+	if COMBAT_TEXT_LOCATIONS then
+		if setup then
+			setup = false
+			osx = COMBAT_TEXT_LOCATIONS.startX
+			osy = COMBAT_TEXT_LOCATIONS.startY
+			oex = COMBAT_TEXT_LOCATIONS.endX
+			oey = COMBAT_TEXT_LOCATIONS.endY
+		end
+	
+		local x = ImproveAny:GV( "COMBATTEXTX", 0 )
+		local y = ImproveAny:GV( "COMBATTEXTY", 0 )
+		if x ~= 0 or y ~= 0 then
+			COMBAT_TEXT_LOCATIONS = {
+				startX = x,
+				startY = y + 384,
+				endX = x,
+				endY = y + 609
+			};
+		end
+	end
+end
+
 local cle = CreateFrame( "Frame" )
 cle:RegisterEvent( "COMBAT_LOG_EVENT_UNFILTERED" )
 cle:SetScript( "OnEvent", function( eventName)
+	ImproveAny:UpdateCombatTextPos()
+
 	cle.tabhot = cle.tabhot or {}
 	cle.tabdot = cle.tabdot or {}
 	
@@ -111,6 +141,8 @@ function ImproveAny:InitCombatText()
 			end )
 		end
 	end
+
+	ImproveAny:UpdateCombatTextPos()
 
 	C_Timer.After( 0.1, ImproveAny.InitCombatText )
 end

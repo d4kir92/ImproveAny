@@ -24,6 +24,8 @@ function ImproveAny:Lang_deDE()
 
 		["COMBAT"] = "Kampf",
 		["COMBATTEXTICONS"] = "Kampftext Symbole",
+		["COMBATTEXTX"] = "Kampftext Position X",
+		["COMBATTEXTY"] = "Kampftext Position Y",
 
 		["CHAT"] = "Chat",
 		["SHORTCHANNELS"] = "Kurze Chat-Kanäle",
