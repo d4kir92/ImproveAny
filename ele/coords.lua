@@ -14,8 +14,10 @@ function ImproveAny:InitIACoordsFrame()
 		IACoordsFrame.coords:SetFont( STANDARD_TEXT_FONT, 14, "THINOUTLINE" )
 
 		function IAFPSThink()
-			local x, y = ImproveAny:GetBestPosXY( "PLAYER" )
-			IACoordsFrame.coords:SetText( format( "|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100 ) )
+			if ImproveAny.GetBestPosXY then
+				local x, y = ImproveAny:GetBestPosXY( "PLAYER" )
+				IACoordsFrame.coords:SetText( format( "|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100 ) )
+			end
 			C_Timer.After( config_update, IAFPSThink )
 		end
 		IAFPSThink()

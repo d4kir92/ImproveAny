@@ -1,6 +1,23 @@
 
 local AddOnName, ImproveAny = ...
 
+function ImproveAny:GetBestPosXY( unit )
+	local mapID = nil
+	if WorldMapFrame.mapID then
+		mapID = WorldMapFrame.mapID
+	elseif C_Map then
+		mapID = C_Map.GetBestMapForUnit( unit )
+	end
+	
+	if mapID and unit then
+		local mapPos = C_Map.GetPlayerMapPosition( mapID, unit )
+		if mapPos then
+			return mapPos:GetXY()
+		end
+	end
+	return 0, 0
+end
+
 function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then	
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function( f )
@@ -51,17 +68,6 @@ function ImproveAny:InitWorldMapFrame()
 				end
 			end )
 		end
-	end
-
-	function ImproveAny:GetBestPosXY( unit )
-		local mapID = WorldMapFrame.mapID or C_Map.GetBestMapForUnit( unit )
-		if mapID and unit then
-			local mapPos = C_Map.GetPlayerMapPosition( mapID, unit )
-			if mapPos then
-				return mapPos:GetXY()
-			end
-		end
-		return 0, 0
 	end
 
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDS", true ) then
