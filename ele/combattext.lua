@@ -40,12 +40,10 @@ function ImproveAny:UpdateCombatTextPos()
 		local x = ImproveAny:GV( "COMBATTEXTX", 0 )
 		local y = ImproveAny:GV( "COMBATTEXTY", 0 )
 		if x ~= 0 or y ~= 0 then
-			COMBAT_TEXT_LOCATIONS = {
-				startX = x,
-				startY = y + 384,
-				endX = x,
-				endY = y + 609
-			};
+			COMBAT_TEXT_LOCATIONS.startX = x
+			COMBAT_TEXT_LOCATIONS.startY = y + 384
+			COMBAT_TEXT_LOCATIONS.endX = x
+			COMBAT_TEXT_LOCATIONS.endY = y + 609
 		end
 	end
 end
