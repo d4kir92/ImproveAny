@@ -54,7 +54,7 @@ function ImproveAny:InitWorldMapFrame()
 	end
 
 	function ImproveAny:GetBestPosXY( unit )
-		local mapID = C_Map.GetBestMapForUnit( unit )
+		local mapID = WorldMapFrame.mapID or C_Map.GetBestMapForUnit( unit )
 		if mapID and unit then
 			local mapPos = C_Map.GetPlayerMapPosition( mapID, unit )
 			if mapPos then
@@ -64,13 +64,9 @@ function ImproveAny:InitWorldMapFrame()
 		return 0, 0
 	end
 
-	if WorldMapFrame and WorldMapFrame.ScrollContainer then
-		local fontsize = 6
-		local fontdist = 10
-		if ImproveAny:GetWoWBuild() == "RETAIL" then
-			fontsize = 30
-			fontdist = 70
-		end
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDS", true ) then
+		local fontsize = 8
+		local fontdist = 20
 
 		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame( "FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( 200, 60 )
@@ -86,10 +82,16 @@ function ImproveAny:InitWorldMapFrame()
 			local x, y = ImproveAny:GetBestPosXY( "PLAYER" )
 			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
 			if x and y then
+				local mf = w / 1200
+
 				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
 				WorldMapFrame.ScrollContainer.Child.plycoords:ClearAllPoints()
-				WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist )
-				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize, "")
+				if y < 0.92 then
+					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf )
+				else
+					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist * mf )
+				end
+				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 				
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText( format( "%0.1f, %0.1f", x * 100, y * 100 ) )
 				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
@@ -102,6 +104,7 @@ function ImproveAny:InitWorldMapFrame()
 
 		WorldMapFrame.ScrollContainer.Child.curcoords = CreateFrame( "FRAME", "curcoords", WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetSize( 200, 60 )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetParent( WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameLevel( 1000 )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameStrata( "FULLSCREEN_DIALOG" )
@@ -114,10 +117,16 @@ function ImproveAny:InitWorldMapFrame()
 			local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
 			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
 			if x and y then
+				local mf = w / 1200
+
 				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
 				WorldMapFrame.ScrollContainer.Child.curcoords:ClearAllPoints()
-				WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist )
-				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize, "")
+				if y < 0.92 then
+					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf )
+				else
+					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist * mf )
+				end
+				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 				
 				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText( format( "%0.1f, %0.1f", x * 100, y * 100 ) )
 				local fw = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringWidth()
