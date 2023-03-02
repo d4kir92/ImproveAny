@@ -16,7 +16,11 @@ function ImproveAny:InitIACoordsFrame()
 		function IAFPSThink()
 			if ImproveAny.GetBestPosXY then
 				local x, y = ImproveAny:GetBestPosXY( "PLAYER" )
-				IACoordsFrame.coords:SetText( format( "|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100 ) )
+				if x and y then
+					IACoordsFrame.coords:SetText( format( "|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100 ) )
+				else
+					IACoordsFrame.coords:SetText( "" )
+				end
 			end
 			C_Timer.After( config_update, IAFPSThink )
 		end
