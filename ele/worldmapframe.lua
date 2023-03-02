@@ -18,7 +18,14 @@ function ImproveAny:GetBestPosXY( unit )
 	return 0, 0
 end
 
+local fontsize = 8
+function ImproveAny:UpdateCoordsFontSize()
+	fontsize = ImproveAny:GV( "COORDSFONTSIZE", 8 )
+end
+
 function ImproveAny:InitWorldMapFrame()
+	fontsize = ImproveAny:GV( "COORDSFONTSIZE", 8 )
+
 	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then	
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function( f )
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition( f )
@@ -71,7 +78,6 @@ function ImproveAny:InitWorldMapFrame()
 	end
 
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDS", true ) then
-		local fontsize = 8
 		local fontdist = 24
 
 		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame( "FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child )

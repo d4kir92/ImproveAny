@@ -102,6 +102,7 @@ function ImproveAny:Lang_deDE()
 		["IAPingFrame"] = "Ping Leiste",
 
 		["COORDS"] = "Koordinaten",
+		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
 		["IACoordsFrame"] = "Koordinatenfenster",
 	}
 

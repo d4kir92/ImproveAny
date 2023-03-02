@@ -109,6 +109,7 @@ function ImproveAny:Lang_enUS()
 		["IAPingFrame"] = "Ping Bar",
 
 		["COORDS"] = "Coords",
+		["COORDSFONTSIZE"] = "Coords Fontsize",
 		["IACoordsFrame"] = "Coords Frame",
 	}
 
