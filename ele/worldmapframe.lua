@@ -15,7 +15,7 @@ function ImproveAny:GetBestPosXY( unit )
 			return mapPos:GetXY()
 		end
 	end
-	return 0, 0
+	return nil, nil
 end
 
 local fontsize = 8
@@ -109,6 +109,8 @@ function ImproveAny:InitWorldMapFrame()
 				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
 				local fh = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringHeight()
 				WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( fw, fh )
+			else
+				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText( "" )
 			end
 		end )
 
