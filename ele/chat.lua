@@ -331,7 +331,11 @@ function ImproveAny:InitChat()
 								
 								local level = IAGetLevel( name, realm )
 								if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
-									msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
+									if strfind( msg, name .. "|r%]" ) then
+										msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
+									else
+										msg = string.gsub( msg, name .. "%]", level .. ":" .. name .. "%]", 1 )
+									end
 								end
 							end
 						end
