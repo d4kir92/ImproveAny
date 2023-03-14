@@ -181,6 +181,8 @@ function ImproveAny:InitChat()
 				else
 					realm = GetRealmName()
 				end
+				realm = string.gsub( realm, "-", "", 1 )
+				realm = string.gsub( realm, " ", "", 1 )
 			end
 			return name, realm
 		end
@@ -251,7 +253,7 @@ function ImproveAny:InitChat()
 		function IAGuildScan()
 			if IsInGuild() then
 				C_GuildInfo.GuildRoster()
-
+				
 				for i = 1, GetNumGuildMembers( true ) do
 					local Name, _, _, Level = GetGuildRosterInfo(i)
 					local name, realm = Name:match("([^%-]+)%-?(.*)")
@@ -278,7 +280,7 @@ function ImproveAny:InitChat()
 			if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
 				C_Timer.After( delay, IAGuildScan )
 			elseif event == "PLAYER_LEVEL_UP" then
-				levelTab[UnitName( "player" ) .. "-" .. GetRealmName()] = UnitLevel( "player" )
+				IASetLevel( UnitName( "player" ), GetRealmName(), UnitLevel( "player" ) )
 			elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
 				C_Timer.After( delay, IAWhoScan )
 			elseif event == "FRIENDLIST_UPDATE" then
@@ -328,14 +330,14 @@ function ImproveAny:InitChat()
 								if GetClassColor then
 									r, g, b, hex = GetClassColor( engClass )
 								end
-								
-								local level = IAGetLevel( name, realm )
-								if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
-									if strfind( msg, name .. "|r%]" ) then
-										msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
-									else
-										msg = string.gsub( msg, name .. "%]", level .. ":" .. name .. "%]", 1 )
-									end
+							end
+
+							local level = IAGetLevel( name, realm )
+							if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
+								if strfind( msg, name .. "|r%]" ) then
+									msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
+								else
+									msg = string.gsub( msg, name .. "%]", level .. ":" .. name .. "%]", 1 )
 								end
 							end
 						end
