@@ -108,7 +108,8 @@ function ImproveAny:Lang_enUS()
 
 		["IAPingFrame"] = "Ping Bar",
 
-		["COORDS"] = "Coords",
+		["COORDSP"] = "Coords (Player) (WorldMap)",
+		["COORDSC"] = "Coords (Cursor) (WorldMap)",
 		["COORDSFONTSIZE"] = "Coords Fontsize",
 		["IACoordsFrame"] = "Coords Frame",
 	}

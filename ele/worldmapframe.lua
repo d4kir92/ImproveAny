@@ -77,9 +77,8 @@ function ImproveAny:InitWorldMapFrame()
 		end
 	end
 
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDS", true ) then
-		local fontdist = 24
-
+	local fontdist = 24
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDSP", true ) then
 		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame( "FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( 200, 60 )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
@@ -119,9 +118,9 @@ function ImproveAny:InitWorldMapFrame()
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText( "" )
 			end
 		end )
+	end
 
-
-
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled( "COORDSC", true ) then
 		WorldMapFrame.ScrollContainer.Child.curcoords = CreateFrame( "FRAME", "curcoords", WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetSize( 200, 60 )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetParent( WorldMapFrame.ScrollContainer.Child )

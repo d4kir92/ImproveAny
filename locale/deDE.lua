@@ -101,7 +101,8 @@ function ImproveAny:Lang_deDE()
 
 		["IAPingFrame"] = "Ping Leiste",
 
-		["COORDS"] = "Koordinaten",
+		["COORDSP"] = "Koordinaten (Spieler) (Weltkarte)",
+		["COORDSC"] = "Koordinaten (Zeiger) (Weltkarte)",
 		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
 		["IACoordsFrame"] = "Koordinatenfenster",
 	}
