@@ -83,7 +83,7 @@ function ImproveAny:InitWorldMapFrame()
 		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame( "FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetSize( 200, 60 )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
-		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameLevel( 1000 )
+		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameLevel( 9999 )
 		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameStrata( "FULLSCREEN_DIALOG" )
 
 		WorldMapFrame.ScrollContainer.Child.plycoords.f = WorldMapFrame.ScrollContainer.Child.plycoords:CreateFontString( "plycoords.f", "OVERLAY", "GameFontNormal" )
@@ -98,10 +98,16 @@ function ImproveAny:InitWorldMapFrame()
 
 				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
 				WorldMapFrame.ScrollContainer.Child.plycoords:ClearAllPoints()
+				local xOffset = 0
+				if x > 0.97 then
+					xOffset = - 40
+				elseif x < 0.03 then
+					xOffset = 40
+				end
 				if y < 0.9 then
-					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf )
+					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y - zoom * fontdist * mf )
 				else
-					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist * mf )
+					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y + zoom * fontdist * mf )
 				end
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 				
@@ -120,7 +126,7 @@ function ImproveAny:InitWorldMapFrame()
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetSize( 200, 60 )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetParent( WorldMapFrame.ScrollContainer.Child )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0 )
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameLevel( 1000 )
+		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameLevel( 9999 )
 		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameStrata( "FULLSCREEN_DIALOG" )
 		
 		WorldMapFrame.ScrollContainer.Child.curcoords.f = WorldMapFrame.ScrollContainer.Child.curcoords:CreateFontString( "curcoords.f", "OVERLAY", "GameFontNormal" )
@@ -135,10 +141,16 @@ function ImproveAny:InitWorldMapFrame()
 
 				local zoom = (2 - WorldMapFrame:GetCanvasZoomPercent())
 				WorldMapFrame.ScrollContainer.Child.curcoords:ClearAllPoints()
+				local xOffset = 0
+				if x > 0.97 then
+					xOffset = - 40
+				elseif x < 0.03 then
+					xOffset = 40
+				end
 				if y < 0.9 then
-					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf )
+					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y - zoom * fontdist * mf )
 				else
-					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y + zoom * fontdist * mf )
+					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint( "TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y + zoom * fontdist * mf )
 				end
 				WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 				
