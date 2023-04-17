@@ -1,36 +1,14 @@
+local _, ImproveAny = ...
 
-local AddOnName, ImproveAny = ...
+local IACHARSLOTS = {CharacterHeadSlot, CharacterNeckSlot, CharacterShoulderSlot, CharacterBackSlot, CharacterChestSlot, CharacterWristSlot, CharacterHandsSlot, CharacterWaistSlot, CharacterLegsSlot, CharacterFeetSlot, CharacterFinger0Slot, CharacterFinger1Slot, CharacterTrinket0Slot, CharacterTrinket1Slot, CharacterMainHandSlot, CharacterSecondaryHandSlot, CharacterRangedSlot}
 
-local IACHARSLOTS = {
-	CharacterHeadSlot,
-	CharacterNeckSlot,
-	CharacterShoulderSlot,
-	CharacterBackSlot,
-	CharacterChestSlot,
-	CharacterWristSlot,
-
-	CharacterHandsSlot,
-	CharacterWaistSlot,
-	CharacterLegsSlot,
-	CharacterFeetSlot,
-	CharacterFinger0Slot,
-	CharacterFinger1Slot,
-	CharacterTrinket0Slot,
-	CharacterTrinket1Slot,
-
-	CharacterMainHandSlot,
-	CharacterSecondaryHandSlot,
-
-	CharacterRangedSlot -- Classic
-}
-
+-- Classic
 function ImproveAny:InitDurabilityFrame()
-	C_Timer.After( 1, function()		
+	C_Timer.After(1, function()
 		DurabilityFrame.textperc = DurabilityFrame:CreateFontString(nil)
 		DurabilityFrame.textperc:SetFont(STANDARD_TEXT_FONT, 10, "")
 		DurabilityFrame.textperc:SetPoint("TOP", DurabilityFrame, "TOP", 0, 10)
 		DurabilityFrame.textperc:SetText("101%")
-
 		DurabilityFrame.textrepaircosts = DurabilityFrame:CreateFontString(nil)
 		DurabilityFrame.textrepaircosts:SetFont(STANDARD_TEXT_FONT, 10, "")
 		DurabilityFrame.textrepaircosts:SetPoint("TOP", DurabilityFrame, "TOP", 0, 22)
@@ -43,12 +21,15 @@ function ImproveAny:InitDurabilityFrame()
 
 			for i = 0, 20 do
 				local curr, maxi = GetInventoryItemDurability(i)
+
 				if curr ~= nil and maxi ~= nil then
 					ccur = ccur + curr
 					cmax = cmax + maxi
 				end
 			end
+
 			local perc = 0
+
 			if cmax > 0 then
 				perc = ImproveAny:MathR(ccur / cmax * 100, 1)
 
@@ -65,7 +46,7 @@ function ImproveAny:InitDurabilityFrame()
 				end
 			end
 
-			if perc <= ImproveAny:GV( "SHOWDURABILITYUNDER", 100 ) then
+			if perc <= ImproveAny:GV("SHOWDURABILITYUNDER", 100) then
 				DurabilityFrame:Show()
 			else
 				DurabilityFrame:Hide()
@@ -73,13 +54,15 @@ function ImproveAny:InitDurabilityFrame()
 
 			if DurabilityFrame.textrepaircosts then
 				local costs = 0
+
 				for i, v in pairs(IACHARSLOTS) do
 					local id = v:GetID()
 
 					if v.tt == nil then
-						v.tt = CreateFrame( "GameTooltip", "TEST" .. i, DurabilityFrame )
+						v.tt = CreateFrame("GameTooltip", "TEST" .. i, DurabilityFrame)
 						v.tt:ClearLines()
 					end
+
 					if v.tt and v.tt.SetInventoryItem then
 						local cost = select(3, v.tt:SetInventoryItem("player", id))
 						costs = costs + cost
@@ -95,34 +78,41 @@ function ImproveAny:InitDurabilityFrame()
 				DurabilityFrame.textrepaircosts:SetText("")
 			end
 
-			C_Timer.After( 1.0, DurabilityFrame.Think )
+			C_Timer.After(1.0, DurabilityFrame.Think)
 		end
+
 		DurabilityFrame.Think()
 
 		if DurabilityFrame.SetAlerts ~= nil then
-			hooksecurefunc( DurabilityFrame, "SetAlerts", function()
+			hooksecurefunc(DurabilityFrame, "SetAlerts", function()
 				DurabilityFrame:Show()
-				for index, value in ipairs( INVENTORY_ALERT_STATUS_SLOTS ) do
-					if ( not value.showSeparate ) or value.slot == "Weapon" then
+
+				for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
+					if (not value.showSeparate) or value.slot == "Weapon" then
 						getglobal("Durability" .. value.slot):Show()
 					end
 				end
-			end )
+			end)
+
 			DurabilityFrame:SetAlerts()
 		elseif DurabilityFrame_SetAlerts ~= nil then
 			local oldalerts = DurabilityFrame_SetAlerts
+
 			function DurabilityFrame_SetAlerts()
 				if oldalerts ~= nil then
 					oldalerts()
 				end
+
 				DurabilityFrame:Show()
-				for index, value in ipairs( INVENTORY_ALERT_STATUS_SLOTS ) do
-					if ( not value.showSeparate ) or value.slot == "Weapon" then
+
+				for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
+					if (not value.showSeparate) or value.slot == "Weapon" then
 						getglobal("Durability" .. value.slot):Show()
 					end
 				end
 			end
+
 			DurabilityFrame_SetAlerts()
 		end
-	end )
+	end)
 end

@@ -1,58 +1,58 @@
-
-local AddOnName, ImproveAny = ...
+local _, ImproveAny = ...
 
 function ImproveAny:InitChat()
 	local chatTypes = {}
-	for i, v in pairs( _G ) do
-		if string.find( i, "CHAT_MSG_" ) and not tContains( chatTypes, i ) then
-			tinsert( chatTypes, i )
-		end
-	end
-	for typ in next, getmetatable( ChatTypeInfo ).__index do
-		if not tContains( chatTypes, "CHAT_MSG_" .. typ ) then
-			tinsert( chatTypes, "CHAT_MSG_" .. typ )
+
+	for i, v in pairs(_G) do
+		if string.find(i, "CHAT_MSG_") and not tContains(chatTypes, i) then
+			tinsert(chatTypes, i)
 		end
 	end
 
-	if ImproveAny:IsEnabled( "CHAT", true ) then
-		function IAChatOnlyBig( str, imax )
-			if str == nil then
-				return nil
-			end
+	for typ in next, getmetatable(ChatTypeInfo).__index do
+		if not tContains(chatTypes, "CHAT_MSG_" .. typ) then
+			tinsert(chatTypes, "CHAT_MSG_" .. typ)
+		end
+	end
 
+	if ImproveAny:IsEnabled("CHAT", true) then
+		function IAChatOnlyBig(str, imax)
+			if str == nil then return nil end
 			local smax = imax or 3
-			
-			local res = string.gsub(str, "[^%u-]", "" )
+			local res = string.gsub(str, "[^%u-]", "")
 
-			if #res > smax then -- shorten
-				res = string.sub( res, 1, smax )
+			-- shorten
+			if #res > smax then
+				res = string.sub(res, 1, smax)
 			end
-			if #str <= smax then -- 1-3 => upper
-				res = string.upper( res )
+
+			-- 1-3 => upper
+			if #str <= smax then
+				res = string.upper(res)
 			end
-			
-			if #res <= 0 then -- no upper?
+
+			-- no upper?
+			if #res <= 0 then
 				if #str <= smax then
-					res = string.upper( str )
+					res = string.upper(str)
 				else
-					res = string.gsub(str, "[^%l-]", "" )
-					res = string.sub( res, 1, smax )
-					res = string.upper( res )
+					res = string.gsub(str, "[^%l-]", "")
+					res = string.sub(res, 1, smax)
+					res = string.upper(res)
 				end
 			end
 
-			if string.find( res, "-", string.len( res ), true ) then
-				res = string.gsub(str, "[^%u]", "" )
+			if string.find(res, "-", string.len(res), true) then
+				res = string.gsub(str, "[^%u]", "")
 			end
 
 			return res
 		end
 
 		local races = {}
-
 		local classes = {}
 
-		C_Timer.After( 0.01, function()
+		C_Timer.After(0.01, function()
 			if ImproveAny:GetWoWBuild() == "CLASSIC" then
 				races["Troll2"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races:0:0:0:0:256:256:128:192:64:128|t"
 				races["NightElf3"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Races:0:0:0:0:256:256:192:256:128:192|t"
@@ -141,82 +141,91 @@ function ImproveAny:InitChat()
 				races["Dracthyr2"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:1040:1105:654:719|t"
 				races["Dracthyr3"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:1040:1105:588:653|t"
 			end
-			
-			classes["WARRIOR"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:0:64|t" 
-			classes["MAGE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:0:64|t" 
-			classes["ROGUE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:0:64|t" 
-			classes["DRUID"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:0:64|t" 
-			classes["HUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:64:128|t" 
-			classes["SHAMAN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:64:128|t" 
-			classes["PRIEST"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:64:128|t" 
-			classes["WARLOCK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:64:128|t" 
-			classes["PALADIN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:128:192|t" 
-			classes["DEATHKNIGHT"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:128:192|t" 
-			classes["MONK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:128:192|t" 
-			classes["DEMONHUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:128:192|t" 
+
+			classes["WARRIOR"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:0:64|t"
+			classes["MAGE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:0:64|t"
+			classes["ROGUE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:0:64|t"
+			classes["DRUID"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:0:64|t"
+			classes["HUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:64:128|t"
+			classes["SHAMAN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:64:128|t"
+			classes["PRIEST"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:64:128|t"
+			classes["WARLOCK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:64:128|t"
+			classes["PALADIN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:128:192|t"
+			classes["DEATHKNIGHT"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:128:192|t"
+			classes["MONK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:128:192|t"
+			classes["DEMONHUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:128:192|t"
 			classes["EVOKER"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:0:129:0:129|t"
 		end)
 
-		function ImproveAny:GetClassIcon( class )
-			return classes[class] 
+		function ImproveAny:GetClassIcon(class)
+			return classes[class]
 		end
 
 		local PLYCache = {}
-		local function IAGetGUID( name )
+
+		local function IAGetGUID(name)
 			return PLYCache[name]
 		end
 
-		function IAResetMsg( msg )
+		function IAResetMsg(msg)
 			msg = string.gsub(msg, "(|Z)", "|X", 1)
 			msg = string.gsub(msg, "(|z)", "|x", 1)
+
 			return msg
 		end
 
-		function IAFixName( name, realm )
+		function IAFixName(name, realm)
 			if name and realm == nil or realm == "" then
-				local s1 = string.find( name, "-", 0, true )
+				local s1 = string.find(name, "-", 0, true)
+
 				if name and s1 then
-					realm = string.sub( name, s1+1 )
-					name = string.sub( name, 1, s1-1 )
+					realm = string.sub(name, s1 + 1)
+					name = string.sub(name, 1, s1 - 1)
 				else
 					realm = GetRealmName()
 				end
-				realm = string.gsub( realm, "-", "", 1 )
-				realm = string.gsub( realm, " ", "", 1 )
+
+				realm = string.gsub(realm, "-", "", 1)
+				realm = string.gsub(realm, " ", "", 1)
 			end
+
 			return name, realm
 		end
 
 		local levelTab = {}
-		function IAGetLevel( name, realm )
-			name, realm = IAFixName( name, realm )
+
+		function IAGetLevel(name, realm)
+			name, realm = IAFixName(name, realm)
+
 			return levelTab[name .. "-" .. realm]
 		end
 
-		function IASetLevel( name, realm, level, from )
-			name, realm = IAFixName( name, realm )
+		function IASetLevel(name, realm, level, from)
+			name, realm = IAFixName(name, realm)
+
 			if name and realm then
 				levelTab[name .. "-" .. realm] = level
 			end
 		end
-		IASetLevel( UnitName( "player" ), nil, UnitLevel( "player" ) )
+
+		IASetLevel(UnitName("player"), nil, UnitLevel("player"))
 
 		function IAWhoScan()
-			local Name, Class, Level, Server, _
 			for i = 1, C_FriendList.GetNumWhoResults() do
-				local info = C_FriendList.GetWhoInfo( i )
+				local info = C_FriendList.GetWhoInfo(i)
+
 				if info and info.fullName and info.level then
-					IASetLevel( info.fullName, nil, info.level, "IAWhoScan" )
+					IASetLevel(info.fullName, nil, info.level, "IAWhoScan")
 				end
 			end
 		end
 
 		function IAFriendScan()
-			local Name, Class, Level
 			for i = 1, C_FriendList.GetNumFriends() do
-				local info = C_FriendList.GetFriendInfo( i )
+				local info = C_FriendList.GetFriendInfo(i)
+
 				if info and info.fullName and info.level then
-					IASetLevel( info.fullName, nil, info.level, "IAFriendScan" )
+					IASetLevel(info.fullName, nil, info.level, "IAFriendScan")
 				end
 			end
 		end
@@ -224,28 +233,33 @@ function ImproveAny:InitChat()
 		function IAPartyScan()
 			local max = GetNumSubgroupMembers or GetNumPartyMembers
 			local success = true
+
 			for i = 1, max() do
-				local name, realm = UnitName( "party" .. i )
+				local name, realm = UnitName("party" .. i)
+
 				if name then
-					if UnitLevel( "party" .. i ) == 0 then
+					if UnitLevel("party" .. i) == 0 then
 						success = false
 					else
-						IASetLevel( name, realm, UnitLevel( "party" .. i ), "IAPartyScan" )
+						IASetLevel(name, realm, UnitLevel("party" .. i), "IAPartyScan")
 					end
 				end
 			end
+
 			if not success then
-				C_Timer.After( 0.1, IAPartyScan )
+				C_Timer.After(0.1, IAPartyScan)
 			end
 		end
 
 		function IARaidScan()
 			local max = GetNumGroupMembers or GetNumRaidMembers
+
 			for i = 1, max() do
-				local _, _, _, Level = GetRaidRosterInfo( i )
-				Name, Server = UnitName( "raid" .. i )
+				local _, _, _, Level = GetRaidRosterInfo(i)
+				local Name, Server = UnitName("raid" .. i)
+
 				if Name then
-					IASetLevel( Name, Server, Level, "IARaidScan" )
+					IASetLevel(Name, Server, Level, "IARaidScan")
 				end
 			end
 		end
@@ -253,46 +267,48 @@ function ImproveAny:InitChat()
 		function IAGuildScan()
 			if IsInGuild() then
 				C_GuildInfo.GuildRoster()
-				
-				for i = 1, GetNumGuildMembers( true ) do
+
+				for i = 1, GetNumGuildMembers(true) do
 					local Name, _, _, Level = GetGuildRosterInfo(i)
 					local name, realm = Name:match("([^%-]+)%-?(.*)")
+
 					if name then
-						IASetLevel( name, realm, Level, "IAGuildScan" )
+						IASetLevel(name, realm, Level, "IAGuildScan")
 					end
 				end
 			end
 		end
 
 		local delay = 0.5
-		local lf = CreateFrame( "Frame", "IALevelFrame" )
-		lf:RegisterEvent( "GROUP_ROSTER_UPDATE" )
-		lf:RegisterEvent( "CHAT_MSG_RAID" )
-		lf:RegisterEvent( "CHAT_MSG_GUILD" )
-		lf:RegisterEvent( "CHAT_MSG_OFFICER" )
-		lf:RegisterEvent( "FRIENDLIST_UPDATE" )
-		lf:RegisterEvent( "GUILD_ROSTER_UPDATE" )
-		lf:RegisterEvent( "RAID_ROSTER_UPDATE" )
-		lf:RegisterEvent( "WHO_LIST_UPDATE" )
-		lf:RegisterEvent( "PLAYER_LEVEL_UP" )
-		lf:RegisterEvent( "CHAT_MSG_SYSTEM" )
-		lf:SetScript( "OnEvent", function( self, event, ... )
+		local lf = CreateFrame("Frame", "IALevelFrame")
+		lf:RegisterEvent("GROUP_ROSTER_UPDATE")
+		lf:RegisterEvent("CHAT_MSG_RAID")
+		lf:RegisterEvent("CHAT_MSG_GUILD")
+		lf:RegisterEvent("CHAT_MSG_OFFICER")
+		lf:RegisterEvent("FRIENDLIST_UPDATE")
+		lf:RegisterEvent("GUILD_ROSTER_UPDATE")
+		lf:RegisterEvent("RAID_ROSTER_UPDATE")
+		lf:RegisterEvent("WHO_LIST_UPDATE")
+		lf:RegisterEvent("PLAYER_LEVEL_UP")
+		lf:RegisterEvent("CHAT_MSG_SYSTEM")
+
+		lf:SetScript("OnEvent", function(sel, event, ...)
 			if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
-				C_Timer.After( delay, IAGuildScan )
+				C_Timer.After(delay, IAGuildScan)
 			elseif event == "PLAYER_LEVEL_UP" then
-				IASetLevel( UnitName( "player" ), GetRealmName(), UnitLevel( "player" ) )
+				IASetLevel(UnitName("player"), GetRealmName(), UnitLevel("player"))
 			elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
-				C_Timer.After( delay, IAWhoScan )
+				C_Timer.After(delay, IAWhoScan)
 			elseif event == "FRIENDLIST_UPDATE" then
-				C_Timer.After( delay, IAFriendScan )
+				C_Timer.After(delay, IAFriendScan)
 			elseif event == "RAID_ROSTER_UPDATE" or event == "CHAT_MSG_RAID" then
-				C_Timer.After( delay, IARaidScan )
+				C_Timer.After(delay, IARaidScan)
 			elseif event == "GROUP_ROSTER_UPDATE" then
-				C_Timer.After( delay, IAPartyScan )
+				C_Timer.After(delay, IAPartyScan)
 			else
-				ImproveAny:MSG( "Missing Event: " .. event )
+				ImproveAny:MSG("Missing Event: " .. event)
 			end
-		end )
+		end)
 
 		IAWhoScan()
 		IAFriendScan()
@@ -300,44 +316,47 @@ function ImproveAny:InitChat()
 		IARaidScan()
 		IAGuildScan()
 
-		local function IAChatAddPlayerIcons( msg, c )
+		local function IAChatAddPlayerIcons(msg, c)
 			local links = {}
-			for i = 1, string.len( msg ) do
-				local s1, e1, itemString = strfind( msg, "|H(.+)|h", i )
-				if not tContains( links, itemString ) then
-					table.insert( links, itemString )
+
+			for i = 1, string.len(msg) do
+				local _, _, itemString = strfind(msg, "|H(.+)|h", i)
+
+				if not tContains(links, itemString) then
+					table.insert(links, itemString)
 				end
 			end
 
-			for i, itemString in pairs( links ) do
+			for i, itemString in pairs(links) do
 				local newString = itemString
+
 				if newString then
-					local typ = select( 1, string.split( ":", newString ) )
-					local id = select( 2, string.split( ":", newString ) )
+					local typ = select(1, string.split(":", newString))
+					local id = select(2, string.split(":", newString))
+
 					if typ == "player" or typ == "playerCommunity" or typ == "playerGM" then
-						local guid = IAGetGUID( id )
+						local guid = IAGetGUID(id)
+
 						if guid then
-							local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID( guid )
-							if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon( engClass ) then
-								if ImproveAny:IsEnabled( "CLASSICONS", true ) then
-									msg = ImproveAny:GetClassIcon( engClass ) .. msg
-								end
-								if ImproveAny:IsEnabled( "RACEICONS", false ) then
-									msg = races[engRace .. gender] .. msg
+							local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID(guid)
+
+							if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon(engClass) then
+								if ImproveAny:IsEnabled("CLASSICONS", true) then
+									msg = ImproveAny:GetClassIcon(engClass) .. msg
 								end
 
-								local r, g, b, hex = 0, 0, 0, "FFFFFFFF"
-								if GetClassColor then
-									r, g, b, hex = GetClassColor( engClass )
+								if ImproveAny:IsEnabled("RACEICONS", false) then
+									msg = races[engRace .. gender] .. msg
 								end
 							end
 
-							local level = IAGetLevel( name, realm )
-							if ImproveAny:IsEnabled( "CHATLEVELS", true ) and level and level > 0 then
-								if strfind( msg, name .. "|r%]" ) then
-									msg = string.gsub( msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1 )
+							local level = IAGetLevel(name, realm)
+
+							if ImproveAny:IsEnabled("CHATLEVELS", true) and level and level > 0 then
+								if strfind(msg, name .. "|r%]") then
+									msg = string.gsub(msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1)
 								else
-									msg = string.gsub( msg, name .. "%]", level .. ":" .. name .. "%]", 1 )
+									msg = string.gsub(msg, name .. "%]", level .. ":" .. name .. "%]", 1)
 								end
 							end
 						end
@@ -348,36 +367,34 @@ function ImproveAny:InitChat()
 			return msg
 		end
 
-		local function IAChatAddItemIcons( msg, c )
-			if c >= 40 then
-				return msg
-			end
+		local function IAChatAddItemIcons(msg, c)
+			if c >= 40 then return msg end
 			msg = string.gsub(msg, "(|H)", "|Z", 1)
 			msg = string.gsub(msg, "(|h)", "|y", 1)
 			msg = string.gsub(msg, "(|h)", "|z", 1)
-
 			local itemString = select(3, strfind(msg, "|Z(.+)|z"))
 
 			if itemString then
-				local typ = select( 1, string.split( ":", itemString ) )
-				local id = select( 2, string.split( ":", itemString ) )
+				local typ = select(1, string.split(":", itemString))
+				local id = select(2, string.split(":", itemString))
 
 				if typ == "item" then
 					itemTexture = GetItemIcon(id)
+
 					if itemTexture then
-						if ImproveAny:IsEnabled( "ITEMICONS", true ) then
+						if ImproveAny:IsEnabled("ITEMICONS", true) then
 							msg = string.gsub(msg, "(|Z)", "|T" .. itemTexture .. ":0|t" .. "|X", 1)
 							msg = string.gsub(msg, "(|z)", "|x", 1)
 
-							return IAChatAddItemIcons( msg, c + 1 )
+							return IAChatAddItemIcons(msg, c + 1)
 						else
-							msg = IAResetMsg( msg )
+							msg = IAResetMsg(msg)
 						end
 					else
-						msg = IAResetMsg( msg )
+						msg = IAResetMsg(msg)
 					end
 				else
-					msg = IAResetMsg( msg )
+					msg = IAResetMsg(msg)
 				end
 			end
 
@@ -388,70 +405,78 @@ function ImproveAny:InitChat()
 			return msg
 		end
 
-
-		
 		local hooks = {}
-		local count = 0
-		local msg = nil
-		local function AddMessage( self, message, ... )
+
+		local function AddMessage(sel, message, ...)
 			local chanName = nil
-			local chanFormat = nil
-			local sear = message:gsub( '|', '' )
-			sear = sear:gsub( 'h%[', ':' )
-			sear = sear:gsub( '%]h', ':' )
-			local _, channel, _, channelName, chanIndex = string.split( ":", sear )
+			local sear = message:gsub('|', '')
+			sear = sear:gsub('h%[', ':')
+			sear = sear:gsub('%]h', ':')
+			local _, channel, _, channelName, chanIndex = string.split(":", sear)
+
 			if channel and channel == "channel" and channelName then
-				local s1 = channelName:find( '%[' )
+				local s1 = channelName:find('%[')
+
 				if s1 then
-					local s2 = channelName:find( '%]' )
+					local s2 = channelName:find('%]')
+
 					if s2 then
-						channelName = channelName:sub( s1 + 1, s2 - 1 )
+						channelName = channelName:sub(s1 + 1, s2 - 1)
 					end
 				end
+
 				chanName = channelName
 			end
 
 			if channel then
 				chanName = chanName or _G["CHAT_MSG_" .. channel]
+				local chanFormat = _G["CHAT_" .. channel .. "_GET"]
 
-				local chanFormat = _G["CHAT_" .. channel .. "_GET"] 
 				if chanFormat == nil and channelName then
 					chanFormat = _G["CHAT_" .. channelName .. "_GET"]
 				end
+
 				if chanFormat == nil and chanIndex then
 					chanFormat = _G["CHAT_" .. chanIndex .. "_GET"]
 				end
+
 				if chanFormat then
-					chanFormat = chanFormat:gsub( '%s', '' )
-					message = message:gsub( chanFormat, ':' )
+					chanFormat = chanFormat:gsub('%s', '')
+					message = message:gsub(chanFormat, ':')
 				end
-				
-				if ImproveAny:IsEnabled( "SHORTCHANNELS", true ) then
+
+				if ImproveAny:IsEnabled("SHORTCHANNELS", true) then
 					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
+
 					if leaderChannel == nil then
 						leaderChannel = _G[channel .. "_LEADER"]
 					end
 
 					if leaderChannel then
-						message = ImproveAny:ReplaceStr( message, leaderChannel, IAChatOnlyBig( leaderChannel ) )
+						message = ImproveAny:ReplaceStr(message, leaderChannel, IAChatOnlyBig(leaderChannel))
 					end
+
 					if chanName then
-						message = ImproveAny:ReplaceStr( message, chanName, IAChatOnlyBig( chanName ) )
+						message = ImproveAny:ReplaceStr(message, chanName, IAChatOnlyBig(chanName))
 					elseif channelName then
 						chanName = _G["CHAT_MSG_" .. channelName]
+
 						if chanName then
-							message = "[" .. IAChatOnlyBig( chanName, 1 ) .. "] " .. message
+							message = "[" .. IAChatOnlyBig(chanName, 1) .. "] " .. message
 						end
 					end
 				end
-				message = IAChatAddPlayerIcons( message, 1 )
+
+				message = IAChatAddPlayerIcons(message, 1)
 			end
-			return hooks[self](self, message, ...)
+
+			return hooks[sel](sel, message, ...)
 		end
 
 		for index = 1, NUM_CHAT_WINDOWS do
 			if index ~= 2 then
 				local frame = _G['ChatFrame' .. index]
+
 				if frame then
 					hooks[frame] = frame.AddMessage
 					frame.AddMessage = AddMessage
@@ -459,51 +484,51 @@ function ImproveAny:InitChat()
 			end
 		end
 
-
-
 		-- Item Icons
-		function IAIconsFilter( self, event, msg, author, ... )
-			local guid = select( 10, ... )
+		function IAIconsFilter(sel, event, msg, author, ...)
+			local guid = select(10, ...)
+
 			if author and guid then
 				PLYCache[author] = guid
 			end
-			return false, IAChatAddItemIcons( msg, 1 ), author, ...
+
+			return false, IAChatAddItemIcons(msg, 1), author, ...
 		end
 
-		for i, typ in pairs( chatTypes ) do
-			ChatFrame_AddMessageEventFilter( typ, IAIconsFilter )
+		for i, typ in pairs(chatTypes) do
+			ChatFrame_AddMessageEventFilter(typ, IAIconsFilter)
 		end
-
-
 
 		-- URLs / IPs / Emails
-		local patterns = {
-			"[htps:/]*%w+%.%w[%w%.%/%+%-%_%#%?%=]*"
-		}
+		local patterns = {"[htps:/]*%w+%.%w[%w%.%/%+%-%_%#%?%=]*"}
 
-		function ImproveAny:FormatURL( url )
-			url = "|cff".."3FC7EB".."|Hurl:"..url.."|h"..url.."|h|r"
+		function ImproveAny:FormatURL(url)
+			url = "|cff" .. "3FC7EB" .. "|Hurl:" .. url .. "|h" .. url .. "|h|r"
+
 			return url
 		end
 
-		function IAConvertMessage( self, event, msg, ... )
-			for i, p in pairs( patterns ) do
-				local s1 = string.find( msg, "|" )
-				local s2 = string.find( msg, p )
+		function IAConvertMessage(sel, event, msg, ...)
+			for i, p in pairs(patterns) do
+				local s1 = string.find(msg, "|")
+				local s2 = string.find(msg, p)
+
 				if s1 == nil and s2 ~= nil then
-					msg = string.gsub( msg, p, ImproveAny:FormatURL( "%1" ) )
+					msg = string.gsub(msg, p, ImproveAny:FormatURL("%1"))
 				end
 			end
 
-			if string.find( msg, "ginv", 0, true ) then
+			if string.find(msg, "ginv", 0, true) then
 				local name = select(1, ...)
+
 				if name then
-					msg = string.gsub( msg, "ginv", "|cff".."AAFFAA".."|Hginv:" .. name .. "|h" .. "ginv" .. "|h|r" )
+					msg = string.gsub(msg, "ginv", "|cff" .. "AAFFAA" .. "|Hginv:" .. name .. "|h" .. "ginv" .. "|h|r")
 				end
-			elseif string.find( msg, "inv", 0, true ) then
+			elseif string.find(msg, "inv", 0, true) then
 				local name = select(1, ...)
+
 				if name then
-					msg = string.gsub( msg, "inv", "|cff".."FFFF00".."|Hinv:" .. name .. "|h" .. "inv" .. "|h|r" )
+					msg = string.gsub(msg, "inv", "|cff" .. "FFFF00" .. "|Hinv:" .. name .. "|h" .. "inv" .. "|h|r")
 				end
 			end
 
@@ -513,72 +538,69 @@ function ImproveAny:InitChat()
 		StaticPopupDialogs["CLICK_LINK_URL"] = {
 			text = "LINK/EMAIL/IP",
 			button1 = "Close",
-			OnAccept = function()
-
-			end,
+			OnAccept = function() end,
 			timeout = 0,
 			whileDead = true,
 			hideOnEscape = true,
-			preferredIndex = 3, 
-			OnShow = 
-				function ( self, data )
-					self.editBox:SetText( data.url )
-					self.editBox:HighlightText()
-				end,
+			preferredIndex = 3,
+			OnShow = function(sel, data)
+				sel.editBox:SetText(data.url)
+				sel.editBox:HighlightText()
+			end,
 			hasEditBox = true
 		}
-		
-
 
 		-- SetHyperLink
-		function ImproveAny:SetHyperlink( link )
-			local poi = string.find( link, ":", 0, true )
-			local typ =  string.sub( link, 1, poi - 1 )
+		function ImproveAny:SetHyperlink(link)
+			local poi = string.find(link, ":", 0, true)
+			local typ = string.sub(link, 1, poi - 1)
+
 			if typ == "url" then
-				local url = string.sub( link, 5 )
+				local url = string.sub(link, 5)
 				local tab = {}
 				tab.url = url
-				StaticPopup_Show( "CLICK_LINK_URL", "", "", tab )
+				StaticPopup_Show("CLICK_LINK_URL", "", "", tab)
+
 				return true
 			elseif typ == "ginv" then
-				local name = string.sub( link, poi + 1 )
-				GuildInvite( name )
+				local name = string.sub(link, poi + 1)
+				GuildInvite(name)
+
 				return true
 			elseif typ == "inv" then
-				local name = string.sub( link, poi + 1 )
+				local name = string.sub(link, poi + 1)
+
 				if C_PartyInfo then
 					C_PartyInfo.InviteUnit(name)
 				else
-					InviteUnit( name )
+					InviteUnit(name)
 				end
+
 				return true
 			end
+
 			return false
 		end
 
 		if ImproveAny:GetWoWBuild() == "RETAIL" then
-
-			hooksecurefunc( ItemRefTooltip, "SetHyperlink", function( self, link, ... )
-				ImproveAny:SetHyperlink( link )
-			end )
-
+			hooksecurefunc(ItemRefTooltip, "SetHyperlink", function(sel, link, ...)
+				ImproveAny:SetHyperlink(link)
+			end)
 		else
-
 			ItemRefTooltip.OldSetHyperlink = ItemRefTooltip.SetHyperlink
-			function ItemRefTooltip:SetHyperlink( link, ... )
-				local worked = ImproveAny:SetHyperlink( link )
+
+			function ItemRefTooltip:SetHyperlink(link, ...)
+				local worked = ImproveAny:SetHyperlink(link)
+
 				if not worked then
-					ItemRefTooltip:OldSetHyperlink( link, ... )
+					ItemRefTooltip:OldSetHyperlink(link, ...)
 				end
 			end
-			
 		end
+
 		-- SetHyperLink
-
-
-
-		for i, typ in pairs( chatTypes ) do
-			ChatFrame_AddMessageEventFilter( typ, IAConvertMessage )
+		for i, typ in pairs(chatTypes) do
+			ChatFrame_AddMessageEventFilter(typ, IAConvertMessage)
 		end
 	end
 end

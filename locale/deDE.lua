@@ -1,12 +1,10 @@
 -- deDE German Deutsch
-
-local AddOnName, ImproveAny = ...
+local _, ImproveAny = ...
 
 function ImproveAny:Lang_deDE()
 	local tab = {
 		["MMBTNLEFT"] = "Linksklick => Optionen",
 		["MMBTNRIGHT"] = "Rechtsklick => Minimapknopf verstecken",
-
 		["GENERAL"] = "Allgemein",
 		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
 		["UIFONT"] = "Ui Schriftart",
@@ -18,33 +16,29 @@ function ImproveAny:Lang_deDE()
 		["PANEl_SPACING_X"] = "Fenster Abstand",
 		["BAGSAMESIZE"] = "Alle Taschen gleich groß",
 		["BAGSIZE"] = "Taschengröße",
-		
 		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
 		["FASTLOOTING"] = "Schnelles Plündern",
-
 		["COMBAT"] = "Kampf",
 		["COMBATTEXTICONS"] = "Kampftext Symbole",
 		["COMBATTEXTX"] = "Kampftext Position X",
 		["COMBATTEXTY"] = "Kampftext Position Y",
-
 		["CHAT"] = "Chat",
 		["SHORTCHANNELS"] = "Kurze Chat-Kanäle",
 		["ITEMICONS"] = "Gegenstandssymbole",
-		["CLASSICONS"] = "Klassensymbole", ["CLASSICONS"] = "Klassensymbole",
+		["CLASSICONS"] = "Klassensymbole",
+		["CLASSICONS"] = "Klassensymbole",
 		["RACEICONS"] = "Völker/KörperTyp Symbole",
 		["CHATLEVELS"] = "Spieler-Stufen",
-
 		["MINIMAP"] = "Minimap",
 		["MINIMAPHIDEBORDER"] = "Rand der Minimap ausblenden",
 		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap-Zoom-Schaltflächen ausblenden",
-		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad", ["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
+		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
+		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
 		["MINIMAPSHAPESQUARE"] = "Quadratische Minimap",
 		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Minimap-Knöpfe verschiebbar machen",
-
 		["ITEMLEVEL"] = "ItemLevel",
 		["ITEMLEVELNUMBER"] = "ItemLevel-Nummer",
 		["ITEMLEVELBORDER"] = "ItemLevel Umrandung",
-
 		["XPBAR"] = "XPBar",
 		["XPLEVEL"] = "Charakterstufe",
 		["XPNUMBER"] = "XP Nummer",
@@ -53,12 +47,10 @@ function ImproveAny:Lang_deDE()
 		["XPEXHAUSTION"] = "XP-Erschöpfung",
 		["XPXPPERHOUR"] = "XP/Stunde",
 		["XPHIDEARTWORK"] = "XP-Leiste Kunstwerk ausblenden",
-
 		["REPBAR"] = "Rufleiste",
 		["REPNUMBER"] = "Ruf Nummer",
 		["REPPERCENT"] = "Ruf Prozent",
 		["REPHIDEARTWORK"] = "Rufleiste - Kunstwerk ausblenden",
-
 		["UNITFRAMES"] = "Einheitenfenster (UnitFrames)",
 		["RFHIDEBUFFIDSINCOMBAT"] = "BuffIds für RaidFrame verstecken (Im Kampf)",
 		["RFHIDEBUFFIDSINNOTCOMBAT"] = "BuffIds für RaidFrame verstecken (Außerhalb vom Kampf)",
@@ -68,7 +60,6 @@ function ImproveAny:Lang_deDE()
 		["OVERWRITERAIDFRAMESIZE"] = "Raidfenster-Größe überschreiben",
 		["RAIDFRAMEW"] = "Raidfenster Weite",
 		["RAIDFRAMEH"] = "Raidfenster Höhe",
-
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Geldleiste",
 		["TOKENBAR"] = "Wertmarkenleiste",
@@ -84,28 +75,22 @@ function ImproveAny:Lang_deDE()
 		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",
 		["UIFONTINDEX"] = "Schriftart",
 		["BAGMODEINDEX"] = "Taschen Modus",
-
 		["TOOLTIPSELLPRICE"] = "Tooltip - Verkaufspreis",
 		["TOOLTIPEXPANSION"] = "Tooltip - Spiel-Erweiterung",
-
 		["ADDEDIN"] = "Hinzugefügt in:",
 		["EXPANSION"] = "%s%s",
-
 		["LFGSHOWLANGUAGEFLAG"] = "LFG - Sprachflaggen anzeigen",
 		["LFGSHOWCLASSICON"] = "LFG - Klassensymbole anzeigen",
 		["LFGSHOWOVERALLSCORE"] = "LFG - Gesamtwertung anzeigen",
 		["LFGSHOWDUNGEONSCORE"] = "LFG - Dungeonwertung anzeigen",
 		["LFGSHOWDUNGEONKEY"] = "LFG - Dungeonstein anzeigen",
-
 		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Extra-Aktionknopf Kunst ausblenden",
-
 		["IAPingFrame"] = "Ping Leiste",
-
 		["COORDSP"] = "Koordinaten (Spieler) (Weltkarte)",
 		["COORDSC"] = "Koordinaten (Zeiger) (Weltkarte)",
 		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
 		["IACoordsFrame"] = "Koordinatenfenster",
 	}
 
-	ImproveAny:UpdateLanguageTab( tab )
+	ImproveAny:UpdateLanguageTab(tab)
 end

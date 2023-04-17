@@ -1,75 +1,74 @@
-
-local AddOnName, ImproveAny = ...
-
+local _, ImproveAny = ...
 local fontSize = 12
-
-IAMoneyBar = CreateFrame( "FRAME", "IAMoneyBar", UIParent )
+IAMoneyBar = CreateFrame("FRAME", "IAMoneyBar", UIParent)
 
 function ImproveAny:InitMoneyBar()
-	if ImproveAny:IsEnabled( "MONEYBAR", true ) then
-		IAMoneyBar:SetSize( 180, 30 )
-		IAMoneyBar:SetPoint( "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100 )
+	if ImproveAny:IsEnabled("MONEYBAR", true) then
+		IAMoneyBar:SetSize(180, 30)
+		IAMoneyBar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100)
 		IAMoneyBar:EnableMouse(true)
-		
 		local oldMoney = GetMoney()
 		local ts = 0
-		local oldDir = ""
+		IAMoneyBar.text = IAMoneyBar:CreateFontString(nil, "ARTWORK")
+		IAMoneyBar.text:SetFont(STANDARD_TEXT_FONT, fontSize, "THINOUTLINE")
+		IAMoneyBar.text:SetPoint("TOP", IAMoneyBar, "TOP", 0, 0)
+		IAMoneyBar.text2 = IAMoneyBar:CreateFontString(nil, "ARTWORK")
+		IAMoneyBar.text2:SetFont(STANDARD_TEXT_FONT, fontSize, "THINOUTLINE")
+		IAMoneyBar.text2:SetPoint("BOTTOM", IAMoneyBar, "BOTTOM", 0, 0)
+		IAMoneyBar.Reset = CreateFrame("Button", "ResetMoneyPerHour", IAMoneyBar, "UIPanelButtonTemplate")
+		IAMoneyBar.Reset:SetSize(100, 20)
+		IAMoneyBar.Reset:SetPoint("BOTTOM", IAMoneyBar, 0, 0)
+		IAMoneyBar.Reset:SetText(RESET)
 
-		IAMoneyBar.text = IAMoneyBar:CreateFontString( nil, "ARTWORK" )
-		IAMoneyBar.text:SetFont( STANDARD_TEXT_FONT, fontSize, "THINOUTLINE" )
-		IAMoneyBar.text:SetPoint( "TOP", IAMoneyBar, "TOP", 0, 0 )
-
-		IAMoneyBar.text2 = IAMoneyBar:CreateFontString( nil, "ARTWORK" )
-		IAMoneyBar.text2:SetFont( STANDARD_TEXT_FONT, fontSize, "THINOUTLINE" )
-		IAMoneyBar.text2:SetPoint( "BOTTOM", IAMoneyBar, "BOTTOM", 0, 0 )
-		
-		IAMoneyBar.Reset = CreateFrame( "Button", "ResetMoneyPerHour", IAMoneyBar, "UIPanelButtonTemplate" )
-		IAMoneyBar.Reset:SetSize( 100, 20 )
-		IAMoneyBar.Reset:SetPoint( "BOTTOM", IAMoneyBar, 0, 0 )
-		IAMoneyBar.Reset:SetText( RESET )
-		IAMoneyBar.Reset:SetScript( "OnClick", function( self, ... )
+		IAMoneyBar.Reset:SetScript("OnClick", function(sel, ...)
 			ts = 0
 			oldMoney = GetMoney()
-		end )
+		end)
+
 		IAMoneyBar.Reset:Hide()
+
 		function IAMoneyBar.Reset:GetMAEle()
 			return IAMoneyBar
 		end
 
-		IAMoneyBar:SetScript( "OnEnter", function( self ) 
+		IAMoneyBar:SetScript("OnEnter", function(sel)
 			IAMoneyBar.Reset:Show()
-		end )
-		IAMoneyBar:SetScript( "OnLeave", function( self ) 
-			if not MouseIsOver( IAMoneyBar.Reset ) then
+		end)
+
+		IAMoneyBar:SetScript("OnLeave", function(sel)
+			if not MouseIsOver(IAMoneyBar.Reset) then
 				IAMoneyBar.Reset:Hide()
 			end
-		end )
-		IAMoneyBar.Reset:SetScript( "OnLeave", function( self ) 
+		end)
+
+		IAMoneyBar.Reset:SetScript("OnLeave", function(sel)
 			IAMoneyBar.Reset:Hide()
-		end )
+		end)
 
 		function IAMoneyBar:MoneyThink()
-			local text = GetCoinTextureString( GetMoney(), fontSize )
-			IAMoneyBar.text:SetText( text )
-
+			local text = GetCoinTextureString(GetMoney(), fontSize)
+			IAMoneyBar.text:SetText(text)
 			local text2 = ""
+
 			if ts > 0 then
 				local totalMoney = GetMoney() - oldMoney
 				local mops = totalMoney / ts
 				local mopm = mops * 60
 				local moph = mopm * 60
+
 				if moph == 0 then
-					--
 				elseif moph >= 0 then
-					text2 = GetCoinTextureString( moph, fontSize ) .. "/" .. "h"
+					text2 = GetCoinTextureString(moph, fontSize) .. "/" .. "h"
 				else
-					text2 = "-" .. GetCoinTextureString( math.abs( moph ), fontSize ) .. "/" .. "h"
+					text2 = "-" .. GetCoinTextureString(math.abs(moph), fontSize) .. "/" .. "h"
 				end
 			end
-			IAMoneyBar.text2:SetText( text2 )		
+
+			IAMoneyBar.text2:SetText(text2)
 			ts = ts + 1
-			C_Timer.After( 1, IAMoneyBar.MoneyThink )
+			C_Timer.After(1, IAMoneyBar.MoneyThink)
 		end
+
 		IAMoneyBar:MoneyThink()
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
