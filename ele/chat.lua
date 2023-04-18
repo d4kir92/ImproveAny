@@ -1,4 +1,31 @@
 local _, ImproveAny = ...
+local allowedTyp = {}
+allowedTyp["player"] = true
+allowedTyp["playerCommunity"] = true
+allowedTyp["playerGM"] = true
+
+-- Funktion, um Klassenfarben abzurufen
+local function GetClassColor(class)
+	local colors = RAID_CLASS_COLORS[class]
+
+	return colors.r, colors.g, colors.b
+end
+
+-- Funktion, um den Spielername in der Chatnachricht einzufärben
+local function ColorizePlayerNameInMessage(message, guid, engClass)
+	local coloredMessage = message:gsub("|Hplayer:(.-)|h%[(.-)%]|h", function(link, playerName)
+		if engClass then
+			local r, g, b = GetClassColor(engClass)
+			local hexColor = ("|cFF%02x%02x%02x"):format(r * 255, g * 255, b * 255)
+
+			return format("|Hplayer:%s|h[%s%s|r]|h", link, hexColor, playerName)
+		else
+			return format("|Hplayer:%s|h[%s]|h", link, playerName)
+		end
+	end)
+
+	return coloredMessage
+end
 
 function ImproveAny:InitChat()
 	local chatTypes = {}
@@ -327,37 +354,36 @@ function ImproveAny:InitChat()
 				end
 			end
 
-			for i, itemString in pairs(links) do
-				local newString = itemString
+			for i, itemString in ipairs(links) do
+				local typ, id = string.split(":", itemString)
 
-				if newString then
-					local typ = select(1, string.split(":", newString))
-					local id = select(2, string.split(":", newString))
+				if allowedTyp[typ] then
+					local guid = IAGetGUID(id)
 
-					if typ == "player" or typ == "playerCommunity" or typ == "playerGM" then
-						local guid = IAGetGUID(id)
+					if guid then
+						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID(guid)
 
-						if guid then
-							local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID(guid)
+						if ImproveAny:IsEnabled("CHATCLASSCOLORS", true) then
+							msg = ColorizePlayerNameInMessage(msg, guid, engClass)
+						end
 
-							if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon(engClass) then
-								if ImproveAny:IsEnabled("CLASSICONS", true) then
-									msg = ImproveAny:GetClassIcon(engClass) .. msg
-								end
-
-								if ImproveAny:IsEnabled("RACEICONS", false) then
-									msg = races[engRace .. gender] .. msg
-								end
+						if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon(engClass) then
+							if ImproveAny:IsEnabled("CHATCLASSICONS", true) then
+								msg = ImproveAny:GetClassIcon(engClass) .. msg
 							end
 
-							local level = IAGetLevel(name, realm)
+							if ImproveAny:IsEnabled("CHATRACEICONS", false) then
+								msg = races[engRace .. gender] .. msg
+							end
+						end
 
-							if ImproveAny:IsEnabled("CHATLEVELS", true) and level and level > 0 then
-								if strfind(msg, name .. "|r%]") then
-									msg = string.gsub(msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1)
-								else
-									msg = string.gsub(msg, name .. "%]", level .. ":" .. name .. "%]", 1)
-								end
+						local level = IAGetLevel(name, realm)
+
+						if ImproveAny:IsEnabled("CHATLEVELS", true) and level and level > 0 then
+							if string.find(msg, name .. "|r%]") then
+								msg = string.gsub(msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1)
+							else
+								msg = string.gsub(msg, name .. "%]", level .. ":" .. name .. "%]", 1)
 							end
 						end
 					end
@@ -382,7 +408,7 @@ function ImproveAny:InitChat()
 					itemTexture = GetItemIcon(id)
 
 					if itemTexture then
-						if ImproveAny:IsEnabled("ITEMICONS", true) then
+						if ImproveAny:IsEnabled("CHATITEMICONS", true) then
 							msg = string.gsub(msg, "(|Z)", "|T" .. itemTexture .. ":0|t" .. "|X", 1)
 							msg = string.gsub(msg, "(|z)", "|x", 1)
 
@@ -409,16 +435,16 @@ function ImproveAny:InitChat()
 
 		local function AddMessage(sel, message, ...)
 			local chanName = nil
-			local sear = message:gsub('|', '')
-			sear = sear:gsub('h%[', ':')
-			sear = sear:gsub('%]h', ':')
+			local sear = message:gsub("|", "")
+			sear = sear:gsub("h%[", ":")
+			sear = sear:gsub("%]h", ":")
 			local _, channel, _, channelName, chanIndex = string.split(":", sear)
 
 			if channel and channel == "channel" and channelName then
-				local s1 = channelName:find('%[')
+				local s1 = channelName:find("%[")
 
 				if s1 then
-					local s2 = channelName:find('%]')
+					local s2 = channelName:find("%]")
 
 					if s2 then
 						channelName = channelName:sub(s1 + 1, s2 - 1)
@@ -441,11 +467,11 @@ function ImproveAny:InitChat()
 				end
 
 				if chanFormat then
-					chanFormat = chanFormat:gsub('%s', '')
-					message = message:gsub(chanFormat, ':')
+					chanFormat = chanFormat:gsub("%s", "")
+					message = message:gsub(chanFormat, ":")
 				end
 
-				if ImproveAny:IsEnabled("SHORTCHANNELS", true) then
+				if ImproveAny:IsEnabled("CHATSHORTCHANNELS", true) then
 					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
 
 					if leaderChannel == nil then
@@ -475,7 +501,7 @@ function ImproveAny:InitChat()
 
 		for index = 1, NUM_CHAT_WINDOWS do
 			if index ~= 2 then
-				local frame = _G['ChatFrame' .. index]
+				local frame = _G["ChatFrame" .. index]
 
 				if frame then
 					hooks[frame] = frame.AddMessage

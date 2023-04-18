@@ -26,11 +26,13 @@ function ImproveAny:Fonts()
 
 	for i, fontName in pairs(BlizDefaultFonts) do
 		ImproveAny:SaveOldFonts(fontName)
-
+		--[[
 		if ImproveAny:GV("fontName", "Default") == "Default" then
-		else --_G[fontName] = IAOldFonts[fontName] -- TAINTS
+			_G[fontName] = IAOldFonts[fontName] -- TAINTS
+		else
+			_G[fontName] = font -- TAINTS
 		end
-		--_G[fontName] = font -- TAINTS
+		]]
 	end
 
 	local ForcedFontSize = {10, 14, 20, 64, 64}
@@ -439,11 +441,12 @@ function ImproveAny:InitIASettings()
 		AddSlider(4, "COMBATTEXTY", 0, nil, -250, 250, 10)
 		AddCategory("CHAT")
 		AddCheckBox(4, "CHAT", true)
-		AddCheckBox(24, "SHORTCHANNELS", true)
-		AddCheckBox(24, "ITEMICONS", true)
-		AddCheckBox(24, "CLASSICONS", true)
-		AddCheckBox(24, "RACEICONS", false)
+		AddCheckBox(24, "CHATSHORTCHANNELS", true)
+		AddCheckBox(24, "CHATITEMICONS", true)
+		AddCheckBox(24, "CHATCLASSICONS", true)
+		AddCheckBox(24, "CHATRACEICONS", false)
 		AddCheckBox(24, "CHATLEVELS", true)
+		AddCheckBox(24, "CHATCLASSCOLORS", true)
 		AddCategory("MINIMAP")
 		AddCheckBox(4, "MINIMAP", true, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPHIDEBORDER", true, ImproveAny.UpdateMinimapSettings)

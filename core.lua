@@ -312,7 +312,10 @@ function ImproveAny:Event(event, ...)
 				end
 			end
 
+			print("TEST")
+
 			if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
+				print("SHOW")
 				tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
 			end
 
@@ -353,18 +356,22 @@ function ImproveAny:Event(event, ...)
 
 		if OnTooltipSetItem then
 			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
-				if frame and frame.OnTooltipSetItem then
-					frame:SetScript("OnTooltipSetItem", function(tt)
-						--[[local spellName, spellID = tt:GetSpell()
-						if spellID then
-							if ImproveAny:IsEnabled( "SETTINGS", false ) then
-								tt:AddDoubleLine( "SpellID" .. ":", "|cFFFFFFFF" .. spellID )
-							end
-						end]]
+				frame:HookScript("OnTooltipSetSpell", function(tt)
+					local _, spellID = tt:GetSpell()
+
+					if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
+						tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
+					end
+				end)
+			end
+
+			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
+				if frame then
+					frame:HookScript("OnTooltipSetItem", function(tt)
 						local _, itemLink = tt:GetItem()
 
 						if itemLink then
-							local itemId = tonumber(strmatch(itemLink, 'item:(%d*)'))
+							local itemId = tonumber(strmatch(itemLink, "item:(%d*)"))
 
 							if itemId then
 								local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = GetItemInfo(itemId)
@@ -372,7 +379,7 @@ function ImproveAny:Event(event, ...)
 								if price and tt.shownMoneyFrames == nil and price > 0 and GetItemCount and GetCoinTextureString then
 									local count = GetItemCount(itemId)
 
-									if ImproveAny:IsEnabled("SELLPRICE", false) then
+									if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
 										if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
 											tt:AddDoubleLine(AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString(price))
 											tt:AddDoubleLine(SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString(price * count))
@@ -385,18 +392,6 @@ function ImproveAny:Event(event, ...)
 						end
 					end)
 				end
-			end
-		end
-
-		if OnTooltipSetSpell then
-			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
-				frame:SetScript("OnTooltipSetSpell", function(tt)
-					local _, spellID = tt:GetSpell()
-
-					if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
-						tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
-					end
-				end)
 			end
 		end
 
