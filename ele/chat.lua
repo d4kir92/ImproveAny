@@ -393,40 +393,27 @@ function ImproveAny:InitChat()
 			return msg
 		end
 
-		local function IAChatAddItemIcons(msg, c)
-			if c >= 40 then return msg end
-			msg = string.gsub(msg, "(|H)", "|Z", 1)
-			msg = string.gsub(msg, "(|h)", "|y", 1)
-			msg = string.gsub(msg, "(|h)", "|z", 1)
-			local itemString = select(3, strfind(msg, "|Z(.+)|z"))
-
-			if itemString then
-				local typ = select(1, string.split(":", itemString))
-				local id = select(2, string.split(":", itemString))
+		local function IAChatAddItemIcons(msg)
+			msg = string.gsub(msg, "(|H.-|h.-|h)", function(itemString)
+				local typ, id = string.match(itemString, "|H(.-):(.-)|h")
 
 				if typ == "item" then
-					itemTexture = GetItemIcon(id)
+					id = string.match(id, "(%d+)")
+					local itemName, _, _, _, _, _, _, _, _, itemTexture = GetItemInfo(id)
 
-					if itemTexture then
+					if itemName and itemTexture then
 						if ImproveAny:IsEnabled("CHATITEMICONS", true) then
-							msg = string.gsub(msg, "(|Z)", "|T" .. itemTexture .. ":0|t" .. "|X", 1)
-							msg = string.gsub(msg, "(|z)", "|x", 1)
-
-							return IAChatAddItemIcons(msg, c + 1)
+							return "|T" .. itemTexture .. ":0|t" .. "|H" .. typ .. ":" .. id .. "|h" .. "[" .. itemName .. "]" .. "|h"
 						else
-							msg = IAResetMsg(msg)
+							return "|H" .. typ .. ":" .. id .. "|h" .. "[" .. itemName .. "]" .. "|h"
 						end
 					else
-						msg = IAResetMsg(msg)
+						return itemString
 					end
 				else
-					msg = IAResetMsg(msg)
+					return itemString
 				end
-			end
-
-			msg = string.gsub(msg, "(|X)", "|H")
-			msg = string.gsub(msg, "(|y)", "|h")
-			msg = string.gsub(msg, "(|x)", "|h")
+			end)
 
 			return msg
 		end

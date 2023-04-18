@@ -312,10 +312,7 @@ function ImproveAny:Event(event, ...)
 				end
 			end
 
-			print("TEST")
-
 			if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
-				print("SHOW")
 				tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
 			end
 
@@ -350,19 +347,21 @@ function ImproveAny:Event(event, ...)
 		end
 
 		if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall then
+			--[[ NEW SYSTEM ]]
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, OnTooltipSetItem)
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, OnTooltipSetItem)
-		end
-
-		if OnTooltipSetItem then
+		else
+			--[[ OLD SYSTEM ]]
 			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
-				frame:HookScript("OnTooltipSetSpell", function(tt)
-					local _, spellID = tt:GetSpell()
+				if frame then
+					frame:HookScript("OnTooltipSetSpell", function(tt)
+						local _, spellID = tt:GetSpell()
 
-					if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
-						tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
-					end
-				end)
+						if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
+							tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
+						end
+					end)
+				end
 			end
 
 			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do

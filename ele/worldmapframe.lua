@@ -43,7 +43,7 @@ function ImproveAny:InitWorldMapFrame()
 
 	if WorldMapFrame then
 		-- TBC, ERA
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" and WorldMapFrame.BlackoutFrame then
+		if WorldMapFrame.BlackoutFrame then
 			hooksecurefunc(WorldMapFrame.BlackoutFrame, "Show", function(sel)
 				if sel.iahide then return end
 				sel.iahide = true

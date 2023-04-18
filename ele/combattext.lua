@@ -141,16 +141,16 @@ function ImproveAny:InitCombatText()
 
 						if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", true) then
 							local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
-							self:SetText(t)
+							sel:SetText(t)
 						else
-							self:SetText(text)
+							sel:SetText(text)
 						end
 					else
-						self:SetText(text)
+						sel:SetText(text)
 					end
 				end
 
-				self.iasettext = false
+				sel.iasettext = false
 			end)
 		end
 	end
