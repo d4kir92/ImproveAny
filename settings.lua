@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.38")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.6.39")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -585,7 +585,7 @@ function ImproveAny:InitIASettings()
 
 	IASettings:UpdateShowErrors()
 	IASettings.DISCORD = CreateFrame("EditBox", "IASettings" .. ".DISCORD", IASettings, "InputBoxTemplate")
-	IASettings.DISCORD:SetText("discord.gg/zWvQKDjDEC")
+	IASettings.DISCORD:SetText("discord.gg/AWcDfvcYCN")
 	IASettings.DISCORD:SetSize(160, 24)
 	IASettings.DISCORD:SetPoint("TOPLEFT", IASettings, "TOPLEFT", IASettings:GetWidth() - 160 - 8, -IASettings:GetHeight() + 24 + 4)
 	IASettings.DISCORD:SetAutoFocus(false)

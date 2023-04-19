@@ -54,7 +54,7 @@ function ImproveAny:InitWorldMapFrame()
 			WorldMapFrame.BlackoutFrame:Hide()
 		end
 
-		if WorldMapFrame.ScrollContainer.Child.TiledBackground then
+		if WorldMapFrame.ScrollContainer and WorldMapFrame.ScrollContainer.Child and WorldMapFrame.ScrollContainer.Child.TiledBackground then
 			hooksecurefunc(WorldMapFrame.ScrollContainer.Child.TiledBackground, "Show", function(sel)
 				if sel.iahide then return end
 				sel.iahide = true
@@ -65,20 +65,22 @@ function ImproveAny:InitWorldMapFrame()
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 
-		WorldMapFrame.ScrollContainer:HookScript("OnMouseWheel", function(sel, delta)
-			local x, y = sel:GetNormalizedCursorPosition()
-			local nextZoomOutScale, nextZoomInScale = sel:GetCurrentZoomRange()
+		if WorldMapFrame.ScrollContainer then
+			WorldMapFrame.ScrollContainer:HookScript("OnMouseWheel", function(sel, delta)
+				local x, y = sel:GetNormalizedCursorPosition()
+				local nextZoomOutScale, nextZoomInScale = sel:GetCurrentZoomRange()
 
-			if delta == 1 then
-				if nextZoomInScale > sel:GetCanvasScale() then
-					sel:InstantPanAndZoom(nextZoomInScale, x, y)
+				if delta == 1 then
+					if nextZoomInScale > sel:GetCanvasScale() then
+						sel:InstantPanAndZoom(nextZoomInScale, x, y)
+					end
+				else
+					if nextZoomOutScale < sel:GetCanvasScale() then
+						sel:InstantPanAndZoom(nextZoomOutScale, x, y)
+					end
 				end
-			else
-				if nextZoomOutScale < sel:GetCanvasScale() then
-					sel:InstantPanAndZoom(nextZoomOutScale, x, y)
-				end
-			end
-		end)
+			end)
+		end
 	end
 
 	local fontdist = 24
