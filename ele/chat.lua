@@ -194,13 +194,6 @@ function ImproveAny:InitChat()
 			return PLYCache[name]
 		end
 
-		function IAResetMsg(msg)
-			msg = string.gsub(msg, "(|Z)", "|X", 1)
-			msg = string.gsub(msg, "(|z)", "|x", 1)
-
-			return msg
-		end
-
 		function IAFixName(name, realm)
 			if name and realm == nil or realm == "" then
 				local s1 = string.find(name, "-", 0, true)
@@ -422,23 +415,17 @@ function ImproveAny:InitChat()
 
 		local function AddMessage(sel, message, ...)
 			local chanName = nil
-			local sear = message:gsub("|", "")
-			sear = sear:gsub("h%[", ":")
-			sear = sear:gsub("%]h", ":")
+			local sear = message:gsub("|", ""):gsub("h%[", ":"):gsub("%]h", ":")
 			local _, channel, _, channelName, chanIndex = string.split(":", sear)
 
 			if channel and channel == "channel" and channelName then
-				local s1 = channelName:find("%[")
+				local s1, s2 = channelName:find("%[(.-)%]")
 
-				if s1 then
-					local s2 = channelName:find("%]")
-
-					if s2 then
-						channelName = channelName:sub(s1 + 1, s2 - 1)
-					end
+				if s1 and s2 then
+					chanName = channelName:sub(s1 + 1, s2 - 1)
+				else
+					chanName = channelName
 				end
-
-				chanName = channelName
 			end
 
 			if channel then
@@ -455,7 +442,12 @@ function ImproveAny:InitChat()
 
 				if chanFormat then
 					chanFormat = chanFormat:gsub("%s", "")
-					message = message:gsub(chanFormat, ":")
+
+					if channelName and channelName == "EMOTE" then
+						message = message:gsub(chanFormat, " ", 1)
+					else
+						message = message:gsub(chanFormat, ":", 1)
+					end
 				end
 
 				if ImproveAny:IsEnabled("CHATSHORTCHANNELS", true) then

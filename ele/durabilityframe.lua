@@ -59,7 +59,7 @@ function ImproveAny:InitDurabilityFrame()
 					local id = v:GetID()
 
 					if v.tt == nil then
-						v.tt = CreateFrame("GameTooltip", "TEST" .. i, DurabilityFrame)
+						v.tt = CreateFrame("GameTooltip", "DURA" .. i, DurabilityFrame)
 						v.tt:ClearLines()
 					end
 
