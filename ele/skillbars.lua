@@ -17,7 +17,7 @@ local function IAGetSkillData(name)
 		local id = skillIds[name]
 
 		if id then
-			skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(id)
+			local skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(id)
 
 			if skillName then
 				itemcur = skillRank
@@ -32,7 +32,7 @@ local function IAGetSkillData(name)
 			end
 
 			for i = 1, numSkillLines do
-				skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(i)
+				local skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(i)
 
 				if skillName then
 					if name == string.lower(skillName) then
@@ -105,7 +105,7 @@ function ImproveAny:SkillsThink()
 
 		if GetSkillLineInfo then
 			for i = 1, 64 do
-				local _, _, _, _, _, _, _, isAbandonable, _, _, _, _ = GetSkillLineInfo(i)
+				local skillName, _, _, _, _, _, _, isAbandonable, _, _, _, _ = GetSkillLineInfo(i)
 
 				if skillName and not tContains(jobs, skillName) then
 					if isAbandonable then
