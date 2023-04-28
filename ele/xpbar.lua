@@ -7,108 +7,8 @@ function ImproveAny:GetMaxLevel()
 	return maxlevel
 end
 
-local XPS = 0
-
-function ImproveAny:GetXPPerSec()
-	return XPS
-end
-
-local XPH = 0
-
-function ImproveAny:GetXPPerHour()
-	return XPH
-end
-
-local HOUR = ImproveAny:ReplaceStr(COOLDOWN_DURATION_HOURS, "%d ", "")
-HOUR = ImproveAny:ReplaceStr(HOUR, "%d", "")
-local inCombat = false
-local f = CreateFrame("FRAME")
-f:RegisterEvent("PLAYER_REGEN_ENABLED")
-f:RegisterEvent("PLAYER_REGEN_DISABLED")
-
-f:SetScript("OnEvent", function(self, event, ...)
-	if event == "PLAYER_REGEN_ENABLED" then
-		inCombat = false
-	elseif event == "PLAYER_REGEN_DISABLED" then
-		inCombat = true
-	end
-end)
-
-local ts = 0
-local totalxp = 0
-local lastxp = UnitXP("PLAYER")
-
-function ImproveAny:XPPerHourLoop()
-	if inCombat or true then
-		ts = ts + 0.2
-	end
-
-	local curxp = UnitXP("PLAYER")
-	local curxpmax = UnitXPMax("PLAYER")
-	local gainedxp = 0
-
-	if curxp > lastxp then
-		-- Gained Xp
-		gainedxp = curxp - lastxp
-	elseif curxp < lastxp then
-		-- Gained Xp + Levelup
-		--gainedxp = lastxpmax - lastxp + curxp
-		ts = 0
-		totalxp = 0
-	end
-
-	if gainedxp > 0 then
-		totalxp = totalxp + gainedxp
-	end
-
-	lastxp = curxp
-	lastxpmax = curxpmax
-
-	if curxpmax ~= 0 and ts > 0 then
-		local xps = totalxp / ts
-		local xpm = xps * 60
-		local xph = xpm * 60
-		XPS = xps
-		XPH = xph
-
-		if MainMenuBarExpText then
-			MainMenuBarExpText:SetText(MainMenuBarExpText:GetText() or "LOADING")
-		end
-
-		if MainMenuExpBar and MainMenuExpBar.xph then
-			local sw, _ = MainMenuExpBar:GetSize()
-			local px = curxp / curxpmax * sw
-			local wi = xph / curxpmax * sw
-
-			if wi <= 0 then
-				wi = 1
-			end
-
-			if px + wi > sw then
-				wi = sw - px
-			end
-
-			if ImproveAny:IsEnabled("XPXPPERHOUR", true) then
-				MainMenuExpBar.xph:SetPoint("LEFT", MainMenuExpBar, "LEFT", px, 0)
-				MainMenuExpBar.xph:SetWidth(wi)
-				MainMenuExpBar.xph:Show()
-			else
-				MainMenuExpBar.xph:Hide()
-			end
-		end
-	end
-
-	C_Timer.After(0.2, ImproveAny.XPPerHourLoop)
-end
-
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", true) then
-		C_Timer.After(1, function()
-			lastxp = UnitXP("PLAYER")
-			lastxpmax = UnitXPMax("PLAYER")
-			ImproveAny:XPPerHourLoop()
-		end)
-
 		C_Timer.After(0.01, function()
 			if ImproveAny:GetWoWBuild() == "TBC" then
 				maxlevel = 70
@@ -135,6 +35,12 @@ function ImproveAny:InitXPBar()
 					MainMenuExpBar.show = true
 					MainMenuBarExpText:Show()
 				end)
+
+				for i = 1, 3 do
+					C_Timer.After(i, function()
+						MainMenuBarExpText:Show()
+					end)
+				end
 			end
 
 			if ImproveAny:IsEnabled("XPHIDEARTWORK", false) then
@@ -145,15 +51,6 @@ function ImproveAny:InitXPBar()
 						art:Hide()
 					end
 				end
-			end
-
-			if MainMenuExpBar then
-				local _, sh = MainMenuExpBar:GetSize()
-				MainMenuExpBar.xph = MainMenuExpBar:CreateTexture(nil, "ARTWORK")
-				MainMenuExpBar.xph:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-				MainMenuExpBar.xph:SetVertexColor(1, 1, 0.5, 0.5)
-				MainMenuExpBar.xph:SetDrawLayer("ARTWORK", 1)
-				MainMenuExpBar.xph:SetSize(1, sh)
 			end
 
 			if MainMenuExpBar and MainMenuBarExpText then
@@ -181,18 +78,10 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					local xps = ImproveAny:GetXPPerSec()
-					local xph = ImproveAny:GetXPPerHour()
 					local per = currXP / maxBar
 					local percent = per * 100
 					local missingXp = maxBar - currXP
 					local percent2 = missingXp / maxBar * 100
-					local xplu = 0
-
-					if xps > 0 then
-						xplu = missingXp / xps -- XP to  level up
-					end
-
 					local text2 = ""
 
 					if ImproveAny:IsEnabled("XPLEVEL", false) then
@@ -246,18 +135,6 @@ function ImproveAny:InitXPBar()
 						end
 
 						text2 = text2 .. ADDON_MISSING .. ": " .. textc .. ImproveAny:FormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
-					end
-
-					if ImproveAny:IsEnabled("XPXPPERHOUR", true) then
-						if text2 ~= "" then
-							text2 = text2 .. " "
-						end
-
-						text2 = text2 .. textc .. string.format(SecondsToTime(xplu)) .. textw
-					end
-
-					if ImproveAny:IsEnabled("XPXPPERHOUR", true) and xph > 0 then
-						text2 = text2 .. "    " .. textc .. ImproveAny:FormatValue(xph, xph <= 5000 and 1 or 0) .. textw .. " " .. textw .. XP .. "/" .. HOUR
 					end
 
 					sel:SetText(text2)

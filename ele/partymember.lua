@@ -59,12 +59,11 @@ function ImproveAny:UpdatePartyXPAPI()
 	end
 end
 
-local function OnEventXP(self, event, ...)
+local function OnEventXP(self, event, prefix, ...)
 	if event == "CHAT_MSG_ADDON" then
-		local prefix, values, _, target = ...
-
 		-- new xp values
 		if prefix == XPPREFIX and ImproveAny:GV("XPTAB") then
+			local values, _, target = ...
 			local xp, xpmax = string.split(";", values)
 
 			if ImproveAny:GV("XPTAB")[target] == nil then
@@ -75,6 +74,8 @@ local function OnEventXP(self, event, ...)
 			ImproveAny:GV("XPTAB")[target]["XPMAX"] = xpmax
 			ImproveAny:GV("XPTAB")[target]["useapi"] = true -- it uses the api
 		elseif prefix == XPAPIPREFIX then
+			local values, _, target = ...
+
 			-- PING
 			if values == "Ping" then
 				local message = "Pong" -- "answer to ping"
@@ -92,7 +93,15 @@ local function OnEventXP(self, event, ...)
 				ImproveAny:GV("XPTAB")[target]["useapi"] = true -- received answer
 			end
 		end
-	elseif event == "PLAYER_ENTERING_WORLD" then
+	end
+end
+
+local frameXP = CreateFrame("Frame")
+frameXP:RegisterEvent("CHAT_MSG_ADDON")
+frameXP:SetScript("OnEvent", OnEventXP)
+
+local function OnEventXPInit(self, event, ...)
+	if event == "PLAYER_ENTERING_WORLD" then
 		local isInitialLogin, isReloadingUi = ...
 
 		if isInitialLogin or isReloadingUi then
@@ -136,64 +145,30 @@ local function OnEventXP(self, event, ...)
 						parent = PartyFrame
 					end
 
-					if debuff then
-						if iadebugxpbar then
-							hooksecurefunc(debuff, "Hide", function(sel)
-								if sel.mahide then return end
-								sel.mahide = true
-								sel:Show()
-								sel.mahide = false
-							end)
-
-							debuff:Show()
-
-							if false then
-								local xpbar = _G["PartyFrameXPBar" .. id]
-
-								if xpbar then
-									hooksecurefunc(xpbar, "Hide", function(sel)
-										if sel.mahide then return end
-										sel.mahide = true
-										sel:Show()
-										sel.mahide = false
-									end)
-
-									xpbar:Show()
-								end
-							end
-						end
-
-						hooksecurefunc(debuff, "SetPoint", function(sel)
-							if sel.iasetpoint then return end
-							sel.iasetpoint = true
-							local xpbar = _G["PartyFrameXPBar" .. i]
-							sel:ClearAllPoints()
-
-							if parent == PartyFrame then
-								local py = 4
-
-								-- DUnitFrames
-								if DUFTAB then
-									py = -6
-
-									if xpbar and xpbar:IsVisible() then
-										py = -18
-									end
-								else
-									if xpbar and xpbar:IsVisible() then
-										py = -8
-									end
-								end
-
-								sel:SetPoint("BOTTOMLEFT", parent, "BOTTOMRIGHT", -80, py)
-							else
-								sel:SetPoint("LEFT", parent, "RIGHT", 4, 0)
-							end
-
-							sel.iasetpoint = false
+					if debuff and iadebugxpbar then
+						hooksecurefunc(debuff, "Hide", function(sel)
+							if sel.mahide then return end
+							sel.mahide = true
+							sel:Show()
+							sel.mahide = false
 						end)
 
-						debuff:SetPoint("LEFT", parent, "RIGHT", 0, 0)
+						debuff:Show()
+
+						if false then
+							local xpbar = _G["PartyFrameXPBar" .. id]
+
+							if xpbar then
+								hooksecurefunc(xpbar, "Hide", function(sel)
+									if sel.mahide then return end
+									sel.mahide = true
+									sel:Show()
+									sel.mahide = false
+								end)
+
+								xpbar:Show()
+							end
+						end
 					end
 				end
 
@@ -320,9 +295,8 @@ local function OnEventXP(self, event, ...)
 	end
 end
 
-local frameXP = CreateFrame("Frame")
-frameXP:RegisterEvent("CHAT_MSG_ADDON")
-frameXP:RegisterEvent("PLAYER_ENTERING_WORLD")
-frameXP:RegisterEvent("GROUP_ROSTER_UPDATE")
-frameXP:RegisterEvent("PLAYER_XP_UPDATE")
-frameXP:SetScript("OnEvent", OnEventXP)
+local frameXPInit = CreateFrame("Frame")
+frameXPInit:RegisterEvent("GROUP_ROSTER_UPDATE")
+frameXPInit:RegisterEvent("PLAYER_XP_UPDATE")
+frameXPInit:RegisterEvent("PLAYER_ENTERING_WORLD")
+frameXPInit:SetScript("OnEvent", OnEventXPInit)
