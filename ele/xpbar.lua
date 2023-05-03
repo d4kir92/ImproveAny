@@ -141,6 +141,10 @@ function ImproveAny:InitXPBar()
 
 					if MainMenuExpBar.show then
 						sel:Show()
+
+						C_Timer.After(0.1, function()
+							sel:Show()
+						end)
 					end
 
 					sel.iasettext = false
