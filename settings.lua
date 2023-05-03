@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.3")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.4")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -363,6 +363,30 @@ function ImproveAny:UpdateStatusBar()
 
 			if v.StatusBar then
 				v.StatusBar:SetWidth(w)
+			end
+		end
+	end
+
+	if MainStatusTrackingBarContainer then
+		MainStatusTrackingBarContainer:SetWidth(w)
+
+		for i, v in pairs({MainStatusTrackingBarContainer:GetChildren()}) do
+			v:SetWidth(w - 5)
+
+			for id, va in pairs({v:GetChildren()}) do
+				va:SetWidth(w - 5)
+			end
+		end
+	end
+
+	if SecondaryStatusTrackingBarContainer then
+		SecondaryStatusTrackingBarContainer:SetWidth(w)
+
+		for i, v in pairs({SecondaryStatusTrackingBarContainer:GetChildren()}) do
+			v:SetWidth(w - 5)
+
+			for id, va in pairs({v:GetChildren()}) do
+				va:SetWidth(w - 5)
 			end
 		end
 	end
