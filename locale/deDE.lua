@@ -43,6 +43,7 @@ function ImproveAny:Lang_deDE()
 		["XPLEVEL"] = "Charakterstufe",
 		["XPNUMBER"] = "XP Nummer",
 		["XPPERCENT"] = "XP-Prozent",
+		["XPQUESTCOMPLETE"] = "Fertige-Quests-XP",
 		["XPMISSING"] = "Fehlende XP",
 		["XPEXHAUSTION"] = "XP-Erschöpfung",
 		["XPXPPERHOUR"] = "XP/Stunde",

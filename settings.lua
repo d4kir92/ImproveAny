@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.4")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.5")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -494,6 +494,7 @@ function ImproveAny:InitIASettings()
 			AddCheckBox(24, "XPPERCENT", true)
 			AddCheckBox(24, "XPMISSING", true)
 			AddCheckBox(24, "XPEXHAUSTION", true)
+			AddCheckBox(24, "XPQUESTCOMPLETE", true)
 			AddCheckBox(24, "XPHIDEARTWORK", true)
 			AddCategory("REPBAR")
 			AddCheckBox(4, "REPBAR", true)

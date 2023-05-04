@@ -50,6 +50,7 @@ function ImproveAny:Lang_enUS()
 		["XPLEVEL"] = "Character Level",
 		["XPNUMBER"] = "XP Number",
 		["XPPERCENT"] = "XP Percent",
+		["XPQUESTCOMPLETE"] = "Quest-Completed-XP",
 		["XPMISSING"] = "Missing XP",
 		["XPEXHAUSTION"] = "XP Exhaustion",
 		["XPXPPERHOUR"] = "XP/Hour",
