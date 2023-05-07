@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.5")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.6")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -77,7 +77,7 @@ local function IASetPos(ele, key, x)
 	if ele == nil then return false end
 	ele:ClearAllPoints()
 
-	if strfind(strlower(key), strlower(searchStr)) then
+	if strfind(strlower(key), strlower(searchStr), 1, true) then
 		ele:Show()
 
 		if posy < -4 then
@@ -136,7 +136,7 @@ local function AddCheckBox(x, key, val, func)
 
 	cbs[key]:ClearAllPoints()
 
-	if strfind(strlower(key), strlower(searchStr)) or strfind(strlower(ImproveAny:GT(key)), strlower(searchStr)) then
+	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(key)), strlower(searchStr), 1, true) then
 		cbs[key]:Show()
 		cbs[key]:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x, posy)
 		posy = posy - 24
@@ -528,6 +528,7 @@ function ImproveAny:InitIASettings()
 			AddCheckBox(4, "MICROMENUCOLORED", true)
 		end
 
+		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
 		AddCheckBox(4, "BAGS", true)
 		AddCheckBox(4, "WORLDMAP", true)

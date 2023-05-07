@@ -91,6 +91,7 @@ function ImproveAny:Lang_deDE()
 		["COORDSC"] = "Koordinaten (Zeiger) (Weltkarte)",
 		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
 		["IACoordsFrame"] = "Koordinatenfenster",
+		["RIGHTCLICKSELFCAST"] = "Rechtsklick für Selbstzauber",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

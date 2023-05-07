@@ -98,6 +98,7 @@ function ImproveAny:Lang_enUS()
 		["COORDSC"] = "Coords (Cursor) (WorldMap)",
 		["COORDSFONTSIZE"] = "Coords Fontsize",
 		["IACoordsFrame"] = "Coords Frame",
+		["RIGHTCLICKSELFCAST"] = "Right click to selfcast",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

@@ -126,6 +126,20 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitIAPingFrame()
 		ImproveAny:InitIACoordsFrame()
 
+		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
+			C_Timer.After(2, function()
+				local bars = {"MainMenuBarArtFrame", "MultiBarBottomLeft", "MultiBarBottomRight", "MultiBarRight", "MultiBarLeft", "PossessBarFrame", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10"}
+
+				for i, v in ipairs(bars) do
+					local bar = _G[v]
+
+					if bar ~= nil then
+						bar:SetAttribute("unit2", "player")
+					end
+				end
+			end)
+		end
+
 		function ImproveAny:UpdateMinimapButton()
 			if IAMMBTN then
 				if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
