@@ -396,9 +396,9 @@ function ImproveAny:InitChat()
 
 					if itemName and itemTexture then
 						if ImproveAny:IsEnabled("CHATITEMICONS", true) then
-							return "|T" .. itemTexture .. ":0|t" .. msg
+							return "|T" .. itemTexture .. ":0|t" .. itemString
 						else
-							return msg
+							return itemString
 						end
 					else
 						return itemString
