@@ -269,7 +269,7 @@ local function OnEventXPInit(self, event, ...)
 						end
 
 						_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:SetPoint(_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:GetPoint())
-						C_Timer.After(0.1, PartyFrameXPBar.think)
+						C_Timer.After(0.3, PartyFrameXPBar.think)
 					end
 
 					PartyFrameXPBar.think()

@@ -150,7 +150,7 @@ function ImproveAny:SkillsThink()
 		IASkillsMover:SetHeight((id - 1) * sh)
 	end
 
-	C_Timer.After(0.2, ImproveAny.SkillsThink)
+	C_Timer.After(0.5, ImproveAny.SkillsThink)
 end
 
 local skillid = 0

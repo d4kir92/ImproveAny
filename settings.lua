@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.11")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.12")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -26,13 +26,6 @@ function ImproveAny:Fonts()
 
 	for i, fontName in pairs(BlizDefaultFonts) do
 		ImproveAny:SaveOldFonts(fontName)
-		--[[
-		if ImproveAny:GV("fontName", "Default") == "Default" then
-			_G[fontName] = IAOldFonts[fontName] -- TAINTS
-		else
-			_G[fontName] = font -- TAINTS
-		end
-		]]
 	end
 
 	local ForcedFontSize = {10, 14, 20, 64, 64}
@@ -311,7 +304,13 @@ function ImproveAny:UpdateRaidFrameSize()
 	end
 end
 
+local keys = {}
+keys["TOP_OFFSET"] = true
+keys["LEFT_OFFSET"] = true
+keys["PANEl_SPACING_X"] = true
+
 hooksecurefunc(UIParent, "SetAttribute", function(self, key, value)
+	if keys[key] == nil then return end
 	if self.iasetattribute then return end
 	self.iasetattribute = true
 

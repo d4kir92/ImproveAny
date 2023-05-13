@@ -68,7 +68,7 @@ function ImproveAny:CheckCVars()
 		ImproveAny:UpdateWorldTextScale()
 	end
 
-	C_Timer.After(1, ImproveAny.CheckCVars)
+	C_Timer.After(3, ImproveAny.CheckCVars)
 end
 
 function ImproveAny:Event(event, ...)

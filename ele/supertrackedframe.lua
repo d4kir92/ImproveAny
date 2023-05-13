@@ -56,7 +56,6 @@ function ImproveAny:InitSuperTrackedFrame()
 			local distPerSec = 0
 			local timeToTarget = 0
 			local scale = 10
-			local cd = 0.1
 
 			function ImproveAny:ThinkSuperTrackedFrame()
 				local distance = 0
@@ -101,7 +100,7 @@ function ImproveAny:InitSuperTrackedFrame()
 
 				lastDistPerSec = distPerSec
 				lastDist = distance
-				C_Timer.After(cd, ImproveAny.ThinkSuperTrackedFrame)
+				C_Timer.After(0.1, ImproveAny.ThinkSuperTrackedFrame)
 			end
 
 			ImproveAny:ThinkSuperTrackedFrame()

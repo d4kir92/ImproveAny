@@ -82,6 +82,7 @@ local IATabBuffs = {}
 
 function ImproveAny:InitCombatText()
 	local max = NUM_COMBAT_TEXT_LINES or 1
+	local found = false
 
 	for i = 1, max do
 		local str = _G["CombatText" .. i]
@@ -152,11 +153,18 @@ function ImproveAny:InitCombatText()
 
 				sel.iasettext = false
 			end)
+
+			found = true
 		end
 	end
 
 	ImproveAny:UpdateCombatTextPos()
-	C_Timer.After(0.1, ImproveAny.InitCombatText)
+
+	if found then
+		C_Timer.After(0.1, ImproveAny.InitCombatText)
+	else
+		C_Timer.After(1, ImproveAny.InitCombatText)
+	end
 end
 
 ImproveAny:InitCombatText()
