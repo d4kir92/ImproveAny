@@ -241,13 +241,13 @@ local function OnEventXPInit(self, event, ...)
 									PartyFrameXPBar.XPL:SetText("")
 									PartyFrameXPBar.XPR:SetText("")
 								elseif GetCVar("statusTextDisplay") == "NUMERIC" then
-									PartyFrameXPBar.XPC:SetText(string.format("%s/%s", IANN(xp), IANN(xpmax)))
+									PartyFrameXPBar.XPC:SetText(string.format("%s/%s", m(xp), ImproveAny:MathR(xpmax)))
 									PartyFrameXPBar.XPL:SetText("")
 									PartyFrameXPBar.XPR:SetText("")
 								elseif GetCVar("statusTextDisplay") == "BOTH" then
 									PartyFrameXPBar.XPC:SetText("")
 									PartyFrameXPBar.XPL:SetText(string.format("%.0f", xp / xpmax * 100) .. "%")
-									PartyFrameXPBar.XPR:SetText(string.format("%s", IANN(xp)))
+									PartyFrameXPBar.XPR:SetText(string.format("%s", ImproveAny:MathR(xp)))
 								else
 									PartyFrameXPBar.XPC:SetText("")
 									PartyFrameXPBar.XPL:SetText("")
