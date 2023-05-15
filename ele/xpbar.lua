@@ -24,6 +24,11 @@ end
 
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", true) then
+		if QuestLogFrame then
+			QuestLogFrame:Show()
+			QuestLogFrame:Hide()
+		end
+
 		C_Timer.After(0.01, function()
 			if GetQuestLogRewardXP == nil then
 				local qaf = CreateFrame("FRAME")
