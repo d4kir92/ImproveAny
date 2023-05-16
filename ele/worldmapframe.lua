@@ -96,7 +96,7 @@ function ImproveAny:InitWorldMapFrame()
 		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
 		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetPoint("CENTER")
 
-		WorldMapFrame.ScrollContainer.Child.plycoords:HookScript("OnUpdate", function()
+		function WorldMapFrame.ScrollContainer.Child.plycoords:IAUpdate()
 			local x, y = ImproveAny:GetBestPosXY("PLAYER")
 			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
 
@@ -123,10 +123,14 @@ function ImproveAny:InitWorldMapFrame()
 				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
 				local fh = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringHeight()
 				WorldMapFrame.ScrollContainer.Child.plycoords:SetSize(fw, fh)
+				C_Timer.After(0.05, WorldMapFrame.ScrollContainer.Child.plycoords.IAUpdate)
 			else
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText("")
+				C_Timer.After(0.5, WorldMapFrame.ScrollContainer.Child.plycoords.IAUpdate)
 			end
-		end)
+		end
+
+		WorldMapFrame.ScrollContainer.Child.plycoords:IAUpdate()
 	end
 
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", true) then
@@ -141,7 +145,7 @@ function ImproveAny:InitWorldMapFrame()
 		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
 		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetPoint("CENTER")
 
-		WorldMapFrame.ScrollContainer.Child.curcoords:HookScript("OnUpdate", function(sel)
+		function WorldMapFrame.ScrollContainer.Child.curcoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.Child and WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
 				local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
@@ -169,8 +173,14 @@ function ImproveAny:InitWorldMapFrame()
 					local fw = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringWidth()
 					local fh = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringHeight()
 					WorldMapFrame.ScrollContainer.Child.curcoords:SetSize(fw, fh)
+					C_Timer.After(0.01, WorldMapFrame.ScrollContainer.Child.curcoords.IAUpdate)
+				else
+					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText("")
+					C_Timer.After(0.5, WorldMapFrame.ScrollContainer.Child.curcoords.IAUpdate)
 				end
 			end
-		end)
+		end
+
+		WorldMapFrame.ScrollContainer.Child.curcoords:IAUpdate()
 	end
 end

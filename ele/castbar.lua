@@ -49,10 +49,12 @@ function ImproveAny:InitCastBar()
 			castbar.timer = castbar:CreateFontString(nil)
 			castbar.timer:SetFont(STANDARD_TEXT_FONT, 10, "")
 			castbar.timer:SetPoint("CENTER", castbar, "RIGHT", 12, 0)
+			castbar.update = 0
+			castbar.tick = 0.01
 
-			f:HookScript("OnUpdate", function(sel, elapsed)
+			function ImproveAny:UpdateCastbarTimer()
 				if castbar.timer ~= nil then
-					if sel.update and sel.update < elapsed then
+					if castbar.update and castbar.update < castbar.tick then
 						local name, _, texture = nil, nil, nil
 
 						if UnitCastingInfo ~= nil then
@@ -87,12 +89,18 @@ function ImproveAny:InitCastBar()
 							castbar.timer:SetText("")
 						end
 
-						sel.update = 0.1
+						castbar.update = 0.1
 					else
-						sel.update = sel.update - elapsed
+						castbar.update = castbar.update - castbar.tick
 					end
+
+					C_Timer.After(castbar.tick, ImproveAny.UpdateCastbarTimer)
+				else
+					C_Timer.After(castbar.tick, 0.3)
 				end
-			end)
+			end
+
+			ImproveAny:UpdateCastbarTimer()
 		end
 	end
 end
