@@ -78,7 +78,7 @@ function ImproveAny:InitDurabilityFrame()
 				DurabilityFrame.textrepaircosts:SetText("")
 			end
 
-			C_Timer.After(1.0, DurabilityFrame.Think)
+			C_Timer.After(0.3, DurabilityFrame.Think)
 		end
 
 		DurabilityFrame.Think()
