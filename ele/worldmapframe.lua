@@ -86,101 +86,114 @@ function ImproveAny:InitWorldMapFrame()
 	local fontdist = 40
 
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", true) then
-		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame("FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child)
-		WorldMapFrame.ScrollContainer.Child.plycoords:SetSize(200, 60)
-		WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0)
-		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameLevel(9999)
-		WorldMapFrame.ScrollContainer.Child.plycoords:SetFrameStrata("FULLSCREEN_DIALOG")
-		WorldMapFrame.ScrollContainer.Child.plycoords.f = WorldMapFrame.ScrollContainer.Child.plycoords:CreateFontString("plycoords.f", "OVERLAY", "GameFontNormal")
-		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText("")
-		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
-		WorldMapFrame.ScrollContainer.Child.plycoords.f:SetPoint("CENTER")
+		local plyCoords = CreateFrame("FRAME", "plyCoords", WorldMapFrame.ScrollContainer.Child)
+		plyCoords:SetSize(200, 60)
+		plyCoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0)
+		plyCoords:SetFrameLevel(9999)
+		plyCoords:SetFrameStrata("FULLSCREEN_DIALOG")
+		plyCoords.f = plyCoords:CreateFontString("plyCoords.f", "OVERLAY", "GameFontNormal")
+		plyCoords.f:SetText("")
+		plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
+		plyCoords.f:SetPoint("CENTER")
 
-		function WorldMapFrame.ScrollContainer.Child.plycoords:IAUpdate()
-			local x, y = ImproveAny:GetBestPosXY("PLAYER")
-			local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
-
-			if x and y then
-				local mf = w / 1200
-				local zoom = 2 - WorldMapFrame:GetCanvasZoomPercent()
-				WorldMapFrame.ScrollContainer.Child.plycoords:ClearAllPoints()
-
-				if x > 0.9 then
-					x = 0.9
-				elseif x < 0.1 then
-					x = 0.1
-				end
-
-				if y > 0.8 then
-					y = 0.8
-				elseif y < 0 then
-					y = 0
-				end
-
-				WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf)
-				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
-				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
-				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
-				local fh = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringHeight()
-				WorldMapFrame.ScrollContainer.Child.plycoords:SetSize(fw, fh)
-				C_Timer.After(0.05, WorldMapFrame.ScrollContainer.Child.plycoords.IAUpdate)
-			else
-				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText("")
-				C_Timer.After(0.5, WorldMapFrame.ScrollContainer.Child.plycoords.IAUpdate)
-			end
-		end
-
-		WorldMapFrame.ScrollContainer.Child.plycoords:IAUpdate()
-	end
-
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", true) then
-		WorldMapFrame.ScrollContainer.Child.curcoords = CreateFrame("FRAME", "curcoords", WorldMapFrame.ScrollContainer.Child)
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetSize(200, 60)
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetParent(WorldMapFrame.ScrollContainer.Child)
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0)
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameLevel(9999)
-		WorldMapFrame.ScrollContainer.Child.curcoords:SetFrameStrata("FULLSCREEN_DIALOG")
-		WorldMapFrame.ScrollContainer.Child.curcoords.f = WorldMapFrame.ScrollContainer.Child.curcoords:CreateFontString("curcoords.f", "OVERLAY", "GameFontNormal")
-		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText("")
-		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "")
-		WorldMapFrame.ScrollContainer.Child.curcoords.f:SetPoint("CENTER")
-
-		function WorldMapFrame.ScrollContainer.Child.curcoords:IAUpdate()
-			if WorldMapFrame.ScrollContainer.Child and WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
-				local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
+		function plyCoords:IAUpdate()
+			if WorldMapFrame:IsShown() then
+				local x, y = ImproveAny:GetBestPosXY("PLAYER")
 				local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
 
 				if x and y then
 					local mf = w / 1200
 					local zoom = 2 - WorldMapFrame:GetCanvasZoomPercent()
-					WorldMapFrame.ScrollContainer.Child.curcoords:ClearAllPoints()
+					plyCoords:ClearAllPoints()
+					local px = x
+					local py = y
 
 					if x > 0.9 then
-						x = 0.9
+						px = 0.9
 					elseif x < 0.1 then
-						x = 0.1
+						px = 0.1
 					end
 
 					if y > 0.8 then
-						y = 0.8
+						py = 0.8
 					elseif y < 0 then
-						y = 0
+						py = 0
 					end
 
-					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf)
-					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
-					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
-					local fw = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringWidth()
-					local fh = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringHeight()
-					WorldMapFrame.ScrollContainer.Child.curcoords:SetSize(fw, fh)
-					C_Timer.After(0.01, WorldMapFrame.ScrollContainer.Child.curcoords.IAUpdate)
+					plyCoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * px, -h * py - zoom * fontdist * mf)
+					plyCoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "THINOUTLINE")
+					plyCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
+					local fw = plyCoords.f:GetStringWidth()
+					local fh = plyCoords.f:GetStringHeight()
+					plyCoords:SetSize(fw, fh)
+					C_Timer.After(0.05, plyCoords.IAUpdate)
 				else
-					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText("")
-					C_Timer.After(0.5, WorldMapFrame.ScrollContainer.Child.curcoords.IAUpdate)
+					plyCoords.f:SetText("")
+					C_Timer.After(0.5, plyCoords.IAUpdate)
 				end
+			else
+				C_Timer.After(0.5, plyCoords.IAUpdate)
 			end
 		end
 
-		WorldMapFrame.ScrollContainer.Child.curcoords:IAUpdate()
+		plyCoords:IAUpdate()
+	end
+
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", true) then
+		local curCoords = CreateFrame("FRAME", "curCoords", WorldMapFrame.ScrollContainer.Child)
+		curCoords:SetSize(200, 60)
+		curCoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", 0, 0)
+		curCoords:SetFrameLevel(9999)
+		curCoords:SetFrameStrata("FULLSCREEN_DIALOG")
+		curCoords.f = curCoords:CreateFontString("curCoords.f", "OVERLAY", "GameFontNormal")
+		curCoords.f:SetText("")
+		curCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
+		curCoords.f:SetPoint("CENTER")
+
+		function curCoords:IAUpdate()
+			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
+				if WorldMapFrame:IsShown() then
+					local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
+					local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
+
+					if x and y then
+						local mf = w / 1200
+						local zoom = 2 - WorldMapFrame:GetCanvasZoomPercent()
+						curCoords:ClearAllPoints()
+						local px = x
+						local py = y
+
+						if x > 0.9 then
+							px = 0.9
+						elseif x < 0.1 then
+							px = 0.1
+						end
+
+						if y > 0.8 then
+							py = 0.8
+						elseif y < 0 then
+							py = 0
+						end
+
+						curCoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * px, -h * py - zoom * fontdist * mf)
+						curCoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "THINOUTLINE")
+						curCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
+						local fw = curCoords.f:GetStringWidth()
+						local fh = curCoords.f:GetStringHeight()
+						curCoords:SetSize(fw, fh)
+						C_Timer.After(0.01, curCoords.IAUpdate)
+					else
+						curCoords.f:SetText("")
+						C_Timer.After(0.5, curCoords.IAUpdate)
+					end
+				else
+					C_Timer.After(0.5, curCoords.IAUpdate)
+				end
+			else
+				C_Timer.After(0.5, curCoords.IAUpdate)
+			end
+		end
+
+		curCoords:IAUpdate()
 	end
 end
