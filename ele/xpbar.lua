@@ -47,10 +47,22 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
+					C_Timer.After(0.01, function()
+						if MainMenuBarExpText then
+							MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
+						end
+					end)
+				end)
+
+				function ImproveAny:UpdateQAF()
 					if MainMenuBarExpText then
 						MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
 					end
-				end)
+
+					C_Timer.After(1, ImproveAny.UpdateQAF)
+				end
+
+				ImproveAny:UpdateQAF()
 
 				function GetQuestLogRewardXP(i)
 					local questID = select(8, GetQuestLogTitle(i))

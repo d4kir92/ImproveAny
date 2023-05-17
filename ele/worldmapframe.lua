@@ -83,7 +83,7 @@ function ImproveAny:InitWorldMapFrame()
 		end
 	end
 
-	local fontdist = 24
+	local fontdist = 40
 
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", true) then
 		WorldMapFrame.ScrollContainer.Child.plycoords = CreateFrame("FRAME", "plycoords", WorldMapFrame.ScrollContainer.Child)
@@ -104,20 +104,20 @@ function ImproveAny:InitWorldMapFrame()
 				local mf = w / 1200
 				local zoom = 2 - WorldMapFrame:GetCanvasZoomPercent()
 				WorldMapFrame.ScrollContainer.Child.plycoords:ClearAllPoints()
-				local xOffset = 0
 
-				if x > 0.97 then
-					xOffset = -40
-				elseif x < 0.03 then
-					xOffset = 40
+				if x > 0.9 then
+					x = 0.9
+				elseif x < 0.1 then
+					x = 0.1
 				end
 
-				if y < 0.9 then
-					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y - zoom * fontdist * mf)
-				else
-					WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y + zoom * fontdist * mf)
+				if y > 0.8 then
+					y = 0.8
+				elseif y < 0 then
+					y = 0
 				end
 
+				WorldMapFrame.ScrollContainer.Child.plycoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf)
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 				WorldMapFrame.ScrollContainer.Child.plycoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
 				local fw = WorldMapFrame.ScrollContainer.Child.plycoords.f:GetStringWidth()
@@ -154,20 +154,20 @@ function ImproveAny:InitWorldMapFrame()
 					local mf = w / 1200
 					local zoom = 2 - WorldMapFrame:GetCanvasZoomPercent()
 					WorldMapFrame.ScrollContainer.Child.curcoords:ClearAllPoints()
-					local xOffset = 0
 
-					if x > 0.97 then
-						xOffset = -40
-					elseif x < 0.03 then
-						xOffset = 40
+					if x > 0.9 then
+						x = 0.9
+					elseif x < 0.1 then
+						x = 0.1
 					end
 
-					if y < 0.9 then
-						WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y - zoom * fontdist * mf)
-					else
-						WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x + xOffset, -h * y + zoom * fontdist * mf)
+					if y > 0.8 then
+						y = 0.8
+					elseif y < 0 then
+						y = 0
 					end
 
+					WorldMapFrame.ScrollContainer.Child.curcoords:SetPoint("TOP", WorldMapFrame.ScrollContainer.Child, "TOPLEFT", w * x, -h * y - zoom * fontdist * mf)
 					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetFont(STANDARD_TEXT_FONT, zoom * fontsize * mf, "")
 					WorldMapFrame.ScrollContainer.Child.curcoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
 					local fw = WorldMapFrame.ScrollContainer.Child.curcoords.f:GetStringWidth()
