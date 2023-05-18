@@ -7,17 +7,27 @@ function ImproveAny:GetMaxLevel()
 	return maxlevel
 end
 
+local lastTotalXp = 0
+
 function ImproveAny:GetQuestCompleteXP()
+	if QuestLogFrame:IsShown() then return lastTotalXp end
 	local totalXP = 0
 
 	for i = 1, GetNumQuestLogEntries() do
+		--local name = select(1, GetQuestLogTitle(i))
 		local questID = select(8, GetQuestLogTitle(i))
+		SelectQuestLogEntry(i)
 
 		if IsQuestComplete(questID) then
-			local xp = GetQuestLogRewardXP(i)
-			totalXP = totalXP + xp
+			local xp = GetQuestLogRewardXP(questID)
+
+			if xp then
+				totalXP = totalXP + xp
+			end
 		end
 	end
+
+	lastTotalXp = totalXP
 
 	return math.floor(totalXP)
 end
@@ -30,7 +40,7 @@ function ImproveAny:InitXPBar()
 		end
 
 		C_Timer.After(0.01, function()
-			if GetQuestLogRewardXP == nil then
+			if GetQuestLogRewardXP == nil and GetRewardXP then
 				local qaf = CreateFrame("FRAME")
 				qaf:RegisterEvent("QUEST_ACCEPTED")
 				qaf:RegisterEvent("QUEST_COMPLETE")
@@ -64,8 +74,8 @@ function ImproveAny:InitXPBar()
 
 				ImproveAny:UpdateQAF()
 
-				function GetQuestLogRewardXP(i)
-					local questID = select(8, GetQuestLogTitle(i))
+				function GetQuestLogRewardXP(questID)
+					if questID == nil then return nil end
 					IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 					if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
 					local level = select(2, GetQuestLogTitle(i))
@@ -111,16 +121,16 @@ function ImproveAny:InitXPBar()
 					MainMenuBarExpText:Show()
 				end)
 
-				for i = 1, 3 do
-					C_Timer.After(i, function()
+				for sec = 1, 3 do
+					C_Timer.After(sec, function()
 						MainMenuBarExpText:Show()
 					end)
 				end
 			end
 
 			if ImproveAny:IsEnabled("XPHIDEARTWORK", false) then
-				for i = 0, 3 do
-					local art = _G["MainMenuXPBarTexture" .. i]
+				for nr = 0, 3 do
+					local art = _G["MainMenuXPBarTexture" .. nr]
 
 					if art then
 						art:Hide()
