@@ -20,11 +20,11 @@ end
 local fontsize = 8
 
 function ImproveAny:UpdateCoordsFontSize()
-	fontsize = ImproveAny:GV("COORDSFONTSIZE", 8)
+	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
 end
 
 function ImproveAny:InitWorldMapFrame()
-	fontsize = ImproveAny:GV("COORDSFONTSIZE", 8)
+	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
 
 	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -98,7 +98,7 @@ function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", true) then
 		local plyCoords = CreateFrame("FRAME", "plyCoords", WorldMapFrame.ScrollContainer)
 		plyCoords:SetSize(200, 60)
-		plyCoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
+		plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
 		plyCoords:SetFrameLevel(9999)
 		plyCoords:SetFrameStrata("FULLSCREEN_DIALOG")
 		plyCoords.f = plyCoords:CreateFontString("plyCoords.f", "OVERLAY", "GameFontNormal")
@@ -106,19 +106,27 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		plyCoords.f:SetPoint("CENTER")
 
+		--[[plyCoords.t = plyCoords:CreateTexture("plyCoords.t", "ARTWORK")
+		plyCoords.t:SetAllPoints(plyCoords)
+		plyCoords.t:SetColorTexture(0.03, 0.03, 0.03, 0.5)]]
 		function plyCoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
 					local x, y = ImproveAny:GetBestPosXY("PLAYER")
-					local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
+					local w, h = WorldMapFrame.ScrollContainer:GetSize()
 
 					if x and y then
+						local scale = WorldMapFrame.ScrollContainer.Child:GetScale()
+
+						if ImproveAny:GetWoWBuild() == "RETAIL" then
+							scale = 1 + WorldMapFrame:GetCanvasZoomPercent()
+						end
+
 						local left = WorldMapFrame.ScrollContainer:GetLeft() - WorldMapFrame.ScrollContainer.Child:GetLeft() * WorldMapFrame.ScrollContainer.Child:GetScale()
-						local mx = x * WorldMapFrame.ScrollContainer.Child:GetScale() - left / WorldMapFrame.ScrollContainer.Child:GetWidth()
+						local mx = x * scale - left / WorldMapFrame.ScrollContainer:GetWidth()
 						local top = WorldMapFrame.ScrollContainer:GetTop() - WorldMapFrame.ScrollContainer.Child:GetTop() * WorldMapFrame.ScrollContainer.Child:GetScale()
-						local my = y * WorldMapFrame.ScrollContainer.Child:GetScale() + top / WorldMapFrame.ScrollContainer.Child:GetHeight()
+						local my = y * scale + top / WorldMapFrame.ScrollContainer:GetHeight()
 						local bx, by = mx, my
-						local mf = w / 1200
 						plyCoords:ClearAllPoints()
 						local offsetY = 0.1
 						local px = bx
@@ -137,7 +145,7 @@ function ImproveAny:InitWorldMapFrame()
 						end
 
 						plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
-						plyCoords.f:SetFont(STANDARD_TEXT_FONT, 2 * fontsize * mf, "THINOUTLINE")
+						plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 						plyCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
 						local fw = plyCoords.f:GetStringWidth()
 						local fh = plyCoords.f:GetStringHeight()
@@ -161,7 +169,7 @@ function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", true) then
 		local curCoords = CreateFrame("FRAME", "curCoords", WorldMapFrame.ScrollContainer)
 		curCoords:SetSize(200, 60)
-		curCoords:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
+		curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
 		curCoords:SetFrameLevel(9999)
 		curCoords:SetFrameStrata("FULLSCREEN_DIALOG")
 		curCoords.f = curCoords:CreateFontString("curCoords.f", "OVERLAY", "GameFontNormal")
@@ -173,11 +181,10 @@ function ImproveAny:InitWorldMapFrame()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
 					local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
-					local w, h = WorldMapFrame.ScrollContainer.Child:GetSize()
+					local w, h = WorldMapFrame.ScrollContainer:GetSize()
 
 					if x and y then
 						local bx, by = ImproveAny:GetNormalizedPosition(WorldMapFrame.ScrollContainer, GetCursorPosition())
-						local mf = w / 1200
 						curCoords:ClearAllPoints()
 						local offsetY = 0.1
 						local px = bx
@@ -196,7 +203,7 @@ function ImproveAny:InitWorldMapFrame()
 						end
 
 						curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
-						curCoords.f:SetFont(STANDARD_TEXT_FONT, 2 * fontsize * mf, "THINOUTLINE")
+						curCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 						curCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
 						local fw = curCoords.f:GetStringWidth()
 						local fh = curCoords.f:GetStringHeight()
