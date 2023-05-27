@@ -3,7 +3,7 @@
 ## Interface-Wrath: 30401
 ## Interface: 100100
 
-## Version: 0.7.21
+## Version: 0.7.22
 ## Title: ImproveAny by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR

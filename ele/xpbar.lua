@@ -78,8 +78,9 @@ function ImproveAny:InitXPBar()
 					if questID == nil then return nil end
 					IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 					if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
-					local level = select(2, GetQuestLogTitle(i))
-					local gold = GetQuestLogRewardMoney(i)
+					print(questID)
+					local level = select(2, GetQuestLogTitle(questID))
+					local gold = GetQuestLogRewardMoney(questID)
 
 					if level and level == 0 then
 						level = nil

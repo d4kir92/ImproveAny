@@ -71,6 +71,22 @@ function ImproveAny:CheckCVars()
 	C_Timer.After(3, ImproveAny.CheckCVars)
 end
 
+function ImproveAny:AddRightClick()
+	if not InCombatLockdown() then
+		local bars = {"MainMenuBarArtFrame", "MultiBarBottomLeft", "MultiBarBottomRight", "MultiBarRight", "MultiBarLeft", "PossessBarFrame", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10"}
+
+		for i, v in ipairs(bars) do
+			local bar = _G[v]
+
+			if bar ~= nil then
+				bar:SetAttribute("unit2", "player")
+			end
+		end
+	else
+		C_Timer.After(0.1, ImproveAny.AddRightClick)
+	end
+end
+
 function ImproveAny:Event(event, ...)
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
@@ -128,15 +144,7 @@ function ImproveAny:Event(event, ...)
 
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
 			C_Timer.After(2, function()
-				local bars = {"MainMenuBarArtFrame", "MultiBarBottomLeft", "MultiBarBottomRight", "MultiBarRight", "MultiBarLeft", "PossessBarFrame", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10"}
-
-				for i, v in ipairs(bars) do
-					local bar = _G[v]
-
-					if bar ~= nil then
-						bar:SetAttribute("unit2", "player")
-					end
-				end
+				ImproveAny:AddRightClick()
 			end)
 		end
 
