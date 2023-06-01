@@ -486,9 +486,11 @@ function ImproveAny:InitItemLevel()
 		end)
 
 		BagItemAutoSortButton:SetScript("OnEnter", function(sel, ...)
-			GameTooltip:SetOwner(self)
-			GameTooltip:SetText(BAG_CLEANUP_BAGS)
-			GameTooltip:Show()
+			if sel then
+				GameTooltip:SetOwner(sel)
+				GameTooltip:SetText(BAG_CLEANUP_BAGS)
+				GameTooltip:Show()
+			end
 		end)
 
 		BagItemAutoSortButton:SetScript("OnLeave", function(sel, ...)

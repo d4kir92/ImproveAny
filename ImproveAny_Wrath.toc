@@ -1,5 +1,5 @@
 ## Interface: 30401
-## Version: 0.7.22
+## Version: 0.7.23
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
