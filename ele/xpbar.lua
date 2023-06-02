@@ -7,6 +7,43 @@ function ImproveAny:GetMaxLevel()
 	return maxlevel
 end
 
+local xpPerMobLevel = 0
+local xpPerMob = 0
+local xpPerMobs = {}
+
+function ImproveAny:AddXPPerMob(xp)
+	if xpPerMobLevel ~= UnitLevel("PLAYER") then
+		xpPerMobLevel = UnitLevel("PLAYER")
+		xpPerMobs = {}
+	end
+
+	xpPerMobs[xp] = true
+	local c = 0
+	local total = 0
+
+	for i, v in pairs(xpPerMobs) do
+		total = total + i
+		c = c + 1
+	end
+
+	xpPerMob = total / c
+end
+
+function ImproveAny:GetXPPerMob()
+	if xpPerMob > 0 then return xpPerMob end
+
+	return 1
+end
+
+function ImproveAny:GetKillsToLevelUp()
+	local currXP = UnitXP("PLAYER")
+	local maxBar = UnitXPMax("PLAYER")
+	local xpm = ImproveAny:GetXPPerMob()
+	if xpm > 1 then return (maxBar - currXP) / xpm end
+
+	return 0
+end
+
 local lastTotalXp = 0
 
 function ImproveAny:GetQuestCompleteXP()
@@ -78,7 +115,6 @@ function ImproveAny:InitXPBar()
 					if questID == nil then return nil end
 					IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 					if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
-					print(questID)
 					local level = select(2, GetQuestLogTitle(questID))
 					local gold = GetQuestLogRewardMoney(questID)
 
@@ -137,6 +173,38 @@ function ImproveAny:InitXPBar()
 						art:Hide()
 					end
 				end
+			end
+
+			if true then
+				local frame = CreateFrame("Frame")
+				frame:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
+
+				if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", 1, true) then
+					COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", "%s")
+				end
+
+				if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", 1, true) then
+					COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", "%d")
+				end
+
+				local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%s", "(.-)"), "%d", "(%d+)")
+
+				frame:SetScript("OnEvent", function(sel, event, message, ...)
+					-- Only if it is a kill
+					if strfind(message, xpKillText) then
+						local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
+						xpGained = tonumber(xpGained)
+
+						if xpGained then
+							if xpGainedEx then
+								xpGainedEx = tonumber(xpGainedEx)
+								ImproveAny:AddXPPerMob(xpGained)
+							else
+								ImproveAny:AddXPPerMob(xpGained)
+							end
+						end
+					end
+				end)
 			end
 
 			if MainMenuExpBar then
@@ -261,6 +329,20 @@ function ImproveAny:InitXPBar()
 						end
 
 						text2 = text2 .. QUEST_COMPLETE .. "-" .. XP .. ": " .. textc .. questCompleteXP .. textw
+					end
+
+					if ImproveAny:IsEnabled("XPKILLSTOLEVELUP", true) then
+						if text2 ~= "" then
+							text2 = text2 .. "    "
+						end
+
+						local kpm = ImproveAny:GetKillsToLevelUp()
+
+						if kpm > 0 then
+							text2 = text2 .. format(QUICKBUTTON_NAME_KILLS .. ": " .. textc .. "%0.1f" .. textw, kpm)
+						else
+							text2 = text2 .. format(QUICKBUTTON_NAME_KILLS .. ": " .. textc .. UNKNOWN .. textw, kpm)
+						end
 					end
 
 					sel:SetText(text2)
