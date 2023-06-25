@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.25")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.26")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -308,11 +308,12 @@ local keys = {}
 keys["TOP_OFFSET"] = true
 keys["LEFT_OFFSET"] = true
 keys["PANEl_SPACING_X"] = true
+local iasetattribute = false
 
 hooksecurefunc(UIParent, "SetAttribute", function(self, key, value)
 	if keys[key] == nil then return end
-	if self.iasetattribute then return end
-	self.iasetattribute = true
+	if iasetattribute then return end
+	iasetattribute = true
 
 	if key == "TOP_OFFSET" then
 		local topOffset = ImproveAny:GV("TOP_OFFSET", 116)
@@ -325,7 +326,7 @@ hooksecurefunc(UIParent, "SetAttribute", function(self, key, value)
 		self:SetAttribute("PANEl_SPACING_X", panelSpacingX)
 	end
 
-	self.iasetattribute = false
+	iasetattribute = false
 end)
 
 function ImproveAny:UpdateUIParentAttribute()
@@ -449,65 +450,65 @@ function ImproveAny:InitIASettings()
 			AddSlider(4, "STATUSBARWIDTH", 565, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
 		end
 
-		AddCheckBox(4, "BAGSAMESIZE", true)
+		AddCheckBox(4, "BAGSAMESIZE", false)
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
 		AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
 		AddCategory("QUICKGAMEPLAY")
-		AddCheckBox(4, "FASTLOOTING", true)
-		AddCheckBox(4, "COORDSP", true)
-		AddCheckBox(4, "COORDSC", true)
+		AddCheckBox(4, "FASTLOOTING", false)
+		AddCheckBox(4, "COORDSP", false)
+		AddCheckBox(4, "COORDSC", false)
 		AddSlider(24, "COORDSFONTSIZE", 8, ImproveAny.UpdateCoordsFontSize, 6, 20, 1)
-		AddCheckBox(4, "IACoordsFrame", true)
+		AddCheckBox(4, "IACoordsFrame", false)
 		AddCategory("COMBAT")
-		AddCheckBox(4, "COMBATTEXTICONS", true)
+		AddCheckBox(4, "COMBATTEXTICONS", false)
 		AddSlider(4, "COMBATTEXTX", 0, nil, -600, 600, 10)
 		AddSlider(4, "COMBATTEXTY", 0, nil, -250, 250, 10)
 		AddCategory("CHAT")
-		AddCheckBox(4, "CHAT", true)
-		AddCheckBox(24, "CHATSHORTCHANNELS", true)
-		AddCheckBox(24, "CHATITEMICONS", true)
-		AddCheckBox(24, "CHATCLASSICONS", true)
+		AddCheckBox(4, "CHAT", false)
+		AddCheckBox(24, "CHATSHORTCHANNELS", false)
+		AddCheckBox(24, "CHATITEMICONS", false)
+		AddCheckBox(24, "CHATCLASSICONS", false)
 		AddCheckBox(24, "CHATRACEICONS", false)
-		AddCheckBox(24, "CHATLEVELS", true)
-		AddCheckBox(24, "CHATCLASSCOLORS", true)
+		AddCheckBox(24, "CHATLEVELS", false)
+		AddCheckBox(24, "CHATCLASSCOLORS", false)
 		AddCategory("MINIMAP")
-		AddCheckBox(4, "MINIMAP", true, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(24, "MINIMAPHIDEBORDER", true, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
-			AddCheckBox(24, "MINIMAPHIDEZOOMBUTTONS", true, ImproveAny.UpdateMinimapSettings)
+			AddCheckBox(24, "MINIMAPHIDEZOOMBUTTONS", false, ImproveAny.UpdateMinimapSettings)
 		end
 
-		AddCheckBox(24, "MINIMAPSCROLLZOOM", true, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(24, "MINIMAPSHAPESQUARE", true, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", true, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
 		AddCategory("ITEMLEVEL")
-		AddCheckBox(4, "ITEMLEVELNUMBER", true, ImproveAny.UpdateILVLIcons)
-		AddCheckBox(4, "ITEMLEVELBORDER", true, ImproveAny.UpdateILVLIcons)
+		AddCheckBox(4, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
+		AddCheckBox(4, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("XPBAR")
-			AddCheckBox(4, "XPBAR", true)
+			AddCheckBox(4, "XPBAR", false)
 			AddCheckBox(24, "XPLEVEL", false)
-			AddCheckBox(24, "XPNUMBER", true)
-			AddCheckBox(24, "XPPERCENT", true)
-			AddCheckBox(24, "XPMISSING", true)
-			AddCheckBox(24, "XPEXHAUSTION", true)
-			AddCheckBox(24, "XPQUESTCOMPLETE", true)
-			AddCheckBox(24, "XPKILLSTOLEVELUP", true)
-			AddCheckBox(24, "XPHIDEARTWORK", true)
+			AddCheckBox(24, "XPNUMBER", false)
+			AddCheckBox(24, "XPPERCENT", false)
+			AddCheckBox(24, "XPMISSING", false)
+			AddCheckBox(24, "XPEXHAUSTION", false)
+			AddCheckBox(24, "XPQUESTCOMPLETE", false)
+			AddCheckBox(24, "XPKILLSTOLEVELUP", false)
+			AddCheckBox(24, "XPHIDEARTWORK", false)
 			AddCategory("REPBAR")
-			AddCheckBox(4, "REPBAR", true)
-			AddCheckBox(24, "REPNUMBER", true)
-			AddCheckBox(24, "REPPERCENT", true)
-			AddCheckBox(24, "REPHIDEARTWORK", true)
+			AddCheckBox(4, "REPBAR", false)
+			AddCheckBox(24, "REPNUMBER", false)
+			AddCheckBox(24, "REPPERCENT", false)
+			AddCheckBox(24, "REPHIDEARTWORK", false)
 		end
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("UNITFRAMES")
 			AddEditBox(4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs)
 			AddEditBox(4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs)
-			AddCheckBox(4, "RAIDFRAMEMOREBUFFS", true)
+			AddCheckBox(4, "RAIDFRAMEMOREBUFFS", false)
 			AddSlider(24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
 			AddSlider(24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
 			local options = DefaultCompactMiniFrameSetUpOptions
@@ -517,34 +518,34 @@ function ImproveAny:InitIASettings()
 		end
 
 		AddCategory("EXTRAS")
-		AddCheckBox(4, "MONEYBAR", true)
-		AddCheckBox(4, "TOKENBAR", true)
-		AddCheckBox(4, "IAILVLBAR", true)
-		AddCheckBox(4, "SKILLBARS", true)
-		AddCheckBox(4, "CASTBAR", true)
-		AddCheckBox(4, "DURABILITY", true)
+		AddCheckBox(4, "MONEYBAR", false)
+		AddCheckBox(4, "TOKENBAR", false)
+		AddCheckBox(4, "IAILVLBAR", false)
+		AddCheckBox(4, "SKILLBARS", false)
+		AddCheckBox(4, "CASTBAR", false)
+		AddCheckBox(4, "DURABILITY", false)
 
 		if ImproveAny:GetWoWBuild() == "RETAIL" then
-			AddCheckBox(4, "MICROMENUCOLORED", true)
+			AddCheckBox(4, "MICROMENUCOLORED", false)
 		end
 
 		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
-		AddCheckBox(4, "BAGS", true)
-		AddCheckBox(4, "WORLDMAP", true)
-		AddCheckBox(4, "TOOLTIPSELLPRICE", true)
-		AddCheckBox(4, "TOOLTIPEXPANSION", true)
-		AddCheckBox(4, "LFGSHOWLANGUAGEFLAG", true)
-		AddCheckBox(4, "LFGSHOWCLASSICON", true)
-		AddCheckBox(4, "LFGSHOWOVERALLSCORE", true)
-		AddCheckBox(4, "LFGSHOWDUNGEONSCORE", true)
-		AddCheckBox(4, "LFGSHOWDUNGEONKEY", true)
+		AddCheckBox(4, "BAGS", false)
+		AddCheckBox(4, "WORLDMAP", false)
+		AddCheckBox(4, "TOOLTIPSELLPRICE", false)
+		AddCheckBox(4, "TOOLTIPEXPANSION", false)
+		AddCheckBox(4, "LFGSHOWLANGUAGEFLAG", false)
+		AddCheckBox(4, "LFGSHOWCLASSICON", false)
+		AddCheckBox(4, "LFGSHOWOVERALLSCORE", false)
+		AddCheckBox(4, "LFGSHOWDUNGEONSCORE", false)
+		AddCheckBox(4, "LFGSHOWDUNGEONKEY", false)
 
 		if ExtraActionButton1 and ExtraActionButton1.style then
 			AddCheckBox(4, "HIDEEXTRAACTIONBUTTONARTWORK", false)
 		end
 
-		AddCheckBox(4, "IAPingFrame", true)
+		AddCheckBox(4, "IAPingFrame", false)
 	end
 
 	IASettings.Search = CreateFrame("EditBox", "IASettings_Search", IASettings, "InputBoxTemplate")

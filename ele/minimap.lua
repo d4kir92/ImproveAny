@@ -182,11 +182,9 @@ function ImproveAny:InitMinimap()
 						end
 
 						if btn.moving then
-							local scale = Minimap:GetScale()
-
 							if GetMinimapShape() == "ROUND" then
 								local Xpoa, Ypoa = GetCursorPosition()
-								local Xmin, Ymin = Minimap:GetLeft() * scale, Minimap:GetBottom() * scale
+								local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
 								Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius
 								Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - radius
 								myIconPos = math.deg(math.atan2(Ypoa, Xpoa))

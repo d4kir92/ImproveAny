@@ -102,11 +102,11 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:Fonts()
 		end
 
-		if ImproveAny:IsEnabled("CASTBAR", true) then
+		if ImproveAny:IsEnabled("CASTBAR", false) then
 			ImproveAny:InitCastBar()
 		end
 
-		if ImproveAny:IsEnabled("DURABILITY", true) then
+		if ImproveAny:IsEnabled("DURABILITY", false) then
 			ImproveAny:InitDurabilityFrame()
 		end
 
