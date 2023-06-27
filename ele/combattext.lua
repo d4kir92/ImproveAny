@@ -26,7 +26,7 @@ end
 local setup = true
 
 function ImproveAny:UpdateCombatTextPos()
-	if COMBAT_TEXT_LOCATIONS then
+	if ImproveAny.Setup and ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) and COMBAT_TEXT_LOCATIONS then
 		if setup then
 			setup = false
 			osx = COMBAT_TEXT_LOCATIONS.startX

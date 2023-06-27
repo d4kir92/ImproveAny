@@ -28,6 +28,7 @@ function ImproveAny:Lang_enUS()
 		["FASTLOOTING"] = "Fast Looting",
 		["COMBAT"] = "Combat",
 		["COMBATTEXTICONS"] = "CombatText Icons",
+		["COMBATTEXTPOSITION"] = "Kampftext Position",
 		["COMBATTEXTX"] = "CombatText Position X",
 		["COMBATTEXTY"] = "CombatText Position Y",
 		["CHAT"] = "Chat",

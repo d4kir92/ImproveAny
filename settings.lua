@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.26")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.27")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -461,6 +461,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "IACoordsFrame", false)
 		AddCategory("COMBAT")
 		AddCheckBox(4, "COMBATTEXTICONS", false)
+		AddCheckBox(4, "COMBATTEXTPOSITION", false)
 		AddSlider(4, "COMBATTEXTX", 0, nil, -600, 600, 10)
 		AddSlider(4, "COMBATTEXTY", 0, nil, -250, 250, 10)
 		AddCategory("CHAT")

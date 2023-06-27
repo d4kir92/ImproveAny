@@ -63,6 +63,9 @@ function ImproveAny:InitDB()
 end
 
 function ImproveAny:GetTab()
+	IATAB = IATAB or {}
+	IATAB["PROFILES"] = IATAB["PROFILES"] or {}
+
 	return IATAB["PROFILES"][ImproveAny:GetCP()]
 end
 
@@ -84,13 +87,17 @@ function ImproveAny:IsEnabled(element, value)
 		return false
 	end
 
-	ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
+	if ImproveAny:GetTab() and ImproveAny:GetTab()["ELES"] then
+		ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
 
-	if ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] == nil then
-		ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+		if ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] == nil then
+			ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+		end
+
+		return ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"]
 	end
 
-	return ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"]
+	return value
 end
 
 function ImproveAny:GetElePoint(key)
