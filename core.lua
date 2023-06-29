@@ -451,7 +451,7 @@ f.incombat = false
 local ts = 0
 
 function ImproveAny:FastLooting()
-	if GetTime() - ts >= 0.2 and ImproveAny:IsEnabled("FASTLOOTING", true) then
+	if GetTime() - ts >= 0.24 and ImproveAny:IsEnabled("FASTLOOTING", true) then
 		ts = GetTime()
 
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
