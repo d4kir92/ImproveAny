@@ -92,7 +92,7 @@ end
 function ImproveAny:GetFlagString(realmName, text)
 	local realmLang = ImproveAny:GetRealmLang(realmName)
 
-	if realmLang and ImproveAny:IsEnabled("LFGSHOWLANGUAGEFLAG", true) then
+	if realmLang and ImproveAny:IsEnabled("LFGSHOWLANGUAGEFLAG", false) then
 		return "|T" .. "Interface\\Addons\\ImproveAny\\media\\flags\\" .. realmLang .. ":12:24:0:0|t" .. " " .. text
 	else
 		return text
@@ -111,7 +111,7 @@ function ImproveAny:InitLFGFrame()
 			local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(id, index, activeEntryInfo.activityID)
 			local dungeonRating = bestDungeonScoreForListing.mapScore
 
-			if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", true) and dungeonRating and dungeonRating > 0 then
+			if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and dungeonRating and dungeonRating > 0 then
 				local color = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonRating)
 
 				if color then
@@ -123,11 +123,11 @@ function ImproveAny:InitLFGFrame()
 
 			local dungeonKey = bestDungeonScoreForListing.bestRunLevel
 
-			if ImproveAny:IsEnabled("LFGSHOWDUNGEONKEY", true) and dungeonKey then
+			if ImproveAny:IsEnabled("LFGSHOWDUNGEONKEY", false) and dungeonKey then
 				text = dungeonKey .. " " .. text
 			end
 
-			if ImproveAny:IsEnabled("LFGSHOWCLASSICON", true) and ImproveAny:GetClassIcon(class) then
+			if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny:GetClassIcon(class) then
 				text = text .. ImproveAny:GetClassIcon(class)
 			end
 
@@ -166,7 +166,7 @@ function ImproveAny:InitLFGFrame()
 
 			-- only when its for dungeon
 			if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then
-				if ImproveAny:IsEnabled("LFGSHOWOVERALLSCORE", true) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
+				if ImproveAny:IsEnabled("LFGSHOWOVERALLSCORE", false) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
 					local color = C_ChallengeMode.GetDungeonScoreRarityColor(sri.leaderOverallDungeonScore)
 
 					if color then
@@ -174,7 +174,7 @@ function ImproveAny:InitLFGFrame()
 					end
 				end
 
-				if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", true) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
+				if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
 					local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(sri.leaderDungeonScoreInfo.mapScore)
 
 					if color then

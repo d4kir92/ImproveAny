@@ -3,7 +3,7 @@ local fontSize = 12
 IAMoneyBar = CreateFrame("FRAME", "IAMoneyBar", UIParent)
 
 function ImproveAny:InitMoneyBar()
-	if ImproveAny:IsEnabled("MONEYBAR", true) then
+	if ImproveAny:IsEnabled("MONEYBAR", false) then
 		IAMoneyBar:SetSize(180, 30)
 		IAMoneyBar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -240 - 10, 100)
 		IAMoneyBar:EnableMouse(true)
@@ -56,11 +56,10 @@ function ImproveAny:InitMoneyBar()
 				local mopm = mops * 60
 				local moph = mopm * 60
 
-				if moph == 0 then
-				elseif moph >= 0 then
-					text2 = GetCoinTextureString(moph, fontSize) .. "/" .. "h"
-				else
-					text2 = "-" .. GetCoinTextureString(math.abs(moph), fontSize) .. "/" .. "h"
+				if moph >= 0 then
+					text2 = GetCoinTextureString(moph, fontSize) .. "/" .. "H"
+				elseif moph < 0 then
+					text2 = "-" .. GetCoinTextureString(math.abs(moph), fontSize) .. "/" .. "H"
 				end
 			end
 

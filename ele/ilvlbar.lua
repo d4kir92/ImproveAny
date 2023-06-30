@@ -2,7 +2,7 @@ local _, ImproveAny = ...
 IAILVLBar = CreateFrame("FRAME", "IAILVLBar", UIParent)
 
 function ImproveAny:InitIAILVLBar()
-	if ImproveAny:IsEnabled("IAILVLBAR", true) then
+	if ImproveAny:IsEnabled("IAILVLBAR", false) then
 		IAILVLBar:SetSize(180, 20)
 		IAILVLBar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 180)
 		IAILVLBar.textilvloverall = IAILVLBar:CreateFontString(nil)

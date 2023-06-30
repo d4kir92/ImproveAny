@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 C_Timer.After(0.01, function()
-	if ImproveAny:IsEnabled("REPBAR", true) then
+	if ImproveAny:IsEnabled("REPBAR", false) then
 		if ReputationWatchBar and ReputationWatchBar.StatusBar then
 			ReputationWatchBar.show = true
 
@@ -134,7 +134,7 @@ C_Timer.After(0.01, function()
 					local percent = per * 100
 
 					if maxBar - minBar > 0 then
-						if ImproveAny:IsEnabled("REPNUMBER", true) then
+						if ImproveAny:IsEnabled("REPNUMBER", false) then
 							if text ~= "" then
 								text = text .. " "
 							end
@@ -142,7 +142,7 @@ C_Timer.After(0.01, function()
 							text = text .. textc .. (value - minBar) .. textw .. "/" .. textc .. (maxBar - minBar)
 						end
 
-						if ImproveAny:IsEnabled("REPPERCENT", true) then
+						if ImproveAny:IsEnabled("REPPERCENT", false) then
 							if text ~= "" then
 								text = text .. textw .. " (" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
 							else
@@ -150,7 +150,7 @@ C_Timer.After(0.01, function()
 							end
 						end
 
-						if ImproveAny:IsEnabled("REPNUMBER", true) or ImproveAny:IsEnabled("REPPERCENT", true) then
+						if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
 							self:SetText(name .. ": " .. text)
 						else
 							self:SetText(orgText)

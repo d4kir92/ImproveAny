@@ -76,7 +76,7 @@ function ImproveAny:InitBags()
 				local COUNT = _G[slot .. "Count"]
 				local id = BAGSIDS[slot]
 
-				if SLOT and ImproveAny:IsEnabled("BAGSAMESIZE", true) then
+				if SLOT and ImproveAny:IsEnabled("BAGSAMESIZE", false) then
 					local size = ImproveAny:GV("BAGSIZE", 30)
 					local scale = size / 30
 

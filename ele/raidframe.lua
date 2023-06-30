@@ -268,7 +268,7 @@ function ImproveAny:InitRaidFrames()
 			hooksecurefunc("CompactUnitFrame_UpdateBuffs", function(frame)
 				if not ImproveAny:IsCompactRaidFrame(frame) then return end
 
-				if ImproveAny:IsEnabled("RAIDFRAMEMOREBUFFS", true) then
+				if ImproveAny:IsEnabled("RAIDFRAMEMOREBUFFS", false) then
 					ImproveAny:RFAddBuffs(frame)
 					local index = 1
 					local frameNum = 1
@@ -313,7 +313,7 @@ function ImproveAny:InitRaidFrames()
 			hooksecurefunc("CompactUnitFrame_UpdateDebuffs", function(frame)
 				if not ImproveAny:IsCompactRaidFrame(frame) then return end
 
-				if ImproveAny:IsEnabled("RAIDFRAMEMOREBUFFS", true) then
+				if ImproveAny:IsEnabled("RAIDFRAMEMOREBUFFS", false) then
 					ImproveAny:RFAddDebuffs(frame)
 					local index = 1
 					local frameNum = 1

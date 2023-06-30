@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 function ImproveAny:InitMicroMenu()
-	if ImproveAny:GetWoWBuild() == "RETAIL" and ImproveAny:IsEnabled("MICROMENUCOLORED", true) then
+	if ImproveAny:GetWoWBuild() == "RETAIL" and ImproveAny:IsEnabled("MICROMENUCOLORED", false) then
 		local MBTNS = MICRO_BUTTONS
 
 		if MICRO_BUTTONS == nil then

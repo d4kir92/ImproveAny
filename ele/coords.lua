@@ -2,7 +2,7 @@ local _, ImproveAny = ...
 local config_update = 0.3
 
 function ImproveAny:InitIACoordsFrame()
-	if ImproveAny:IsEnabled("IACoordsFrame", true) then
+	if ImproveAny:IsEnabled("IACoordsFrame", false) then
 		IACoordsFrame = CreateFrame("Frame", "IACoordsFrame", UIParent)
 		IACoordsFrame:SetSize(100, 20)
 		IACoordsFrame:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, 0)

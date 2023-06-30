@@ -123,8 +123,8 @@ function ImproveAny:InitItemLevel()
 								sum = sum + ilvl
 							end
 
-							if ImproveAny:IsEnabled("ITEMLEVEL", true) then
-								if ImproveAny:IsEnabled("ITEMLEVELNUMBER", true) and ilvl and ilvl > 1 then
+							if ImproveAny:IsEnabled("ITEMLEVEL", false) then
+								if ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and ilvl and ilvl > 1 then
 									SLOT.iatext:SetText(color.hex .. ilvl)
 								end
 
@@ -134,7 +134,7 @@ function ImproveAny:InitItemLevel()
 									alpha = alpha - 0.2
 								end
 
-								if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", true) then
+								if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", false) then
 									SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 								else
 									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
@@ -200,7 +200,7 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.btn = CreateFrame("CheckButton", "PaperDollFrame" .. "btn", PaperDollFrame, "UICheckButtonTemplate")
 		PaperDollFrame.btn:SetSize(20, 20)
 		PaperDollFrame.btn:SetPoint("TOPLEFT", CharacterWristSlot, "BOTTOMLEFT", 6, -10)
-		PaperDollFrame.btn:SetChecked(ImproveAny:IsEnabled("ITEMLEVEL", true))
+		PaperDollFrame.btn:SetChecked(ImproveAny:IsEnabled("ITEMLEVEL", false))
 
 		PaperDollFrame.btn:SetScript("OnClick", function(sel)
 			local newval = self:GetChecked()
@@ -244,15 +244,15 @@ function ImproveAny:InitItemLevel()
 								local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
 								local color = ITEM_QUALITY_COLORS[rarity]
 
-								if ImproveAny:IsEnabled("ITEMLEVEL", true) and ilvl and color then
+								if ImproveAny:IsEnabled("ITEMLEVEL", false) and ilvl and color then
 									-- ignore: shirt, tabard, ammo
 									if i ~= 4 and i ~= 19 and i ~= 20 and ilvl and ilvl > 1 then
 										count = count + 1
 										sum = sum + ilvl
 									end
 
-									if ImproveAny:IsEnabled("ITEMLEVEL", true) then
-										if ImproveAny:IsEnabled("ITEMLEVELNUMBER", true) and ilvl and ilvl > 1 then
+									if ImproveAny:IsEnabled("ITEMLEVEL", false) then
+										if ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and ilvl and ilvl > 1 then
 											SLOT.iatext:SetText(color.hex .. ilvl)
 										end
 
@@ -262,7 +262,7 @@ function ImproveAny:InitItemLevel()
 											alpha = alpha - 0.2
 										end
 
-										if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", true) then
+										if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", false) then
 											SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 										else
 											SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
@@ -301,7 +301,7 @@ function ImproveAny:InitItemLevel()
 
 						IAILVLINSPECT = string.format("%0.2f", sum / max)
 
-						if ImproveAny:IsEnabled("ITEMLEVEL", true) and ImproveAny:IsEnabled("ITEMLEVELNUMBER", true) then
+						if ImproveAny:IsEnabled("ITEMLEVEL", false) and ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) then
 							InspectPaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVLINSPECT)
 						else
 							InspectPaperDollFrame.ilvl:SetText("")
@@ -377,8 +377,8 @@ function ImproveAny:InitItemLevel()
 						local color = ITEM_QUALITY_COLORS[rarity]
 
 						if ilvl and color then
-							if ImproveAny:IsEnabled("ITEMLEVEL", true) then
-								if ImproveAny:IsEnabled("ITEMLEVELNUMBER", true) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) and ilvl and ilvl > 1 then
+							if ImproveAny:IsEnabled("ITEMLEVEL", false) then
+								if ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and tContains(IAClassIDs, classID) or (classID == 15 and tContains(IASubClassIDs15, subclassID)) and ilvl and ilvl > 1 then
 									SLOT.iatext:SetText(color.hex .. ilvl)
 								else
 									SLOT.iatext:SetText("")
@@ -390,7 +390,7 @@ function ImproveAny:InitItemLevel()
 									alpha = alpha - 0.2
 								end
 
-								if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", true) then
+								if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", false) then
 									SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
 								else
 									SLOT.iaborder:SetVertexColor(1, 1, 1, 0)

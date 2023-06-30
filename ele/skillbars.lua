@@ -193,7 +193,7 @@ function ImproveAny:InitSkillBars()
 		IASkills.bars = {}
 	end
 
-	if ImproveAny:IsEnabled("SKILLBARS", true) and ImproveAny:GetWoWBuild() ~= "RETAIL" then
+	if ImproveAny:IsEnabled("SKILLBARS", false) and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 16)
 		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 17)
 		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 18)

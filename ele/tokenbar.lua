@@ -55,7 +55,7 @@ end
 IATokenBar = CreateFrame("FRAME", "IATokenBar", UIParent)
 
 function ImproveAny:InitTokenBar()
-	if ImproveAny:IsEnabled("TOKENBAR", true) then
+	if ImproveAny:IsEnabled("TOKENBAR", false) then
 		IATokenBar:SetSize(180, 20)
 		IATokenBar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -200, 130)
 		IATokenBar:EnableMouse(true)

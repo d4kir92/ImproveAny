@@ -42,7 +42,7 @@ function ImproveAny:InitChat()
 		end
 	end
 
-	if ImproveAny:IsEnabled("CHAT", true) then
+	if ImproveAny:IsEnabled("CHAT", false) then
 		function IAChatOnlyBig(str, imax)
 			if str == nil then return nil end
 			local smax = imax or 3
@@ -204,10 +204,10 @@ function ImproveAny:InitChat()
 				else
 					realm = GetRealmName()
 				end
-
-				realm = string.gsub(realm, "-", "", 1)
-				realm = string.gsub(realm, " ", "", 1)
 			end
+
+			realm = string.gsub(realm, "-", "")
+			realm = string.gsub(realm, " ", "")
 
 			return name, realm
 		end
@@ -287,8 +287,9 @@ function ImproveAny:InitChat()
 		function IAGuildScan()
 			if IsInGuild() then
 				C_GuildInfo.GuildRoster()
+				local max = GetNumGuildMembers(true)
 
-				for i = 1, GetNumGuildMembers(true) do
+				for i = 1, max do
 					local Name, _, _, Level = GetGuildRosterInfo(i)
 					local name, realm = Name:match("([^%-]+)%-?(.*)")
 
@@ -356,12 +357,12 @@ function ImproveAny:InitChat()
 					if guid then
 						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID(guid)
 
-						if ImproveAny:IsEnabled("CHATCLASSCOLORS", true) then
+						if ImproveAny:IsEnabled("CHATCLASSCOLORS", false) then
 							msg = ColorizePlayerNameInMessage(msg, guid, engClass)
 						end
 
 						if engClass and engRace and gender and races[engRace .. gender] and ImproveAny:GetClassIcon(engClass) then
-							if ImproveAny:IsEnabled("CHATCLASSICONS", true) then
+							if ImproveAny:IsEnabled("CHATCLASSICONS", false) then
 								msg = ImproveAny:GetClassIcon(engClass) .. msg
 							end
 
@@ -372,7 +373,7 @@ function ImproveAny:InitChat()
 
 						local level = IAGetLevel(name, realm)
 
-						if ImproveAny:IsEnabled("CHATLEVELS", true) and level and level > 0 then
+						if ImproveAny:IsEnabled("CHATLEVELS", false) and level and level > 0 then
 							if string.find(msg, name .. "|r%]") then
 								msg = string.gsub(msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1)
 							else
@@ -395,7 +396,7 @@ function ImproveAny:InitChat()
 					local itemName, _, _, _, _, _, _, _, _, itemTexture = GetItemInfo(id)
 
 					if itemName and itemTexture then
-						if ImproveAny:IsEnabled("CHATITEMICONS", true) then
+						if ImproveAny:IsEnabled("CHATITEMICONS", false) then
 							return "|T" .. itemTexture .. ":0|t" .. itemString
 						else
 							return itemString
@@ -450,7 +451,7 @@ function ImproveAny:InitChat()
 					end
 				end
 
-				if ImproveAny:IsEnabled("CHATSHORTCHANNELS", true) then
+				if ImproveAny:IsEnabled("CHATSHORTCHANNELS", false) then
 					local leaderChannel = _G["CHAT_MSG_" .. channel .. "_LEADER"]
 
 					if leaderChannel == nil then

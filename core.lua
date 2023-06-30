@@ -117,11 +117,11 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitIAILVLBar()
 		ImproveAny:InitSkillBars()
 
-		if ImproveAny:IsEnabled("BAGS", true) then
+		if ImproveAny:IsEnabled("BAGS", false) then
 			ImproveAny:InitBags()
 		end
 
-		if ImproveAny:IsEnabled("WORLDMAP", true) then
+		if ImproveAny:IsEnabled("WORLDMAP", false) then
 			ImproveAny:InitWorldMapFrame()
 		end
 
@@ -130,7 +130,7 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitMicroMenu()
 		ImproveAny:InitIASettings()
 
-		if ImproveAny:IsEnabled("CHAT", true) then
+		if ImproveAny:IsEnabled("CHAT", false) then
 			ImproveAny:InitChat()
 		end
 
@@ -341,7 +341,7 @@ function ImproveAny:Event(event, ...)
 			if itemId then
 				local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, expacID, _, _ = GetItemInfo(itemId)
 
-				if expacID and ImproveAny:IsEnabled("TOOLTIPEXPANSION", true) then
+				if expacID and ImproveAny:IsEnabled("TOOLTIPEXPANSION", false) then
 					local textcolor = "|cFFFF1111"
 
 					if expacID >= GetExpansionLevel() then
@@ -451,7 +451,7 @@ f.incombat = false
 local ts = 0
 
 function ImproveAny:FastLooting()
-	if GetTime() - ts >= 0.24 and ImproveAny:IsEnabled("FASTLOOTING", true) then
+	if GetTime() - ts >= 0.24 and ImproveAny:IsEnabled("FASTLOOTING", false) then
 		ts = GetTime()
 
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then

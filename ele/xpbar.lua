@@ -70,7 +70,7 @@ function ImproveAny:GetQuestCompleteXP()
 end
 
 function ImproveAny:InitXPBar()
-	if ImproveAny:IsEnabled("XPBAR", true) then
+	if ImproveAny:IsEnabled("XPBAR", false) then
 		if QuestLogFrame then
 			QuestLogFrame:Show()
 			QuestLogFrame:Hide()
@@ -256,7 +256,7 @@ function ImproveAny:InitXPBar()
 						text2 = text2 .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. ImproveAny:GetMaxLevel() .. textw
 					end
 
-					if ImproveAny:IsEnabled("XPNUMBER", true) then
+					if ImproveAny:IsEnabled("XPNUMBER", false) then
 						if text2 ~= "" then
 							text2 = text2 .. "    "
 						end
@@ -264,8 +264,8 @@ function ImproveAny:InitXPBar()
 						text2 = text2 .. XP .. ": " .. textc .. ImproveAny:FormatValue(currXP) .. textw .. "/" .. textc .. ImproveAny:FormatValue(maxBar)
 					end
 
-					if ImproveAny:IsEnabled("XPPERCENT", true) then
-						if ImproveAny:IsEnabled("XPNUMBER", true) then
+					if ImproveAny:IsEnabled("XPPERCENT", false) then
+						if ImproveAny:IsEnabled("XPNUMBER", false) then
 							if text2 ~= "" then
 								text2 = text2 .. textw .. " ("
 							end
@@ -277,12 +277,12 @@ function ImproveAny:InitXPBar()
 
 						text2 = text2 .. textc .. format("%.2f", percent) .. textw .. "%"
 
-						if ImproveAny:IsEnabled("XPNUMBER", true) and text2 ~= "" then
+						if ImproveAny:IsEnabled("XPNUMBER", false) and text2 ~= "" then
 							text2 = text2 .. textw .. ")"
 						end
 					end
 
-					if ImproveAny:IsEnabled("XPEXHAUSTION", true) and GetXPExhaustion() and GetXPExhaustion() >= 0 then
+					if ImproveAny:IsEnabled("XPEXHAUSTION", false) and GetXPExhaustion() and GetXPExhaustion() >= 0 then
 						local eper = GetXPExhaustion() / maxBar
 						local epercent = eper * 100
 
@@ -293,7 +293,7 @@ function ImproveAny:InitXPBar()
 						text2 = text2 .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. ImproveAny:FormatValue(GetXPExhaustion()) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
 					end
 
-					if ImproveAny:IsEnabled("XPMISSING", true) then
+					if ImproveAny:IsEnabled("XPMISSING", false) then
 						if text2 ~= "" then
 							text2 = text2 .. "    "
 						end
@@ -313,7 +313,7 @@ function ImproveAny:InitXPBar()
 								wi = sw - px
 							end
 
-							if ImproveAny:IsEnabled("XPQUESTCOMPLETE", true) then
+							if ImproveAny:IsEnabled("XPQUESTCOMPLETE", false) then
 								MainMenuExpBar.qcx:SetPoint("LEFT", MainMenuExpBar, "LEFT", px, 0)
 								MainMenuExpBar.qcx:SetWidth(wi)
 								MainMenuExpBar.qcx:Show()
@@ -323,7 +323,7 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					if ImproveAny:IsEnabled("XPQUESTCOMPLETE", true) and questCompleteXP > 0 then
+					if ImproveAny:IsEnabled("XPQUESTCOMPLETE", false) and questCompleteXP > 0 then
 						if text2 ~= "" then
 							text2 = text2 .. "    "
 						end
@@ -331,7 +331,7 @@ function ImproveAny:InitXPBar()
 						text2 = text2 .. QUEST_COMPLETE .. "-" .. XP .. ": " .. textc .. questCompleteXP .. textw
 					end
 
-					if ImproveAny:IsEnabled("XPKILLSTOLEVELUP", true) then
+					if ImproveAny:IsEnabled("XPKILLSTOLEVELUP", false) then
 						if text2 ~= "" then
 							text2 = text2 .. "    "
 						end

@@ -95,7 +95,7 @@ function ImproveAny:InitWorldMapFrame()
 		return normalizedX, normalizedY
 	end
 
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", true) then
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", false) then
 		local plyCoords = CreateFrame("FRAME", "plyCoords", WorldMapFrame.ScrollContainer)
 		plyCoords:SetSize(200, 60)
 		plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
@@ -166,7 +166,7 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords:IAUpdate()
 	end
 
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", true) then
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", false) then
 		local curCoords = CreateFrame("FRAME", "curCoords", WorldMapFrame.ScrollContainer)
 		curCoords:SetSize(200, 60)
 		curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)

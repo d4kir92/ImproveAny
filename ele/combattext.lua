@@ -120,7 +120,7 @@ function ImproveAny:InitCombatText()
 						end
 					end
 
-					if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", true) then
+					if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 						local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
 						sel:SetText(t)
 						done = true
@@ -140,7 +140,7 @@ function ImproveAny:InitCombatText()
 					if cle.tabhot then
 						local icon = cle.tabhot[amount]
 
-						if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", true) then
+						if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 							local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
 							sel:SetText(t)
 						else

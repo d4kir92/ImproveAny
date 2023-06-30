@@ -3,13 +3,13 @@ local mmdelay = 0.1
 local minimapshape = "ROUND"
 
 function ImproveAny:UpdateMinimapSettings()
-	if ImproveAny:IsEnabled("MINIMAP", true) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", true) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
 		IASHAPE("SQUARE")
 	else
 		IASHAPE("ROUND")
 	end
 
-	if ImproveAny:IsEnabled("MINIMAP", true) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", true) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) then
 		if MinimapBorder then
 			MinimapBorder:Hide()
 		end
@@ -35,7 +35,7 @@ function ImproveAny:UpdateMinimapSettings()
 		end
 	end
 
-	if ImproveAny:IsEnabled("MINIMAP", true) and ImproveAny:IsEnabled("MINIMAPHIDEZOOMBUTTONS", true) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEZOOMBUTTONS", false) then
 		if MinimapZoomIn then
 			MinimapZoomIn:Hide()
 		end
@@ -53,7 +53,7 @@ function ImproveAny:UpdateMinimapSettings()
 		end
 	end
 
-	if ImproveAny:IsEnabled("MINIMAP", true) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", true) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", false) then
 		function IAOnMouseWheel(sel, dir)
 			if dir > 0 then
 				if MinimapZoomIn then
@@ -76,7 +76,7 @@ function ImproveAny:UpdateMinimapSettings()
 	end
 
 	C_Timer.After(0.1, function()
-		if ImproveAny:IsEnabled("MINIMAP", true) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", true) then
+		if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) then
 			if MinimapBorder then
 				MinimapBorder:SetParent(IAHIDDEN)
 			end
@@ -132,14 +132,14 @@ function ImproveAny:InitMinimap()
 
 	ImproveAny:UpdateMinimapSettings()
 
-	if ImproveAny:IsEnabled("MINIMAP", true) then
+	if ImproveAny:IsEnabled("MINIMAP", false) then
 		if ElvUI then return end
 
 		C_Timer.After(0.3, function()
 			local IAMMBtnsBliz = {}
 
 			function ImproveAny:ConvertToMinimapButton(name, hide)
-				if not ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", true) then return end
+				if not ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", false) then return end
 				local btn = _G[name]
 
 				if btn then
