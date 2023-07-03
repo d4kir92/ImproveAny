@@ -69,6 +69,36 @@ function ImproveAny:GetQuestCompleteXP()
 	return math.floor(totalXP)
 end
 
+local function AddText(text, bNum, bPer, str, vNum, vNumMax)
+	local res = ""
+
+	if ImproveAny:IsEnabled(bNum, false) or (bPer and ImproveAny:IsEnabled(bPer, false)) then
+		if text ~= "" then
+			res = res .. "    "
+		end
+
+		if vNum and vNum ~= 0 then
+			if vNumMax and vNumMax > 0 then
+				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
+					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", textw, str, textc, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
+				elseif bPer and ImproveAny:IsEnabled(bPer, false) then
+					res = res .. format("%s%s: %s%0.1f%s%%", textw, str, textc, vNum / vNumMax * 100, textw)
+				elseif ImproveAny:IsEnabled(bNum, false) then
+					res = res .. format("%s%s: %s%d%s/%s%d", textw, str, textc, vNum, textw, textc, vNumMax, textw)
+				end
+			else
+				if ImproveAny:IsEnabled(bNum, false) then
+					res = res .. format("%s%s: %s%d%s", textw, str, textc, vNum, textw)
+				end
+			end
+		else
+			res = res .. format("%s%s: %s%s", textw, str, textc, UNKNOWN, textw)
+		end
+	end
+
+	return res
+end
+
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", false) then
 		if QuestLogFrame then
@@ -146,21 +176,44 @@ function ImproveAny:InitXPBar()
 
 			if MainMenuExpBar then
 				MainMenuExpBar:SetHeight(15)
-				MainMenuExpBar.show = true
 
 				MainMenuExpBar:HookScript("OnEnter", function(sel)
-					MainMenuExpBar.show = false
-					MainMenuBarExpText:Hide()
+					if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
+						MainMenuExpBar.show = true
+						MainMenuBarExpText:Show()
+					else
+						MainMenuExpBar.show = false
+						MainMenuBarExpText:Hide()
+					end
 				end)
 
 				MainMenuExpBar:HookScript("OnLeave", function(sel)
+					if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
+						MainMenuExpBar.show = false
+						MainMenuBarExpText:Hide()
+					else
+						MainMenuExpBar.show = true
+						MainMenuBarExpText:Show()
+					end
+				end)
+
+				if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 					MainMenuExpBar.show = true
 					MainMenuBarExpText:Show()
-				end)
+				else
+					MainMenuExpBar.show = false
+					MainMenuBarExpText:Hide()
+				end
 
 				for sec = 1, 3 do
 					C_Timer.After(sec, function()
-						MainMenuBarExpText:Show()
+						if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
+							MainMenuExpBar.show = true
+							MainMenuBarExpText:Show()
+						else
+							MainMenuExpBar.show = false
+							MainMenuBarExpText:Hide()
+						end
 					end)
 				end
 			end
@@ -241,65 +294,9 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					local per = currXP / maxBar
-					local percent = per * 100
 					local missingXp = maxBar - currXP
-					local percent2 = missingXp / maxBar * 100
 					local questCompleteXP = ImproveAny:GetQuestCompleteXP()
 					local text2 = ""
-
-					if ImproveAny:IsEnabled("XPLEVEL", false) then
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
-
-						text2 = text2 .. LEVEL .. ": " .. textc .. UnitLevel("PLAYER") .. textw .. "/" .. textc .. ImproveAny:GetMaxLevel() .. textw
-					end
-
-					if ImproveAny:IsEnabled("XPNUMBER", false) then
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
-
-						text2 = text2 .. XP .. ": " .. textc .. ImproveAny:FormatValue(currXP) .. textw .. "/" .. textc .. ImproveAny:FormatValue(maxBar)
-					end
-
-					if ImproveAny:IsEnabled("XPPERCENT", false) then
-						if ImproveAny:IsEnabled("XPNUMBER", false) then
-							if text2 ~= "" then
-								text2 = text2 .. textw .. " ("
-							end
-						else
-							if text2 ~= "" then
-								text2 = text2 .. "    "
-							end
-						end
-
-						text2 = text2 .. textc .. format("%.2f", percent) .. textw .. "%"
-
-						if ImproveAny:IsEnabled("XPNUMBER", false) and text2 ~= "" then
-							text2 = text2 .. textw .. ")"
-						end
-					end
-
-					if ImproveAny:IsEnabled("XPEXHAUSTION", false) and GetXPExhaustion() and GetXPExhaustion() >= 0 then
-						local eper = GetXPExhaustion() / maxBar
-						local epercent = eper * 100
-
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
-
-						text2 = text2 .. textw .. TUTORIAL_TITLE26 .. ": " .. textc .. ImproveAny:FormatValue(GetXPExhaustion()) .. " " .. textw .. "(" .. textc .. format("%.2f", epercent) .. "%" .. textw .. ")"
-					end
-
-					if ImproveAny:IsEnabled("XPMISSING", false) then
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
-
-						text2 = text2 .. ADDON_MISSING .. ": " .. textc .. ImproveAny:FormatValue(missingXp) .. textw .. " (" .. textc .. format("%.2f", percent2) .. "%" .. textw .. ")"
-					end
 
 					if MainMenuExpBar and MainMenuExpBar.qcx then
 						local sw, _ = MainMenuExpBar:GetSize()
@@ -323,28 +320,23 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					if ImproveAny:IsEnabled("XPQUESTCOMPLETE", false) and questCompleteXP > 0 then
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
+					-- Level
+					text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, UnitLevel("PLAYER"), ImproveAny:GetMaxLevel())
+					-- XP
+					text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
+					-- XP Missing
+					text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, missingXp, maxBar)
 
-						text2 = text2 .. QUEST_COMPLETE .. "-" .. XP .. ": " .. textc .. questCompleteXP .. textw
+					-- XP Exhaustion
+					if GetXPExhaustion() and GetXPExhaustion() >= 0 then
+						text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, GetXPExhaustion(), maxBar)
 					end
 
-					if ImproveAny:IsEnabled("XPKILLSTOLEVELUP", false) then
-						if text2 ~= "" then
-							text2 = text2 .. "    "
-						end
-
-						local kpm = ImproveAny:GetKillsToLevelUp()
-
-						if kpm > 0 then
-							text2 = text2 .. format(QUICKBUTTON_NAME_KILLS .. ": " .. textc .. "%0.1f" .. textw, kpm)
-						else
-							text2 = text2 .. format(QUICKBUTTON_NAME_KILLS .. ": " .. textc .. UNKNOWN .. textw, kpm)
-						end
-					end
-
+					-- XP QuestComplete
+					text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar)
+					-- XP KILLSTOLEVELUP
+					text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp())
+					-- XPBAR -> SetText
 					sel:SetText(text2)
 
 					if MainMenuExpBar.show then

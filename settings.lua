@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.30")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.31")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -490,14 +490,19 @@ function ImproveAny:InitIASettings()
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("XPBAR")
 			AddCheckBox(4, "XPBAR", false)
-			AddCheckBox(24, "XPLEVEL", false)
+			AddCheckBox(24, "XPNUMBERLEVEL", false)
+			AddCheckBox(24, "XPPERCENTLEVEL", false)
 			AddCheckBox(24, "XPNUMBER", false)
 			AddCheckBox(24, "XPPERCENT", false)
-			AddCheckBox(24, "XPMISSING", false)
-			AddCheckBox(24, "XPEXHAUSTION", false)
-			AddCheckBox(24, "XPQUESTCOMPLETE", false)
-			AddCheckBox(24, "XPKILLSTOLEVELUP", false)
+			AddCheckBox(24, "XPNUMBEREXHAUSTION", false)
+			AddCheckBox(24, "XPPERCENTEXHAUSTION", false)
+			AddCheckBox(24, "XPNUMBERMISSING", false)
+			AddCheckBox(24, "XPPERCENTMISSING", false)
+			AddCheckBox(24, "XPNUMBERQUESTCOMPLETE", false)
+			AddCheckBox(24, "XPPERCENTQUESTCOMPLETE", false)
+			AddCheckBox(24, "XPNUMBERKILLSTOLEVELUP", false)
 			AddCheckBox(24, "XPHIDEARTWORK", false)
+			AddCheckBox(24, "XPBARTEXTSHOWINVERTED", false)
 			AddCategory("REPBAR")
 			AddCheckBox(4, "REPBAR", false)
 			AddCheckBox(24, "REPNUMBER", false)
