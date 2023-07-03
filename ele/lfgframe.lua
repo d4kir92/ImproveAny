@@ -127,7 +127,7 @@ function ImproveAny:InitLFGFrame()
 				text = dungeonKey .. " " .. text
 			end
 
-			if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny:GetClassIcon(class) then
+			if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny.GetClassIcon and ImproveAny:GetClassIcon(class) then
 				text = text .. ImproveAny:GetClassIcon(class)
 			end
 
