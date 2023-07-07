@@ -60,6 +60,7 @@ function ImproveAny:Lang_enUS()
 		["XPPERCENTMISSING"] = "Missing XP Percent",
 		["XPNUMBEREXHAUSTION"] = "XP Exhaustion Number",
 		["XPPERCENTEXHAUSTION"] = "XP Exhaustion Percent",
+		["XPHIDEUNKNOWNVALUES"] = "Hide unknown XP values",
 		["XPHIDEARTWORK"] = "XPBar Hide Artwork",
 		["XPBARTEXTSHOWINVERTED"] = "Invert show/hide XPBar text",
 		["REPBAR"] = "Reputation Bar",

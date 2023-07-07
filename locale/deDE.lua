@@ -53,6 +53,7 @@ function ImproveAny:Lang_deDE()
 		["XPPERCENTMISSING"] = "Fehlende XP Prozent",
 		["XPNUMBEREXHAUSTION"] = "XP-Erschöpfung Nummer",
 		["XPPERCENTEXHAUSTION"] = "XP-Erschöpfung Prozent",
+		["XPHIDEUNKNOWNVALUES"] = "Verstecke unbekannte XP Zahlen",
 		["XPHIDEARTWORK"] = "XP-Leiste Kunstwerk ausblenden",
 		["XPBARTEXTSHOWINVERTED"] = "Ein-/Ausblenden des XPBar-Textes invertieren",
 		["REPBAR"] = "Rufleiste",

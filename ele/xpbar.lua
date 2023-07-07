@@ -69,12 +69,18 @@ function ImproveAny:GetQuestCompleteXP()
 	return math.floor(totalXP)
 end
 
-local function AddText(text, bNum, bPer, str, vNum, vNumMax)
+local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 	local res = ""
 
 	if ImproveAny:IsEnabled(bNum, false) or (bPer and ImproveAny:IsEnabled(bPer, false)) then
 		if text ~= "" then
 			res = res .. "    "
+		end
+
+		local num = "%d"
+
+		if bDecimals then
+			num = "%0.1f"
 		end
 
 		if vNum and vNum ~= 0 then
@@ -88,10 +94,10 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax)
 				end
 			else
 				if ImproveAny:IsEnabled(bNum, false) then
-					res = res .. format("%s%s: %s%d%s", textw, str, textc, vNum, textw)
+					res = res .. format("%s%s: %s" .. num .. "%s", textw, str, textc, vNum, textw)
 				end
 			end
-		else
+		elseif ImproveAny:IsEnabled("XPHIDEUNKNOWNVALUES", false) == false then
 			res = res .. format("%s%s: %s%s", textw, str, textc, UNKNOWN, textw)
 		end
 	end
@@ -112,6 +118,8 @@ function ImproveAny:InitXPBar()
 				qaf:RegisterEvent("QUEST_ACCEPTED")
 				qaf:RegisterEvent("QUEST_COMPLETE")
 				qaf:RegisterEvent("QUEST_TURNED_IN")
+				qaf:RegisterEvent("LOOT_OPENED")
+				qaf:RegisterEvent("LOOT_CLOSED")
 
 				qaf:SetScript("OnEvent", function(sel, event, ...)
 					if event == "QUEST_ACCEPTED" then
@@ -124,7 +132,7 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					C_Timer.After(0.01, function()
+					C_Timer.After(0.05, function()
 						if MainMenuBarExpText then
 							MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
 						end
@@ -335,7 +343,7 @@ function ImproveAny:InitXPBar()
 					-- XP QuestComplete
 					text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar)
 					-- XP KILLSTOLEVELUP
-					text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp())
+					text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
 					-- XPBAR -> SetText
 					sel:SetText(text2)
 
