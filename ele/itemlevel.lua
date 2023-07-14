@@ -211,13 +211,13 @@ function ImproveAny:InitItemLevel()
 				IFThink.UpdateItemInfos()
 			end
 
-			if IAUpdateBags then
-				IAUpdateBagsIlvl()
+			if ImproveAny.UpdateBagsIlvl then
+				ImproveAny:UpdateBagsIlvl()
 			end
 		end)
 
 		-- Inspect
-		function IAWaitForInspectFrame()
+		function ImproveAny:WaitForInspectFrame()
 			if InspectPaperDollFrame then
 				IFThink = CreateFrame("FRAME")
 				InspectPaperDollFrame.ilvl = InspectPaperDollFrame:CreateFontString(nil, "ARTWORK")
@@ -318,13 +318,13 @@ function ImproveAny:InitItemLevel()
 					C_Timer.After(0.1, IFThink.UpdateItemInfos)
 				end)
 			else
-				C_Timer.After(0.1, IAWaitForInspectFrame)
+				C_Timer.After(0.1, ImproveAny.WaitForInspectFrame)
 			end
 		end
 
-		IAWaitForInspectFrame()
+		ImproveAny:WaitForInspectFrame()
 
-		function IAGetContainerNumSlots(bagID)
+		function ImproveAny:GetContainerNumSlots(bagID)
 			local cur = 0
 
 			if C_Container and C_Container.GetContainerNumSlots then
@@ -342,7 +342,7 @@ function ImproveAny:InitItemLevel()
 			return max, cur
 		end
 
-		function IAGetContainerItemLink(bagID, slotID)
+		function ImproveAny:GetContainerItemLink(bagID, slotID)
 			if C_Container and C_Container.GetContainerItemLink then return C_Container.GetContainerItemLink(bagID, slotID) end
 
 			return GetContainerItemLink(bagID, slotID)
@@ -357,7 +357,7 @@ function ImproveAny:InitItemLevel()
 				bagID = id
 			end
 
-			local size = IAGetContainerNumSlots(bagID)
+			local size = ImproveAny:GetContainerNumSlots(bagID)
 
 			for i = 1, size do
 				local SLOT = _G[name .. "Item" .. i]
@@ -368,7 +368,7 @@ function ImproveAny:InitItemLevel()
 
 				if SLOT then
 					local slotID = size - i + 1
-					local slotLink = IAGetContainerItemLink(bagID, slotID)
+					local slotLink = ImproveAny:GetContainerItemLink(bagID, slotID)
 					ImproveAny:AddIlvl(SLOT, slotID)
 
 					if slotLink and GetDetailedItemLevelInfo then
@@ -411,7 +411,7 @@ function ImproveAny:InitItemLevel()
 			end
 		end
 
-		function IAUpdateBagsIlvl()
+		function ImproveAny:UpdateBagsIlvl()
 			local tab = {}
 
 			for i = 1, 20 do
@@ -422,7 +422,7 @@ function ImproveAny:InitItemLevel()
 				ContainerFrameCombinedBags.iasetup = true
 
 				ContainerFrameCombinedBags:HookScript("OnShow", function(sel)
-					IAUpdateBagsIlvl()
+					ImproveAny:UpdateBagsIlvl()
 				end)
 			end
 
@@ -454,10 +454,10 @@ function ImproveAny:InitItemLevel()
 		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
 
 		frame:SetScript("OnEvent", function(sel, event)
-			IAUpdateBagsIlvl()
+			ImproveAny:UpdateBagsIlvl()
 		end)
 
-		IAUpdateBagsIlvl()
+		ImproveAny:UpdateBagsIlvl()
 	end
 
 	if ImproveAny:GetWoWBuild() ~= "RETAIL" then

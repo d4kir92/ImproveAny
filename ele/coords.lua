@@ -10,7 +10,7 @@ function ImproveAny:InitIACoordsFrame()
 		IACoordsFrame.coords:SetPoint("CENTER", IACoordsFrame, "CENTER", 0, 0)
 		IACoordsFrame.coords:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE")
 
-		function IAFPSThink()
+		function ImproveAny:FPSThink()
 			if ImproveAny.GetBestPosXY then
 				local x, y = ImproveAny:GetBestPosXY("PLAYER")
 
@@ -21,9 +21,9 @@ function ImproveAny:InitIACoordsFrame()
 				end
 			end
 
-			C_Timer.After(config_update, IAFPSThink)
+			C_Timer.After(config_update, ImproveAny.FPSThink)
 		end
 
-		IAFPSThink()
+		ImproveAny:FPSThink()
 	end
 end

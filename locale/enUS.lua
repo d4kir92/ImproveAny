@@ -107,6 +107,7 @@ function ImproveAny:Lang_enUS()
 		["COORDSFONTSIZE"] = "Coords Fontsize",
 		["IACoordsFrame"] = "Coords Frame",
 		["RIGHTCLICKSELFCAST"] = "Right click to selfcast",
+		["BLOCKWORDS"] = "Blockwords"
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

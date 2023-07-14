@@ -60,7 +60,7 @@ if IMPORTREALMS[portal] then
 			if REALMS[portal][realmName] == nil then
 				REALMS[portal][realmName] = lang
 			else
-				print(">>> EXISTS ALREADY", realmName)
+				print(">>> [ImproveAny] EXISTS ALREADY", realmName)
 			end
 		end
 	end

@@ -192,7 +192,7 @@ function ImproveAny:InitChat()
 	end
 
 	if ImproveAny:IsEnabled("CHAT", false) then
-		function IAChatOnlyBig(str, imax)
+		function ImproveAny:ChatOnlyBig(str, imax)
 			if str == nil then return nil end
 			local smax = imax or 3
 			local res = string.gsub(str, "[^%u-]", "")
@@ -227,11 +227,11 @@ function ImproveAny:InitChat()
 
 		local PLYCache = {}
 
-		local function IAGetGUID(name)
+		function ImproveAny:GetGUID(name)
 			return PLYCache[name]
 		end
 
-		function IAFixName(name, realm)
+		function ImproveAny:FixName(name, realm)
 			if name and realm == nil or realm == "" then
 				local s1 = string.find(name, "-", 0, true)
 
@@ -251,43 +251,43 @@ function ImproveAny:InitChat()
 
 		local levelTab = {}
 
-		function IAGetLevel(name, realm)
-			name, realm = IAFixName(name, realm)
+		function ImproveAny:GetLevel(name, realm)
+			name, realm = ImproveAny:FixName(name, realm)
 
 			return levelTab[name .. "-" .. realm]
 		end
 
-		function IASetLevel(name, realm, level, from)
-			name, realm = IAFixName(name, realm)
+		function ImproveAny:SetLevel(name, realm, level, from)
+			name, realm = ImproveAny:FixName(name, realm)
 
 			if name and realm then
 				levelTab[name .. "-" .. realm] = level
 			end
 		end
 
-		IASetLevel(UnitName("player"), nil, UnitLevel("player"))
+		ImproveAny:SetLevel(UnitName("player"), nil, UnitLevel("player"))
 
-		function IAWhoScan()
+		function ImproveAny:WhoScan()
 			for i = 1, C_FriendList.GetNumWhoResults() do
 				local info = C_FriendList.GetWhoInfo(i)
 
 				if info and info.fullName and info.level then
-					IASetLevel(info.fullName, nil, info.level, "IAWhoScan")
+					ImproveAny:SetLevel(info.fullName, nil, info.level, "WhoScan")
 				end
 			end
 		end
 
-		function IAFriendScan()
+		function ImproveAny:FriendScan()
 			for i = 1, C_FriendList.GetNumFriends() do
 				local info = C_FriendList.GetFriendInfo(i)
 
 				if info and info.fullName and info.level then
-					IASetLevel(info.fullName, nil, info.level, "IAFriendScan")
+					ImproveAny:SetLevel(info.fullName, nil, info.level, "FriendScan")
 				end
 			end
 		end
 
-		function IAPartyScan()
+		function ImproveAny:PartyScan()
 			local max = GetNumSubgroupMembers or GetNumPartyMembers
 			local success = true
 
@@ -298,17 +298,17 @@ function ImproveAny:InitChat()
 					if UnitLevel("party" .. i) == 0 then
 						success = false
 					else
-						IASetLevel(name, realm, UnitLevel("party" .. i), "IAPartyScan")
+						ImproveAny:SetLevel(name, realm, UnitLevel("party" .. i), "PartyScan")
 					end
 				end
 			end
 
 			if not success then
-				C_Timer.After(0.1, IAPartyScan)
+				C_Timer.After(0.1, ImproveAny.PartyScan)
 			end
 		end
 
-		function IARaidScan()
+		function ImproveAny:RaidScan()
 			local max = GetNumGroupMembers or GetNumRaidMembers
 
 			for i = 1, max() do
@@ -316,12 +316,12 @@ function ImproveAny:InitChat()
 				local Name, Server = UnitName("raid" .. i)
 
 				if Name then
-					IASetLevel(Name, Server, Level, "IARaidScan")
+					ImproveAny:SetLevel(Name, Server, Level, "RaidScan")
 				end
 			end
 		end
 
-		function IAGuildScan()
+		function ImproveAny:GuildScan()
 			if IsInGuild() then
 				C_GuildInfo.GuildRoster()
 				local max = GetNumGuildMembers(true)
@@ -331,7 +331,7 @@ function ImproveAny:InitChat()
 					local name, realm = Name:match("([^%-]+)%-?(.*)")
 
 					if name then
-						IASetLevel(name, realm, Level, "IAGuildScan")
+						ImproveAny:SetLevel(name, realm, Level, "GuildScan")
 					end
 				end
 			end
@@ -352,29 +352,29 @@ function ImproveAny:InitChat()
 
 		lf:SetScript("OnEvent", function(sel, event, ...)
 			if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
-				C_Timer.After(delay, IAGuildScan)
+				C_Timer.After(delay, ImproveAny.GuildScan)
 			elseif event == "PLAYER_LEVEL_UP" then
-				IASetLevel(UnitName("player"), GetRealmName(), UnitLevel("player"))
+				ImproveAny:SetLevel(UnitName("player"), GetRealmName(), UnitLevel("player"))
 			elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
-				C_Timer.After(delay, IAWhoScan)
+				C_Timer.After(delay, ImproveAny.WhoScan)
 			elseif event == "FRIENDLIST_UPDATE" then
-				C_Timer.After(delay, IAFriendScan)
+				C_Timer.After(delay, ImproveAny.FriendScan)
 			elseif event == "RAID_ROSTER_UPDATE" or event == "CHAT_MSG_RAID" then
-				C_Timer.After(delay, IARaidScan)
+				C_Timer.After(delay, ImproveAny.RaidScan)
 			elseif event == "GROUP_ROSTER_UPDATE" then
-				C_Timer.After(delay, IAPartyScan)
+				C_Timer.After(delay, ImproveAny.PartyScan)
 			else
 				ImproveAny:MSG("Missing Event: " .. event)
 			end
 		end)
 
-		IAWhoScan()
-		IAFriendScan()
-		IAPartyScan()
-		IARaidScan()
-		IAGuildScan()
+		ImproveAny:WhoScan()
+		ImproveAny:FriendScan()
+		ImproveAny:PartyScan()
+		ImproveAny:RaidScan()
+		ImproveAny:GuildScan()
 
-		local function IAChatAddPlayerIcons(msg, c)
+		local function LOCALChatAddPlayerIcons(msg, c)
 			local links = {}
 
 			for i = 1, string.len(msg) do
@@ -389,7 +389,7 @@ function ImproveAny:InitChat()
 				local typ, id = string.split(":", itemString)
 
 				if allowedTyp[typ] then
-					local guid = IAGetGUID(id)
+					local guid = ImproveAny:GetGUID(id)
 
 					if guid then
 						local _, engClass, _, engRace, gender, name, realm = GetPlayerInfoByGUID(guid)
@@ -408,7 +408,7 @@ function ImproveAny:InitChat()
 							end
 						end
 
-						local level = IAGetLevel(name, realm)
+						local level = ImproveAny:GetLevel(name, realm)
 
 						if ImproveAny:IsEnabled("CHATLEVELS", false) and level and level > 0 then
 							if string.find(msg, name .. "|r%]") then
@@ -424,7 +424,7 @@ function ImproveAny:InitChat()
 			return msg
 		end
 
-		local function IAChatAddItemIcons(msg)
+		local function LOCALChatAddItemIcons(msg)
 			msg = string.gsub(msg, "(|H.-|h.-|h)", function(itemString)
 				local typ, id = string.match(itemString, "|H(.-):(.-)|h")
 
@@ -496,21 +496,21 @@ function ImproveAny:InitChat()
 					end
 
 					if leaderChannel then
-						message = ImproveAny:ReplaceStr(message, leaderChannel, IAChatOnlyBig(leaderChannel))
+						message = ImproveAny:ReplaceStr(message, leaderChannel, ImproveAny:ChatOnlyBig(leaderChannel))
 					end
 
 					if chanName then
-						message = ImproveAny:ReplaceStr(message, chanName, IAChatOnlyBig(chanName))
+						message = ImproveAny:ReplaceStr(message, chanName, ImproveAny:ChatOnlyBig(chanName))
 					elseif channelName then
 						chanName = _G["CHAT_MSG_" .. channelName]
 
 						if chanName then
-							message = "[" .. IAChatOnlyBig(chanName, 1) .. "] " .. message
+							message = "[" .. ImproveAny:ChatOnlyBig(chanName, 1) .. "] " .. message
 						end
 					end
 				end
 
-				message = IAChatAddPlayerIcons(message, 1)
+				message = LOCALChatAddPlayerIcons(message, 1)
 			end
 
 			return hooks[sel](sel, message, ...)
@@ -528,24 +528,24 @@ function ImproveAny:InitChat()
 		end
 
 		-- Item Icons
-		function IAIconsFilter(sel, event, msg, author, ...)
+		local function LOCALIconsFilter(sel, typ, msg, author, ...)
 			local guid = select(10, ...)
 
 			if author and guid then
 				PLYCache[author] = guid
 			end
 
-			return false, IAChatAddItemIcons(msg, 1), author, ...
+			return false, LOCALChatAddItemIcons(msg, 1), author, ...
 		end
 
 		for i, typ in pairs(chatTypes) do
-			ChatFrame_AddMessageEventFilter(typ, IAIconsFilter)
+			ChatFrame_AddMessageEventFilter(typ, LOCALIconsFilter)
 		end
 
 		-- URLs / IPs / Emails
 		local patterns = {"[htps:/]*%w+%.%w[%w%.%/%+%-%_%#%?%=]*"}
 
-		function IAConvertMessage(sel, event, msg, ...)
+		function ImproveAny:ConvertMessage(typ, msg, ...)
 			for i, p in pairs(patterns) do
 				local s1 = string.find(msg, "|")
 				local s2 = string.find(msg, p)
@@ -605,7 +605,7 @@ function ImproveAny:InitChat()
 
 		-- SetHyperLink
 		for i, typ in pairs(chatTypes) do
-			ChatFrame_AddMessageEventFilter(typ, IAConvertMessage)
+			ChatFrame_AddMessageEventFilter(typ, ImproveAny.ConvertMessage)
 		end
 	end
 end

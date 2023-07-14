@@ -153,7 +153,7 @@ function ImproveAny:InitRaidFrames()
 			end)
 		end
 
-		function IA_CompactUnitFrame_UpdateCooldownFrame(frame, expirationTime, duration)
+		function ImproveAny:_CompactUnitFrame_UpdateCooldownFrame(frame, expirationTime, duration)
 			if GetClassicExpansionLevel() < LE_EXPANSION_BURNING_CRUSADE then return end
 			local enabled = expirationTime and expirationTime ~= 0
 
@@ -165,7 +165,7 @@ function ImproveAny:InitRaidFrames()
 			end
 		end
 
-		function IA_CompactUnitFrame_UtilSetBuff(buffFrame, unit, index, filter)
+		function ImproveAny:CompactUnitFrame_UtilSetBuff(buffFrame, unit, index, filter)
 			local _, icon, count, _, duration, expirationTime, _, _, _, _, _ = UnitBuff(unit, index, filter)
 			buffFrame.icon:SetTexture(icon)
 
@@ -183,11 +183,11 @@ function ImproveAny:InitRaidFrames()
 			end
 
 			buffFrame:SetID(index)
-			IA_CompactUnitFrame_UpdateCooldownFrame(buffFrame, expirationTime, duration)
+			ImproveAny:CompactUnitFrame_UpdateCooldownFrame(buffFrame, expirationTime, duration)
 			buffFrame:Show()
 		end
 
-		function IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, unit, index, filter, isBossAura, isBossBuff)
+		function ImproveAny:_CompactUnitFrame_UtilSetDebuff(debuffFrame, unit, index, filter, isBossAura, isBossBuff)
 			-- make sure you are using the correct index here!
 			--isBossAura says make this look large.
 			--isBossBuff looks in HELPFULL auras otherwise it looks in HARMFULL ones
@@ -216,7 +216,7 @@ function ImproveAny:InitRaidFrames()
 			end
 
 			debuffFrame:SetID(index)
-			IA_CompactUnitFrame_UpdateCooldownFrame(debuffFrame, expirationTime, duration)
+			ImproveAny:CompactUnitFrame_UpdateCooldownFrame(debuffFrame, expirationTime, duration)
 			local color = DebuffTypeColor[debuffType] or DebuffTypeColor["none"]
 			debuffFrame.border:SetVertexColor(color.r, color.g, color.b)
 			debuffFrame.isBossBuff = isBossBuff
@@ -237,7 +237,7 @@ function ImproveAny:InitRaidFrames()
 			local oldInNotCombatIds = ""
 			local inNotCombatIds = {}
 
-			function IA_CompactUnitFrame_UtilShouldDisplayBuff(unit, index, filter)
+			function ImproveAny:_CompactUnitFrame_UtilShouldDisplayBuff(unit, index, filter)
 				local _, _, _, _, _, _, _, _, _, _, canApplyAura = UnitBuff(unit, index, filter)
 				local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
 
@@ -279,11 +279,11 @@ function ImproveAny:InitRaidFrames()
 							local buffName = UnitBuff(frame.displayedUnit, index, filter)
 
 							if buffName then
-								if IA_CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
+								if ImproveAny:CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
 									local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
 
 									if buffFrame then
-										IA_CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
+										ImproveAny:CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
 									end
 
 									frameNum = frameNum + 1
@@ -328,7 +328,7 @@ function ImproveAny:InitRaidFrames()
 									local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 
 									if debuffFrame then
-										IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false)
+										ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false)
 									end
 
 									frameNum = frameNum + 1
@@ -360,7 +360,7 @@ function ImproveAny:InitRaidFrames()
 									local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 
 									if debuffFrame then
-										IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, true)
+										ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, true)
 									end
 
 									frameNum = frameNum + 1
@@ -392,7 +392,7 @@ function ImproveAny:InitRaidFrames()
 									local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 
 									if debuffFrame then
-										IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
+										ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
 									end
 
 									frameNum = frameNum + 1
@@ -426,7 +426,7 @@ function ImproveAny:InitRaidFrames()
 										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
 
 										if debuffFrame then
-											IA_CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
+											ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
 										end
 
 										frameNum = frameNum + 1

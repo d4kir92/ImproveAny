@@ -4,9 +4,9 @@ local minimapshape = "ROUND"
 
 function ImproveAny:UpdateMinimapSettings()
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
-		IASHAPE("SQUARE")
+		ImproveAny:SHAPE("SQUARE")
 	else
-		IASHAPE("ROUND")
+		ImproveAny:SHAPE("ROUND")
 	end
 
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) then
@@ -54,7 +54,7 @@ function ImproveAny:UpdateMinimapSettings()
 	end
 
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", false) then
-		function IAOnMouseWheel(sel, dir)
+		function ImproveAny:OnMouseWheel(sel, dir)
 			if dir > 0 then
 				if MinimapZoomIn then
 					MinimapZoomIn:Click()
@@ -70,7 +70,7 @@ function ImproveAny:UpdateMinimapSettings()
 			end
 		end
 
-		Minimap:SetScript("OnMouseWheel", IAOnMouseWheel)
+		Minimap:SetScript("OnMouseWheel", ImproveAny.OnMouseWheel)
 	else
 		Minimap:SetScript("OnMouseWheel", function() end) --
 	end
@@ -116,7 +116,7 @@ function ImproveAny:InitMinimap()
 		return minimapshape
 	end
 
-	function IASHAPE(msg)
+	function ImproveAny:SHAPE(msg)
 		msg = msg:upper()
 
 		if minimapshape ~= msg then
@@ -313,7 +313,7 @@ function ImproveAny:InitMinimap()
 			-- ADDONS
 			local mmbtns = {}
 
-			function IAUpdateMMBtns()
+			function ImproveAny:UpdateMMBtns()
 				for i, child in pairs({Minimap:GetChildren()}) do
 					if not tContains(mmbtns, child) and child:GetName() then
 						for x, w in pairs(mmBtnsNames) do
@@ -328,11 +328,11 @@ function ImproveAny:InitMinimap()
 				mmdelay = mmdelay + 0.1
 
 				if mmdelay <= 1.0 then
-					C_Timer.After(mmdelay, IAUpdateMMBtns)
+					C_Timer.After(mmdelay, ImproveAny.UpdateMMBtns)
 				end
 			end
 
-			IAUpdateMMBtns()
+			ImproveAny:UpdateMMBtns()
 		end)
 	end
 end

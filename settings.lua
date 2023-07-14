@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.35")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.36")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -66,7 +66,7 @@ local cbs = {}
 local ebs = {}
 local sls = {}
 
-local function IASetPos(ele, key, x)
+function ImproveAny:SetPos(ele, key, x)
 	if ele == nil then return false end
 	ele:ClearAllPoints()
 
@@ -96,7 +96,7 @@ local function AddCategory(key)
 		ca.f:SetText(ImproveAny:GT(key))
 	end
 
-	IASetPos(cas[key], key)
+	ImproveAny:SetPos(cas[key], key)
 end
 
 local function AddCheckBox(x, key, val, func)
@@ -152,7 +152,7 @@ local function AddEditBox(x, key, val, func)
 				ImproveAny:SV(key, ebs[key]:GetText())
 
 				if func then
-					func()
+					func(self, ...)
 				end
 			end
 		end)
@@ -162,7 +162,7 @@ local function AddEditBox(x, key, val, func)
 		ebs[key].f:SetText(ImproveAny:GT(key))
 	end
 
-	IASetPos(ebs[key], key, x + 8)
+	ImproveAny:SetPos(ebs[key], key, x + 8)
 end
 
 local function AddSlider(x, key, val, func, vmin, vmax, steps)
@@ -219,7 +219,7 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps)
 		posy = posy - 10
 	end
 
-	IASetPos(sls[key], key, x)
+	ImproveAny:SetPos(sls[key], key, x)
 end
 
 function ImproveAny:UpdateILVLIcons()
@@ -229,8 +229,8 @@ function ImproveAny:UpdateILVLIcons()
 		IFThink.UpdateItemInfos()
 	end
 
-	if IAUpdateBags then
-		IAUpdateBagsIlvl()
+	if ImproveAny.UpdateBagsIlvl then
+		ImproveAny:UpdateBagsIlvl()
 	end
 end
 
@@ -397,10 +397,10 @@ function ImproveAny:ToggleSettings()
 
 	if ImproveAny:IsEnabled("SETTINGS", false) then
 		IASettings:Show()
-		IASettings:UpdateShowErrors()
+		ImproveAny:UpdateShowErrors()
 	else
 		IASettings:Hide()
-		IASettings:UpdateShowErrors()
+		ImproveAny:UpdateShowErrors()
 	end
 end
 
@@ -434,7 +434,7 @@ function ImproveAny:InitIASettings()
 		ImproveAny:ToggleSettings()
 	end)
 
-	function IAUpdateElementList()
+	function ImproveAny:UpdateElementList(sel)
 		posy = -8
 		AddCategory("GENERAL")
 		AddCheckBox(4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton)
@@ -472,6 +472,31 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(24, "CHATRACEICONS", false)
 		AddCheckBox(24, "CHATLEVELS", false)
 		AddCheckBox(24, "CHATCLASSCOLORS", false)
+
+		AddEditBox(24, "BLOCKWORDS", "", function(eb, ...)
+			eb.lastchange = GetTime()
+
+			C_Timer.After(1, function()
+				if eb.lastchange < GetTime() - 0.9 then
+					ImproveAny:SV("BLOCKWORDS", eb:GetText())
+
+					if eb:GetText() ~= "" then
+						print("|cFF00FF00" .. "[ImproveAny] " .. "BLOCKWORDS changed to: |r")
+
+						for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+							if strlen(v) < 3 then
+								print(" • |cFFFF0000" .. v .. " [TO SHORT!]")
+							else
+								print(" • |cFF00FF00" .. v)
+							end
+						end
+					else
+						print("|cFFFF0000" .. "[ImproveAny] " .. "BLOCKWORDS are disabled")
+					end
+				end
+			end)
+		end)
+
 		AddCategory("MINIMAP")
 		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
@@ -557,7 +582,7 @@ function ImproveAny:InitIASettings()
 
 	IASettings.Search:SetScript("OnTextChanged", function(sel, ...)
 		searchStr = IASettings.Search:GetText()
-		IAUpdateElementList()
+		ImproveAny:UpdateElementList()
 	end)
 
 	IASettings.SF = CreateFrame("ScrollFrame", "IASettings_SF", IASettings, "UIPanelScrollFrameTemplate")
@@ -600,10 +625,10 @@ function ImproveAny:InitIASettings()
 			C_UI.Reload()
 		end
 
-		IASettings:UpdateShowErrors()
+		ImproveAny:UpdateShowErrors()
 	end)
 
-	function IASettings:UpdateShowErrors()
+	function ImproveAny:UpdateShowErrors()
 		if GetCVar("ScriptErrors") == "0" then
 			IASettings.showerrors:Show()
 		else
@@ -611,7 +636,7 @@ function ImproveAny:InitIASettings()
 		end
 	end
 
-	IASettings:UpdateShowErrors()
+	ImproveAny:UpdateShowErrors()
 	IASettings.DISCORD = CreateFrame("EditBox", "IASettings" .. ".DISCORD", IASettings, "InputBoxTemplate")
 	IASettings.DISCORD:SetText("discord.gg/AWcDfvcYCN")
 	IASettings.DISCORD:SetSize(160, 24)
@@ -624,3 +649,30 @@ function ImproveAny:InitIASettings()
 		IASettings:SetPoint(dbp1, UIParent, dbp3, dbp4, dbp5)
 	end
 end
+
+function ImproveAny:CheckBlockedWords()
+	if ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
+		for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+			if strlen(v) < 3 then
+				print("|cFFFF0000" .. "[ImproveAny] " .. "Blockword \"" .. v .. "\" is to short!")
+			end
+		end
+	end
+end
+
+ImproveAny:CheckBlockedWords()
+
+function ImproveAny:RemoveBadWords(self, msg, author, ...)
+	msg = strlower(msg)
+
+	if ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
+		for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+			if v ~= "" and msg:find(strlower(v)) then return true end
+		end
+	end
+end
+
+ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ImproveAny.RemoveBadWords)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ImproveAny.RemoveBadWords)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", ImproveAny.RemoveBadWords)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", ImproveAny.RemoveBadWords)

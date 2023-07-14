@@ -16,7 +16,7 @@ function ImproveAny:GT(str)
 
 		return str
 	else
-		print("MISSING STR", str)
+		print("[ImproveAny] MISSING STR", str)
 	end
 end
 

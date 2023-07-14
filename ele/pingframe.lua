@@ -10,7 +10,7 @@ function ImproveAny:InitIAPingFrame()
 		IAPingFrame.ping:SetPoint("CENTER", IAPingFrame, "CENTER", 0, 0)
 		IAPingFrame.ping:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE")
 
-		function IAPingThink()
+		function ImproveAny:PingThink()
 			local _, _, lagHome, lagWorld = GetNetStats()
 			local dif = abs(lagHome - lagWorld)
 			local lagNorm = lagHome + dif
@@ -25,9 +25,9 @@ function ImproveAny:InitIAPingFrame()
 				IAPingFrame.ping:SetText(format("|cff3FC7EBPing|r: %4dms", lagNorm))
 			end
 
-			C_Timer.After(config_update, IAPingThink)
+			C_Timer.After(config_update, ImproveAny.PingThink)
 		end
 
-		IAPingThink()
+		ImproveAny:PingThink()
 	end
 end

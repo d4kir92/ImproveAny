@@ -8,7 +8,7 @@ local skillIds = {}
 local jobs = {}
 local subTypes = {}
 
-local function IAGetSkillData(name)
+function ImproveAny:GetSkillData(name)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
@@ -57,7 +57,7 @@ local function IAGetSkillData(name)
 	return itemname, itemcur, itemmax
 end
 
-local function IAGetWeaponSkillData(id)
+function ImproveAny:GetWeaponSkillData(id)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
@@ -65,7 +65,7 @@ local function IAGetWeaponSkillData(id)
 
 	if item then
 		if subTypes[item] then
-			itemname, itemcur, itemmax = IAGetSkillData(subTypes[item])
+			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
 		else
 			_, _, _, _, _, _, itemSubType = GetItemInfo(item)
 
@@ -85,7 +85,7 @@ local function IAGetWeaponSkillData(id)
 			end
 
 			subTypes[item] = itemSubType
-			itemname, itemcur, itemmax = IAGetSkillData(itemSubType)
+			itemname, itemcur, itemmax = ImproveAny:GetSkillData(itemSubType)
 		end
 	end
 
@@ -194,15 +194,15 @@ function ImproveAny:InitSkillBars()
 	end
 
 	if ImproveAny:IsEnabled("SKILLBARS", false) and ImproveAny:GetWoWBuild() ~= "RETAIL" then
-		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 16)
-		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 17)
-		ImproveAny:AddStatusBar(IAGetWeaponSkillData, 18)
-		ImproveAny:AddStatusBar(IAGetSkillData, string.lower(STAT_CATEGORY_DEFENSE))
-		ImproveAny:AddStatusBar(IAGetSkillData, "job")
-		ImproveAny:AddStatusBar(IAGetSkillData, "job")
-		ImproveAny:AddStatusBar(IAGetSkillData, string.lower(PROFESSIONS_FIRST_AID))
-		ImproveAny:AddStatusBar(IAGetSkillData, string.lower(PROFESSIONS_COOKING))
-		ImproveAny:AddStatusBar(IAGetSkillData, string.lower(PROFESSIONS_FISHING))
+		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
+		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
+		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(STAT_CATEGORY_DEFENSE))
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FIRST_AID))
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_COOKING))
+		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FISHING))
 		ImproveAny:SkillsThink()
 	end
 end
