@@ -9,6 +9,7 @@ local jobs = {}
 local subTypes = {}
 
 function ImproveAny:GetSkillData(name)
+	--print("name", name)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
@@ -58,6 +59,7 @@ function ImproveAny:GetSkillData(name)
 end
 
 function ImproveAny:GetWeaponSkillData(id)
+	--print("id", id)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
@@ -122,10 +124,10 @@ function ImproveAny:SkillsThink()
 	local jobid = 1
 
 	for i, bar in pairs(IASkills.bars) do
-		local name, cur, max = bar.func(bar.args)
+		local name, cur, max = bar:func(bar.args)
 
 		if bar.args == "job" and jobs[jobid] then
-			name, cur, max = bar.func(string.lower(jobs[jobid]))
+			name, cur, max = bar:func(string.lower(jobs[jobid]))
 			jobid = jobid + 1
 		end
 
