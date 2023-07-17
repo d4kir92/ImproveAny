@@ -54,7 +54,7 @@ function ImproveAny:UpdateMinimapSettings()
 	end
 
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", false) then
-		function ImproveAny:OnMouseWheel(sel, dir)
+		function ImproveAny:OnMouseWheel(dir)
 			if dir > 0 then
 				if MinimapZoomIn then
 					MinimapZoomIn:Click()
