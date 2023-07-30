@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.39")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.40")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -651,7 +651,7 @@ function ImproveAny:InitIASettings()
 end
 
 function ImproveAny:CheckBlockedWords()
-	if ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
+	if IATAB and ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
 		for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
 			if strlen(v) < 3 then
 				print("|cFFFF0000" .. "[ImproveAny] " .. "Blockword \"" .. v .. "\" is to short!")
@@ -660,7 +660,7 @@ function ImproveAny:CheckBlockedWords()
 	end
 end
 
-ImproveAny:CheckBlockedWords()
+C_Timer.After(2, ImproveAny.CheckBlockedWords)
 
 function ImproveAny:RemoveBadWords(self, msg, author, ...)
 	msg = strlower(msg)
