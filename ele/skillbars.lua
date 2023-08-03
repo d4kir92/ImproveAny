@@ -9,7 +9,6 @@ local jobs = {}
 local subTypes = {}
 
 function ImproveAny:GetSkillData(name)
-	--print("name", name)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
@@ -59,7 +58,6 @@ function ImproveAny:GetSkillData(name)
 end
 
 function ImproveAny:GetWeaponSkillData(id)
-	--print("id", id)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
