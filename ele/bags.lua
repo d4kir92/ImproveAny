@@ -116,11 +116,11 @@ function ImproveAny:InitBags()
 		end)
 
 		C_Timer.After(1, function()
-			IABagBar = CreateFrame("FRAME", "IABagBar", MABagBar or UIParent)
+			IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
 
 			if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
-				if ImproveAny:GetWoWBuild() ~= "RETAIL" and MABagBar then
-					BagToggle = CreateFrame("BUTTON", "BagToggle", MABagBar or UIParent)
+				if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
+					BagToggle = CreateFrame("BUTTON", "BagToggle", BagsBar or UIParent)
 					local mainBag = _G["MainMenuBarBackpackButton"]
 
 					if mainBag then
@@ -174,6 +174,13 @@ function ImproveAny:InitBags()
 
 							if slot ~= "MainMenuBarBackpackButton" then
 								if slot ~= "BagToggle" then
+									hooksecurefunc(SLOT, "SetParent", function(sel, parent)
+										if sel.ia_setparent then return end
+										sel.ia_setparent = true
+										sel:SetParent(IABagBar)
+										sel.ia_setparent = false
+									end)
+
 									SLOT:SetParent(IABagBar)
 								end
 
@@ -188,19 +195,19 @@ function ImproveAny:InitBags()
 								oldslot = SLOT
 							else
 								SLOT:ClearAllPoints()
-								SLOT:SetPoint("RIGHT", MABagBar or UIParent, "RIGHT", 0, 0)
+								SLOT:SetPoint("RIGHT", BagsBar or UIParent, "RIGHT", 0, 0)
 							end
 						end
 					end
 
 					sw = sw + (count - 1) * br
-					BagToggle:SetPoint("LEFT", MABagBar or UIParent, "RIGHT", -sh * 1.5 - br, 0)
+					BagToggle:SetPoint("LEFT", BagsBar or UIParent, "RIGHT", -sh * 1.5 - br, 0)
 					BagToggle:SetSize(sh * 0.5, sh * 0.8)
 					IABagBar:SetSize(sw, sh)
-					IABagBar:SetPoint("RIGHT", MABagBar or UIParent, "RIGHT", 0, 0)
+					IABagBar:SetPoint("RIGHT", BagsBar or UIParent, "RIGHT", 0, 0)
 
-					if MABagBar then
-						MABagBar:SetSize(sw, sh)
+					if BagsBar then
+						BagsBar:SetSize(sw, sh)
 					end
 				end
 			elseif ImproveAny:GV("BAGMODE", "RETAIL") == "CLASSIC" then
@@ -252,9 +259,9 @@ function ImproveAny:InitBags()
 					sw = sw + (count - 1) * br
 					IABagBar:SetSize(sw, sh)
 
-					if MABagBar then
-						IABagBar:SetPoint("RIGHT", MABagBar or UIParent, "RIGHT", 0, 0)
-						MABagBar:SetSize(sw, sh)
+					if BagsBar then
+						IABagBar:SetPoint("RIGHT", BagsBar or UIParent, "RIGHT", 0, 0)
+						BagsBar:SetSize(sw, sh)
 					else
 						IABagBar:SetPoint("TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0)
 					end
@@ -274,9 +281,9 @@ function ImproveAny:InitBags()
 					local sw, sh = SLOT:GetSize()
 					IABagBar:SetSize(sw, sh)
 
-					if MABagBar then
-						IABagBar:SetPoint("RIGHT", MABagBar or UIParent, "RIGHT", 0, 0)
-						MABagBar:SetSize(sw, sh)
+					if BagsBar then
+						IABagBar:SetPoint("RIGHT", BagsBar or UIParent, "RIGHT", 0, 0)
+						BagsBar:SetSize(sw, sh)
 					else
 						IABagBar:SetPoint("TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0)
 					end
@@ -289,4 +296,18 @@ function ImproveAny:InitBags()
 			end
 		end)
 	end
+
+	C_Timer.After(1, function()
+		for i, v in pairs(BAGS) do
+			local bagF = _G[v]
+			local NT = _G[v .. "NormalTexture"]
+
+			if NT and bagF and NT.scalesetup == nil then
+				NT.scalesetup = true
+				local sw, sh = bagF:GetSize()
+				local scale = 1.67
+				NT:SetSize(sw * scale, sh * scale)
+			end
+		end
+	end)
 end
