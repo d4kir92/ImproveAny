@@ -420,8 +420,18 @@ function ImproveAny:InitChat()
 						if ImproveAny:IsEnabled("CHATLEVELS", false) and level and level > 0 then
 							if string.find(msg, name .. "|r%]") then
 								msg = string.gsub(msg, name .. "|r%]", level .. ":" .. name .. "|r%]", 1)
-							else
+							elseif string.find(msg, name .. "%]") then
 								msg = string.gsub(msg, name .. "%]", level .. ":" .. name .. "%]", 1)
+							else
+								local _, e1 = string.find(msg, name)
+
+								if e1 then
+									local s2 = string.find(msg, name, e1)
+
+									if s2 then
+										msg = msg:sub(1, s2 - 1) .. level .. ":" .. msg:sub(s2)
+									end
+								end
 							end
 						end
 					end
