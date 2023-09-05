@@ -441,6 +441,12 @@ function ImproveAny:Event(event, ...)
 				sel:UnregisterEvent(event2)
 			end
 		end)
+
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+			function ShouldKnowUnitHealth()
+				return true
+			end
+		end
 	end
 end
 
