@@ -277,6 +277,34 @@ function ImproveAny:InitMinimap()
 			-- Retail
 			ImproveAny:ConvertToMinimapButton("MiniMapTrackingButton") -- Tracking
 
+			if MiniMapTracking then
+				hooksecurefunc(MiniMapTrackingButton, "SetPoint", function(sel, ...)
+					if sel.ia_setpoint then return end
+					sel.ia_setpoint = true
+					MiniMapTracking:ClearAllPoints()
+					MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
+					sel.ia_setpoint = false
+				end)
+
+				hooksecurefunc(MiniMapTracking, "SetPoint", function(sel, ...)
+					if sel.ia_setpoint then return end
+					sel.ia_setpoint = true
+					MiniMapTracking:ClearAllPoints()
+					MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
+					sel.ia_setpoint = false
+				end)
+
+				MiniMapTracking:ClearAllPoints()
+				MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
+
+				if MiniMapTrackingButton:GetFrameLevel() > 1 then
+					MiniMapTracking:SetFrameLevel(MiniMapTrackingButton:GetFrameLevel() - 1)
+				else
+					MiniMapTrackingButton:SetFrameLevel(3)
+					MiniMapTracking:SetFrameLevel(MiniMapTrackingButton:GetFrameLevel() - 1)
+				end
+			end
+
 			if GameTimeFrame then
 				GameTimeFrame:SetFrameLevel(10)
 			end
