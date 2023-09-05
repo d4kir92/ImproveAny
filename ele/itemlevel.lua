@@ -203,7 +203,7 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.btn:SetChecked(ImproveAny:IsEnabled("ITEMLEVEL", false))
 
 		PaperDollFrame.btn:SetScript("OnClick", function(sel)
-			local newval = self:GetChecked()
+			local newval = sel:GetChecked()
 			ImproveAny:SetEnabled("ITEMLEVEL", newval)
 			PDThink.UpdateItemInfos()
 

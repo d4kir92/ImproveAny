@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.49")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.50")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -110,8 +110,8 @@ local function AddCheckBox(x, key, val, func)
 		cb:SetSize(24, 24)
 		cb:SetChecked(ImproveAny:IsEnabled(key, val))
 
-		cb:SetScript("OnClick", function(self)
-			ImproveAny:SetEnabled(key, self:GetChecked())
+		cb:SetScript("OnClick", function(sel)
+			ImproveAny:SetEnabled(key, sel:GetChecked())
 
 			if func then
 				func()
