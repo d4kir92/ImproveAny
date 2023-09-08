@@ -2,6 +2,7 @@ local _, ImproveAny = ...
 -- TAINTFREE SLASH COMMANDS --
 local lastMessage = ""
 local cmds = {}
+local IAMMBTN = nil
 
 hooksecurefunc("ChatEdit_ParseText", function(editBox, send, parseIfNoSpace)
 	if send == 0 then
@@ -436,7 +437,7 @@ function ImproveAny:Event(event, ...)
 			end
 		end)
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ShouldKnowUnitHealth() == false then
 			function ShouldKnowUnitHealth()
 				return true
 			end

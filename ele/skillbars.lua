@@ -67,7 +67,7 @@ function ImproveAny:GetWeaponSkillData(id)
 		if subTypes[item] then
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
 		else
-			_, _, _, _, _, _, itemSubType = GetItemInfo(item)
+			local _, _, _, _, _, _, itemSubType = GetItemInfo(item)
 
 			if itemSubType then
 				if AUCTION_SUBCATEGORY_ONE_HANDED then

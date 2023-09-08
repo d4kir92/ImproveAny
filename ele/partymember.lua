@@ -117,58 +117,11 @@ local function OnEventXPInit(self, event, ...)
 				local PartyPortrait = _G["PartyMemberFrame" .. i .. "Portrait"]
 				local ManaBar = _G["PartyMemberFrame" .. i .. "ManaBar"]
 
-				if iadebugxpbar then
-					hooksecurefunc(PartyFrame, "Hide", function(sel)
-						if sel.mahide then return end
-						sel.mahide = true
-						sel:Show()
-						sel.mahide = false
-					end)
-
-					PartyFrame:Show()
-
-					hooksecurefunc(PartyFrame:GetParent(), "Hide", function(sel)
-						if sel.mahide then return end
-						sel.mahide = true
-						sel:Show()
-						sel.mahide = false
-					end)
-
-					PartyFrame:GetParent():Show()
-				end
-
 				for id = 1, 4 do
-					local debuff = _G["PartyMemberFrame" .. i .. "Debuff" .. id]
 					local parent = _G["PartyMemberFrame" .. i .. "Debuff" .. id - 1]
 
 					if parent == nil then
 						parent = PartyFrame
-					end
-
-					if debuff and iadebugxpbar then
-						hooksecurefunc(debuff, "Hide", function(sel)
-							if sel.mahide then return end
-							sel.mahide = true
-							sel:Show()
-							sel.mahide = false
-						end)
-
-						debuff:Show()
-
-						if false then
-							local xpbar = _G["PartyFrameXPBar" .. id]
-
-							if xpbar then
-								hooksecurefunc(xpbar, "Hide", function(sel)
-									if sel.mahide then return end
-									sel.mahide = true
-									sel:Show()
-									sel.mahide = false
-								end)
-
-								xpbar:Show()
-							end
-						end
 					end
 				end
 
@@ -225,7 +178,7 @@ local function OnEventXPInit(self, event, ...)
 
 					function PartyFrameXPBar.think()
 						if UnitExists("PARTY" .. i) and UnitLevel("PARTY" .. i) < ImproveAny:GetMaxLevel() then
-							PartyFrameXPBar:Show()
+							PartyFrameXPBar:SetAlpha(1)
 							local co = GetQuestDifficultyColor(UnitLevel("PARTY" .. i))
 							PartyFrameXPBar.levelText:SetText(UnitLevel("PARTY" .. i))
 							PartyFrameXPBar.levelText:SetTextColor(co.r, co.g, co.b, 1)
@@ -265,7 +218,7 @@ local function OnEventXPInit(self, event, ...)
 								PartyFrameXPBar.textureBorder:SetAlpha(0)
 							end
 						else
-							PartyFrameXPBar:Hide()
+							PartyFrameXPBar:SetAlpha(0)
 						end
 
 						_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:SetPoint(_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:GetPoint())
