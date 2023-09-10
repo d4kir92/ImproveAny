@@ -437,8 +437,8 @@ function ImproveAny:Event(event, ...)
 			end
 		end)
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ShouldKnowUnitHealth() == false then
-			function ShouldKnowUnitHealth()
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ShouldKnowUnitHealth and ShouldKnowUnitHealth("target") == false then
+			function ShouldKnowUnitHealth(unit)
 				return true
 			end
 		end
