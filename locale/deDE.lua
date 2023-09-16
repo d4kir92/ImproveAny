@@ -100,7 +100,9 @@ function ImproveAny:Lang_deDE()
 		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
 		["IACoordsFrame"] = "Koordinatenfenster",
 		["RIGHTCLICKSELFCAST"] = "Rechtsklick für Selbstzauber",
-		["BLOCKWORDS"] = "Blockwörter"
+		["BLOCKWORDS"] = "Blockwörter",
+		["FRAMES"] = "Fenster",
+		["WIDEFRAMES"] = "Weite Fenster",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

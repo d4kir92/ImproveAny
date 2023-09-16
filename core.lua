@@ -443,7 +443,7 @@ function ImproveAny:Event(event, ...)
 			end
 		end
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
 			if ImproveAny:GetWoWBuild() == "CLASSIC" then
 				local tall, numTallQuests = 74, 22
 

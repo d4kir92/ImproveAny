@@ -1,7 +1,7 @@
 local _, ImproveAny = ...
 
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.55")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.56")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -443,9 +443,6 @@ function ImproveAny:InitIASettings()
 		AddSlider(4, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1)
 		AddSlider(4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1)
 		AddCheckBox(4, "HIDEPVPBADGE", false)
-		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)
-		AddSlider(4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5)
-		AddSlider(4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1)
 
 		if StatusTrackingBarManager then
 			AddSlider(4, "STATUSBARWIDTH", 565, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
@@ -512,6 +509,11 @@ function ImproveAny:InitIASettings()
 		AddCategory("ITEMLEVEL")
 		AddCheckBox(4, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
 		AddCheckBox(4, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
+		AddCategory("FRAMES")
+		AddCheckBox(4, "WIDEFRAMES", false)
+		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)
+		AddSlider(4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5)
+		AddSlider(4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1)
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("XPBAR")
