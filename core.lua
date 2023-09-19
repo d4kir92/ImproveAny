@@ -1085,14 +1085,5 @@ function ImproveAny:InitAutoAcceptQuests()
 		raaf:SetScript("OnEvent", Autoquests)
 	end
 
-	local aaf = CreateFrame("Frame")
-	aaf:RegisterEvent("PLAYER_LOGIN")
-	aaf:SetScript(
-		"OnEvent",
-		function(sel, event)
-			if event == "PLAYER_LOGIN" then
-				RegisterAutoQuestsEvents()
-			end
-		end
-	)
+	RegisterAutoQuestsEvents()
 end
