@@ -49,7 +49,7 @@ end
 
 local PDThink = CreateFrame("FRAME")
 
-function PDThink:UpdateItemInfos()
+function ImproveAny:PDUpdateItemInfos()
 	local count = 0
 	local sum = 0
 
@@ -94,7 +94,7 @@ function PDThink:UpdateItemInfos()
 				else
 					SLOT.iatexth:SetText("")
 				end
-
+		
 				if ilvl and color then
 					if slot == "AmmoSlot" then
 						local COUNT = _G["Character" .. slot .. "Count"]
@@ -106,6 +106,7 @@ function PDThink:UpdateItemInfos()
 							COUNT:SetText(COUNT:GetText())
 						end
 					end
+					
 
 					-- ignore: shirt, tabard, ammo
 					if i ~= 4 and i ~= 19 and i ~= 20 and ilvl and ilvl > 1 then
@@ -187,7 +188,7 @@ function ImproveAny:InitItemLevel()
 		end
 
 		function PDThink.Loop()
-			PDThink.UpdateItemInfos()
+			ImproveAny:PDUpdateItemInfos()
 			C_Timer.After(1, PDThink.Loop)
 		end
 
@@ -195,7 +196,7 @@ function ImproveAny:InitItemLevel()
 		PDThink:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 
 		PDThink:SetScript("OnEvent", function(sel, event, slotid, ...)
-			PDThink.UpdateItemInfos()
+			ImproveAny:PDUpdateItemInfos()
 		end)
 
 		PaperDollFrame.btn = CreateFrame("CheckButton", "PaperDollFrame" .. "btn", PaperDollFrame, "UICheckButtonTemplate")
@@ -206,10 +207,10 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.btn:SetScript("OnClick", function(sel)
 			local newval = sel:GetChecked()
 			ImproveAny:SetEnabled("ITEMLEVEL", newval)
-			PDThink.UpdateItemInfos()
+			ImproveAny:PDUpdateItemInfos()
 
-			if IFThink and IFThink.UpdateItemInfos then
-				IFThink.UpdateItemInfos()
+			if ImproveAny.IFUpdateItemInfos then
+				ImproveAny:IFUpdateItemInfos()
 			end
 
 			if ImproveAny.UpdateBagsIlvl then
@@ -230,7 +231,7 @@ function ImproveAny:InitItemLevel()
 					ImproveAny:AddIlvl(_G["Inspect" .. slot], i)
 				end
 
-				function IFThink.UpdateItemInfos()
+				function ImproveAny:IFUpdateItemInfos()
 					local count = 0
 					local sum = 0
 
@@ -312,11 +313,11 @@ function ImproveAny:InitItemLevel()
 					end
 				end
 
-				C_Timer.After(0.5, IFThink.UpdateItemInfos)
+				C_Timer.After(0.5, ImproveAny.IFUpdateItemInfos)
 				IFThink:RegisterEvent("INSPECT_READY")
 
 				IFThink:SetScript("OnEvent", function(sel, event, slotid, ...)
-					C_Timer.After(0.1, IFThink.UpdateItemInfos)
+					C_Timer.After(0.1, ImproveAny.IFUpdateItemInfos)
 				end)
 			else
 				C_Timer.After(0.1, ImproveAny.WaitForInspectFrame)
