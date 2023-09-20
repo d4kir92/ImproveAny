@@ -7,18 +7,14 @@ local skillMax = -1
 local skillIds = {}
 local jobs = {}
 local subTypes = {}
-
 function ImproveAny:GetSkillData(name)
 	local itemcur = nil
 	local itemmax = nil
 	local itemname = nil
-
 	if GetSkillLineInfo then
 		local id = skillIds[name]
-
 		if id then
 			local skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(id)
-
 			if skillName then
 				itemcur = skillRank
 				itemmax = skillMaxRank
@@ -26,14 +22,12 @@ function ImproveAny:GetSkillData(name)
 			end
 		else
 			local numSkillLines = 999
-
 			if GetNumSkillLines then
 				numSkillLines = GetNumSkillLines()
 			end
 
 			for i = 1, numSkillLines do
 				local skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(i)
-
 				if skillName then
 					if name == string.lower(skillName) then
 						skillIds[name] = i
@@ -62,17 +56,14 @@ function ImproveAny:GetWeaponSkillData(id)
 	local itemmax = nil
 	local itemname = nil
 	local item = GetInventoryItemLink("player", id)
-
 	if item then
 		if subTypes[item] then
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
 		else
 			local _, _, _, _, _, _, itemSubType = GetItemInfo(item)
-
 			if itemSubType then
 				if AUCTION_SUBCATEGORY_ONE_HANDED then
 					local s1, e1 = string.find(itemSubType, AUCTION_SUBCATEGORY_ONE_HANDED, 1, true)
-
 					if s1 and e1 then
 						local onehanded = string.gsub(AUCTION_SUBCATEGORY_ONE_HANDED, "%-", "_")
 						itemSubType = string.gsub(itemSubType, "%-", "_")
@@ -87,26 +78,30 @@ function ImproveAny:GetWeaponSkillData(id)
 			subTypes[item] = itemSubType
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(itemSubType)
 		end
+	else
+		if id == 16 then
+			if GetLocale() == "enGB" or GetLocale() == "enUS" then
+				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unarmed")
+			end
+
+			if GetLocale() == "deDE" then
+				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unbewaffnet")
+			end
+		end
 	end
 
 	return itemname, itemcur, itemmax
 end
 
 function ImproveAny:SkillsThink()
-	if GetNumSkillLines then
-		numSkillLines = GetNumSkillLines()
-	end
-
-	if GetNumSkillLines ~= skillMax then
+	if GetNumSkillLines and GetNumSkillLines() ~= skillMax then
 		skillMax = GetNumSkillLines
 		skillIds = {}
 		jobs = {}
 		subTypes = {}
-
 		if GetSkillLineInfo then
 			for i = 1, 64 do
 				local skillName, _, _, _, _, _, _, isAbandonable, _, _, _, _ = GetSkillLineInfo(i)
-
 				if skillName and not tContains(jobs, skillName) then
 					if isAbandonable then
 						tinsert(jobs, skillName)
@@ -120,10 +115,8 @@ function ImproveAny:SkillsThink()
 
 	local id = 1
 	local jobid = 1
-
 	for i, bar in pairs(IASkills.bars) do
 		local name, cur, max = bar:func(bar.args)
-
 		if bar.args == "job" and jobs[jobid] then
 			name, cur, max = bar:func(string.lower(jobs[jobid]))
 			jobid = jobid + 1
@@ -154,10 +147,8 @@ function ImproveAny:SkillsThink()
 end
 
 local skillid = 0
-
 function ImproveAny:AddStatusBar(func, args)
 	skillid = skillid + 1
-
 	if skillid then
 		IASkills.bars[skillid] = CreateFrame("FRAME", name, IASkills)
 		local bar = IASkills.bars[skillid]
