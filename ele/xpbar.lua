@@ -99,11 +99,22 @@ end
 function ImproveAny:UpdateQuestFrame()
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
-		local questLogTitleText, _, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
+		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
 		if not isHeader and GetQuestLogRewardXP(questID) then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
 			local questTitleTagText = questTitleTag:GetText() or ""
 			local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
+			if lvl and lvl > 0 then
+				local lvltext = lvl
+				if questTag == "Dungeon" then
+					lvltext = lvltext .. "D"
+				elseif questTag == "Group" then
+					lvltext = lvltext .. "G"
+				end
+
+				questNormalText:SetText(format("[%s]%s", lvltext, questNormalText:GetText()))
+			end
+
 			questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
 			if isComplete and isComplete < 0 then
 				questTag = FAILED
@@ -113,7 +124,7 @@ function ImproveAny:UpdateQuestFrame()
 
 			if questTag then
 				QuestLogDummyText:SetText("  " .. questLogTitleText)
-				tempWidth = 276 - questTitleTag:GetWidth()
+				tempWidth = 274 - questTitleTag:GetWidth()
 				if QuestLogDummyText:GetWidth() > tempWidth then
 					textWidth = tempWidth
 				else
@@ -122,7 +133,7 @@ function ImproveAny:UpdateQuestFrame()
 
 				questNormalText:SetWidth(tempWidth)
 			else
-				if questNormalText:GetWidth() > 276 then
+				if questNormalText:GetWidth() > 274 then
 					questNormalText:SetWidth(260)
 				end
 			end
