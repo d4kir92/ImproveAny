@@ -97,6 +97,7 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 end
 
 function ImproveAny:UpdateQuestFrame()
+	local oldQuestId = QuestLogFrame.selectedButtonID
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
 		SelectQuestLogEntry(questIndex)
@@ -142,6 +143,8 @@ function ImproveAny:UpdateQuestFrame()
 			end
 		end
 	end
+
+	SelectQuestLogEntry(oldQuestId)
 end
 
 function ImproveAny:InitXPBar()
