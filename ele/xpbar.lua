@@ -99,6 +99,7 @@ end
 function ImproveAny:UpdateQuestFrame()
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
+		SelectQuestLogEntry(questIndex)
 		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
 		if not isHeader and GetQuestLogRewardXP(questID) then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
@@ -110,6 +111,8 @@ function ImproveAny:UpdateQuestFrame()
 					lvltext = lvltext .. "D"
 				elseif questTag == "Group" then
 					lvltext = lvltext .. "G"
+				elseif questTag == "Elite" then
+					lvltext = lvltext .. "E"
 				end
 
 				questNormalText:SetText(format("[%s]%s", lvltext, questNormalText:GetText()))
@@ -193,7 +196,12 @@ function ImproveAny:InitXPBar()
 					function GetQuestLogRewardXP(questID)
 						if questID == nil then return nil end
 						IATAB["QUESTS"] = IATAB["QUESTS"] or {}
-						if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
+						if IATAB["QUESTS"][questID] ~= nil then
+							print("F", questID, IATAB["QUESTS"][questID])
+
+							return IATAB["QUESTS"][questID]
+						end
+
 						local level = select(2, GetQuestLogTitle(questID))
 						local gold = GetQuestLogRewardMoney(questID)
 						if level and level == 0 then
@@ -204,7 +212,11 @@ function ImproveAny:InitXPBar()
 							gold = nil
 						end
 
-						if level and gold then return gold * 3.75 * (level + 1) end
+						if level and gold then
+							print(questID, gold * 3.75 * (level + 1))
+
+							return gold * 3.75 * (level + 1)
+						end
 
 						return 0
 					end
