@@ -96,6 +96,40 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 	return res
 end
 
+function ImproveAny:UpdateQuestFrame()
+	for i = 1, QUESTS_DISPLAYED do
+		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
+		local questLogTitleText, _, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
+		if not isHeader and GetQuestLogRewardXP(questID) then
+			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
+			local questTitleTagText = questTitleTag:GetText() or ""
+			local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
+			questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
+			if isComplete and isComplete < 0 then
+				questTag = FAILED
+			elseif isComplete and isComplete > 0 then
+				questTag = COMPLETE
+			end
+
+			if questTag then
+				QuestLogDummyText:SetText("  " .. questLogTitleText)
+				tempWidth = 276 - questTitleTag:GetWidth()
+				if QuestLogDummyText:GetWidth() > tempWidth then
+					textWidth = tempWidth
+				else
+					textWidth = QuestLogDummyText:GetWidth()
+				end
+
+				questNormalText:SetWidth(tempWidth)
+			else
+				if questNormalText:GetWidth() > 276 then
+					questNormalText:SetWidth(260)
+				end
+			end
+		end
+	end
+end
+
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", false) then
 		if QuestLogFrame then
@@ -106,7 +140,7 @@ function ImproveAny:InitXPBar()
 		C_Timer.After(
 			0.01,
 			function()
-				if GetQuestLogRewardXP == nil and GetRewardXP then
+				if GetQuestLogRewardXP == nil and GetRewardXP ~= nil then
 					local qaf = CreateFrame("FRAME")
 					qaf:RegisterEvent("QUEST_ACCEPTED")
 					qaf:RegisterEvent("QUEST_COMPLETE")
@@ -164,6 +198,13 @@ function ImproveAny:InitXPBar()
 						return 0
 					end
 				end
+
+				hooksecurefunc(
+					"QuestLog_Update",
+					function()
+						ImproveAny:UpdateQuestFrame()
+					end
+				)
 
 				if ImproveAny:GetWoWBuild() == "TBC" then
 					maxlevel = 70
