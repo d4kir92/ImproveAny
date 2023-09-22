@@ -143,7 +143,8 @@ function ImproveAny:SkillsThink()
 		IASkillsMover:SetHeight((id - 1) * sh)
 	end
 
-	C_Timer.After(0.5, ImproveAny.SkillsThink)
+	ImproveAny:Debug("skillbars.lua: SkillsThink", "think")
+	C_Timer.After(1, ImproveAny.SkillsThink)
 end
 
 local skillid = 0

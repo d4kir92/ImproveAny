@@ -154,6 +154,7 @@ function ImproveAny:InitXPBar()
 			QuestLogFrame:Hide()
 		end
 
+		ImproveAny:Debug("xpbar.lua: #1")
 		C_Timer.After(
 			0.01,
 			function()
@@ -176,6 +177,7 @@ function ImproveAny:InitXPBar()
 								end
 							end
 
+							ImproveAny:Debug("xpbar.lua: #2")
 							C_Timer.After(
 								0.05,
 								function()
@@ -192,6 +194,7 @@ function ImproveAny:InitXPBar()
 							MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
 						end
 
+						ImproveAny:Debug("xpbar.lua: #3")
 						C_Timer.After(1, ImproveAny.UpdateQAF)
 					end
 
@@ -199,12 +202,7 @@ function ImproveAny:InitXPBar()
 					function GetQuestLogRewardXP(questID)
 						if questID == nil then return nil end
 						IATAB["QUESTS"] = IATAB["QUESTS"] or {}
-						if IATAB["QUESTS"][questID] ~= nil then
-							print("F", questID, IATAB["QUESTS"][questID])
-
-							return IATAB["QUESTS"][questID]
-						end
-
+						if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
 						local level = select(2, GetQuestLogTitle(questID))
 						local gold = GetQuestLogRewardMoney(questID)
 						if level and level == 0 then
@@ -215,11 +213,7 @@ function ImproveAny:InitXPBar()
 							gold = nil
 						end
 
-						if level and gold then
-							print(questID, gold * 3.75 * (level + 1))
-
-							return gold * 3.75 * (level + 1)
-						end
+						if level and gold then return gold * 3.75 * (level + 1) end
 
 						return 0
 					end
@@ -281,6 +275,7 @@ function ImproveAny:InitXPBar()
 					end
 
 					for sec = 1, 3 do
+						ImproveAny:Debug("xpbar.lua: #4")
 						C_Timer.After(
 							sec,
 							function()

@@ -78,7 +78,8 @@ function ImproveAny:CheckCVars()
 		ImproveAny:UpdateWorldTextScale()
 	end
 
-	C_Timer.After(3, ImproveAny.CheckCVars)
+	ImproveAny:Debug("CHECK CVARS", "retry")
+	C_Timer.After(5, ImproveAny.CheckCVars)
 end
 
 function ImproveAny:AddRightClick()
@@ -91,6 +92,7 @@ function ImproveAny:AddRightClick()
 			end
 		end
 	else
+		ImproveAny:Debug("AdddRightClick")
 		C_Timer.After(0.1, ImproveAny.AddRightClick)
 	end
 end
@@ -150,6 +152,7 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitIAPingFrame()
 		ImproveAny:InitIACoordsFrame()
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
+			ImproveAny:Debug("RIGHTCLICKSELFCAST")
 			C_Timer.After(
 				2,
 				function()

@@ -1,10 +1,17 @@
 local _, ImproveAny = ...
+function ImproveAny:Debug(msg, typ)
+	if typ == "think" then return end
+	if typ == "retry" then return end
+	--if msg ~= "minimap.lua: UpdatePos #2" then return end
+	if false then
+		print("|cFFFF0000" .. "[DEBUG][ImproveAny |T136033:16:16:0:0|t] " .. msg)
+	end
+end
 
 function ImproveAny:MathC(val, vmin, vmax)
 	if val == nil then return 0 end
 	if vmin == nil then return 0 end
 	if vmax == nil then return 1 end
-
 	if val < vmin then
 		return vmin
 	elseif val > vmax then
@@ -23,7 +30,6 @@ end
 
 function ImproveAny:FormatValue(val, dec)
 	dec = dec or 1
-
 	if val < 1000 then
 		return ("%." .. 0 .. "f"):format(val)
 	elseif val < 1000000 then
@@ -44,7 +50,6 @@ end
 function ImproveAny:ReplaceStr(text, old, new)
 	if text == nil then return "" end
 	local b, e = text:find(old, 1, true)
-
 	if b == nil then
 		return text
 	else

@@ -1,6 +1,5 @@
 local _, ImproveAny = ...
 local config_update = 0.3
-
 function ImproveAny:InitIACoordsFrame()
 	if ImproveAny:IsEnabled("IACoordsFrame", false) then
 		IACoordsFrame = CreateFrame("Frame", "IACoordsFrame", UIParent)
@@ -9,11 +8,9 @@ function ImproveAny:InitIACoordsFrame()
 		IACoordsFrame.coords = IACoordsFrame:CreateFontString("IACoordsFrame.coords", "BACKGROUND")
 		IACoordsFrame.coords:SetPoint("CENTER", IACoordsFrame, "CENTER", 0, 0)
 		IACoordsFrame.coords:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE")
-
-		function ImproveAny:FPSThink()
+		function ImproveAny:CoordsThink()
 			if ImproveAny.GetBestPosXY then
 				local x, y = ImproveAny:GetBestPosXY("PLAYER")
-
 				if x and y then
 					IACoordsFrame.coords:SetText(format("|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100))
 				else
@@ -21,9 +18,10 @@ function ImproveAny:InitIACoordsFrame()
 				end
 			end
 
-			C_Timer.After(config_update, ImproveAny.FPSThink)
+			ImproveAny:Debug("coords.lua: CoordsThink")
+			C_Timer.After(config_update, ImproveAny.CoordsThink)
 		end
 
-		ImproveAny:FPSThink()
+		ImproveAny:CoordsThink()
 	end
 end

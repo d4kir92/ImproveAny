@@ -1,6 +1,5 @@
 local _, ImproveAny = ...
 local ialang = {}
-
 function ImproveAny:GetLangTab()
 	return ialang
 end
@@ -8,7 +7,6 @@ end
 function ImproveAny:GT(str)
 	local tab = ImproveAny:GetLangTab()
 	local result = tab[str]
-
 	if result ~= nil then
 		return result
 	elseif str then
@@ -16,13 +14,12 @@ function ImproveAny:GT(str)
 
 		return str
 	else
-		print("[ImproveAny] MISSING STR", str)
+		print("[ImproveAny |T136033:16:16:0:0|t] MISSING STR", str)
 	end
 end
 
 function ImproveAny:UpdateLanguage()
 	ImproveAny:Lang_enUS()
-
 	if GetLocale() == "deDE" then
 		ImproveAny:Lang_deDE()
 	elseif GetLocale() == "enUS" then

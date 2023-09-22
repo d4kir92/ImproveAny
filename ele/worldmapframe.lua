@@ -1,8 +1,6 @@
 local _, ImproveAny = ...
-
 function ImproveAny:GetBestPosXY(unit)
 	local mapID = nil
-
 	if WorldMapFrame.mapID then
 		mapID = WorldMapFrame.mapID
 	elseif C_Map then
@@ -18,19 +16,16 @@ function ImproveAny:GetBestPosXY(unit)
 end
 
 local fontsize = 8
-
 function ImproveAny:UpdateCoordsFontSize()
 	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
 end
 
 function ImproveAny:InitWorldMapFrame()
 	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
-
 	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
 			local scale = WorldMapFrame:GetScale()
-
 			if not IsAddOnLoaded("Mapster") then
 				return x / scale, y / scale
 			else
@@ -44,42 +39,52 @@ function ImproveAny:InitWorldMapFrame()
 	if WorldMapFrame then
 		-- TBC, ERA
 		if WorldMapFrame.BlackoutFrame then
-			hooksecurefunc(WorldMapFrame.BlackoutFrame, "Show", function(sel)
-				if sel.iahide then return end
-				sel.iahide = true
-				sel:Hide()
-				sel.iahide = false
-			end)
+			hooksecurefunc(
+				WorldMapFrame.BlackoutFrame,
+				"Show",
+				function(sel)
+					if sel.iahide then return end
+					sel.iahide = true
+					sel:Hide()
+					sel.iahide = false
+				end
+			)
 
 			WorldMapFrame.BlackoutFrame:Hide()
 		end
 
 		if WorldMapFrame.ScrollContainer and WorldMapFrame.ScrollContainer.Child and WorldMapFrame.ScrollContainer.Child.TiledBackground then
-			hooksecurefunc(WorldMapFrame.ScrollContainer.Child.TiledBackground, "Show", function(sel)
-				if sel.iahide then return end
-				sel.iahide = true
-				sel:Hide()
-				sel.iahide = false
-			end)
+			hooksecurefunc(
+				WorldMapFrame.ScrollContainer.Child.TiledBackground,
+				"Show",
+				function(sel)
+					if sel.iahide then return end
+					sel.iahide = true
+					sel:Hide()
+					sel.iahide = false
+				end
+			)
 
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 
 		if WorldMapFrame.ScrollContainer then
-			WorldMapFrame.ScrollContainer:HookScript("OnMouseWheel", function(sel, delta)
-				local x, y = sel:GetNormalizedCursorPosition()
-				local nextZoomOutScale, nextZoomInScale = sel:GetCurrentZoomRange()
-
-				if delta == 1 then
-					if nextZoomInScale > sel:GetCanvasScale() then
-						sel:InstantPanAndZoom(nextZoomInScale, x, y)
-					end
-				else
-					if nextZoomOutScale < sel:GetCanvasScale() then
-						sel:InstantPanAndZoom(nextZoomOutScale, x, y)
+			WorldMapFrame.ScrollContainer:HookScript(
+				"OnMouseWheel",
+				function(sel, delta)
+					local x, y = sel:GetNormalizedCursorPosition()
+					local nextZoomOutScale, nextZoomInScale = sel:GetCurrentZoomRange()
+					if delta == 1 then
+						if nextZoomInScale > sel:GetCanvasScale() then
+							sel:InstantPanAndZoom(nextZoomInScale, x, y)
+						end
+					else
+						if nextZoomOutScale < sel:GetCanvasScale() then
+							sel:InstantPanAndZoom(nextZoomOutScale, x, y)
+						end
 					end
 				end
-			end)
+			)
 		end
 	end
 
@@ -105,7 +110,6 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords.f:SetText("")
 		plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		plyCoords.f:SetPoint("CENTER")
-
 		--[[plyCoords.t = plyCoords:CreateTexture("plyCoords.t", "ARTWORK")
 		plyCoords.t:SetAllPoints(plyCoords)
 		plyCoords.t:SetColorTexture(0.03, 0.03, 0.03, 0.5)]]
@@ -114,10 +118,8 @@ function ImproveAny:InitWorldMapFrame()
 				if WorldMapFrame:IsShown() then
 					local x, y = ImproveAny:GetBestPosXY("PLAYER")
 					local w, h = WorldMapFrame.ScrollContainer:GetSize()
-
 					if x and y then
 						local scale = WorldMapFrame.ScrollContainer.Child:GetScale()
-
 						if ImproveAny:GetWoWBuild() == "RETAIL" then
 							scale = 1 + WorldMapFrame:GetCanvasZoomPercent()
 						end
@@ -131,7 +133,6 @@ function ImproveAny:InitWorldMapFrame()
 						local offsetY = 0.1
 						local px = bx
 						local py = by + offsetY
-
 						if bx > 0.9 then
 							px = 0.9
 						elseif bx < 0.1 then
@@ -150,16 +151,20 @@ function ImproveAny:InitWorldMapFrame()
 						local fw = plyCoords.f:GetStringWidth()
 						local fh = plyCoords.f:GetStringHeight()
 						plyCoords:SetSize(fw, fh)
+						ImproveAny:Debug("worldmapframe.lua: IAUpdate #1")
 						C_Timer.After(0.01, plyCoords.IAUpdate)
 					else
 						plyCoords.f:SetText("")
+						ImproveAny:Debug("worldmapframe.lua: IAUpdate #2")
 						C_Timer.After(0.5, plyCoords.IAUpdate)
 					end
 				else
-					C_Timer.After(0.5, plyCoords.IAUpdate)
+					ImproveAny:Debug("worldmapframe.lua: IAUpdate #3", "retry")
+					C_Timer.After(1, plyCoords.IAUpdate)
 				end
 			else
-				C_Timer.After(0.5, plyCoords.IAUpdate)
+				ImproveAny:Debug("worldmapframe.lua: IAUpdate #4", "retry")
+				C_Timer.After(1, plyCoords.IAUpdate)
 			end
 		end
 
@@ -176,20 +181,17 @@ function ImproveAny:InitWorldMapFrame()
 		curCoords.f:SetText("")
 		curCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		curCoords.f:SetPoint("CENTER")
-
 		function curCoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
 					local x, y = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
 					local w, h = WorldMapFrame.ScrollContainer:GetSize()
-
 					if x and y then
 						local bx, by = ImproveAny:GetNormalizedPosition(WorldMapFrame.ScrollContainer, GetCursorPosition())
 						curCoords:ClearAllPoints()
 						local offsetY = 0.1
 						local px = bx
 						local py = by + offsetY
-
 						if bx > 0.9 then
 							px = 0.9
 						elseif bx < 0.1 then
@@ -208,16 +210,20 @@ function ImproveAny:InitWorldMapFrame()
 						local fw = curCoords.f:GetStringWidth()
 						local fh = curCoords.f:GetStringHeight()
 						curCoords:SetSize(fw, fh)
+						ImproveAny:Debug("worldmapframe.lua: IAUpdate #5")
 						C_Timer.After(0.01, curCoords.IAUpdate)
 					else
 						curCoords.f:SetText("")
+						ImproveAny:Debug("worldmapframe.lua: IAUpdate #6")
 						C_Timer.After(0.5, curCoords.IAUpdate)
 					end
 				else
-					C_Timer.After(0.5, curCoords.IAUpdate)
+					ImproveAny:Debug("worldmapframe.lua: IAUpdate #7", "retry")
+					C_Timer.After(1, curCoords.IAUpdate)
 				end
 			else
-				C_Timer.After(0.5, curCoords.IAUpdate)
+				ImproveAny:Debug("worldmapframe.lua: IAUpdate #8", "retry")
+				C_Timer.After(1, curCoords.IAUpdate)
 			end
 		end
 

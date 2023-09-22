@@ -104,6 +104,7 @@ function ImproveAny:InitBags()
 			end
 		)
 
+		ImproveAny:Debug("bags #1")
 		C_Timer.After(
 			1,
 			function()
@@ -276,6 +277,7 @@ function ImproveAny:InitBags()
 		)
 	end
 
+	ImproveAny:Debug("bags #2")
 	C_Timer.After(
 		1,
 		function()

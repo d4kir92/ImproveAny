@@ -2,11 +2,9 @@ local _, ImproveAny = ...
 local br = 0.068
 local f = CreateFrame("FRAME")
 f.update = 0.1
-
 function ImproveAny:InitCastBar()
 	local castbar = CastingBarFrame
 	local height = 24
-
 	if PlayerCastingBarFrame then
 		castbar = PlayerCastingBarFrame
 		height = 16
@@ -14,11 +12,15 @@ function ImproveAny:InitCastBar()
 
 	-- OLD CastBar
 	if castbar then
-		hooksecurefunc(castbar.Border, "Show", function(sel, ...)
-			if true then
-				sel:Hide()
+		hooksecurefunc(
+			castbar.Border,
+			"Show",
+			function(sel, ...)
+				if true then
+					sel:Hide()
+				end
 			end
-		end)
+		)
 
 		if true then
 			castbar.Border:Hide()
@@ -26,7 +28,6 @@ function ImproveAny:InitCastBar()
 
 		if true then
 			castbar.Flash:SetParent(IAHIDDEN)
-
 			if PlayerCastingBarFrame then
 				castbar.Text:SetFont(STANDARD_TEXT_FONT, 10, "")
 				castbar.Text:ClearAllPoints()
@@ -51,12 +52,10 @@ function ImproveAny:InitCastBar()
 			castbar.timer:SetPoint("CENTER", castbar, "RIGHT", 12, 0)
 			castbar.update = 0
 			castbar.tick = 0.01
-
 			function ImproveAny:UpdateCastbarTimer()
 				if castbar.timer ~= nil then
 					if castbar.update and castbar.update < castbar.tick then
 						local name, _, texture = nil, nil, nil
-
 						if UnitCastingInfo ~= nil then
 							name, _, texture = UnitCastingInfo("PLAYER")
 						end
@@ -94,8 +93,10 @@ function ImproveAny:InitCastBar()
 						castbar.update = castbar.update - castbar.tick
 					end
 
+					ImproveAny:Debug("castbar.lua: tick #1", "think")
 					C_Timer.After(castbar.tick, ImproveAny.UpdateCastbarTimer)
 				else
+					ImproveAny:Debug("castbar.lua: tick #2")
 					C_Timer.After(castbar.tick, 0.3)
 				end
 			end

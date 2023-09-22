@@ -1,7 +1,6 @@
 local _, ImproveAny = ...
 local BuildNr = select(4, GetBuildInfo())
 local Build = "CLASSIC"
-
 if BuildNr >= 100000 then
 	Build = "RETAIL"
 elseif BuildNr > 29999 then
@@ -20,7 +19,6 @@ end
 
 local COL_R = "|cFFFF0000"
 local COL_Y = "|cFFFFFF00"
-
 function ImproveAny:MSG(msg)
 	print("|cff3FC7EB" .. "[ImproveAny |T136033:16:16:0:0|t]|r " .. COL_Y .. msg)
 end
@@ -89,7 +87,6 @@ function ImproveAny:IsEnabled(element, value)
 
 	if ImproveAny:GetTab() and ImproveAny:GetTab()["ELES"] then
 		ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
-
 		if ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] == nil then
 			ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
 		end
@@ -118,7 +115,6 @@ function ImproveAny:SetElePoint(key, p1, p2, p3, p4, p5)
 	ImproveAny:GetTab()["ELES"]["POINTS"][key]["PX"] = p4
 	ImproveAny:GetTab()["ELES"]["POINTS"][key]["PY"] = p5
 	local frame = _G[key]
-
 	if frame then
 		frame:ClearAllPoints()
 		frame:SetPoint(p1, UIParent, p3, p4, p5)
@@ -134,7 +130,6 @@ end
 function ImproveAny:GV(name, value)
 	IATAB = IATAB or {}
 	IATAB["VALUES"] = IATAB["VALUES"] or {}
-
 	if IATAB["VALUES"][name] == nil then
 		ImproveAny:SV(name, value)
 	end

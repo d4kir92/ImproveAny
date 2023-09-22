@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.7.65")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.0")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -452,6 +452,7 @@ function ImproveAny:InitIASettings()
 			"",
 			function(eb, ...)
 				eb.lastchange = GetTime()
+				ImproveAny:Debug("settings, lastchange")
 				C_Timer.After(
 					1,
 					function()

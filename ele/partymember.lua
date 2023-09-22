@@ -1,13 +1,10 @@
 local _, ImproveAny = ...
 local XPPREFIX = "ImproveAnyXP"
 local XPAPIPREFIX = "ImproveAnyXPAPI"
-local iadebugxpbar = false
 local iaxpready = false
-
 function ImproveAny:UnitName(unit)
 	if UnitExists(unit) then
 		local name, realm = UnitName(unit)
-
 		if realm and realm ~= "" then
 			name = name .. "-" .. realm
 		else
@@ -44,14 +41,12 @@ end
 function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
 		local target = ImproveAny:UnitName("PARTY" .. i)
-
 		if target and ImproveAny:GV("XPTAB")[target] == nil then
 			ImproveAny:GV("XPTAB")[target] = {}
 		end
 	end
 
 	local message = "Ping"
-
 	if IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		C_ChatInfo.SendAddonMessage(XPAPIPREFIX, message, "INSTANCE_CHAT")
 	elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
@@ -65,7 +60,6 @@ local function OnEventXP(self, event, prefix, ...)
 		if prefix == XPPREFIX and ImproveAny:GV("XPTAB") then
 			local values, _, target = ...
 			local xp, xpmax = string.split(";", values)
-
 			if ImproveAny:GV("XPTAB")[target] == nil then
 				ImproveAny:GV("XPTAB")[target] = {}
 			end
@@ -75,11 +69,9 @@ local function OnEventXP(self, event, prefix, ...)
 			ImproveAny:GV("XPTAB")[target]["useapi"] = true -- it uses the api
 		elseif prefix == XPAPIPREFIX then
 			local values, _, target = ...
-
 			-- PING
 			if values == "Ping" then
 				local message = "Pong" -- "answer to ping"
-
 				if IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 					C_ChatInfo.SendAddonMessage(XPAPIPREFIX, message, "INSTANCE_CHAT")
 				elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
@@ -99,15 +91,12 @@ end
 local frameXP = CreateFrame("Frame")
 frameXP:RegisterEvent("CHAT_MSG_ADDON")
 frameXP:SetScript("OnEvent", OnEventXP)
-
 local function OnEventXPInit(self, event, ...)
 	if event == "PLAYER_ENTERING_WORLD" then
 		local isInitialLogin, isReloadingUi = ...
-
 		if isInitialLogin or isReloadingUi then
 			C_ChatInfo.RegisterAddonMessagePrefix(XPPREFIX)
 			C_ChatInfo.RegisterAddonMessagePrefix(XPAPIPREFIX)
-
 			if ImproveAny:GV("XPTAB") == nil then
 				ImproveAny:SV("XPTAB", {})
 			end
@@ -116,10 +105,8 @@ local function OnEventXPInit(self, event, ...)
 				local PartyFrame = _G["PartyMemberFrame" .. i]
 				local PartyPortrait = _G["PartyMemberFrame" .. i .. "Portrait"]
 				local ManaBar = _G["PartyMemberFrame" .. i .. "ManaBar"]
-
 				for id = 1, 4 do
 					local parent = _G["PartyMemberFrame" .. i .. "Debuff" .. id - 1]
-
 					if parent == nil then
 						parent = PartyFrame
 					end
@@ -171,7 +158,6 @@ local function OnEventXPInit(self, event, ...)
 					PartyFrameXPBar.levelText:SetText("" .. math.random(1, 59))
 					local c = GetQuestDifficultyColor(PartyFrameXPBar.levelText:GetText())
 					PartyFrameXPBar.levelText:SetTextColor(c.r, c.g, c.b, 1)
-
 					if ImproveAny:GV("nochanges") == nil then
 						ImproveAny:SV("nochanges", false)
 					end
@@ -184,11 +170,9 @@ local function OnEventXPInit(self, event, ...)
 							PartyFrameXPBar.levelText:SetTextColor(co.r, co.g, co.b, 1)
 							local xp = ImproveAny:UnitXP("PARTY" .. i, 0)
 							local xpmax = ImproveAny:UnitXPMax("PARTY" .. i, 1)
-
 							if (xp > 0 or xpmax > 1) and not ImproveAny:GV("nochanges") then
 								local per = xp / xpmax
 								PartyFrameXPBar.textureBar:SetWidth(per * PartyFrameXPBar:GetWidth() - 4)
-
 								if GetCVar("statusTextDisplay") == "PERCENT" then
 									PartyFrameXPBar.XPC:SetText(string.format("%.0f", xp / xpmax * 100) .. "%")
 									PartyFrameXPBar.XPL:SetText("")
@@ -222,7 +206,8 @@ local function OnEventXPInit(self, event, ...)
 						end
 
 						_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:SetPoint(_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:GetPoint())
-						C_Timer.After(0.3, PartyFrameXPBar.think)
+						ImproveAny:Debug("partymember.lua: PartyFrameXPBar", "think")
+						C_Timer.After(1, PartyFrameXPBar.think)
 					end
 
 					PartyFrameXPBar.think()
@@ -239,7 +224,6 @@ local function OnEventXPInit(self, event, ...)
 		end
 
 		local message = UnitXP("PLAYER") .. ";" .. UnitXPMax("PLAYER") -- send xp
-
 		if IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 			C_ChatInfo.SendAddonMessage(XPPREFIX, message, "INSTANCE_CHAT")
 		elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then

@@ -1,6 +1,5 @@
 local _, ImproveAny = ...
 IAILVLBar = CreateFrame("FRAME", "IAILVLBar", UIParent)
-
 function ImproveAny:InitIAILVLBar()
 	if ImproveAny:IsEnabled("IAILVLBAR", false) then
 		IAILVLBar:SetSize(180, 20)
@@ -15,11 +14,9 @@ function ImproveAny:InitIAILVLBar()
 		IAILVLBar.textilvlequipped:SetPoint("BOTTOM", IAILVLBar, "BOTTOM", 0, 0)
 		IAILVLBar.textilvlequipped:SetText("")
 		IAILVLBar.textilvlequipped:SetTextColor(1.0, 1.0, 0.1)
-
 		function IAILVLBar.Think()
 			if IAILVLBar.textilvloverall and IAILVLBar.textilvlequipped then
 				local overall, equipped = IAILVL, IAILVL
-
 				if GetAverageItemLevel then
 					overall, equipped = GetAverageItemLevel()
 					overall = string.format("%.2f", overall)
@@ -47,7 +44,8 @@ function ImproveAny:InitIAILVLBar()
 				IAILVLBar.textilvlequipped:SetText("")
 			end
 
-			C_Timer.After(1.0, IAILVLBar.Think)
+			ImproveAny:Debug("IAILVLBar.lua: Think", "think")
+			C_Timer.After(1, IAILVLBar.Think)
 		end
 
 		IAILVLBar.Think()
