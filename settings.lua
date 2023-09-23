@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.0")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.1")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"

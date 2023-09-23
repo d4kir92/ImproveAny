@@ -136,6 +136,7 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:InitAutoAcceptQuests()
 		end
 
+		ImproveAny:InitCombatText()
 		ImproveAny:InitXPBar()
 		ImproveAny:InitSuperTrackedFrame()
 		ImproveAny:InitMicroMenu()
