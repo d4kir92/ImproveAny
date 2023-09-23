@@ -42,76 +42,82 @@ end
 
 local PDThink = CreateFrame("FRAME")
 function ImproveAny:PDUpdateItemInfos()
-	local count = 0
-	local sum = 0
-	for i, slot in pairs(IACharSlots) do
-		i = i - 1
-		local SLOT = _G["Character" .. slot]
-		if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
-			local ItemID = GetInventoryItemLink("PLAYER", SLOT:GetID()) or GetInventoryItemID("PLAYER", SLOT:GetID())
-			if ItemID ~= nil and GetDetailedItemLevelInfo then
-				local _, _, rarity = GetItemInfo(ItemID)
-				local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
-				local color = ITEM_QUALITY_COLORS[rarity]
-				local current, maximum = GetInventoryItemDurability(i)
-				if current and maximum then
-					local per = current / maximum
-					-- 100%
-					if current == maximum then
-						SLOT.iatexth:SetTextColor(0, 1, 0, 1)
-					elseif per == 0.0 then
-						-- = 0%, black
-						SLOT.iatexth:SetTextColor(0, 0, 0, 1)
-					elseif per < 0.1 then
-						-- < 10%, red
-						SLOT.iatexth:SetTextColor(1, 0, 0, 1)
-					elseif per < 0.3 then
-						-- < 30%, orange
-						SLOT.iatexth:SetTextColor(1, 0.65, 0, 1)
-					elseif per < 1 then
-						-- < 100%, red
-						SLOT.iatexth:SetTextColor(1, 1, 0, 1)
-					end
+	if ImproveAny:IsEnabled("ITEMLEVELSYSTEM", false) then
+		local count = 0
+		local sum = 0
+		for i, slot in pairs(IACharSlots) do
+			i = i - 1
+			local SLOT = _G["Character" .. slot]
+			if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
+				local ItemID = GetInventoryItemLink("PLAYER", SLOT:GetID()) or GetInventoryItemID("PLAYER", SLOT:GetID())
+				if ItemID ~= nil and GetDetailedItemLevelInfo then
+					local _, _, rarity = GetItemInfo(ItemID)
+					local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
+					local color = ITEM_QUALITY_COLORS[rarity]
+					local current, maximum = GetInventoryItemDurability(i)
+					if current and maximum then
+						local per = current / maximum
+						-- 100%
+						if current == maximum then
+							SLOT.iatexth:SetTextColor(0, 1, 0, 1)
+						elseif per == 0.0 then
+							-- = 0%, black
+							SLOT.iatexth:SetTextColor(0, 0, 0, 1)
+						elseif per < 0.1 then
+							-- < 10%, red
+							SLOT.iatexth:SetTextColor(1, 0, 0, 1)
+						elseif per < 0.3 then
+							-- < 30%, orange
+							SLOT.iatexth:SetTextColor(1, 0.65, 0, 1)
+						elseif per < 1 then
+							-- < 100%, red
+							SLOT.iatexth:SetTextColor(1, 1, 0, 1)
+						end
 
-					if current ~= maximum then
-						SLOT.iatexth:SetText(string.format("%0.0f", current / maximum * 100) .. "%")
+						if current ~= maximum then
+							SLOT.iatexth:SetText(string.format("%0.0f", current / maximum * 100) .. "%")
+						else
+							SLOT.iatexth:SetText("")
+						end
 					else
 						SLOT.iatexth:SetText("")
 					end
-				else
-					SLOT.iatexth:SetText("")
-				end
 
-				if ilvl and color then
-					if slot == "AmmoSlot" then
-						local COUNT = _G["Character" .. slot .. "Count"]
-						if COUNT.hooked == nil then
-							COUNT.hooked = true
-							COUNT:SetFont(STANDARD_TEXT_FONT, 9, "THINOUTLINE")
-							SLOT.maxDisplayCount = 999999
-							COUNT:SetText(COUNT:GetText())
-						end
-					end
-
-					-- ignore: shirt, tabard, ammo
-					if i ~= 4 and i ~= 19 and i ~= 20 and ilvl and ilvl > 1 then
-						count = count + 1
-						sum = sum + ilvl
-					end
-
-					if ImproveAny:IsEnabled("ITEMLEVEL", false) then
-						if ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and ilvl and ilvl > 1 then
-							SLOT.iatext:SetText(color.hex .. ilvl)
+					if ilvl and color then
+						if slot == "AmmoSlot" then
+							local COUNT = _G["Character" .. slot .. "Count"]
+							if COUNT.hooked == nil then
+								COUNT.hooked = true
+								COUNT:SetFont(STANDARD_TEXT_FONT, 9, "THINOUTLINE")
+								SLOT.maxDisplayCount = 999999
+								COUNT:SetText(COUNT:GetText())
+							end
 						end
 
-						local alpha = IAGlowAlpha
-						if color.r == 1 and color.g == 1 and color.b == 1 then
-							alpha = alpha - 0.2
+						-- ignore: shirt, tabard, ammo
+						if i ~= 4 and i ~= 19 and i ~= 20 and ilvl and ilvl > 1 then
+							count = count + 1
+							sum = sum + ilvl
 						end
 
-						if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", false) then
-							SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
+						if ImproveAny:IsEnabled("ITEMLEVEL", false) then
+							if ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and ilvl and ilvl > 1 then
+								SLOT.iatext:SetText(color.hex .. ilvl)
+							end
+
+							local alpha = IAGlowAlpha
+							if color.r == 1 and color.g == 1 and color.b == 1 then
+								alpha = alpha - 0.2
+							end
+
+							if rarity and rarity > 1 and ImproveAny:IsEnabled("ITEMLEVELBORDER", false) then
+								SLOT.iaborder:SetVertexColor(color.r, color.g, color.b, alpha)
+							else
+								SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
+							end
 						else
+							SLOT.iatext:SetText("")
+							SLOT.iatexth:SetText("")
 							SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 						end
 					else
@@ -124,41 +130,37 @@ function ImproveAny:PDUpdateItemInfos()
 					SLOT.iatexth:SetText("")
 					SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 				end
+			end
+		end
+
+		if count > 0 then
+			local max = 16 -- when only IAnhand
+			if GetInventoryItemID("PLAYER", 17) then
+				local t1 = GetItemInfo(GetInventoryItemLink("PLAYER", 17))
+				-- when 2x 1handed
+				if t1 then
+					max = 17
+				end
+			end
+
+			if ImproveAny:GetWoWBuild() == "RETAIL" then
+				max = max - 1
+			end
+
+			IAILVL = string.format("%0.2f", sum / max)
+			if true then
+				PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
 			else
-				SLOT.iatext:SetText("")
-				SLOT.iatexth:SetText("")
-				SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
+				PaperDollFrame.ilvl:SetText("")
 			end
-		end
-	end
-
-	if count > 0 then
-		local max = 16 -- when only IAnhand
-		if GetInventoryItemID("PLAYER", 17) then
-			local t1 = GetItemInfo(GetInventoryItemLink("PLAYER", 17))
-			-- when 2x 1handed
-			if t1 then
-				max = 17
-			end
-		end
-
-		if ImproveAny:GetWoWBuild() == "RETAIL" then
-			max = max - 1
-		end
-
-		IAILVL = string.format("%0.2f", sum / max)
-		if true then
-			PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
 		else
-			PaperDollFrame.ilvl:SetText("")
+			PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
 		end
-	else
-		PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
 	end
 end
 
 function ImproveAny:InitItemLevel()
-	if PaperDollFrame then
+	if ImproveAny:IsEnabled("ITEMLEVELSYSTEM", false) and PaperDollFrame then
 		PaperDollFrame.ilvl = PaperDollFrame:CreateFontString(nil, "ARTWORK")
 		PaperDollFrame.ilvl:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
 		PaperDollFrame.ilvl:SetPoint("TOPLEFT", CharacterWristSlot, "BOTTOMLEFT", 24, -15)
@@ -438,7 +440,7 @@ function ImproveAny:InitItemLevel()
 		ImproveAny:UpdateBagsIlvl()
 	end
 
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
 		-- Bag Searchbar
 		BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")
 		BagItemSearchBox:SetSize(110, 18)

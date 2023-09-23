@@ -178,14 +178,11 @@ function ImproveAny:AddStatusBar(func, args)
 end
 
 function ImproveAny:InitSkillBars()
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("SKILLBARS", false) then
 		IASkills = CreateFrame("FRAME", "IASkills", UIParent)
 		IASkills:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 520, 0)
 		IASkills:SetSize(sw, 6 * sh)
 		IASkills.bars = {}
-	end
-
-	if ImproveAny:IsEnabled("SKILLBARS", false) and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
 		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
 		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)

@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.1")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.2")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -487,8 +487,9 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
 		AddCategory("ITEMLEVEL")
-		AddCheckBox(4, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
-		AddCheckBox(4, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
+		AddCheckBox(4, "ITEMLEVELSYSTEM")
+		AddCheckBox(24, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
+		AddCheckBox(24, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 		AddCategory("FRAMES")
 		AddCheckBox(4, "WIDEFRAMES", false)
 		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)

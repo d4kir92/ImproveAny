@@ -106,6 +106,7 @@ function ImproveAny:Event(event, ...)
 
 		ImproveAny:InitSlash()
 		ImproveAny:InitDB()
+		ImproveAny:InitIASettings()
 		if ImproveAny:GV("fontName", "Default") ~= "Default" and ImproveAny.Fonts then
 			ImproveAny:Fonts()
 		end
@@ -140,7 +141,6 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitXPBar()
 		ImproveAny:InitSuperTrackedFrame()
 		ImproveAny:InitMicroMenu()
-		ImproveAny:InitIASettings()
 		if ImproveAny:IsEnabled("CHAT", false) then
 			ImproveAny:InitChat()
 		end

@@ -1,9 +1,7 @@
 -- enUS English
 local _, ImproveAny = ...
-
 function ImproveAny:UpdateLanguageTab(tab)
 	local lang = ImproveAny:GetLangTab()
-
 	for i, v in pairs(tab) do
 		lang[i] = v
 	end
@@ -110,6 +108,7 @@ function ImproveAny:Lang_enUS()
 		["BLOCKWORDS"] = "Blockwords",
 		["FRAMES"] = "Windows (Frames)",
 		["WIDEFRAMES"] = "Wide Windows (Wide Frames)",
+		["ITEMLEVELSYSTEM"] = "Item Level System",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

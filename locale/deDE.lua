@@ -1,6 +1,5 @@
 -- deDE German Deutsch
 local _, ImproveAny = ...
-
 function ImproveAny:Lang_deDE()
 	local tab = {
 		["MMBTNLEFT"] = "Linksklick => Optionen",
@@ -103,6 +102,7 @@ function ImproveAny:Lang_deDE()
 		["BLOCKWORDS"] = "Blockwörter",
 		["FRAMES"] = "Fenster",
 		["WIDEFRAMES"] = "Weite Fenster",
+		["ITEMLEVELSYSTEM"] = "ItemLevel System",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)
