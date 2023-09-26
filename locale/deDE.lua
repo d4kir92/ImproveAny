@@ -103,6 +103,7 @@ function ImproveAny:Lang_deDE()
 		["FRAMES"] = "Fenster",
 		["WIDEFRAMES"] = "Weite Fenster",
 		["ITEMLEVELSYSTEM"] = "ItemLevel System",
+		["AUTOACCEPTQUESTS"] = "Automatisch Quests annehmen",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

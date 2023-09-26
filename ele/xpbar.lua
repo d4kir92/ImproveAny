@@ -239,7 +239,10 @@ function ImproveAny:InitXPBar()
 				end
 
 				if MainMenuExpBar then
-					MainMenuExpBar:SetHeight(15)
+					if not IsAddOnLoaded("MoveAny") then
+						MainMenuExpBar:SetHeight(15)
+					end
+
 					MainMenuExpBar:HookScript(
 						"OnEnter",
 						function(sel)

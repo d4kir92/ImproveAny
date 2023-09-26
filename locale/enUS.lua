@@ -109,6 +109,7 @@ function ImproveAny:Lang_enUS()
 		["FRAMES"] = "Windows (Frames)",
 		["WIDEFRAMES"] = "Wide Windows (Wide Frames)",
 		["ITEMLEVELSYSTEM"] = "Item Level System",
+		["AUTOACCEPTQUESTS"] = "Auto Accept Quests",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

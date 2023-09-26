@@ -23,30 +23,33 @@ C_Timer.After(
 				)
 
 				if ImproveAny:IsEnabled("REPHIDEARTWORK", false) then
-					hooksecurefunc(
-						ReputationWatchBar,
-						"SetHeight",
-						function(self, h)
-							if self.iasetheight then return end
-							self.iasetheight = true
-							self:SetHeight(15)
-							self.iasetheight = false
-						end
-					)
+					if not IsAddOnLoaded("MoveAny") then
+						hooksecurefunc(
+							ReputationWatchBar,
+							"SetHeight",
+							function(self, h)
+								if self.iasetheight then return end
+								self.iasetheight = true
+								self:SetHeight(15)
+								self.iasetheight = false
+							end
+						)
 
-					ReputationWatchBar:SetHeight(15)
-					hooksecurefunc(
-						ReputationWatchBar.StatusBar,
-						"SetHeight",
-						function(self, h)
-							if self.iasetheight then return end
-							self.iasetheight = true
-							self:SetHeight(15)
-							self.iasetheight = false
-						end
-					)
+						ReputationWatchBar:SetHeight(15)
+						hooksecurefunc(
+							ReputationWatchBar.StatusBar,
+							"SetHeight",
+							function(self, h)
+								if self.iasetheight then return end
+								self.iasetheight = true
+								self:SetHeight(15)
+								self.iasetheight = false
+							end
+						)
 
-					ReputationWatchBar.StatusBar:SetHeight(15)
+						ReputationWatchBar.StatusBar:SetHeight(15)
+					end
+
 					for i = 0, 3 do
 						local art = ReputationWatchBar.StatusBar["WatchBarTexture" .. i]
 						local art2 = ReputationWatchBar.StatusBar["XPBarTexture" .. i]
