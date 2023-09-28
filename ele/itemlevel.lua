@@ -148,12 +148,14 @@ function ImproveAny:PDUpdateItemInfos()
 			end
 
 			IAILVL = string.format("%0.2f", sum / max)
-			if true then
-				PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
-			else
-				PaperDollFrame.ilvl:SetText("")
+			if PaperDollFrame.ilvl then
+				if true then
+					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
+				else
+					PaperDollFrame.ilvl:SetText("")
+				end
 			end
-		else
+		elseif PaperDollFrame.ilvl then
 			PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
 		end
 	end
@@ -280,12 +282,12 @@ function ImproveAny:InitItemLevel()
 						end
 
 						IAILVLINSPECT = string.format("%0.2f", sum / max)
-						if ImproveAny:IsEnabled("ITEMLEVEL", false) and ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) then
+						if ImproveAny:IsEnabled("ITEMLEVEL", false) and ImproveAny:IsEnabled("ITEMLEVELNUMBER", false) and InspectPaperDollFrame.ilvl then
 							InspectPaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVLINSPECT)
 						else
 							InspectPaperDollFrame.ilvl:SetText("")
 						end
-					else
+					elseif InspectPaperDollFrame.ilvl then
 						InspectPaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
 					end
 				end

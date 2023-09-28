@@ -104,27 +104,32 @@ function ImproveAny:UpdateQuestFrame()
 		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
 		if not isHeader and GetQuestLogRewardXP(questID) then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
-			local questTitleTagText = questTitleTag:GetText() or ""
-			local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
-			if lvl and lvl > 0 then
-				local qnt = questNormalText:GetText() or ""
-				local lvltext = lvl
-				if questTag == "Dungeon" then
-					lvltext = lvltext .. "D"
-				elseif questTag == "Group" then
-					lvltext = lvltext .. "G"
-				elseif questTag == "Elite" then
-					lvltext = lvltext .. "E"
+			if questTitleTag then
+				local questTitleTagText = questTitleTag:GetText() or ""
+				local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
+				if lvl and lvl > 0 then
+					local qnt = questNormalText:GetText() or ""
+					local lvltext = lvl
+					if questTag == "Dungeon" then
+						lvltext = lvltext .. "D"
+					elseif questTag == "Group" then
+						lvltext = lvltext .. "G"
+					elseif questTag == "Elite" then
+						lvltext = lvltext .. "E"
+					end
+
+					if lvltext and qnt then
+						questNormalText:SetText(format("[%s]%s", lvltext, qnt))
+					else
+						print("[ImproveAny:UpdateQuestFrame] FAILED", lvltext, qnt)
+					end
 				end
 
-				if lvltext and qnt then
-					questNormalText:SetText(format("[%s]%s", lvltext, qnt))
-				else
-					print("[ImproveAny:UpdateQuestFrame] FAILED", lvltext, qnt)
+				if questTitleTag then
+					questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
 				end
 			end
 
-			questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
 			if isComplete and isComplete < 0 then
 				questTag = FAILED
 			elseif isComplete and isComplete > 0 then
@@ -133,7 +138,11 @@ function ImproveAny:UpdateQuestFrame()
 
 			if questTag then
 				QuestLogDummyText:SetText("  " .. questLogTitleText)
-				tempWidth = 274 - questTitleTag:GetWidth()
+				local tempWidth = 274
+				if questTitleTag then
+					tempWidth = 274 - questTitleTag:GetWidth()
+				end
+
 				if QuestLogDummyText:GetWidth() > tempWidth then
 					textWidth = tempWidth
 				else
@@ -224,12 +233,14 @@ function ImproveAny:InitXPBar()
 					end
 				end
 
-				hooksecurefunc(
-					"QuestLog_Update",
-					function()
-						ImproveAny:UpdateQuestFrame()
-					end
-				)
+				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+					hooksecurefunc(
+						"QuestLog_Update",
+						function()
+							ImproveAny:UpdateQuestFrame()
+						end
+					)
+				end
 
 				if ImproveAny:GetWoWBuild() == "TBC" then
 					maxlevel = 70

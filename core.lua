@@ -986,26 +986,34 @@ function ImproveAny:Event(event, ...)
 			end
 		end
 
-		if true then
+		if ImproveAny:GetWoWBuild() == "CLASSIC" then
 			local function InitTSF()
-				TradeSkillFrame.hasMaterial = CreateFrame("CheckButton", "HasMaterial", TradeSkillFrame, "UICheckButtonTemplate")
-				TradeSkillFrame.hasMaterial:SetSize(20, 20)
-				TradeSkillFrame.hasMaterial:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 70, -54)
-				TradeSkillFrame.hasMaterial:SetChecked(ImproveAny:IsEnabled("HASMATERIAL", false))
-				TradeSkillFrame.hasMaterial:SetScript(
-					"OnClick",
-					function(sel)
-						ImproveAny:SetEnabled("HASMATERIAL", sel:GetChecked())
-						TradeSkillFrame_Update()
-					end
-				)
+				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+					TradeSkillFrame.hasMaterial = CreateFrame("CheckButton", "HasMaterial", TradeSkillFrame, "UICheckButtonTemplate")
+					TradeSkillFrame.hasMaterial:SetSize(20, 20)
+					TradeSkillFrame.hasMaterial:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 70, -54)
+					TradeSkillFrame.hasMaterial:SetChecked(ImproveAny:IsEnabled("HASMATERIAL", false))
+					TradeSkillFrame.hasMaterial:SetScript(
+						"OnClick",
+						function(sel)
+							ImproveAny:SetEnabled("HASMATERIAL", sel:GetChecked())
+							TradeSkillFrame_Update()
+						end
+					)
 
-				TradeSkillFrame.hasMaterial.f = TradeSkillFrame.hasMaterial:CreateFontString(nil, nil, "GameFontNormalSmall")
-				TradeSkillFrame.hasMaterial.f:SetPoint("LEFT", TradeSkillFrame.hasMaterial, "RIGHT", 0, 0)
-				TradeSkillFrame.hasMaterial.f:SetText(CRAFT_IS_MAKEABLE or "Have Materials")
+					TradeSkillFrame.hasMaterial.f = TradeSkillFrame.hasMaterial:CreateFontString(nil, nil, "GameFontNormalSmall")
+					TradeSkillFrame.hasMaterial.f:SetPoint("LEFT", TradeSkillFrame.hasMaterial, "RIGHT", 0, 0)
+					TradeSkillFrame.hasMaterial.f:SetText(CRAFT_IS_MAKEABLE or "Have Materials")
+				end
+
 				TradeSkillFrame.hasSkillUp = CreateFrame("CheckButton", "HasSkillUp", TradeSkillFrame, "UICheckButtonTemplate")
 				TradeSkillFrame.hasSkillUp:SetSize(20, 20)
-				TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -54)
+				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+					TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -54)
+				else
+					TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -15)
+				end
+
 				TradeSkillFrame.hasSkillUp:SetChecked(ImproveAny:IsEnabled("HASSKILLUP", false))
 				TradeSkillFrame.hasSkillUp:SetScript(
 					"OnClick",
@@ -1061,7 +1069,7 @@ function ImproveAny:Event(event, ...)
 						headerId = 0
 						for i = 1, TRADE_SKILLS_DISPLAYED do
 							local skillIndex = i + skillOffset
-							local name, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
+							local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
 							local skillButton = getglobal("TradeSkillSkill" .. i)
 							if skillIndex <= numTradeSkills then
 								local color = TradeSkillTypeColor[skillType]
