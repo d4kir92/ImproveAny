@@ -107,6 +107,7 @@ function ImproveAny:UpdateQuestFrame()
 			local questTitleTagText = questTitleTag:GetText() or ""
 			local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
 			if lvl and lvl > 0 then
+				local qnt = questNormalText:GetText() or ""
 				local lvltext = lvl
 				if questTag == "Dungeon" then
 					lvltext = lvltext .. "D"
@@ -116,7 +117,11 @@ function ImproveAny:UpdateQuestFrame()
 					lvltext = lvltext .. "E"
 				end
 
-				questNormalText:SetText(format("[%s]%s", lvltext, questNormalText:GetText()))
+				if lvltext and qnt then
+					questNormalText:SetText(format("[%s]%s", lvltext, qnt))
+				else
+					print("[ImproveAny:UpdateQuestFrame] FAILED", lvltext, qnt)
+				end
 			end
 
 			questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
