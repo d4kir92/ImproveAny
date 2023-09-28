@@ -101,12 +101,13 @@ function ImproveAny:UpdateQuestFrame()
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
 		SelectQuestLogEntry(questIndex)
+		local questNormalText = nil
 		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
 		if not isHeader and GetQuestLogRewardXP(questID) then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
 			if questTitleTag then
 				local questTitleTagText = questTitleTag:GetText() or ""
-				local questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
+				questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
 				if lvl and lvl > 0 then
 					local qnt = questNormalText:GetText() or ""
 					local lvltext = lvl
