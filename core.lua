@@ -985,6 +985,135 @@ function ImproveAny:Event(event, ...)
 				end
 			end
 		end
+
+		if true then
+			local function InitTSF()
+				TradeSkillFrame.hasMaterial = CreateFrame("CheckButton", "HasMaterial", TradeSkillFrame, "UICheckButtonTemplate")
+				TradeSkillFrame.hasMaterial:SetSize(20, 20)
+				TradeSkillFrame.hasMaterial:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 70, -54)
+				TradeSkillFrame.hasMaterial:SetChecked(ImproveAny:IsEnabled("HASMATERIAL", false))
+				TradeSkillFrame.hasMaterial:SetScript(
+					"OnClick",
+					function(sel)
+						ImproveAny:SetEnabled("HASMATERIAL", sel:GetChecked())
+						TradeSkillFrame_Update()
+					end
+				)
+
+				TradeSkillFrame.hasMaterial.f = TradeSkillFrame.hasMaterial:CreateFontString(nil, nil, "GameFontNormalSmall")
+				TradeSkillFrame.hasMaterial.f:SetPoint("LEFT", TradeSkillFrame.hasMaterial, "RIGHT", 0, 0)
+				TradeSkillFrame.hasMaterial.f:SetText(CRAFT_IS_MAKEABLE or "Have Materials")
+				TradeSkillFrame.hasSkillUp = CreateFrame("CheckButton", "HasSkillUp", TradeSkillFrame, "UICheckButtonTemplate")
+				TradeSkillFrame.hasSkillUp:SetSize(20, 20)
+				TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -54)
+				TradeSkillFrame.hasSkillUp:SetChecked(ImproveAny:IsEnabled("HASSKILLUP", false))
+				TradeSkillFrame.hasSkillUp:SetScript(
+					"OnClick",
+					function(sel)
+						ImproveAny:SetEnabled("HASSKILLUP", sel:GetChecked())
+						TradeSkillFrame_Update()
+					end
+				)
+
+				TradeSkillFrame.hasSkillUp.f = TradeSkillFrame.hasSkillUp:CreateFontString(nil, nil, "GameFontNormalSmall")
+				TradeSkillFrame.hasSkillUp.f:SetPoint("LEFT", TradeSkillFrame.hasSkillUp, "RIGHT", 0, 0)
+				TradeSkillFrame.hasSkillUp.f:SetText(TRADESKILL_FILTER_HAS_SKILL_UP or "Has Skill Up")
+				hooksecurefunc(
+					"TradeSkillFrame_Update",
+					function()
+						local py = 94
+						local numTradeSkills = GetNumTradeSkills()
+						local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame)
+						local headers = {}
+						local headerId = 0
+						local skillCount = 0
+						for i = 1, TRADE_SKILLS_DISPLAYED do
+							local skillIndex = i + skillOffset
+							local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
+							if skillIndex <= numTradeSkills then
+								if isHeader then
+									if i ~= 1 then
+										if skillCount == 0 then
+											headers[headerId] = false
+										else
+											headers[headerId] = true
+										end
+
+										headerId = headerId + 1
+									end
+
+									skillCount = 0
+								else
+									local color = TradeSkillTypeColor[skillType]
+									if not (ImproveAny:IsEnabled("HASSKILLUP", false) and color.r == color.g and color.r == color.b) and not (numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false)) then
+										skillCount = skillCount + 1
+									end
+								end
+							end
+						end
+
+						if skillCount == 0 then
+							headers[headerId] = false
+						else
+							headers[headerId] = true
+						end
+
+						headerId = 0
+						for i = 1, TRADE_SKILLS_DISPLAYED do
+							local skillIndex = i + skillOffset
+							local name, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
+							local skillButton = getglobal("TradeSkillSkill" .. i)
+							if skillIndex <= numTradeSkills then
+								local color = TradeSkillTypeColor[skillType]
+								if not isHeader then
+									if ImproveAny:IsEnabled("HASSKILLUP", false) and color.r == color.g and color.r == color.b then
+										skillButton:Hide()
+									else
+										if numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false) then
+											skillButton:Hide()
+										else
+											skillButton:ClearAllPoints()
+											skillButton:SetPoint("TOPLEFT", skillButton:GetParent(), "TOPLEFT", 32, -py)
+											skillButton:Show()
+											py = py + 16
+										end
+									end
+								else
+									if headers[headerId] then
+										skillButton:ClearAllPoints()
+										skillButton:SetPoint("TOPLEFT", skillButton:GetParent(), "TOPLEFT", 32, -py)
+										skillButton:Show()
+										py = py + 16
+									else
+										skillButton:Hide()
+									end
+
+									headerId = headerId + 1
+								end
+							else
+								skillButton:Hide()
+							end
+						end
+					end
+				)
+			end
+
+			if IsAddOnLoaded("Blizzard_TradeSkillUI") then
+				InitTSF()
+			else
+				local waitFrame = CreateFrame("FRAME")
+				waitFrame:RegisterEvent("ADDON_LOADED")
+				waitFrame:SetScript(
+					"OnEvent",
+					function(sel, even, arg1)
+						if arg1 == "Blizzard_TradeSkillUI" then
+							InitTSF()
+							waitFrame:UnregisterAllEvents()
+						end
+					end
+				)
+			end
+		end
 	end
 end
 
