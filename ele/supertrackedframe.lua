@@ -65,7 +65,7 @@ function ImproveAny:InitSuperTrackedFrame()
 				distPerSec = distDif * scale
 				distPerSec = floor(distPerSec)
 				if distPerSec ~= 0 then
-					distPerSec = ImproveAny:Lerp(lastDistPerSec, distPerSec, 0.2)
+					distPerSec = ImproveAny:Lerp(lastDistPerSec, distPerSec, 0.3)
 					timeToTarget = distance / distPerSec
 				else
 					timeToTarget = 0
@@ -92,7 +92,7 @@ function ImproveAny:InitSuperTrackedFrame()
 				lastDistPerSec = distPerSec
 				lastDist = distance
 				ImproveAny:Debug("supertrackedframe.lua: ThinkSuperTrackedFrame " .. distance, "think")
-				C_Timer.After(0.4, ImproveAny.ThinkSuperTrackedFrame)
+				C_Timer.After(0.1, ImproveAny.ThinkSuperTrackedFrame)
 			end
 
 			ImproveAny:ThinkSuperTrackedFrame()

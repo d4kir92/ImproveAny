@@ -1053,7 +1053,7 @@ function ImproveAny:Event(event, ...)
 									skillCount = 0
 								else
 									local color = TradeSkillTypeColor[skillType]
-									if not (ImproveAny:IsEnabled("HASSKILLUP", false) and color.r == color.g and color.r == color.b) and not (numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false)) then
+									if not (ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b) and not (numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false)) then
 										skillCount = skillCount + 1
 									end
 								end
@@ -1074,7 +1074,7 @@ function ImproveAny:Event(event, ...)
 							if skillIndex <= numTradeSkills then
 								local color = TradeSkillTypeColor[skillType]
 								if not isHeader then
-									if ImproveAny:IsEnabled("HASSKILLUP", false) and color.r == color.g and color.r == color.b then
+									if ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b then
 										skillButton:Hide()
 									else
 										if numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false) then
