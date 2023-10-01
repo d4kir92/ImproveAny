@@ -156,6 +156,22 @@ function ImproveAny:FormatURL(url)
 	return url
 end
 
+local rightWasDown = false
+local rightWasDownTs = 0
+function ImproveAny:ThinkRightClick()
+	if IsMouseButtonDown("RightButton") then
+		rightWasDown = true
+		rightWasDownTs = time()
+	end
+
+	if rightWasDownTs < time() - 0.1 then
+		rightWasDown = false
+	end
+
+	C_Timer.After(0.01, ImproveAny.ThinkRightClick)
+end
+
+ImproveAny:ThinkRightClick()
 function ImproveAny:SetHyperlink(link)
 	local poi = string.find(link, ":", 0, true)
 	local typ = string.sub(link, 1, poi - 1)
@@ -166,17 +182,20 @@ function ImproveAny:SetHyperlink(link)
 		StaticPopup_Show("CLICK_LINK_URL", "", "", tab)
 
 		return true
-	elseif typ == "ginv" then
-		local name = string.sub(link, poi + 1)
-		GuildInvite(name)
-
-		return true
 	elseif typ == "inv" then
 		local name = string.sub(link, poi + 1)
-		if C_PartyInfo then
-			C_PartyInfo.InviteUnit(name)
+		if rightWasDown then
+			if GuildInvite then
+				GuildInvite(name)
+			end
+
+			return true
 		else
-			InviteUnit(name)
+			if C_PartyInfo and C_PartyInfo.InviteUnit then
+				C_PartyInfo.InviteUnit(name)
+			elseif InviteUnit then
+				InviteUnit(name)
+			end
 		end
 
 		return true
@@ -544,12 +563,7 @@ function ImproveAny:InitChat()
 				end
 			end
 
-			if string.find(msg, "ginv", 0, true) then
-				local name = select(1, ...)
-				if name then
-					msg = string.gsub(msg, "ginv", "|cff" .. "AAFFAA" .. "|Hginv:" .. name .. "|h" .. "ginv" .. "|h|r")
-				end
-			elseif string.find(msg, "inv", 0, true) then
+			if string.find(msg, "inv", 0, true) then
 				local name = select(1, ...)
 				if name then
 					msg = string.gsub(msg, "inv", "|cff" .. "FFFF00" .. "|Hinv:" .. name .. "|h" .. "inv" .. "|h|r")
@@ -578,16 +592,17 @@ function ImproveAny:InitChat()
 			hooksecurefunc(
 				ItemRefTooltip,
 				"SetHyperlink",
-				function(sel, link, ...)
+				function(sel, link)
+					print(link)
 					ImproveAny:SetHyperlink(link)
 				end
 			)
 		else
 			ItemRefTooltip.OldSetHyperlink = ItemRefTooltip.SetHyperlink
-			function ItemRefTooltip:SetHyperlink(link, ...)
+			function ItemRefTooltip:SetHyperlink(link)
 				local worked = ImproveAny:SetHyperlink(link)
 				if not worked then
-					ItemRefTooltip:OldSetHyperlink(link, ...)
+					ItemRefTooltip:OldSetHyperlink(link)
 				end
 			end
 		end
