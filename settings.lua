@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.9")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.10")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -321,7 +321,7 @@ function ImproveAny:UpdateUIParentAttribute()
 end
 
 function ImproveAny:UpdateStatusBar()
-	local w = ImproveAny:GV("STATUSBARWIDTH", 565)
+	local w = ImproveAny:GV("STATUSBARWIDTH", 570)
 	if StatusTrackingBarManager then
 		StatusTrackingBarManager:SetWidth(w)
 		if StatusTrackingBarManager.TopBarFrameTexture then
@@ -349,7 +349,9 @@ function ImproveAny:UpdateStatusBar()
 		for i, v in pairs({MainStatusTrackingBarContainer:GetChildren()}) do
 			v:SetWidth(w - 5)
 			for id, va in pairs({v:GetChildren()}) do
-				va:SetWidth(w - 5)
+				if id ~= 3 then
+					va:SetWidth(w - 5)
+				end
 			end
 		end
 	end
@@ -359,7 +361,9 @@ function ImproveAny:UpdateStatusBar()
 		for i, v in pairs({SecondaryStatusTrackingBarContainer:GetChildren()}) do
 			v:SetWidth(w - 5)
 			for id, va in pairs({v:GetChildren()}) do
-				va:SetWidth(w - 5)
+				if id ~= 3 then
+					va:SetWidth(w - 5)
+				end
 			end
 		end
 	end
@@ -420,7 +424,7 @@ function ImproveAny:InitIASettings()
 		AddSlider(4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1)
 		AddCheckBox(4, "HIDEPVPBADGE", false)
 		if StatusTrackingBarManager then
-			AddSlider(4, "STATUSBARWIDTH", 565, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
+			AddSlider(4, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
 		end
 
 		AddCheckBox(4, "BAGSAMESIZE", false)
