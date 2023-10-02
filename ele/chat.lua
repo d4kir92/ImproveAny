@@ -182,7 +182,7 @@ function ImproveAny:SetHyperlink(link)
 		StaticPopup_Show("CLICK_LINK_URL", "", "", tab)
 
 		return true
-	elseif typ == "inv" then
+	elseif typ == "inv" or typ == "einladen" then
 		local name = string.sub(link, poi + 1)
 		if rightWasDown then
 			if GuildInvite then
@@ -567,6 +567,13 @@ function ImproveAny:InitChat()
 				local name = select(1, ...)
 				if name then
 					msg = string.gsub(msg, "inv", "|cff" .. "FFFF00" .. "|Hinv:" .. name .. "|h" .. "inv" .. "|h|r")
+				end
+			end
+
+			if string.find(msg, "einladen", 0, true) then
+				local name = select(1, ...)
+				if name then
+					msg = string.gsub(msg, "einladen", "|cff" .. "FFFF00" .. "|Heinladen:" .. name .. "|h" .. "einladen" .. "|h|r")
 				end
 			end
 
