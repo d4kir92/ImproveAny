@@ -229,34 +229,6 @@ function ImproveAny:InitRaidFrames()
 			debuffFrame:Show()
 		end
 
-		if CompactUnitFrame_UtilShouldDisplayBuff then
-			local oldInCombatIds = ""
-			local inCombatIds = {}
-			local oldInNotCombatIds = ""
-			local inNotCombatIds = {}
-			function ImproveAny:_CompactUnitFrame_UtilShouldDisplayBuff(unit, index, filter)
-				local _, _, _, _, _, _, _, _, _, _, canApplyAura = UnitBuff(unit, index, filter)
-				local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellId, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
-				if oldInCombatIds ~= ImproveAny:GV("RFHIDEBUFFIDSINCOMBAT", "") then
-					oldInCombatIds = ImproveAny:GV("RFHIDEBUFFIDSINCOMBAT", "")
-					inCombatIds = {strsplit(",", oldInCombatIds)}
-				end
-
-				if oldInNotCombatIds ~= ImproveAny:GV("RFHIDEBUFFIDSINNOTCOMBAT", "") then
-					oldInNotCombatIds = ImproveAny:GV("RFHIDEBUFFIDSINNOTCOMBAT", "")
-					inNotCombatIds = {strsplit(",", oldInNotCombatIds)}
-				end
-
-				if InCombatLockdown() and tContains(inCombatIds, spellId .. "") then return false end
-				if not InCombatLockdown() and tContains(inNotCombatIds, spellId .. "") then return false end
-				if hasCustom then
-					return showForMySpec or (alwaysShowMine and (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle"))
-				else
-					return (unitCaster == "player" or unitCaster == "pet" or unitCaster == "vehicle") and canApplyAura and not SpellIsSelfBuff(spellId)
-				end
-			end
-		end
-
 		if CompactUnitFrame_UpdateBuffs then
 			hooksecurefunc(
 				"CompactUnitFrame_UpdateBuffs",
@@ -271,7 +243,7 @@ function ImproveAny:InitRaidFrames()
 							if frame.displayedUnit then
 								local buffName = UnitBuff(frame.displayedUnit, index, filter)
 								if buffName then
-									if ImproveAny:CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
+									if CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
 										local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
 										if buffFrame then
 											ImproveAny:CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)

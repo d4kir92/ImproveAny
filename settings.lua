@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.12")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.13")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -525,8 +525,6 @@ function ImproveAny:InitIASettings()
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("UNITFRAMES")
-			AddEditBox(4, "RFHIDEBUFFIDSINCOMBAT", "", ImproveAny.ShowMsgForBuffs)
-			AddEditBox(4, "RFHIDEBUFFIDSINNOTCOMBAT", "", ImproveAny.ShowMsgForBuffs)
 			AddCheckBox(4, "RAIDFRAMEMOREBUFFS", false)
 			AddSlider(24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
 			AddSlider(24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
