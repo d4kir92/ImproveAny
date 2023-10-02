@@ -44,20 +44,26 @@ end
 local lastTotalXp = 0
 function ImproveAny:GetQuestCompleteXP()
 	if QuestLogFrame:IsShown() then return lastTotalXp end
+	local oldQuestId = QuestLogFrame.selectedButtonID
 	local totalXP = 0
-	for i = 1, GetNumQuestLogEntries() do
-		--local name = select(1, GetQuestLogTitle(i))
-		local questID = select(8, GetQuestLogTitle(i))
-		SelectQuestLogEntry(i)
-		if IsQuestComplete(questID) then
+	for i = 1, QUESTS_DISPLAYED do
+		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
+		local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(questIndex)
+		if not isHeader then
+			SelectQuestLogEntry(i)
 			local xp = GetQuestLogRewardXP(questID)
-			if xp then
-				totalXP = totalXP + xp
+			if xp and xp > 0 then
+				IATAB["QUESTS"] = IATAB["QUESTS"] or {}
+				IATAB["QUESTS"][questID] = xp
+				if IsQuestComplete(questID) then
+					totalXP = totalXP + xp
+				end
 			end
 		end
 	end
 
 	lastTotalXp = totalXP
+	SelectQuestLogEntry(oldQuestId)
 
 	return math.floor(totalXP)
 end
@@ -97,17 +103,33 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 end
 
 function ImproveAny:UpdateQuestFrame()
-	local oldQuestId = QuestLogFrame.selectedButtonID
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
-		SelectQuestLogEntry(questIndex)
 		local questNormalText = nil
 		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
-		if not isHeader and GetQuestLogRewardXP(questID) then
+		local rewardXP = IAGetQuestLogRewardXP(questID)
+		if not isHeader and rewardXP then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
+			local questTitleCheck = _G["QuestLogTitle" .. i .. "Check"]
+			local questTitleGroupMates = _G["QuestLogTitle" .. i .. "GroupMates"]
+			if questTitleCheck then
+				questTitleCheck:ClearAllPoints()
+				questTitleCheck:SetPoint("RIGHT", questTitleTag, "LEFT", 0, 0)
+			end
+
+			if questTitleGroupMates then
+				questTitleGroupMates:ClearAllPoints()
+				questTitleGroupMates:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 0, 0)
+			end
+
 			if questTitleTag then
 				local questTitleTagText = questTitleTag:GetText() or ""
 				questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
+				if questNormalText then
+					questNormalText:ClearAllPoints()
+					questNormalText:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 18, 0)
+				end
+
 				if lvl and lvl > 0 then
 					local qnt = questNormalText:GetText() or ""
 					local lvltext = lvl
@@ -127,7 +149,7 @@ function ImproveAny:UpdateQuestFrame()
 				end
 
 				if questTitleTag then
-					questTitleTag:SetText(string.format("(%dXP)%s", GetQuestLogRewardXP(questID), questTitleTagText))
+					questTitleTag:SetText(string.format("(%dXP)%s", rewardXP, questTitleTagText))
 				end
 			end
 
@@ -158,8 +180,6 @@ function ImproveAny:UpdateQuestFrame()
 			end
 		end
 	end
-
-	SelectQuestLogEntry(oldQuestId)
 end
 
 function ImproveAny:InitXPBar()
@@ -173,7 +193,7 @@ function ImproveAny:InitXPBar()
 		C_Timer.After(
 			0.01,
 			function()
-				if GetQuestLogRewardXP == nil and GetRewardXP ~= nil then
+				if GetRewardXP ~= nil then
 					local qaf = CreateFrame("FRAME")
 					qaf:RegisterEvent("QUEST_ACCEPTED")
 					qaf:RegisterEvent("QUEST_COMPLETE")
@@ -214,7 +234,7 @@ function ImproveAny:InitXPBar()
 					end
 
 					ImproveAny:UpdateQAF()
-					function GetQuestLogRewardXP(questID)
+					function IAGetQuestLogRewardXP(questID)
 						if questID == nil then return nil end
 						IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 						if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end

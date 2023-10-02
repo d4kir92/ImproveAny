@@ -593,7 +593,6 @@ function ImproveAny:InitChat()
 				ItemRefTooltip,
 				"SetHyperlink",
 				function(sel, link)
-					print(link)
 					ImproveAny:SetHyperlink(link)
 				end
 			)
