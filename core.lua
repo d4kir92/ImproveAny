@@ -1071,7 +1071,7 @@ function ImproveAny:Event(event, ...)
 							local skillIndex = i + skillOffset
 							local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
 							local skillButton = getglobal("TradeSkillSkill" .. i)
-							if skillIndex <= numTradeSkills then
+							if skillIndex <= numTradeSkills and i < 25 then
 								local color = TradeSkillTypeColor[skillType]
 								if not isHeader then
 									if ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b then
