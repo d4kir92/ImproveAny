@@ -181,6 +181,7 @@ function ImproveAny:InitMinimap()
 									end
 								)
 
+								btn:SetParent(Minimap)
 								btn:ClearAllPoints()
 								btn:SetPoint("CENTER", Minimap, "CENTER", IATAB[name .. "ofsx"], IATAB[name .. "ofsy"])
 							end
@@ -355,14 +356,14 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("MinimapZoomIn")
 				ImproveAny:ConvertToMinimapButton("MinimapZoomOut")
 				ImproveAny:ConvertToMinimapButton("CodexBrowserIcon")
-				local mmBtnsNames = {"LibDBIcon", "BtWQuests", "MinimapButton",}
+				local mmBtnsNames = {"LibDBIcon", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
 				-- ADDONS
 				local mmbtns = {}
 				function ImproveAny:UpdateMMBtns()
 					for i, child in pairs({Minimap:GetChildren()}) do
 						if not tContains(mmbtns, child) and child:GetName() then
 							for x, w in pairs(mmBtnsNames) do
-								if strfind(child:GetName(), w) and not tContains(mmbtns, child) then
+								if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
 									tinsert(mmbtns, child)
 									ImproveAny:ConvertToMinimapButton(child:GetName())
 								end
