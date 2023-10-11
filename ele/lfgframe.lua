@@ -53,6 +53,7 @@ if IMPORTREALMS[portal] then
 	end
 end
 
+local realmOnce = {}
 function ImproveAny:GetRealmLang(name)
 	local realmName = name
 	if realmName == nil then return nil end
@@ -67,8 +68,9 @@ function ImproveAny:GetRealmLang(name)
 	if REALMS[portal2] == nil then return nil end
 	if REALMS[portal2][realmName] then
 		return REALMS[portal2][realmName]
-	else
-		ImproveAny:MSG(format("MISSING REALM [%s], please Send to Developer", realmName))
+	elseif realmOnce[realmName] == nil then
+		realmOnce[realmLang] = true
+		ImproveAny:MSG(format("MISSING REALM [%s], please send to Developer to add this Realm", realmName))
 	end
 
 	return nil
