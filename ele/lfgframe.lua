@@ -69,7 +69,7 @@ function ImproveAny:GetRealmLang(name)
 	if REALMS[portal2][realmName] then
 		return REALMS[portal2][realmName]
 	elseif realmOnce[realmName] == nil then
-		realmOnce[realmLang] = true
+		realmOnce[realmName] = true
 		ImproveAny:MSG(format("MISSING REALM [%s], please send to Developer to add this Realm", realmName))
 	end
 
