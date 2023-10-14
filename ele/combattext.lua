@@ -52,7 +52,7 @@ function ImproveAny:InitCombatText()
 			cle:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 			cle:SetScript(
 				"OnEvent",
-				function(eventName)
+				function(sel, eventName, ...)
 					if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) then
 						ImproveAny:UpdateCombatTextPos()
 					end
@@ -83,8 +83,7 @@ function ImproveAny:InitCombatText()
 			)
 		end
 
-		local max = NUM_COMBAT_TEXT_LINES or 1
-		local found = false
+		local max = NUM_COMBAT_TEXT_LINES or 0
 		for i = 1, max do
 			local str = _G["CombatText" .. i]
 			if str and str.initsettext == nil then
@@ -135,7 +134,7 @@ function ImproveAny:InitCombatText()
 								amount = tonumber(val)
 							end
 
-							if cle.tabhot then
+							if cle and cle.tabhot then
 								local icon = cle.tabhot[amount]
 								if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 									local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
@@ -151,8 +150,6 @@ function ImproveAny:InitCombatText()
 						sel.iasettext = false
 					end
 				)
-
-				found = true
 			end
 		end
 
@@ -160,9 +157,8 @@ function ImproveAny:InitCombatText()
 			ImproveAny:UpdateCombatTextPos()
 		end
 
-		if found then
+		if max > 1 then
 			ImproveAny:Debug("combattext.lua: found")
-			C_Timer.After(0.1, ImproveAny.InitCombatText)
 		else
 			ImproveAny:Debug("combattext.lua: not found", "retry")
 			C_Timer.After(1, ImproveAny.InitCombatText)
