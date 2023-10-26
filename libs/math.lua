@@ -56,3 +56,11 @@ function ImproveAny:ReplaceStr(text, old, new)
 		return text:sub(1, b - 1) .. new .. text:sub(e + 1)
 	end
 end
+
+function ImproveAny:GetRowsCols(amount)
+	local wurzel = math.sqrt(amount)
+	if wurzel * wurzel == amount then return wurzel, wurzel end
+	if wurzel % 1 > 0.5 then return math.ceil(wurzel), math.ceil(wurzel) end
+
+	return math.floor(wurzel), math.ceil(wurzel)
+end

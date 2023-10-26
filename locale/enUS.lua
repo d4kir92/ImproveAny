@@ -110,6 +110,7 @@ function ImproveAny:Lang_enUS()
 		["WIDEFRAMES"] = "Wide Windows (Wide Frames)",
 		["ITEMLEVELSYSTEM"] = "Item Level System",
 		["AUTOACCEPTQUESTS"] = "Auto Accept Quests",
+		["COMBINEMMBTNS"] = "Combine Minimap Buttons",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

@@ -3,7 +3,7 @@
 ## Interface-Wrath: 30403
 ## Interface: 100107
 
-## Version: 0.8.21
+## Version: 0.9.0
 ## Title: ImproveAny by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -14,8 +14,7 @@
 ## X-Wago-ID: 5bGoV1K0
 ## IconTexture: 136033
 
-libs\LibDBIcon-1.0\embeds.xml
-libs\LibDBIcon-1.0\LibDBIcon-1.0\lib.xml
+libs\D4Lib\D4Lib.xml
 
 libs/math.lua
 libs/db.lua

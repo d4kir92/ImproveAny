@@ -2,7 +2,6 @@ local _, ImproveAny = ...
 -- TAINTFREE SLASH COMMANDS --
 local lastMessage = ""
 local cmds = {}
-local IAMMBTN = nil
 if ChatEdit_ParseText then
 	hooksecurefunc(
 		"ChatEdit_ParseText",
@@ -163,37 +162,10 @@ function ImproveAny:Event(event, ...)
 		end
 
 		function ImproveAny:UpdateMinimapButton()
-			if IAMMBTN then
-				if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
-					IAMMBTN:Show("ImproveAnyMinimapIcon")
-				else
-					IAMMBTN:Hide("ImproveAnyMinimapIcon")
-				end
-			end
-		end
-
-		function ImproveAny:ToggleMinimapButton()
-			ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", not ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true))
-			if IAMMBTN then
-				if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
-					IAMMBTN:Show("ImproveAnyMinimapIcon")
-				else
-					IAMMBTN:Hide("ImproveAnyMinimapIcon")
-				end
-			end
-		end
-
-		function ImproveAny:HideMinimapButton()
-			ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", false)
-			if IAMMBTN then
-				IAMMBTN:Hide("ImproveAnyMinimapIcon")
-			end
-		end
-
-		function ImproveAny:ShowMinimapButton()
-			ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", true)
-			if IAMMBTN then
-				IAMMBTN:Show("ImproveAnyMinimapIcon")
+			if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
+				D4:ShowMMBtn("ImproveAny")
+			else
+				D4:HideMMBtn("ImproveAny")
 			end
 		end
 
@@ -209,43 +181,25 @@ function ImproveAny:Event(event, ...)
 			ExtraActionButton1.style:Hide()
 		end
 
-		local ImproveAnyMinimapIcon = LibStub("LibDataBroker-1.1"):NewDataObject(
-			"ImproveAnyMinimapIcon",
+		local mmbtn = nil
+		D4:CreateMinimapButton(
 			{
-				type = "data source",
-				text = "ImproveAnyMinimapIcon",
-				icon = 136033,
-				OnClick = function(sel, btn)
-					if btn == "LeftButton" then
-						ImproveAny:ToggleSettings()
-					elseif btn == "RightButton" then
-						ImproveAny:HideMinimapButton()
-					end
+				["name"] = "ImproveAny",
+				["icon"] = 136033,
+				["var"] = mmbtn,
+				["dbtab"] = IATAB,
+				["vTT"] = {"ImproveAny", ImproveAny:GT("MMBTNLEFT"), ImproveAny:GT("MMBTNRIGHT")},
+				["funcL"] = function()
+					ImproveAny:ToggleSettings()
 				end,
-				OnTooltipShow = function(tooltip)
-					if not tooltip or not tooltip.AddLine then return end
-					tooltip:AddLine("ImproveAny")
-					tooltip:AddLine(ImproveAny:GT("MMBTNLEFT"))
-					tooltip:AddLine(ImproveAny:GT("MMBTNRIGHT"))
+				["funcR"] = function()
+					D4:MSG("ImproveAny", 132117, "Minimap Button is now hidden.")
+					D4:HideMMBtn("ImproveAny")
 				end,
 			}
 		)
 
-		if ImproveAnyMinimapIcon then
-			IAMMBTN = LibStub("LibDBIcon-1.0", true)
-			if IAMMBTN then
-				IAMMBTN:Register("ImproveAnyMinimapIcon", ImproveAnyMinimapIcon, ImproveAny:GetMinimapTable())
-			end
-		end
-
-		if IAMMBTN then
-			if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
-				IAMMBTN:Show("ImproveAnyMinimapIcon")
-			else
-				IAMMBTN:Hide("ImproveAnyMinimapIcon")
-			end
-		end
-
+		ImproveAny:UpdateMinimapButton()
 		ImproveAny:UpdateMaxZoom()
 		ImproveAny:UpdateWorldTextScale()
 		ImproveAny:CheckCVars()

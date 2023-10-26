@@ -104,6 +104,7 @@ function ImproveAny:Lang_deDE()
 		["WIDEFRAMES"] = "Weite Fenster",
 		["ITEMLEVELSYSTEM"] = "ItemLevel System",
 		["AUTOACCEPTQUESTS"] = "Automatisch Quests annehmen",
+		["COMBINEMMBTNS"] = "Minimap Knöpfe zusammenfassen",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

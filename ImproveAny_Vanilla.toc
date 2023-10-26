@@ -1,5 +1,5 @@
 ## Interface: 11404
-## Version: 0.8.21
+## Version: 0.9.0
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -9,8 +9,7 @@
 ## X-Curse-Project-ID: 646135
 ## X-Wago-ID: 5bGoV1K0
 
-libs\LibDBIcon-1.0\embeds.xml
-libs\LibDBIcon-1.0\LibDBIcon-1.0\lib.xml
+libs\D4Lib\D4Lib.xml
 
 libs/math.lua
 libs/db.lua

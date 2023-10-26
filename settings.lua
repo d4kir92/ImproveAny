@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.8.21")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.0")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -489,6 +489,7 @@ function ImproveAny:InitIASettings()
 
 		AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(4, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
 		AddCategory("ITEMLEVEL")
 		AddCheckBox(4, "ITEMLEVELSYSTEM")
