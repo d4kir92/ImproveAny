@@ -59,7 +59,7 @@ end
 
 function ImproveAny:GetRowsCols(amount)
 	local wurzel = math.sqrt(amount)
-	if wurzel * wurzel == amount then return wurzel, wurzel end
+	if wurzel * wurzel == amount then return math.floor(wurzel), math.ceil(wurzel) end
 	if wurzel % 1 > 0.5 then return math.ceil(wurzel), math.ceil(wurzel) end
 
 	return math.floor(wurzel), math.ceil(wurzel)

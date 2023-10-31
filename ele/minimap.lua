@@ -446,7 +446,7 @@ function ImproveAny:InitMinimap()
 				end
 
 				if select(4, GetBuildInfo()) < 100000 then
-					ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, true) -- Calendar
+					ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, ImproveAny:GetWoWBuild() == "CLASSIC") -- Calendar
 				end
 
 				ImproveAny:ConvertToMinimapButton("ExpansionLandingPageMinimapButton", true) -- Sanctum
