@@ -402,7 +402,7 @@ function ImproveAny:InitMinimap()
 
 				-- Blizzard Minimap Buttons Dragging
 				-- ALL
-				ImproveAny:ConvertToMinimapButton("MiniMapWorldMapButton", true, true) -- WorldMap
+				ImproveAny:ConvertToMinimapButton("MiniMapWorldMapButton", true) -- WorldMap
 				ImproveAny:ConvertToMinimapButton("MiniMapMailFrame", true) -- Mail
 				-- Retail
 				ImproveAny:ConvertToMinimapButton("MiniMapTrackingButton", true) -- Tracking
