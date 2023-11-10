@@ -96,6 +96,9 @@ function ImproveAny:AddRightClick()
 	end
 end
 
+local warningEnhanceDressup = false
+local warningEnhanceQuestLog = false
+local warningEnhanceTrainers = false
 function ImproveAny:Event(event, ...)
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
@@ -444,6 +447,21 @@ function ImproveAny:Event(event, ...)
 		end
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
+			if not warningEnhanceDressup and LeaPlusDB and LeaPlusDB["EnhanceDressup"] and LeaPlusDB["EnhanceDressup"] == "On" then
+				ImproveAny:MSG("LeatrixPlus \"EnhanceDressup\" is enabled, will may break WideFrames")
+				warningEnhanceDressup = true
+			end
+
+			if not warningEnhanceQuestLog and LeaPlusDB and LeaPlusDB["EnhanceQuestLog"] and LeaPlusDB["EnhanceQuestLog"] == "On" then
+				ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLog\" is enabled, will may break WideFrames")
+				warningEnhanceQuestLog = true
+			end
+
+			if not warningEnhanceTrainers and LeaPlusDB and LeaPlusDB["EnhanceTrainers"] and LeaPlusDB["EnhanceTrainers"] == "On" then
+				ImproveAny:MSG("LeatrixPlus \"EnhanceTrainers\" is enabled, will may break WideFrames")
+				warningEnhanceTrainers = true
+			end
+
 			if ImproveAny:GetWoWBuild() == "CLASSIC" then
 				local tall, numTallQuests = 74, 22
 				UIPanelWindows["QuestLogFrame"] = {

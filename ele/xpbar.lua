@@ -102,7 +102,13 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 	return res
 end
 
+local questlogWarning = false
 function ImproveAny:UpdateQuestFrame()
+	if not questlogWarning and LeaPlusDB and LeaPlusDB["EnhanceQuestLevels"] and LeaPlusDB["EnhanceQuestLevels"] == "On" then
+		ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLevels\" is enabled, will may break QuestLog")
+		questlogWarning = true
+	end
+
 	for i = 1, QUESTS_DISPLAYED do
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
 		local questNormalText = nil
