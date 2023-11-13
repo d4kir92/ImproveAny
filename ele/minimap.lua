@@ -413,26 +413,22 @@ function ImproveAny:InitMinimap()
 						function(sel, ...)
 							if sel.ia_setpoint then return end
 							sel.ia_setpoint = true
-							MiniMapTracking:ClearAllPoints()
-							MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
+							local op1, op2, op3, op4, op5 = MiniMapTrackingButton:GetPoint()
+							if op2 ~= MiniMapTracking then
+								MiniMapTracking:ClearAllPoints()
+								MiniMapTracking:SetPoint(op1, op2, op3, op4, op5)
+							end
+
 							sel.ia_setpoint = false
 						end
 					)
 
-					hooksecurefunc(
-						MiniMapTracking,
-						"SetPoint",
-						function(sel, ...)
-							if sel.ia_setpoint then return end
-							sel.ia_setpoint = true
-							MiniMapTracking:ClearAllPoints()
-							MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
-							sel.ia_setpoint = false
-						end
-					)
+					local op1, op2, op3, op4, op5 = MiniMapTrackingButton:GetPoint()
+					if op2 ~= MiniMapTracking then
+						MiniMapTracking:ClearAllPoints()
+						MiniMapTracking:SetPoint(op1, op2, op3, op4, op5)
+					end
 
-					MiniMapTracking:ClearAllPoints()
-					MiniMapTracking:SetPoint(MiniMapTrackingButton:GetPoint())
 					if MiniMapTrackingButton:GetFrameLevel() > 1 then
 						MiniMapTracking:SetFrameLevel(MiniMapTrackingButton:GetFrameLevel() - 1)
 					else
