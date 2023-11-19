@@ -112,12 +112,15 @@ C_Timer.After(
 
 function ImproveAny:GetClassIcon(class, size)
 	size = size or 0
+	if classes and classes[class] then return "|T" .. classes[class] .. ":" .. size .. ":" .. size .. "|t" end
 
-	return "|T" .. classes[class] .. ":" .. size .. ":" .. size .. "|t"
+	return ""
 end
 
 function ImproveAny:GetRaceIcon(race, gender)
-	return races[race .. gender]
+	if races then return races[race .. gender] end
+
+	return ""
 end
 
 local allowedTyp = {}
