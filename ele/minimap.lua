@@ -42,6 +42,30 @@ function ImproveAny:UpdateMinimapSettings()
 		if MinimapZoomOut then
 			MinimapZoomOut:Hide()
 		end
+
+		if Minimap.ZoomIn then
+			hooksecurefunc(
+				Minimap.ZoomIn,
+				"Show",
+				function(sel)
+					sel:Hide()
+				end
+			)
+
+			Minimap.ZoomIn:Hide()
+		end
+
+		if Minimap.ZoomOut then
+			hooksecurefunc(
+				Minimap.ZoomOut,
+				"Show",
+				function(sel)
+					sel:Hide()
+				end
+			)
+
+			Minimap.ZoomOut:Hide()
+		end
 	else
 		if MinimapZoomIn then
 			MinimapZoomIn:Show()
