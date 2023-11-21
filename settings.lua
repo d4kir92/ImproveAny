@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.9")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.10")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -432,6 +432,7 @@ function ImproveAny:InitIASettings()
 		AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
 		AddCategory("QUICKGAMEPLAY")
 		AddCheckBox(4, "AUTOACCEPTQUESTS", false)
+		AddCheckBox(4, "AUTOCHECKINQUESTS", false)
 		AddCheckBox(4, "FASTLOOTING", false)
 		AddCheckBox(4, "COORDSP", false)
 		AddCheckBox(4, "COORDSC", false)

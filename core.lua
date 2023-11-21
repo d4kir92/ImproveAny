@@ -135,7 +135,7 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:InitWorldMapFrame()
 		end
 
-		if ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
+		if ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
 			ImproveAny:InitAutoAcceptQuests()
 		end
 
@@ -1169,11 +1169,11 @@ function ImproveAny:InitAutoAcceptQuests()
 					end
 				end
 
-				if event == "QUEST_DETAIL" then
+				if event == "QUEST_DETAIL" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
 					AcceptQuest()
 				end
 
-				if event == "QUEST_PROGRESS" then
+				if event == "QUEST_PROGRESS" and ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
 					CompleteQuest()
 				end
 
