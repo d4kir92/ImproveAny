@@ -76,6 +76,7 @@ function ImproveAny:Lang_enUS()
 		["RAIDFRAMEH"] = "Raidframe Height",
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Money Bar",
+		["MONEYBARPERHOUR"] = "Money Bar per Hour",
 		["TOKENBAR"] = "Token Bar",
 		["IAILVLBAR"] = "Itemlevel Bar",
 		["SKILLBARS"] = "Skillbars (Professions, Weaponskills)",

@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.11")
+	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.12")
 }
 
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
@@ -535,6 +535,7 @@ function ImproveAny:InitIASettings()
 
 		AddCategory("EXTRAS")
 		AddCheckBox(4, "MONEYBAR", false)
+		AddCheckBox(24, "MONEYBARPERHOUR", false)
 		AddCheckBox(4, "TOKENBAR", false)
 		AddCheckBox(4, "IAILVLBAR", false)
 		AddCheckBox(4, "SKILLBARS", false)

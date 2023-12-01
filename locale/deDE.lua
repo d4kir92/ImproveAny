@@ -70,6 +70,7 @@ function ImproveAny:Lang_deDE()
 		["RAIDFRAMEH"] = "Raidfenster Höhe",
 		["EXTRAS"] = "Extras",
 		["MONEYBAR"] = "Geldleiste",
+		["MONEYBARPERHOUR"] = "Geldleiste pro Stunde",
 		["TOKENBAR"] = "Wertmarkenleiste",
 		["IAILVLBAR"] = "Gegenstandsstufeleiste (Itemlevel)",
 		["SKILLBARS"] = "Skillbars (Berufe, Waffenfertigkeiten)",
