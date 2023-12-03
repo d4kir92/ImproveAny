@@ -252,6 +252,20 @@ function ImproveAny:InitBags()
 					for i, slot in pairs(BAGS) do
 						local SLOT = _G[slot]
 						if SLOT and slot ~= "MainMenuBarBackpackButton" then
+							hooksecurefunc(
+								SLOT,
+								"SetParent",
+								function(sel)
+									if sel.ia_setparent then return end
+									sel.ia_setparent = true
+									if sel:GetParent() ~= IAHIDDEN then
+										sel:SetParent(IAHIDDEN)
+									end
+
+									sel.ia_setparent = false
+								end
+							)
+
 							SLOT:SetParent(IAHIDDEN)
 						end
 					end
