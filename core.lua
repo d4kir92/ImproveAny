@@ -440,12 +440,6 @@ function ImproveAny:Event(event, ...)
 			end
 		)
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ShouldKnowUnitHealth and ShouldKnowUnitHealth("target") == false then
-			function ShouldKnowUnitHealth(unit)
-				return true
-			end
-		end
-
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
 			if not warningEnhanceDressup and LeaPlusDB and LeaPlusDB["EnhanceDressup"] and LeaPlusDB["EnhanceDressup"] == "On" then
 				ImproveAny:MSG("LeatrixPlus \"EnhanceDressup\" is enabled, will may break WideFrames")

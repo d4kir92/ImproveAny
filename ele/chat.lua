@@ -372,7 +372,12 @@ function ImproveAny:InitChat()
 				if event == "GUILD_ROSTER_UPDATE" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
 					C_Timer.After(delay, ImproveAny.GuildScan)
 				elseif event == "PLAYER_LEVEL_UP" then
-					ImproveAny:SetLevel(UnitName("player"), GetRealmName(), UnitLevel("player"))
+					C_Timer.After(
+						delay,
+						function()
+							ImproveAny:SetLevel(UnitName("player"), GetRealmName(), UnitLevel("player"))
+						end
+					)
 				elseif event == "WHO_LIST_UPDATE" or event == "CHAT_MSG_SYSTEM" then
 					C_Timer.After(delay, ImproveAny.WhoScan)
 				elseif event == "FRIENDLIST_UPDATE" then
