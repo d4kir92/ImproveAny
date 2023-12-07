@@ -442,17 +442,17 @@ function ImproveAny:Event(event, ...)
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
 			if not warningEnhanceDressup and LeaPlusDB and LeaPlusDB["EnhanceDressup"] and LeaPlusDB["EnhanceDressup"] == "On" then
-				ImproveAny:MSG("LeatrixPlus \"EnhanceDressup\" is enabled, will may break WideFrames")
+				ImproveAny:MSG("LeatrixPlus \"EnhanceDressup\" is enabled, may break WideFrames")
 				warningEnhanceDressup = true
 			end
 
 			if not warningEnhanceQuestLog and LeaPlusDB and LeaPlusDB["EnhanceQuestLog"] and LeaPlusDB["EnhanceQuestLog"] == "On" then
-				ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLog\" is enabled, will may break WideFrames")
+				ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLog\" is enabled, may break WideFrames")
 				warningEnhanceQuestLog = true
 			end
 
 			if not warningEnhanceTrainers and LeaPlusDB and LeaPlusDB["EnhanceTrainers"] and LeaPlusDB["EnhanceTrainers"] == "On" then
-				ImproveAny:MSG("LeatrixPlus \"EnhanceTrainers\" is enabled, will may break WideFrames")
+				ImproveAny:MSG("LeatrixPlus \"EnhanceTrainers\" is enabled, may break WideFrames")
 				warningEnhanceTrainers = true
 			end
 

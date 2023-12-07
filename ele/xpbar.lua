@@ -105,7 +105,7 @@ end
 local questlogWarning = false
 function ImproveAny:UpdateQuestFrame()
 	if not questlogWarning and LeaPlusDB and LeaPlusDB["EnhanceQuestLevels"] and LeaPlusDB["EnhanceQuestLevels"] == "On" then
-		ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLevels\" is enabled, will may break QuestLog")
+		ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLevels\" is enabled, may break QuestLog")
 		questlogWarning = true
 	end
 
