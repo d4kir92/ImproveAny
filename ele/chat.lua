@@ -93,26 +93,26 @@ C_Timer.After(
 			races["Dracthyr3"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:1236:1301:130:195|t"
 		end
 
-		classes["WARRIOR"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:0:64"
-		classes["MAGE"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:0:64"
-		classes["ROGUE"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:0:64"
-		classes["DRUID"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:0:64"
-		classes["HUNTER"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:64:128"
-		classes["SHAMAN"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:64:128"
-		classes["PRIEST"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:64:128"
-		classes["WARLOCK"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:64:128"
-		classes["PALADIN"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:128:192"
-		classes["DEATHKNIGHT"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:128:192"
-		classes["MONK"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:128:192"
-		classes["DEMONHUNTER"] = "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:128:192"
-		classes["EVOKER"] = "Interface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:0:129:0:129"
-		classes["EVOKER"] = "4574311"
+		classes["WARRIOR"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:0:64|t"
+		classes["MAGE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:0:64|t"
+		classes["ROGUE"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:0:64|t"
+		classes["DRUID"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:0:64|t"
+		classes["HUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:64:128|t"
+		classes["SHAMAN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:64:128|t"
+		classes["PRIEST"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:64:128|t"
+		classes["WARLOCK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:64:128|t"
+		classes["PALADIN"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:0:64:128:192|t"
+		classes["DEATHKNIGHT"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:64:128:128:192|t"
+		classes["MONK"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:128:192:128:192|t"
+		classes["DEMONHUNTER"] = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:0:0:0:0:256:256:192:256:128:192|t"
+		classes["EVOKER"] = "|TInterface\\Glues\\CharacterCreate\\CharacterCreateIcons:0:0:0:0:2048:1024:0:129:0:129|t"
+		classes["EVOKER"] = "|T4574311|t"
 	end
 )
 
 function ImproveAny:GetClassIcon(class, size)
 	size = size or 0
-	if classes and classes[class] then return "|T" .. classes[class] .. ":" .. size .. ":" .. size .. "|t" end
+	if classes and classes[class] then return classes[class] end
 
 	return ""
 end
@@ -205,6 +205,18 @@ function ImproveAny:SetHyperlink(link)
 	end
 
 	return false
+end
+
+local function removeTimestamp(message)
+	local result = string.gsub(message, "^[:%d%d]+[%s][AM]*[PM]*[%s]*", "")
+	if GetChatTimestampFormat() then
+		local timestamp = BetterDate(GetChatTimestampFormat(), time())
+		timestamp = string.sub(timestamp, 1, #timestamp - 1)
+
+		return result, "[" .. timestamp .. "]a"
+	end
+
+	return result
 end
 
 function ImproveAny:InitChat()
@@ -479,6 +491,8 @@ function ImproveAny:InitChat()
 		local hooks = {}
 		local function AddMessage(sel, message, ...)
 			local chanName = nil
+			local timestamp = nil
+			message, timestamp = removeTimestamp(message)
 			local sear = message:gsub("|", ""):gsub("h%[", ":"):gsub("%]h", ":")
 			local _, channel, _, channelName, chanIndex = string.split(":", sear)
 			if channel and channel == "channel" and channelName then
@@ -531,6 +545,10 @@ function ImproveAny:InitChat()
 				end
 
 				message = LOCALChatAddPlayerIcons(message, 1)
+			end
+
+			if timestamp then
+				message = timestamp .. message
 			end
 
 			return hooks[sel](sel, message, ...)
