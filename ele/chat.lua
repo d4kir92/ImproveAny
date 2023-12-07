@@ -213,7 +213,7 @@ local function removeTimestamp(message)
 		local timestamp = BetterDate(GetChatTimestampFormat(), time())
 		timestamp = string.sub(timestamp, 1, #timestamp - 1)
 
-		return result, "[" .. timestamp .. "]a"
+		return result, "[" .. timestamp .. "]"
 	end
 
 	return result
