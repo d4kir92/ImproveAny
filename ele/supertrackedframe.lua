@@ -50,7 +50,7 @@ function ImproveAny:InitSuperTrackedFrame()
 			local lastDistPerSec = 0
 			local distPerSec = 0
 			local timeToTarget = 0
-			local scale = 20
+			local scale = 10
 			function ImproveAny:ThinkSuperTrackedFrame()
 				local distance = 0
 				if WorldMapPin_GetDistance then
