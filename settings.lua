@@ -1,8 +1,4 @@
-local _, ImproveAny = ...
-local config = {
-	["title"] = format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.19")
-}
-
+local AddonName, ImproveAny = ...
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
 local IAOldFonts = {}
 local BlizDefaultFonts = {"STANDARD_TEXT_FONT", "UNIT_NAME_FONT", "DAMAGE_TEXT_FONT", "NAMEPLATE_FONT", "NAMEPLATE_SPELLCAST_FONT"}
@@ -406,7 +402,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	IASettings.TitleText:SetText(config.title)
+	D4:SetVersion(AddonName, 136033, "0.9.20")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.20"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
