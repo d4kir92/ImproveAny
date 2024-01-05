@@ -127,10 +127,7 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitTokenBar()
 		ImproveAny:InitIAILVLBar()
 		ImproveAny:InitSkillBars()
-		if ImproveAny:IsEnabled("BAGS", false) then
-			ImproveAny:InitBags()
-		end
-
+		ImproveAny:InitBags()
 		if ImproveAny:IsEnabled("WORLDMAP", false) then
 			ImproveAny:InitWorldMapFrame()
 		end

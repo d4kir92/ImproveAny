@@ -402,8 +402,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	D4:SetVersion(AddonName, 136033, "0.9.23")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.23"))
+	D4:SetVersion(AddonName, 136033, "0.9.24")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.24"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -424,6 +424,7 @@ function ImproveAny:InitIASettings()
 			AddSlider(4, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
 		end
 
+		AddCheckBox(4, "FREESPACEBAGS", false)
 		AddCheckBox(4, "BAGSAMESIZE", false)
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
 		AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
@@ -540,7 +541,6 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "DURABILITY", false)
 		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
-		AddCheckBox(4, "BAGS", false)
 		AddCheckBox(4, "WORLDMAP", false)
 		AddCheckBox(4, "TOOLTIPSELLPRICE", false)
 		AddCheckBox(4, "TOOLTIPEXPANSION", false)

@@ -78,7 +78,7 @@ function ImproveAny:Lang_deDE()
 		["DURABILITY"] = "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)",
 		["MICROMENUCOLORED"] = "Mikro Menü eingefärbt",
 		["SHOWDURABILITYUNDER"] = "Zeige Haltbarkeit, wenn unter",
-		["BAGS"] = "Freiraum für jede Tasche anzeigen",
+		["FREESPACEBAGS"] = "Freiraum für jede Tasche anzeigen",
 		["WORLDMAP"] = "Weltkarten-Zoom mit Mausrad",
 		["BAGMODE"] = "Taschen Modus",
 		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",

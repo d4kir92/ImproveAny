@@ -86,9 +86,12 @@ function ImproveAny:InitBags()
 				if SLOT and SLOT.text ~= nil and C_Container and C_Container.GetContainerNumFreeSlots and id then
 					local numberOfFreeSlots = C_Container.GetContainerNumFreeSlots(id)
 					sum = sum + numberOfFreeSlots
-					SLOT.text:SetText("(" .. numberOfFreeSlots .. ")")
+					if ImproveAny:IsEnabled("FREESPACEBAGS", false) then
+						SLOT.text:SetText("(" .. numberOfFreeSlots .. ")")
+					end
+
 					SLOT.maxDisplayCount = 999999
-					if COUNT then
+					if COUNT and ImproveAny:IsEnabled("FREESPACEBAGS", false) then
 						COUNT:SetText("")
 					end
 				end
