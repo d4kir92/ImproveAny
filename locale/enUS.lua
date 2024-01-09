@@ -84,7 +84,7 @@ function ImproveAny:Lang_enUS()
 		["DURABILITY"] = "Durability (Shows ItemLevel, Repaircosts)",
 		["MICROMENUCOLORED"] = "Micro Menu Colored",
 		["SHOWDURABILITYUNDER"] = "Show Durability, when under:",
-		["BAGS"] = "Show Freespace for each Bag",
+		["FREESPACEBAGS"] = "Show Freespace for each Bag",
 		["WORLDMAP"] = "WorldMap Zoom with Mousewheel",
 		["BAGMODE"] = "Bag Mode",
 		["STATUSBARWIDTH"] = "Status Bar Width (XPbar, Reputationbar)",
