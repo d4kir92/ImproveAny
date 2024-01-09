@@ -1,11 +1,11 @@
 local _, ImproveAny = ...
-local BAGS = {"MainMenuBarBackpackButton", "CharacterBag0Slot", "CharacterBag1Slot", "CharacterBag2Slot", "CharacterBag3Slot"}
+local BAGS = {"MainMenuBarBackpackButton", "CharacterBag3Slot", "CharacterBag2Slot", "CharacterBag1Slot", "CharacterBag0Slot"}
 local BAGSIDS = {}
 BAGSIDS["MainMenuBarBackpackButton"] = 0
-BAGSIDS["CharacterBag0Slot"] = 1
-BAGSIDS["CharacterBag1Slot"] = 2
-BAGSIDS["CharacterBag2Slot"] = 3
-BAGSIDS["CharacterBag3Slot"] = 4
+BAGSIDS["CharacterBag3Slot"] = 1
+BAGSIDS["CharacterBag2Slot"] = 2
+BAGSIDS["CharacterBag1Slot"] = 3
+BAGSIDS["CharacterBag0Slot"] = 4
 function ImproveAny:BAGSTryAdd(fra, index)
 	if _G[fra] == nil then return end
 	if fra and not tContains(BAGS, fra) then
@@ -37,7 +37,7 @@ function ImproveAny:UpdateBagsTable()
 	ImproveAny:BAGSTryAdd("CharacterReagentBag0Slot", 1)
 	ImproveAny:BAGSTryAdd("KeyRingButton", 1)
 	ImproveAny:BAGSTryAdd("BagBarExpandToggle", #BAGS + 1)
-	ImproveAny:BAGSTryAdd("BagToggle", #BAGS)
+	ImproveAny:BAGSTryAdd("BagToggle", #BAGS + 1)
 	ImproveAny:BAGSTryAdd("MainMenuBarBackpackButton")
 end
 
@@ -47,7 +47,7 @@ end
 
 function ImproveAny:InitBags()
 	if CharacterBag0Slot then
-		local br = 3
+		local br = 5
 		for i, slot in pairs(BAGS) do
 			local SLOT = _G[slot]
 			if slot ~= "KeyRingButton" and SLOT and SLOT.text == nil then
@@ -111,6 +111,16 @@ function ImproveAny:InitBags()
 		C_Timer.After(
 			1,
 			function()
+				if not BagsBar then
+					BagsBar = CreateFrame("Frame", "BagsBar", UIParent)
+					BagsBar:SetSize(100, 100)
+					if MicroButtonAndBagsBar then
+						BagsBar:SetPoint("CENTER", MicroButtonAndBagsBar, "CENTER", 0, 0)
+					elseif MainMenuBarArtFrame then
+						BagsBar:SetPoint("BOTTOMRIGHT", MainMenuBarArtFrame, "BOTTOMRIGHT", -6, 1)
+					end
+				end
+
 				IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
 				if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
 					if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
@@ -121,7 +131,7 @@ function ImproveAny:InitBags()
 							BagToggle:SetSize(h * 0.5, h * 0.8)
 						end
 
-						ImproveAny:BAGSTryAdd("BagToggle", #BAGS)
+						ImproveAny:BAGSTryAdd("BagToggle", #BAGS + 1)
 						BagToggle.show = true
 						BagToggle:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 						function BagToggle:UpdateIcon()
@@ -180,7 +190,7 @@ function ImproveAny:InitBags()
 
 									SLOT:ClearAllPoints()
 									if oldslot then
-										SLOT:SetPoint("LEFT", IABagBar, "LEFT", sw + (i - 1) * br - SLOT:GetWidth(), 0)
+										SLOT:SetPoint("LEFT", oldslot, "RIGHT", br, 0)
 									else
 										SLOT:SetPoint("LEFT", IABagBar, "LEFT", 0, 0)
 									end
@@ -225,7 +235,7 @@ function ImproveAny:InitBags()
 								SLOT:SetParent(IABagBar)
 								SLOT:ClearAllPoints()
 								if oldslot then
-									SLOT:SetPoint("LEFT", IABagBar, "LEFT", sw + (i - 1) * br - SLOT:GetWidth(), 0)
+									SLOT:SetPoint("LEFT", oldslot, "RIGHT", br, 0)
 								else
 									SLOT:SetPoint("LEFT", IABagBar, "LEFT", 0, 0)
 								end
