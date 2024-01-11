@@ -122,6 +122,10 @@ function ImproveAny:InitBags()
 				end
 
 				IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
+				if IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
+					ImproveAny:MSG(format("Dominos is enabled, BAGMODE: %s may can break Domonis moving the bag bar.", ImproveAny:GV("BAGMODE", "RETAIL")))
+				end
+
 				if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
 					if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
 						BagToggle = CreateFrame("BUTTON", "BagToggle", BagsBar or UIParent)
@@ -297,7 +301,7 @@ function ImproveAny:InitBags()
 						SLOT:ClearAllPoints()
 						SLOT:SetPoint("RIGHT", IABagBar, "RIGHT", 0, 0)
 					end
-				else
+				elseif ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
 					ImproveAny:MSG("BAGMODE NOT FOUND: " .. ImproveAny:GV("BAGMODE", "RETAIL"))
 				end
 			end
