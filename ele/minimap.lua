@@ -219,6 +219,8 @@ function ImproveAny:InitMinimap()
 				end
 
 				function ImproveAny:UpdateIAMMBtns()
+					local br = 7
+					local sr = 1
 					local sum = 0
 					for i, v in pairs(IAMMBtns) do
 						if v:IsShown() then
@@ -239,7 +241,7 @@ function ImproveAny:InitMinimap()
 
 					table.sort(IAMMBtns, sortFunc)
 					local rows, cols = ImproveAny:GetRowsCols(sum)
-					IAMMBtnsFrame:SetSize(cols * MMBtnSize, rows * MMBtnSize)
+					IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
 					local row, col = 0, 0
 					for i, v in pairs(IAMMBtns) do
 						if v:IsShown() then
@@ -250,7 +252,17 @@ function ImproveAny:InitMinimap()
 
 							v:SetParent(IAMMBtnsFrame)
 							v:ClearAllPoints()
-							v:SetPoint("TOPLEFT", IAMMBtnsFrame, "TOPLEFT", col * MMBtnSize, -row * MMBtnSize)
+							local cSpace = 0
+							local rSpace = 0
+							if col > 0 then
+								cSpace = col * sr
+							end
+
+							if row > 0 then
+								rSpace = row * sr
+							end
+
+							v:SetPoint("TOPLEFT", IAMMBtnsFrame, "TOPLEFT", col * MMBtnSize + cSpace + br, -row * MMBtnSize - rSpace - br)
 							col = col + 1
 						end
 					end
