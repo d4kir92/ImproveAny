@@ -496,6 +496,7 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("MinimapZoomIn", true)
 				ImproveAny:ConvertToMinimapButton("MinimapZoomOut", true)
 				ImproveAny:ConvertToMinimapButton("CodexBrowserIcon", true)
+				ImproveAny:ConvertToMinimapButton("CalendarButtonFrame", true)
 				-- ADDONS
 				local mmbtns = {}
 				function ImproveAny:UpdateMMBtns()
