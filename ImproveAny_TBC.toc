@@ -1,5 +1,5 @@
 ## Interface: 20504
-## Version: 0.9.38
+## Version: 0.9.39
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
@@ -11,33 +11,33 @@
 
 libs\D4Lib\D4Lib.xml
 
-libs/math.lua
-libs/db.lua
+libs\math.lua
+libs\db.lua
 
-locale/enUS.lua
-locale/deDE.lua
-libs/lang.lua
+locale\enUS.lua
+locale\deDE.lua
+libs\lang.lua
 
-ele/bags.lua
-ele/castbar.lua
-ele/chat.lua
-ele/combattext.lua
-ele/coords.lua
-ele/durabilityframe.lua
-ele/ilvlbar.lua
-ele/itemlevel.lua
-ele/lfgframe.lua
-ele/micromenu.lua
-ele/minimap.lua
-ele/moneybar.lua
-ele/partymember.lua
-ele/pingframe.lua
-ele/raidframe.lua
-ele/repbar.lua
-ele/skillbars.lua
-ele/supertrackedframe.lua
-ele/tokenbar.lua
-ele/worldmapframe.lua
-ele/xpbar.lua
+ele\bags.lua
+ele\castbar.lua
+ele\chat.lua
+ele\combattext.lua
+ele\coords.lua
+ele\durabilityframe.lua
+ele\ilvlbar.lua
+ele\itemlevel.lua
+ele\lfgframe.lua
+ele\micromenu.lua
+ele\minimap.lua
+ele\moneybar.lua
+ele\partymember.lua
+ele\pingframe.lua
+ele\raidframe.lua
+ele\repbar.lua
+ele\skillbars.lua
+ele\supertrackedframe.lua
+ele\tokenbar.lua
+ele\worldmapframe.lua
+ele\xpbar.lua
 settings.lua
 core.lua
