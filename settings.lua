@@ -377,7 +377,25 @@ function ImproveAny:ToggleSettings()
 end
 
 function ImproveAny:InitIASettings()
-	IASettings = CreateFrame("Frame", "IASettings", UIParent, "BasicFrameTemplate")
+	if not D4:IsOldWow() then
+		IASettings = CreateFrame("Frame", "IASettings", UIParent, "BasicFrameTemplate")
+	else
+		IASettings = CreateFrame("Frame", "IASettings", UIParent)
+		IASettings.TitleText = IASettings:CreateFontString(nil, nil, "GameFontNormal")
+		IASettings.TitleText:SetPoint("TOP", IASettings, "TOP", 0, 0)
+		IASettings.CloseButton = CreateFrame("Button", "IASettings.CloseButton", IASettings, "UIPanelButtonTemplate")
+		IASettings.CloseButton:SetPoint("TOPRIGHT", IASettings, "TOPRIGHT", 0, 0)
+		IASettings.CloseButton:SetSize(25, 25)
+		IASettings.CloseButton:SetText("X")
+		IASettings.bg = IASettings:CreateTexture("IASettings.bg", "ARTWORK")
+		IASettings.bg:SetAllPoints(IASettings)
+		if IASettings.bg.SetColorTexture then
+			IASettings.bg:SetColorTexture(0.03, 0.03, 0.03, 0.5)
+		else
+			IASettings.bg:SetTexture(0.03, 0.03, 0.03, 0.5)
+		end
+	end
+
 	IASettings:SetSize(550, 500)
 	IASettings:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	IASettings:SetFrameStrata("HIGH")
@@ -402,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	D4:SetVersion(AddonName, 136033, "0.9.37")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.37"))
+	D4:SetVersion(AddonName, 136033, "0.9.38")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.38"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -577,7 +595,12 @@ function ImproveAny:InitIASettings()
 	IASettings.SF:SetScrollChild(IASettings.SC)
 	IASettings.SF.bg = IASettings.SF:CreateTexture("IASettings.SF.bg", "ARTWORK")
 	IASettings.SF.bg:SetAllPoints(IASettings.SF)
-	IASettings.SF.bg:SetColorTexture(0.03, 0.03, 0.03, 0.5)
+	if IASettings.SF.bg.SetColorTexture then
+		IASettings.SF.bg:SetColorTexture(0.03, 0.03, 0.03, 0.5)
+	else
+		IASettings.SF.bg:SetTexture(0.03, 0.03, 0.03, 0.5)
+	end
+
 	IASettings.save = CreateFrame("BUTTON", "IASettings" .. ".save", IASettings, "UIPanelButtonTemplate")
 	IASettings.save:SetSize(120, 24)
 	IASettings.save:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 4, -IASettings:GetHeight() + 24 + 4)
@@ -585,7 +608,11 @@ function ImproveAny:InitIASettings()
 	IASettings.save:SetScript(
 		"OnClick",
 		function()
-			C_UI.Reload()
+			if C_UI then
+				C_UI.Reload()
+			else
+				ReloadUi()
+			end
 		end
 	)
 
@@ -597,7 +624,11 @@ function ImproveAny:InitIASettings()
 	IASettings.reload:SetScript(
 		"OnClick",
 		function()
-			C_UI.Reload()
+			if C_UI then
+				C_UI.Reload()
+			else
+				ReloadUi()
+			end
 		end
 	)
 
@@ -610,7 +641,11 @@ function ImproveAny:InitIASettings()
 		function()
 			if GetCVar("ScriptErrors") == "0" then
 				SetCVar("ScriptErrors", 1)
-				C_UI.Reload()
+				if C_UI then
+					C_UI.Reload()
+				else
+					ReloadUi()
+				end
 			end
 
 			ImproveAny:UpdateShowErrors()

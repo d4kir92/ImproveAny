@@ -12,7 +12,7 @@ if ChatEdit_ParseText then
 		end
 	)
 else
-	ImproveAny:MSG("FAILED TO ADD SLASH COMMAND #1")
+	ImproveAny:MSG("FAILED TO ADD SLASH HANDLE #1")
 end
 
 if ChatFrame_DisplayHelpTextSimple then
@@ -37,14 +37,19 @@ if ChatFrame_DisplayHelpTextSimple then
 		end
 	)
 else
-	ImproveAny:MSG("FAILED TO ADD SLASH COMMAND #2")
+	ImproveAny:MSG("FAILED TO ADD SLASH HANDLE #2")
 end
 
 function ImproveAny:InitSlash()
 	cmds["/IMPROVE"] = ImproveAny.ToggleSettings
 	cmds["/IMPROVEANY"] = ImproveAny.ToggleSettings
-	cmds["/RL"] = C_UI.Reload
-	cmds["/REL"] = C_UI.Reload
+	if C_UI then
+		cmds["/RL"] = C_UI.Reload
+		cmds["/REL"] = C_UI.Reload
+	else
+		cmds["/RL"] = ReloadUi
+		cmds["/REL"] = ReloadUi
+	end
 end
 
 -- TAINTFREE SLASH COMMANDS --
@@ -59,7 +64,7 @@ for i = 2.6, 5.0, 0.1 do
 	ConsoleExec("cameraDistanceMaxZoomFactor " .. i)
 end
 
-IAMaxZoom = tonumber(GetCVar("cameraDistanceMaxZoomFactor"))
+IAMaxZoom = tonumber(GetCVar("cameraDistanceMaxZoomFactor")) or 4
 function ImproveAny:UpdateMaxZoom()
 	ConsoleExec("cameraDistanceMaxZoomFactor " .. ImproveAny:GV("MAXZOOM", ImproveAny:GetMaxZoom()))
 end

@@ -444,9 +444,12 @@ function ImproveAny:InitItemLevel()
 
 	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
 		-- Bag Searchbar
-		BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")
-		BagItemSearchBox:SetSize(110, 18)
-		BagItemSearchBox:SetPoint("TOPLEFT", ContainerFrame1, "TOPLEFT", 50, -30)
+		if not D4:IsOldWow() then
+			BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")
+			BagItemSearchBox:SetSize(110, 18)
+			BagItemSearchBox:SetPoint("TOPLEFT", ContainerFrame1, "TOPLEFT", 50, -30)
+		end
+
 		-- Bag SortButton
 		BagItemAutoSortButton = CreateFrame("Button", "BagItemAutoSortButton", ContainerFrame1)
 		BagItemAutoSortButton:SetSize(16, 16)
