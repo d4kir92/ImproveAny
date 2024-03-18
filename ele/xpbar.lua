@@ -260,7 +260,7 @@ function ImproveAny:InitXPBar()
 					end
 				end
 
-				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+				if D4:GetWoWBuild() == "CLASSIC" then
 					hooksecurefunc(
 						"QuestLog_Update",
 						function()
@@ -269,11 +269,11 @@ function ImproveAny:InitXPBar()
 					)
 				end
 
-				if ImproveAny:GetWoWBuild() == "TBC" then
+				if D4:GetWoWBuild() == "TBC" then
 					maxlevel = 70
 				end
 
-				if ImproveAny:GetWoWBuild() == "WRATH" then
+				if D4:GetWoWBuild() == "WRATH" then
 					maxlevel = 80
 				end
 

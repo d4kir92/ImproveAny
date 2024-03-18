@@ -72,7 +72,7 @@ function ImproveAny:InitCastBar()
 							name, _, texture = ChannelInfo()
 						end
 
-						if ImproveAny:GetWoWBuild() ~= "RETAIL" and texture == 136235 then
+						if D4:GetWoWBuild() ~= "RETAIL" and texture == 136235 then
 							texture = 136243 -- 136192
 						end
 

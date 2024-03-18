@@ -143,7 +143,7 @@ function ImproveAny:PDUpdateItemInfos()
 				end
 			end
 
-			if ImproveAny:GetWoWBuild() == "RETAIL" then
+			if D4:GetWoWBuild() == "RETAIL" then
 				max = max - 1
 			end
 
@@ -277,7 +277,7 @@ function ImproveAny:InitItemLevel()
 							end
 						end
 
-						if ImproveAny:GetWoWBuild() == "RETAIL" then
+						if D4:GetWoWBuild() == "RETAIL" then
 							max = max - 1
 						end
 
@@ -442,7 +442,7 @@ function ImproveAny:InitItemLevel()
 		ImproveAny:UpdateBagsIlvl()
 	end
 
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
+	if D4:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
 		-- Bag Searchbar
 		if not D4:IsOldWow() then
 			BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")

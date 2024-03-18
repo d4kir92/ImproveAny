@@ -127,7 +127,7 @@ function ImproveAny:InitBags()
 				end
 
 				if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
-					if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
+					if D4:GetWoWBuild() ~= "RETAIL" and BagsBar then
 						BagToggle = CreateFrame("BUTTON", "BagToggle", BagsBar or UIParent)
 						local mainBag = _G["MainMenuBarBackpackButton"]
 						if mainBag then

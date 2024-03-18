@@ -346,7 +346,7 @@ function ImproveAny:Event(event, ...)
 						textcolor = "|cFF11FF11"
 					end
 
-					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
+					if D4:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
 						tt:AddDoubleLine(ImproveAny:GT("ADDEDIN"), format(ImproveAny:GT("EXPANSION"), textcolor, _G["EXPANSION_NAME" .. expacID]))
 					end
 				end
@@ -442,7 +442,7 @@ function ImproveAny:Event(event, ...)
 			end
 		)
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
+		if D4:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
 			if not warningEnhanceDressup and LeaPlusDB and LeaPlusDB["EnhanceDressup"] and LeaPlusDB["EnhanceDressup"] == "On" then
 				ImproveAny:MSG("LeatrixPlus \"EnhanceDressup\" is enabled, may break WideFrames")
 				warningEnhanceDressup = true
@@ -458,7 +458,7 @@ function ImproveAny:Event(event, ...)
 				warningEnhanceTrainers = true
 			end
 
-			if ImproveAny:GetWoWBuild() == "CLASSIC" then
+			if D4:GetWoWBuild() == "CLASSIC" then
 				local tall, numTallQuests = 74, 22
 				UIPanelWindows["QuestLogFrame"] = {
 					area = "override",
@@ -596,7 +596,7 @@ function ImproveAny:Event(event, ...)
 					local regions = {_G["TradeSkillFrame"]:GetRegions()}
 					for i, v in pairs(regions) do
 						if i > 1 then
-							if ImproveAny:GetWoWBuild() == "CLASSIC" then
+							if D4:GetWoWBuild() == "CLASSIC" then
 								if i == 2 then
 									regions[i]:SetSize(1024, 512)
 									regions[i]:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
@@ -954,9 +954,9 @@ function ImproveAny:Event(event, ...)
 			end
 		end
 
-		if ImproveAny:GetWoWBuild() == "CLASSIC" then
+		if D4:GetWoWBuild() == "CLASSIC" then
 			local function InitTSF()
-				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+				if D4:GetWoWBuild() == "CLASSIC" then
 					TradeSkillFrame.hasMaterial = CreateFrame("CheckButton", "HasMaterial", TradeSkillFrame, "UICheckButtonTemplate")
 					TradeSkillFrame.hasMaterial:SetSize(20, 20)
 					TradeSkillFrame.hasMaterial:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 70, -54)
@@ -976,7 +976,7 @@ function ImproveAny:Event(event, ...)
 
 				TradeSkillFrame.hasSkillUp = CreateFrame("CheckButton", "HasSkillUp", TradeSkillFrame, "UICheckButtonTemplate")
 				TradeSkillFrame.hasSkillUp:SetSize(20, 20)
-				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+				if D4:GetWoWBuild() == "CLASSIC" then
 					TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -54)
 				else
 					TradeSkillFrame.hasSkillUp:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 210, -15)
