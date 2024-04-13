@@ -106,7 +106,7 @@ end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", FixIconChat)
 if D4:GetWoWBuild() == "CLASSIC" then
     C_Timer.After(
-        3,
+        2,
         function()
             -- FIX HEALTH
             D4.fixedHealth = D4.fixedHealth or false
@@ -122,17 +122,23 @@ if D4:GetWoWBuild() == "CLASSIC" then
 
                 if foundText == false then
                     TargetFrameTextureFrame:CreateFontString("TargetFrameHealthBarText", "BORDER", "TextStatusBarText")
-                    TargetFrameHealthBarText:SetPoint("CENTER", TargetFrameTextureFrame, "CENTER", -50, 3)
                     TargetFrameTextureFrame:CreateFontString("TargetFrameHealthBarTextLeft", "BORDER", "TextStatusBarText")
-                    TargetFrameHealthBarTextLeft:SetPoint("LEFT", TargetFrameTextureFrame, "LEFT", 8, 3)
                     TargetFrameTextureFrame:CreateFontString("TargetFrameHealthBarTextRight", "BORDER", "TextStatusBarText")
-                    TargetFrameHealthBarTextRight:SetPoint("RIGHT", TargetFrameTextureFrame, "RIGHT", -110, 3)
                     TargetFrameTextureFrame:CreateFontString("TargetFrameManaBarText", "BORDER", "TextStatusBarText")
-                    TargetFrameManaBarText:SetPoint("CENTER", TargetFrameTextureFrame, "CENTER", -50, -8)
                     TargetFrameTextureFrame:CreateFontString("TargetFrameManaBarTextLeft", "BORDER", "TextStatusBarText")
-                    TargetFrameManaBarTextLeft:SetPoint("LEFT", TargetFrameTextureFrame, "LEFT", 8, -8)
                     TargetFrameTextureFrame:CreateFontString("TargetFrameManaBarTextRight", "BORDER", "TextStatusBarText")
-                    TargetFrameManaBarTextRight:SetPoint("RIGHT", TargetFrameTextureFrame, "RIGHT", -110, -8)
+                    TargetFrameHealthBarText:ClearAllPoints()
+                    TargetFrameHealthBarTextLeft:ClearAllPoints()
+                    TargetFrameHealthBarTextRight:ClearAllPoints()
+                    TargetFrameManaBarText:ClearAllPoints()
+                    TargetFrameManaBarTextLeft:ClearAllPoints()
+                    TargetFrameManaBarTextRight:ClearAllPoints()
+                    TargetFrameHealthBarText:SetPoint("CENTER", TargetFrameHealthBar, "CENTER", 0, 0)
+                    TargetFrameHealthBarTextLeft:SetPoint("LEFT", TargetFrameHealthBar, "LEFT", 0, 0)
+                    TargetFrameHealthBarTextRight:SetPoint("RIGHT", TargetFrameHealthBar, "RIGHT", 0, 0)
+                    TargetFrameManaBarText:SetPoint("CENTER", TargetFrameManaBar, "CENTER", 0, 0)
+                    TargetFrameManaBarTextLeft:SetPoint("LEFT", TargetFrameManaBar, "LEFT", 0, 0)
+                    TargetFrameManaBarTextRight:SetPoint("RIGHT", TargetFrameManaBar, "RIGHT", 0, 0)
                     TargetFrameHealthBar.LeftText = TargetFrameHealthBarTextLeft
                     TargetFrameHealthBar.RightText = TargetFrameHealthBarTextRight
                     TargetFrameManaBar.LeftText = TargetFrameManaBarTextLeft
