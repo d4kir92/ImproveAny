@@ -68,7 +68,7 @@ function ImproveAny:GetQuestCompleteXP()
 	return math.floor(totalXP)
 end
 
-local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
+local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 	local res = ""
 	if ImproveAny:IsEnabled(bNum, false) or (bPer and ImproveAny:IsEnabled(bPer, false)) then
 		if text ~= "" then
@@ -80,22 +80,29 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals)
 			num = "%0.1f"
 		end
 
+		local col1 = textw
+		local col2 = textc
+		if color then
+			col1 = color
+			col2 = textw .. textc
+		end
+
 		if vNum and vNum ~= 0 then
 			if vNumMax and vNumMax > 0 then
 				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
-					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", textw, str, textc, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
+					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
 				elseif bPer and ImproveAny:IsEnabled(bPer, false) then
-					res = res .. format("%s%s: %s%0.1f%s%%", textw, str, textc, vNum / vNumMax * 100, textw)
+					res = res .. format("%s%s: %s%0.1f%s%%", col1, str, col2, vNum / vNumMax * 100, textw)
 				elseif ImproveAny:IsEnabled(bNum, false) then
-					res = res .. format("%s%s: %s%d%s/%s%d", textw, str, textc, vNum, textw, textc, vNumMax, textw)
+					res = res .. format("%s%s: %s%d%s/%s%d", col1, str, col2, vNum, textw, textc, vNumMax, textw)
 				end
 			else
 				if ImproveAny:IsEnabled(bNum, false) then
-					res = res .. format("%s%s: %s" .. num .. "%s", textw, str, textc, vNum, textw)
+					res = res .. format("%s%s: %s" .. num .. "%s", col1, str, col2, vNum, textw)
 				end
 			end
 		elseif ImproveAny:IsEnabled("XPHIDEUNKNOWNVALUES", false) == false then
-			res = res .. format("%s%s: %s%s", textw, str, textc, UNKNOWN, textw)
+			res = res .. format("%s%s: %s%s", col1, str, col2, UNKNOWN, textw)
 		end
 	end
 
@@ -186,6 +193,16 @@ function ImproveAny:UpdateQuestFrame()
 			end
 		end
 	end
+end
+
+function ImproveAny:Clamp(vval, vmin, vmax)
+	if vval < vmin then
+		return vmin
+	elseif vval > vmax then
+		return vmax
+	end
+
+	return vval
 end
 
 function ImproveAny:InitXPBar()
@@ -379,17 +396,24 @@ function ImproveAny:InitXPBar()
 				end
 
 				if MainMenuExpBar then
+					MainMenuExpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
+					if ExhaustionLevelFillBar then
+						ExhaustionLevelFillBar:SetVertexColor(0.21, 0.40, 0.64, 0.75)
+						ExhaustionLevelFillBar:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+						ExhaustionLevelFillBar:SetDrawLayer("BACKGROUND", -1)
+					end
+
 					local _, sh = MainMenuExpBar:GetSize()
-					MainMenuExpBar.qcx = MainMenuExpBar:CreateTexture(nil, "ARTWORK")
+					MainMenuExpBar.qcx = MainMenuExpBar:CreateTexture(nil, "BACKGROUND")
 					MainMenuExpBar.qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-					MainMenuExpBar.qcx:SetVertexColor(0.66, 0.66, 1, 0.33)
-					MainMenuExpBar.qcx:SetDrawLayer("ARTWORK", 1)
+					MainMenuExpBar.qcx:SetVertexColor(1, 1, 0, 1)
 					MainMenuExpBar.qcx:SetSize(1, sh)
+					MainMenuExpBar.qcx:SetDrawLayer("BACKGROUND", -2)
 				end
 
 				if MainMenuExpBar and MainMenuBarExpText then
 					local fontName, _, fontFlags = MainMenuBarExpText:GetFont()
-					MainMenuBarExpText:SetFont(fontName, 12, fontFlags)
+					MainMenuBarExpText:SetFont(fontName, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fontFlags)
 					MainMenuBarExpText:SetPoint("CENTER", MainMenuExpBar, "CENTER", 0, 1)
 					hooksecurefunc(
 						MainMenuBarExpText,
@@ -405,6 +429,8 @@ function ImproveAny:InitXPBar()
 								return
 							end
 
+							local ff, _, fflags = sel:GetFont()
+							sel:SetFont(ff, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fflags)
 							if GameLimitedMode_IsActive() then
 								local rLevel = GetRestrictedAccountData()
 								if UnitLevel("player") >= rLevel then
@@ -448,7 +474,7 @@ function ImproveAny:InitXPBar()
 							end
 
 							-- XP QuestComplete
-							text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar)
+							text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
 							-- XP KILLSTOLEVELUP
 							text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
 							-- XPBAR -> SetText

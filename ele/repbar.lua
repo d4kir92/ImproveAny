@@ -87,8 +87,8 @@ C_Timer.After(
 			end
 
 			if ReputationWatchBar and ReputationWatchBar.OverlayFrame and ReputationWatchBar.OverlayFrame.Text then
-				local fontName, _, fontFlags = ReputationWatchBar.OverlayFrame.Text:GetFont()
-				ReputationWatchBar.OverlayFrame.Text:SetFont(fontName, 12, fontFlags)
+				local fontName, _, fontFlags = MainMenuBarExpText:GetFont()
+				ReputationWatchBar.OverlayFrame.Text:SetFont(fontName, ImproveAny:Clamp(ReputationWatchBar:GetHeight() * 0.7, 8, 30), fontFlags)
 				ReputationWatchBar.OverlayFrame.Text:SetPoint("CENTER", ReputationWatchBar.OverlayFrame, "CENTER", 0, 1)
 				hooksecurefunc(
 					ReputationWatchBar.OverlayFrame.Text,
@@ -96,6 +96,8 @@ C_Timer.After(
 					function(self, orgText)
 						if self.iasettext then return end
 						self.iasettext = true
+						local ff, _, fflags = self:GetFont()
+						self:SetFont(ff, ImproveAny:Clamp(ReputationWatchBar:GetHeight() * 0.7, 8, 30), fflags)
 						local name, reaction, minBar, maxBar, value, factionID = GetWatchedFactionInfo()
 						local isCapped
 						if GetFriendshipReputation then
