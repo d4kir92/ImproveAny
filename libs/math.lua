@@ -59,8 +59,20 @@ end
 
 function ImproveAny:GetRowsCols(amount)
 	local wurzel = math.sqrt(amount)
-	if wurzel * wurzel == amount then return math.ceil(wurzel), math.ceil(wurzel) end
-	if wurzel % 1 >= 0.5 then return math.ceil(wurzel), math.ceil(wurzel) end
+	if wurzel % 1 == 0 then return wurzel, wurzel end
+	local rows, cols
+	if wurzel % 1 > 0.5 then
+		wurzel = math.ceil(wurzel)
+		rows = wurzel
+		cols = wurzel
+	else
+		wurzel = math.floor(wurzel)
+		rows = wurzel
+		cols = wurzel + 1
+	end
 
-	return math.floor(wurzel), math.ceil(wurzel)
+	rows = ImproveAny:MathC(rows, 1, 20)
+	cols = ImproveAny:MathC(cols, 1, 20)
+
+	return rows, cols
 end
