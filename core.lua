@@ -1212,34 +1212,48 @@ function ImproveAny:InitAutoAcceptQuests()
 					local activeQuests = C_GossipInfo.GetActiveQuests()
 					local nAvailable = C_GossipInfo.GetNumAvailableQuests()
 					local availableQuests = C_GossipInfo.GetAvailableQuests()
+					local gossipOptions = C_GossipInfo.GetOptions()
 					local autoquestsQuestID
 					local autoquestsIsComplete
 					local autoquestsRepeatable
-					if nAvailable > 0 then
+					-- if there is only a non-gossip option, then go to it directly
+					if nAvailable == 0 and #activeQuests == 0 and #gossipOptions == 1 then
+						C_GossipInfo.SelectOptionByIndex(0)
+					elseif nAvailable > 0 then
 						for i = 1, nAvailable do
 							if type(availableQuests) == "table" then
 								autoquestsQuestID = availableQuests[i].questID
 								autoquestsRepeatable = availableQuests[i].repeatable
-								if nAvailable >= 2 and autoquestsRepeatable == true then
-								else
+								if nAvailable < 2 or autoquestsRepeatable == false then
 									C_GossipInfo.SelectAvailableQuest(autoquestsQuestID)
 								end
 							end
 						end
 					elseif nActive > 0 then
+						local selectedIndex = 2
+						if GetQuestLogSelection then
+							selectedIndex = GetQuestLogSelection()
+						end
+
 						for i = 1, nActive do
 							if type(activeQuests) == "table" then
 								autoquestsIsComplete = activeQuests[i].isComplete
 								autoquestsQuestID = activeQuests[i].questID
-								if autoquestsIsComplete == true then
+								if SelectQuestLogEntry and GetQuestLogIndexByID then
+									SelectQuestLogEntry(GetQuestLogIndexByID(autoquestsQuestID))
+								end
+
+								if autoquestsIsComplete == true or (GetQuestLogLeaderBoard ~= nil and GetQuestLogLeaderBoard(1) == nil) then
 									C_GossipInfo.SelectActiveQuest(autoquestsQuestID)
 								end
 							end
 						end
-					end
-				end
 
-				if event == "QUEST_GREETING" then
+						if SelectQuestLogEntry and GetQuestLogIndexByID then
+							SelectQuestLogEntry(selectedIndex)
+						end
+					end
+				elseif event == "QUEST_GREETING" then
 					local npcAvailableQuestCount = GetNumAvailableQuests()
 					local npcActiveQuestCount = GetNumActiveQuests()
 					if npcAvailableQuestCount > 0 then
@@ -1251,25 +1265,17 @@ function ImproveAny:InitAutoAcceptQuests()
 							SelectActiveQuest(i)
 						end
 					end
-				end
-
-				if event == "QUEST_DETAIL" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
+				elseif event == "QUEST_DETAIL" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
 					if escortQuests[GetQuestID()] == nil then
 						AcceptQuest()
 					else
 						ImproveAny:MSG("Is Escort Quest")
 					end
-				end
-
-				if event == "QUEST_ACCEPT_CONFIRM" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
+				elseif event == "QUEST_ACCEPT_CONFIRM" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
 					ConfirmAcceptQuest()
-				end
-
-				if event == "QUEST_PROGRESS" and ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
+				elseif event == "QUEST_PROGRESS" and ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
 					CompleteQuest()
-				end
-
-				if event == "QUEST_COMPLETE" then
+				elseif event == "QUEST_COMPLETE" then
 					local npcQuestRewardsCount = GetNumQuestChoices()
 					if npcQuestRewardsCount > 1 then
 						PlaySound(5274, "master")
