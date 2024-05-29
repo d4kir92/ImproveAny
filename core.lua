@@ -101,6 +101,54 @@ function ImproveAny:AddRightClick()
 	end
 end
 
+function ImproveAny:IsOnActionbar(spellID)
+	for i = 1, 120 do
+		local actionType, id, _ = GetActionInfo(i)
+		if actionType == "macro" then
+			id = GetMacroSpell(id)
+		end
+
+		if id == spellID then return true end
+	end
+
+	if GetShapeshiftFormInfo then
+		for i = 1, 10 do
+			local _, _, _, id = GetShapeshiftFormInfo(i)
+			if id == spellID then return true end
+		end
+	end
+
+	return false
+end
+
+function ImproveAny:InitSpellBookFix()
+	hooksecurefunc(
+		"SpellBookFrame_UpdateSpells",
+		function()
+			for i = 1, SPELLS_PER_PAGE do
+				local sel = _G["SpellButton" .. i]
+				local slot, slotType = SpellBook_GetSpellBookSlot(sel)
+				if slot and slotType ~= "FUTURESPELL" then
+					local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
+					local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
+					local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+					if isPassive or spellName == nil or texture == 134419 then
+						sel:SetChecked(false)
+					else
+						if spellName and spellID and not ImproveAny:IsOnActionbar(spellID) then
+							sel:SetChecked(true)
+						else
+							sel:SetChecked(false)
+						end
+					end
+				else
+					sel:SetChecked(false)
+				end
+			end
+		end
+	)
+end
+
 local warningEnhanceDressup = false
 local warningEnhanceQuestLog = false
 local warningEnhanceTrainers = false
@@ -156,6 +204,10 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:UpdateStatusBar()
 		ImproveAny:InitIAPingFrame()
 		ImproveAny:InitIACoordsFrame()
+		if D4:GetWoWBuild() ~= "RETAIL" then
+			ImproveAny:InitSpellBookFix()
+		end
+
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
 			ImproveAny:Debug("RIGHTCLICKSELFCAST")
 			C_Timer.After(
@@ -622,6 +674,16 @@ function ImproveAny:Event(event, ...)
 						end
 					end
 
+					if TradeSkillRankFrame and TradeSkillLinkButton then
+						TradeSkillLinkButton:ClearAllPoints()
+						TradeSkillLinkButton:SetPoint("TOP", TradeSkillFrame, "TOP", 0, -15)
+					end
+
+					if TradeSkillRankFrame and TradeSkillRankFrameSkillRank then
+						TradeSkillRankFrameSkillRank:ClearAllPoints()
+						TradeSkillRankFrameSkillRank:SetPoint("CENTER", TradeSkillRankFrame, "CENTER", 0, 0)
+					end
+
 					_G["TradeSkillCreateButton"]:ClearAllPoints()
 					_G["TradeSkillCreateButton"]:SetPoint("RIGHT", _G["TradeSkillCancelButton"], "LEFT", -1, 0)
 					_G["TradeSkillCancelButton"]:SetSize(80, 22)
@@ -634,7 +696,7 @@ function ImproveAny:Event(event, ...)
 					TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
 					TradeSkillSubClassDropDown:ClearAllPoints()
 					TradeSkillSubClassDropDown:SetPoint("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 0, 0)
-					if IsAddOnLoaded("ClassicProfessionFilter") and TradeSkillFrame.SearchBox and TradeSkillFrame.HaveMats and TradeSkillFrame.HaveMats.text then
+					if IsAddOnLoaded("ClassicProfessionFilter") and TradeSkillFrame.SearchBox and TradeSkillFrame.HaveMats and TradeSkillFrame.HaveMats.text and D4:GetWoWBuild() ~= "RETAIL" and D4:GetWoWBuild() ~= "CATA" then
 						TradeSkillFrame.SearchBox:ClearAllPoints()
 						TradeSkillFrame.SearchBox:SetPoint("LEFT", TradeSkillRankFrame, "RIGHT", 20, -10)
 						TradeSkillFrame.HaveMats:ClearAllPoints()
