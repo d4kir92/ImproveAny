@@ -15,7 +15,7 @@ function ImproveAny:InitDurabilityFrame()
 			DurabilityFrame.textrepaircosts:SetPoint("TOP", DurabilityFrame, "TOP", 0, 22)
 			DurabilityFrame.textrepaircosts:SetText("")
 			DurabilityFrame.textrepaircosts:SetTextColor(1.0, 1.0, 0.1)
-			function DurabilityFrame.Think()
+			function DurabilityFrame:Think()
 				local ccur = 0
 				local cmax = 0
 				for i = 0, 20 do
@@ -41,10 +41,12 @@ function ImproveAny:InitDurabilityFrame()
 					end
 				end
 
-				if perc <= ImproveAny:GV("SHOWDURABILITYUNDER", 100) then
-					DurabilityFrame:Show()
-				else
-					DurabilityFrame:Hide()
+				if not InCombatLockdown() then
+					if perc <= ImproveAny:GV("SHOWDURABILITYUNDER", 100) then
+						DurabilityFrame:Show()
+					else
+						DurabilityFrame:Hide()
+					end
 				end
 
 				if DurabilityFrame.textrepaircosts then
