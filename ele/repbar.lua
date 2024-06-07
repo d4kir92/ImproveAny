@@ -23,7 +23,7 @@ C_Timer.After(
 				)
 
 				if ImproveAny:IsEnabled("REPHIDEARTWORK", false) then
-					if not IsAddOnLoaded("MoveAny") then
+					if not D4:IsAddOnLoaded("MoveAny") then
 						hooksecurefunc(
 							ReputationWatchBar,
 							"SetHeight",

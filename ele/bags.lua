@@ -122,7 +122,7 @@ function ImproveAny:InitBags()
 				end
 
 				IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
-				if IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
+				if D4:IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
 					ImproveAny:MSG(format("Dominos is enabled, BAGMODE: %s may can break Domonis moving the bag bar.", ImproveAny:GV("BAGMODE", "RETAIL")))
 				end
 

@@ -155,7 +155,7 @@ local warningEnhanceTrainers = false
 function ImproveAny:Event(event, ...)
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
-		if IsAddOnLoaded("D4KiR MoveAndImprove") then
+		if D4:IsAddOnLoaded("D4KiR MoveAndImprove") then
 			ImproveAny:MSG("DON'T use MoveAndImprove, when you use ImproveAny")
 		end
 
@@ -391,7 +391,7 @@ function ImproveAny:Event(event, ...)
 			end
 
 			if itemId then
-				local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, expacID, _, _ = GetItemInfo(itemId)
+				local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, expacID, _, _ = D4:GetItemInfo(itemId)
 				if expacID and ImproveAny:IsEnabled("TOOLTIPEXPANSION", false) then
 					local textcolor = "|cFFFF1111"
 					if expacID >= GetExpansionLevel() then
@@ -444,7 +444,7 @@ function ImproveAny:Event(event, ...)
 							if itemLink then
 								local itemId = tonumber(strmatch(itemLink, "item:(%d*)"))
 								if itemId then
-									local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = GetItemInfo(itemId)
+									local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = D4:GetItemInfo(itemId)
 									if price and tt.shownMoneyFrames == nil and price > 0 and GetItemCount and GetCoinTextureString then
 										local count = GetItemCount(itemId)
 										if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
@@ -696,7 +696,7 @@ function ImproveAny:Event(event, ...)
 					TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
 					TradeSkillSubClassDropDown:ClearAllPoints()
 					TradeSkillSubClassDropDown:SetPoint("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 0, 0)
-					if IsAddOnLoaded("ClassicProfessionFilter") and TradeSkillFrame.SearchBox and TradeSkillFrame.HaveMats and TradeSkillFrame.HaveMats.text and D4:GetWoWBuild() ~= "RETAIL" and D4:GetWoWBuild() ~= "CATA" then
+					if D4:IsAddOnLoaded("ClassicProfessionFilter") and TradeSkillFrame.SearchBox and TradeSkillFrame.HaveMats and TradeSkillFrame.HaveMats.text and D4:GetWoWBuild() ~= "RETAIL" and D4:GetWoWBuild() ~= "CATA" then
 						TradeSkillFrame.SearchBox:ClearAllPoints()
 						TradeSkillFrame.SearchBox:SetPoint("LEFT", TradeSkillRankFrame, "RIGHT", 20, -10)
 						TradeSkillFrame.HaveMats:ClearAllPoints()
@@ -723,7 +723,7 @@ function ImproveAny:Event(event, ...)
 					end
 				end
 
-				if IsAddOnLoaded("Blizzard_TradeSkillUI") then
+				if D4:IsAddOnLoaded("Blizzard_TradeSkillUI") then
 					TradeSkillFunc("TradeSkill")
 				else
 					local waitFrame = CreateFrame("FRAME")
@@ -848,7 +848,7 @@ function ImproveAny:Event(event, ...)
 						end
 					)
 
-					if IsAddOnLoaded("ClassicProfessionFilter") and CraftFrame.SearchBox and CraftFrame.HaveMats and CraftFrame.HaveMats.text and CraftFrame.SearchMats and CraftFrame.SearchMats.text then
+					if D4:IsAddOnLoaded("ClassicProfessionFilter") and CraftFrame.SearchBox and CraftFrame.HaveMats and CraftFrame.HaveMats.text and CraftFrame.SearchMats and CraftFrame.SearchMats.text then
 						CraftFrame.SearchBox:ClearAllPoints()
 						CraftFrame.SearchBox:SetPoint("LEFT", CraftRankFrame, "RIGHT", 20, -10)
 						CraftFrame.HaveMats:ClearAllPoints()
@@ -875,7 +875,7 @@ function ImproveAny:Event(event, ...)
 					end
 				end
 
-				if IsAddOnLoaded("Blizzard_CraftUI") then
+				if D4:IsAddOnLoaded("Blizzard_CraftUI") then
 					CraftFunc()
 				else
 					local waitFrame = CreateFrame("FRAME")
@@ -998,7 +998,7 @@ function ImproveAny:Event(event, ...)
 					ClassTrainerGreetingText:Hide()
 				end
 
-				if IsAddOnLoaded("Blizzard_TrainerUI") then
+				if D4:IsAddOnLoaded("Blizzard_TrainerUI") then
 					TrainerFunc()
 				else
 					local waitFrame = CreateFrame("FRAME")
@@ -1136,7 +1136,7 @@ function ImproveAny:Event(event, ...)
 				)
 			end
 
-			if IsAddOnLoaded("Blizzard_TradeSkillUI") then
+			if D4:IsAddOnLoaded("Blizzard_TradeSkillUI") then
 				InitTSF()
 			else
 				local waitFrame = CreateFrame("FRAME")

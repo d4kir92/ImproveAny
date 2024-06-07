@@ -26,7 +26,7 @@ function ImproveAny:InitWorldMapFrame()
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(fr)
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(fr)
 			local scale = WorldMapFrame:GetScale()
-			if not IsAddOnLoaded("Mapster") and not IsAddOnLoaded("GW2_UI") then
+			if not D4:IsAddOnLoaded("Mapster") and not D4:IsAddOnLoaded("GW2_UI") then
 				return x / scale, y / scale
 			else
 				local reverseEffectiveScale = 1 / UIParent:GetEffectiveScale()

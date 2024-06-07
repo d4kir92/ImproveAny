@@ -299,7 +299,7 @@ function ImproveAny:InitXPBar()
 				end
 
 				if MainMenuExpBar then
-					if not IsAddOnLoaded("MoveAny") then
+					if not D4:IsAddOnLoaded("MoveAny") then
 						MainMenuExpBar:SetHeight(15)
 					end
 

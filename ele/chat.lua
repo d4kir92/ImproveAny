@@ -469,7 +469,7 @@ function ImproveAny:InitChat()
 					local typ, id = string.match(itemString, "|H(.-):(.-)|h")
 					if typ == "item" then
 						id = string.match(id, "(%d+)")
-						local itemName, _, _, _, _, _, _, _, _, itemTexture = GetItemInfo(id)
+						local itemName, _, _, _, _, _, _, _, _, itemTexture = D4:GetItemInfo(id)
 						if itemName and itemTexture then
 							if ImproveAny:IsEnabled("CHATITEMICONS", false) then
 								return "|T" .. itemTexture .. ":0|t" .. itemString
