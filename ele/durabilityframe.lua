@@ -83,10 +83,12 @@ function ImproveAny:InitDurabilityFrame()
 					DurabilityFrame,
 					"SetAlerts",
 					function()
-						DurabilityFrame:Show()
-						for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
-							if (not value.showSeparate) or value.slot == "Weapon" then
-								getglobal("Durability" .. value.slot):Show()
+						if not InCombatLockdown() then
+							DurabilityFrame:Show()
+							for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
+								if (not value.showSeparate) or value.slot == "Weapon" then
+									getglobal("Durability" .. value.slot):Show()
+								end
 							end
 						end
 					end
@@ -94,19 +96,19 @@ function ImproveAny:InitDurabilityFrame()
 
 				DurabilityFrame:SetAlerts()
 			elseif DurabilityFrame_SetAlerts ~= nil then
-				local oldalerts = DurabilityFrame_SetAlerts
-				function DurabilityFrame_SetAlerts()
-					if oldalerts ~= nil then
-						oldalerts()
-					end
-
-					DurabilityFrame:Show()
-					for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
-						if (not value.showSeparate) or value.slot == "Weapon" then
-							getglobal("Durability" .. value.slot):Show()
+				hooksecurefunc(
+					"DurabilityFrame_SetAlerts",
+					function()
+						if not InCombatLockdown() then
+							DurabilityFrame:Show()
+							for index, value in ipairs(INVENTORY_ALERT_STATUS_SLOTS) do
+								if (not value.showSeparate) or value.slot == "Weapon" then
+									getglobal("Durability" .. value.slot):Show()
+								end
+							end
 						end
 					end
-				end
+				)
 
 				DurabilityFrame_SetAlerts()
 			end
