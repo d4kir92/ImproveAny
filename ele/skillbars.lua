@@ -183,10 +183,13 @@ function ImproveAny:InitSkillBars()
 		IASkills:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 520, 0)
 		IASkills:SetSize(sw, 6 * sh)
 		IASkills.bars = {}
-		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
-		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
-		ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)
-		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(STAT_CATEGORY_DEFENSE))
+		if D4:GetWoWBuildNr() < 40000 then
+			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
+			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
+			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)
+			ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(STAT_CATEGORY_DEFENSE))
+		end
+
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FIRST_AID))
