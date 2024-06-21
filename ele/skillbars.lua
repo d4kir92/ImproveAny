@@ -60,7 +60,7 @@ function ImproveAny:GetWeaponSkillData(id)
 		if subTypes[item] then
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
 		else
-			local _, _, _, _, _, _, itemSubType = D4:GetItemInfo(item)
+			local _, _, _, _, _, _, itemSubType = ImproveAny:GetItemInfo(item)
 			if itemSubType then
 				if AUCTION_SUBCATEGORY_ONE_HANDED then
 					local s1, e1 = string.find(itemSubType, AUCTION_SUBCATEGORY_ONE_HANDED, 1, true)
@@ -178,12 +178,12 @@ function ImproveAny:AddStatusBar(func, args)
 end
 
 function ImproveAny:InitSkillBars()
-	if D4:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("SKILLBARS", false) then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("SKILLBARS", false) then
 		IASkills = CreateFrame("FRAME", "IASkills", UIParent)
 		IASkills:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 520, 0)
 		IASkills:SetSize(sw, 6 * sh)
 		IASkills.bars = {}
-		if D4:GetWoWBuildNr() < 40000 then
+		if ImproveAny:GetWoWBuildNr() < 40000 then
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)

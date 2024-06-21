@@ -120,7 +120,7 @@ function ImproveAny:UpdateQuestFrame()
 		local questIndex = i + FauxScrollFrame_GetOffset(_G["QuestLogListScrollFrame"])
 		local questNormalText = nil
 		local questLogTitleText, lvl, questTag, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
-		local rewardXP = IAGetQuestLogRewardXP(questID)
+		local rewardXP = ImproveAny:GetQuestLogRewardXP(questID)
 		if not isHeader and rewardXP then
 			local questTitleTag = _G["QuestLogTitle" .. i .. "Tag"]
 			local questTitleCheck = _G["QuestLogTitle" .. i .. "Check"]
@@ -257,7 +257,7 @@ function ImproveAny:InitXPBar()
 					end
 
 					ImproveAny:UpdateQAF()
-					function IAGetQuestLogRewardXP(questID)
+					function ImproveAny:GetQuestLogRewardXP(questID)
 						if questID == nil then return nil end
 						IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 						if IATAB["QUESTS"][questID] ~= nil then return IATAB["QUESTS"][questID] end
@@ -277,7 +277,7 @@ function ImproveAny:InitXPBar()
 					end
 				end
 
-				if D4:GetWoWBuild() == "CLASSIC" then
+				if ImproveAny:GetWoWBuild() == "CLASSIC" then
 					hooksecurefunc(
 						"QuestLog_Update",
 						function()
@@ -286,11 +286,11 @@ function ImproveAny:InitXPBar()
 					)
 				end
 
-				if D4:GetWoWBuild() == "TBC" then
+				if ImproveAny:GetWoWBuild() == "TBC" then
 					maxlevel = 70
 				end
 
-				if D4:GetWoWBuild() == "WRATH" then
+				if ImproveAny:GetWoWBuild() == "WRATH" then
 					maxlevel = 80
 				end
 
@@ -299,7 +299,7 @@ function ImproveAny:InitXPBar()
 				end
 
 				if MainMenuExpBar then
-					if not D4:IsAddOnLoaded("MoveAny") then
+					if not ImproveAny:IsAddOnLoaded("MoveAny") then
 						MainMenuExpBar:SetHeight(15)
 					end
 

@@ -1,4 +1,5 @@
 local _, ImproveAny = ...
+ImproveAny:SetAddonOutput("ImproveAny", 136033)
 function ImproveAny:Debug(msg, typ)
 	if typ == "think" then return end
 	if typ == "retry" then return end

@@ -22,11 +22,11 @@ end
 
 function ImproveAny:InitWorldMapFrame()
 	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
-	if WorldMapFrame and D4:GetWoWBuild() ~= "RETAIL" then
+	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(fr)
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(fr)
 			local scale = WorldMapFrame:GetScale()
-			if not D4:IsAddOnLoaded("Mapster") and not D4:IsAddOnLoaded("GW2_UI") then
+			if not ImproveAny:IsAddOnLoaded("Mapster") and not ImproveAny:IsAddOnLoaded("GW2_UI") then
 				return x / scale, y / scale
 			else
 				local reverseEffectiveScale = 1 / UIParent:GetEffectiveScale()
@@ -120,7 +120,7 @@ function ImproveAny:InitWorldMapFrame()
 					local w, h = WorldMapFrame.ScrollContainer:GetSize()
 					if x and y then
 						local scale = WorldMapFrame.ScrollContainer.Child:GetScale()
-						if D4:GetWoWBuild() == "RETAIL" then
+						if ImproveAny:GetWoWBuild() == "RETAIL" then
 							scale = 1 + WorldMapFrame:GetCanvasZoomPercent()
 						end
 

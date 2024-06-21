@@ -1,10 +1,8 @@
 local _, ImproveAny = ...
 local tab = {}
-
 function ImproveAny:GetTokenList()
 	tab = {}
 	local max = 1
-
 	if GetCurrencyListSize then
 		max = GetCurrencyListSize()
 	elseif C_CurrencyInfo.GetCurrencyListSize then
@@ -13,9 +11,8 @@ function ImproveAny:GetTokenList()
 
 	for index = 1, max do
 		local name, _, _, _, isWatched, count, icon, _, _, _ = nil
-
 		if GetCurrencyListInfo then
-			name, _, _, _, isWatched, count, icon, maxCount, _, _ = GetCurrencyListInfo(index)
+			name, _, _, _, isWatched, count, icon, _, _, _ = GetCurrencyListInfo(index)
 		elseif C_CurrencyInfo.GetCurrencyListInfo then
 			info = C_CurrencyInfo.GetCurrencyListInfo(index)
 			name = info.name
@@ -26,11 +23,14 @@ function ImproveAny:GetTokenList()
 
 		if name then
 			if isWatched then
-				tinsert(tab, {
-					["name"] = name,
-					["count"] = count,
-					["icon"] = icon
-				})
+				tinsert(
+					tab,
+					{
+						["name"] = name,
+						["count"] = count,
+						["icon"] = icon
+					}
+				)
 			end
 		else
 			break
@@ -39,7 +39,6 @@ function ImproveAny:GetTokenList()
 
 	if IATokenBar and IATokenBar.text then
 		local text = ""
-
 		for i, token in pairs(tab) do
 			if text ~= "" then
 				text = text .. " "
@@ -53,7 +52,6 @@ function ImproveAny:GetTokenList()
 end
 
 IATokenBar = CreateFrame("FRAME", "IATokenBar", UIParent)
-
 function ImproveAny:InitTokenBar()
 	if ImproveAny:IsEnabled("TOKENBAR", false) then
 		IATokenBar:SetSize(180, 20)
@@ -64,15 +62,20 @@ function ImproveAny:InitTokenBar()
 		IATokenBar.text:SetPoint("CENTER", IATokenBar, "CENTER", 0, 0)
 		IATokenBar.text:SetText("ImproveAny - Tokenbar")
 		IATokenBar:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
-
-		IATokenBar:SetScript("OnEvent", function(sel, ...)
-			ImproveAny:GetTokenList()
-		end)
+		IATokenBar:SetScript(
+			"OnEvent",
+			function(sel, ...)
+				ImproveAny:GetTokenList()
+			end
+		)
 
 		if TokenFrame_Update then
-			hooksecurefunc("TokenFrame_Update", function()
-				ImproveAny:GetTokenList()
-			end)
+			hooksecurefunc(
+				"TokenFrame_Update",
+				function()
+					ImproveAny:GetTokenList()
+				end
+			)
 		end
 
 		ImproveAny:GetTokenList()

@@ -377,7 +377,7 @@ function ImproveAny:ToggleSettings()
 end
 
 function ImproveAny:InitIASettings()
-	if not D4:IsOldWow() then
+	if not ImproveAny:IsOldWow() then
 		IASettings = CreateFrame("Frame", "IASettings", UIParent, "BasicFrameTemplate")
 	else
 		IASettings = CreateFrame("Frame", "IASettings", UIParent)
@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	D4:SetVersion(AddonName, 136033, "0.9.72")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.72"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.73")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.73"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -511,10 +511,11 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(24, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 		AddCategory("FRAMES")
 		AddCheckBox(4, "WIDEFRAMES", false)
+		AddCheckBox(4, "IMPROVETRADESKILLFRAME", false)
 		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)
 		AddSlider(4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5)
 		AddSlider(4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1)
-		if D4:GetWoWBuild() ~= "RETAIL" then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("XPBAR")
 			AddCheckBox(4, "XPBAR", false)
 			AddCheckBox(24, "XPNUMBERLEVEL", false)
@@ -538,7 +539,7 @@ function ImproveAny:InitIASettings()
 			AddCheckBox(24, "REPHIDEARTWORK", false)
 		end
 
-		if D4:GetWoWBuild() ~= "RETAIL" then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("UNITFRAMES")
 			AddCheckBox(4, "RAIDFRAMEMOREBUFFS", false)
 			AddSlider(24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)

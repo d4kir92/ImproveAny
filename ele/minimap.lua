@@ -203,7 +203,7 @@ function ImproveAny:InitMinimap()
 				IAMMBtnsFrame.hide = true
 				if ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
 					local mmbtn = nil
-					D4:CreateMinimapButton(
+					ImproveAny:CreateMinimapButton(
 						{
 							["name"] = "ImproveAnyMMBtns",
 							["icon"] = 1120721,
@@ -288,7 +288,7 @@ function ImproveAny:InitMinimap()
 						btn:SetMovable(true)
 						btn:SetUserPlaced(false)
 						local radius = 80
-						if D4:GetWoWBuild() == "RETAIL" then
+						if ImproveAny:GetWoWBuild() == "RETAIL" then
 							radius = 110
 						end
 
@@ -421,7 +421,7 @@ function ImproveAny:InitMinimap()
 					MinimapToggleButton:Hide()
 				end
 
-				if D4:GetWoWBuild() ~= "RETAIL" and TimeManagerClockButton then
+				if ImproveAny:GetWoWBuild() ~= "RETAIL" and TimeManagerClockButton then
 					local clocktexture = select(1, TimeManagerClockButton:GetRegions())
 					if clocktexture and clocktexture.SetTexture then
 						clocktexture:SetTexture(nil)
@@ -478,7 +478,7 @@ function ImproveAny:InitMinimap()
 				end
 
 				if select(4, GetBuildInfo()) < 100000 then
-					ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, D4:GetWoWBuild() == "CLASSIC") -- Calendar
+					ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, ImproveAny:GetWoWBuild() == "CLASSIC") -- Calendar
 				end
 
 				ImproveAny:ConvertToMinimapButton("ExpansionLandingPageMinimapButton", true) -- Sanctum

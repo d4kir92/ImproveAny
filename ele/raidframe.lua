@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 function ImproveAny:InitRaidFrames()
-	if D4:GetWoWBuild() ~= "RETAIL" then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		local raidFrames = {}
 		function ImproveAny:IsCompactRaidFrame(frame)
 			if frame == nil then return false end

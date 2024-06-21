@@ -41,6 +41,11 @@ function ImproveAny:AddIlvl(SLOT, i)
 end
 
 local PDThink = CreateFrame("FRAME")
+local IAILVL = nil
+function ImproveAny:GetIAILVL()
+	return IAILVL
+end
+
 function ImproveAny:PDUpdateItemInfos()
 	if ImproveAny:IsEnabled("ITEMLEVELSYSTEM", false) then
 		local count = 0
@@ -51,7 +56,7 @@ function ImproveAny:PDUpdateItemInfos()
 			if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
 				local ItemID = GetInventoryItemLink("PLAYER", SLOT:GetID()) or GetInventoryItemID("PLAYER", SLOT:GetID())
 				if ItemID ~= nil and GetDetailedItemLevelInfo then
-					local _, _, rarity = D4:GetItemInfo(ItemID)
+					local _, _, rarity = ImproveAny:GetItemInfo(ItemID)
 					local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
 					local color = ITEM_QUALITY_COLORS[rarity]
 					local current, maximum = GetInventoryItemDurability(i)
@@ -136,21 +141,21 @@ function ImproveAny:PDUpdateItemInfos()
 		if count > 0 then
 			local max = 16 -- when only IAnhand
 			if GetInventoryItemID("PLAYER", 17) then
-				local t1 = D4:GetItemInfo(GetInventoryItemLink("PLAYER", 17))
+				local t1 = ImproveAny:GetItemInfo(GetInventoryItemLink("PLAYER", 17))
 				-- when 2x 1handed
 				if t1 then
 					max = 17
 				end
 			end
 
-			if D4:GetWoWBuild() == "RETAIL" then
+			if ImproveAny:GetWoWBuild() == "RETAIL" then
 				max = max - 1
 			end
 
 			IAILVL = string.format("%0.2f", sum / max)
 			if PaperDollFrame.ilvl then
 				if true then
-					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. IAILVL)
+					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. ImproveAny:GetIAILVL())
 				else
 					PaperDollFrame.ilvl:SetText("")
 				end
@@ -226,7 +231,7 @@ function ImproveAny:InitItemLevel()
 						if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink then
 							local ItemID = GetInventoryItemLink("TARGET", SLOT:GetID()) --GetInventoryItemID("PLAYER", SLOT:GetID())
 							if ItemID and GetDetailedItemLevelInfo then
-								local _, _, rarity = D4:GetItemInfo(ItemID)
+								local _, _, rarity = ImproveAny:GetItemInfo(ItemID)
 								local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
 								local color = ITEM_QUALITY_COLORS[rarity]
 								if ImproveAny:IsEnabled("ITEMLEVEL", false) and ilvl and color then
@@ -270,14 +275,14 @@ function ImproveAny:InitItemLevel()
 						local max = 16 -- when only IAnhand
 						local ItemID = GetInventoryItemLink("TARGET", 17)
 						if GetItemInfo and GetInventoryItemID and ItemID ~= nil then
-							local t1 = D4:GetItemInfo(ItemID)
+							local t1 = ImproveAny:GetItemInfo(ItemID)
 							-- when 2x 1handed
 							if t1 then
 								max = 17
 							end
 						end
 
-						if D4:GetWoWBuild() == "RETAIL" then
+						if ImproveAny:GetWoWBuild() == "RETAIL" then
 							max = max - 1
 						end
 
@@ -351,7 +356,7 @@ function ImproveAny:InitItemLevel()
 					local slotLink = ImproveAny:GetContainerItemLink(bagID, slotID)
 					ImproveAny:AddIlvl(SLOT, slotID)
 					if slotLink and GetDetailedItemLevelInfo then
-						local _, _, rarity, _, _, _, _, _, _, _, _, classID, subclassID = D4:GetItemInfo(slotLink)
+						local _, _, rarity, _, _, _, _, _, _, _, _, classID, subclassID = ImproveAny:GetItemInfo(slotLink)
 						local ilvl, _, _ = GetDetailedItemLevelInfo(slotLink)
 						local color = ITEM_QUALITY_COLORS[rarity]
 						if ilvl and color then
@@ -442,9 +447,9 @@ function ImproveAny:InitItemLevel()
 		ImproveAny:UpdateBagsIlvl()
 	end
 
-	if D4:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
 		-- Bag Searchbar
-		if not D4:IsOldWow() then
+		if not ImproveAny:IsOldWow() then
 			for i = 1, 6 do
 				local cf = _G["ContainerFrame" .. i]
 				if cf then

@@ -122,12 +122,12 @@ function ImproveAny:InitBags()
 				end
 
 				IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
-				if D4:IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
+				if ImproveAny:IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
 					ImproveAny:MSG(format("Dominos is enabled, BAGMODE: %s may can break Domonis moving the bag bar.", ImproveAny:GV("BAGMODE", "RETAIL")))
 				end
 
 				if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
-					if D4:GetWoWBuild() ~= "RETAIL" and BagsBar then
+					if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
 						BagToggle = CreateFrame("BUTTON", "BagToggle", BagsBar or UIParent)
 						local mainBag = _G["MainMenuBarBackpackButton"]
 						if mainBag then
