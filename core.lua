@@ -250,7 +250,7 @@ function ImproveAny:Event(event, ...)
 					ImproveAny:ToggleSettings()
 				end,
 				["funcR"] = function()
-					ImproveAny:MSG("ImproveAny", 132117, "Minimap Button is now hidden.")
+					ImproveAny:MSG("Minimap Button is now hidden.")
 					ImproveAny:HideMMBtn("ImproveAny")
 				end,
 			}
