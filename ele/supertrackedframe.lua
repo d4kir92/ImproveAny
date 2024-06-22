@@ -1,13 +1,14 @@
 local _, ImproveAny = ...
 function ImproveAny:InitSuperTrackedFrame()
-	if SuperTrackedFrame == nil then
-		SuperTrackedFrame = WorldSpacePin
+	local stf = SuperTrackedFrame
+	if stf == nil then
+		stf = WorldSpacePin
 	end
 
-	if SuperTrackedFrame then
-		if SuperTrackedFrame.GetTargetAlphaBaseValue then
-			local fAlpha = SuperTrackedFrame.GetTargetAlphaBaseValue
-			function SuperTrackedFrame:GetTargetAlphaBaseValue()
+	if stf then
+		if stf.GetTargetAlphaBaseValue then
+			local fAlpha = stf.GetTargetAlphaBaseValue
+			function stf:GetTargetAlphaBaseValue()
 				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
 					return 0.5
 				else
@@ -16,9 +17,9 @@ function ImproveAny:InitSuperTrackedFrame()
 			end
 		end
 
-		if SuperTrackedFrame.GetTargetAlpha then
-			local fAlpha = SuperTrackedFrame.GetTargetAlpha
-			function SuperTrackedFrame:GetTargetAlpha()
+		if stf.GetTargetAlpha then
+			local fAlpha = stf.GetTargetAlpha
+			function stf:GetTargetAlpha()
 				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
 					return 0.5
 				else
@@ -27,31 +28,31 @@ function ImproveAny:InitSuperTrackedFrame()
 			end
 		end
 
-		if SuperTrackedFrame.DistanceText == nil then
-			SuperTrackedFrame.DistanceText = WorldSpacePin.text
+		if stf.DistanceText == nil then
+			stf.DistanceText = WorldSpacePin.text
 		end
 
-		SuperTrackedFrame.DistanceTime = SuperTrackedFrame:CreateFontString(nil, "ARTWORK")
+		stf.DistanceTime = stf:CreateFontString(nil, "ARTWORK")
 		if C_Navigation then
-			SuperTrackedFrame.DistanceTime:SetFont(STANDARD_TEXT_FONT, 12, "")
-			SuperTrackedFrame.DistanceTime:SetPoint("TOP", SuperTrackedFrame, "BOTTOM", 0, -38)
+			stf.DistanceTime:SetFont(STANDARD_TEXT_FONT, 12, "")
+			stf.DistanceTime:SetPoint("TOP", stf, "BOTTOM", 0, 2)
 		else
-			SuperTrackedFrame.DistanceTime:SetFont(STANDARD_TEXT_FONT, 10, "")
-			SuperTrackedFrame.DistanceTime:SetPoint("TOP", SuperTrackedFrame, "BOTTOM", 0, -12)
+			stf.DistanceTime:SetFont(STANDARD_TEXT_FONT, 10, "")
+			stf.DistanceTime:SetPoint("TOP", stf, "BOTTOM", 0, -12)
 		end
 
-		SuperTrackedFrame.DistanceTime:SetText("LOADING (IA)")
-		SuperTrackedFrame.DistanceTime:SetTextColor(SuperTrackedFrame.DistanceText:GetTextColor())
-		SuperTrackedFrame.DistanceTime:SetShadowOffset(SuperTrackedFrame.DistanceText:GetShadowOffset())
+		stf.DistanceTime:SetText("LOADING (IA)")
+		stf.DistanceTime:SetTextColor(stf.DistanceText:GetTextColor())
+		stf.DistanceTime:SetShadowOffset(stf.DistanceText:GetShadowOffset())
 		if C_Navigation or WorldMapPin_GetDistance then
-			FLOAT_SPELL_DURATION_SEC = ImproveAny:ReplaceStr(INT_SPELL_DURATION_SEC, "%d", "%0.0f")
-			FLOAT_SPELL_DURATION_MIN = ImproveAny:ReplaceStr(INT_SPELL_DURATION_MIN, "%d", "%0.1f")
+			local sec = ImproveAny:ReplaceStr(INT_SPELL_DURATION_SEC, "%d", "%0.0f")
+			local min = ImproveAny:ReplaceStr(INT_SPELL_DURATION_MIN, "%d", "%0.1f")
 			local lastDist = 0
 			local lastDistPerSec = 0
 			local distPerSec = 0
 			local timeToTarget = 0
 			local scale = 10
-			function ImproveAny:ThinkSuperTrackedFrame()
+			function ImproveAny:ThinkSTF()
 				local distance = 0
 				if WorldMapPin_GetDistance then
 					distance = WorldMapPin_GetDistance()
@@ -78,24 +79,24 @@ function ImproveAny:InitSuperTrackedFrame()
 				end
 
 				if clamped then
-					SuperTrackedFrame.DistanceTime:SetText("")
+					stf.DistanceTime:SetText("")
 				else
 					if secs == 0 then
-						SuperTrackedFrame.DistanceTime:SetText("∞")
+						stf.DistanceTime:SetText("∞")
 					elseif secs > -60 and secs < 60 then
-						SuperTrackedFrame.DistanceTime:SetText(format(FLOAT_SPELL_DURATION_SEC, secs))
+						stf.DistanceTime:SetText(format(sec, secs))
 					else
-						SuperTrackedFrame.DistanceTime:SetText(format(FLOAT_SPELL_DURATION_MIN, secs / 60))
+						stf.DistanceTime:SetText(format(min, secs / 60))
 					end
 				end
 
 				lastDistPerSec = distPerSec
 				lastDist = distance
-				ImproveAny:Debug("supertrackedframe.lua: ThinkSuperTrackedFrame " .. distance, "think")
-				C_Timer.After(0.1, ImproveAny.ThinkSuperTrackedFrame)
+				ImproveAny:Debug("supertrackedframe.lua: ThinkSTF " .. distance, "think")
+				C_Timer.After(0.1, ImproveAny.ThinkSTF)
 			end
 
-			ImproveAny:ThinkSuperTrackedFrame()
+			ImproveAny:ThinkSTF()
 		end
 	end
 end
