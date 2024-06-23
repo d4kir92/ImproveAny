@@ -477,6 +477,10 @@ function ImproveAny:InitMinimap()
 					GameTimeFrame:SetFrameLevel(10)
 				end
 
+				if MiniMapInstanceDifficulty:GetParent() == "MinimapCluster" then
+					MiniMapInstanceDifficulty:SetParent(Minimap)
+				end
+
 				if select(4, GetBuildInfo()) < 100000 then
 					ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, ImproveAny:GetWoWBuild() == "CLASSIC") -- Calendar
 				end
@@ -484,10 +488,6 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("ExpansionLandingPageMinimapButton", true) -- Sanctum
 				ImproveAny:ConvertToMinimapButton("GarrisonLandingPageMinimapButton", true) -- Sanctum
 				ImproveAny:ConvertToMinimapButton("QueueStatusMinimapButton", true) -- LFG
-				if MiniMapInstanceDifficulty then
-					MiniMapInstanceDifficulty:SetParent(Minimap)
-				end
-
 				-- Classic ERA
 				ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame", true) -- Tracking
 				ImproveAny:ConvertToMinimapButton("MiniMapLFGFrame", true) -- LFG
