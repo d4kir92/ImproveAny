@@ -447,7 +447,7 @@ function ImproveAny:InitItemLevel()
 		ImproveAny:UpdateBagsIlvl()
 	end
 
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil then
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagItemSearchBox == nil and BagItemAutoSortButton == nil and ImproveAny:IsEnabled("IMPROVEBAGS", false) then
 		-- Bag Searchbar
 		if not ImproveAny:IsOldWow() then
 			for i = 1, 6 do
@@ -459,9 +459,14 @@ function ImproveAny:InitItemLevel()
 					search:SetScript(
 						"OnUpdate",
 						function(sel, ...)
-							if IsBagOpen(0) and cf:GetID() == 0 then
-								sel:SetAlpha(1)
-								sel:EnableMouse(true)
+							if ImproveAny:IsEnabled("IMPROVEBAGS", false) then
+								if IsBagOpen(0) and cf:GetID() == 0 then
+									sel:SetAlpha(1)
+									sel:EnableMouse(true)
+								else
+									sel:SetAlpha(0)
+									sel:EnableMouse(false)
+								end
 							else
 								sel:SetAlpha(0)
 								sel:EnableMouse(false)

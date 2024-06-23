@@ -107,6 +107,8 @@ function ImproveAny:Lang_deDE()
 		["AUTOACCEPTQUESTS"] = "Automatisch Quests annehmen",
 		["AUTOCHECKINQUESTS"] = "Automatisch Quests abgeben",
 		["COMBINEMMBTNS"] = "Minimap Knöpfe zusammenfassen",
+		["IMPROVEBAGS"] = "Taschen verbessern (Suche/Sortieren)",
+		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)
