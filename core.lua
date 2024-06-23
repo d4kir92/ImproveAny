@@ -1016,7 +1016,7 @@ function ImproveAny:Event(event, ...)
 			end
 		end
 
-		if ImproveAny:GetWoWBuild() == "CLASSIC" and ImproveAny:IsEnabled("IMPROVETRADESKILLFRAME", false) then
+		if ImproveAny:GetWoWBuild() == "CLASSIC" and ImproveAny:IsEnabled("IMPROVETRADESKILLFRAME", true) then
 			local function InitTSF()
 				if ImproveAny:GetWoWBuild() == "CLASSIC" then
 					TradeSkillFrame.hasMaterial = CreateFrame("CheckButton", "HasMaterial", TradeSkillFrame, "UICheckButtonTemplate")

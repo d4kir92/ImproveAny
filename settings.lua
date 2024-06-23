@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.76")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.76"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.77")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.77"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -512,7 +512,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(24, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 		AddCategory("FRAMES")
 		AddCheckBox(4, "WIDEFRAMES", false)
-		AddCheckBox(4, "IMPROVETRADESKILLFRAME", false)
+		AddCheckBox(4, "IMPROVETRADESKILLFRAME", true)
 		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)
 		AddSlider(4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5)
 		AddSlider(4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1)
