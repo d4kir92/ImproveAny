@@ -477,7 +477,7 @@ function ImproveAny:InitMinimap()
 					GameTimeFrame:SetFrameLevel(10)
 				end
 
-				if MiniMapInstanceDifficulty:GetParent() == "MinimapCluster" then
+				if MiniMapInstanceDifficulty and MiniMapInstanceDifficulty:GetParent() == "MinimapCluster" then
 					MiniMapInstanceDifficulty:SetParent(Minimap)
 				end
 
