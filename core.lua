@@ -208,6 +208,26 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:InitSpellBookFix()
 		end
 
+		if CharacterFrameExpandButton and ImproveAny:IsEnabled("CHARACTERFRAMEAUTOEXPAND", true) then
+			if CharacterFrame then
+				CharacterFrame:HookScript(
+					"OnShow",
+					function()
+						CharacterFrameExpandButton:Click()
+					end
+				)
+			end
+
+			if CharacterFrameTab1 then
+				CharacterFrameTab1:HookScript(
+					"OnClick",
+					function()
+						CharacterFrameExpandButton:Click()
+					end
+				)
+			end
+		end
+
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
 			ImproveAny:Debug("RIGHTCLICKSELFCAST")
 			C_Timer.After(

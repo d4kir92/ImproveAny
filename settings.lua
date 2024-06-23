@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.77")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.77"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.78")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.78"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -453,6 +453,10 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "COORDSP", false)
 		AddCheckBox(4, "COORDSC", false)
 		AddCheckBox(4, "IMPROVEBAGS", true)
+		if CharacterFrameExpandButton then
+			AddCheckBox(4, "CHARACTERFRAMEAUTOEXPAND", true)
+		end
+
 		AddSlider(24, "COORDSFONTSIZE", 8, ImproveAny.UpdateCoordsFontSize, 6, 20, 1)
 		AddCheckBox(4, "IACoordsFrame", false)
 		AddCategory("COMBAT")

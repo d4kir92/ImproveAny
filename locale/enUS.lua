@@ -115,6 +115,7 @@ function ImproveAny:Lang_enUS()
 		["COMBINEMMBTNS"] = "Combine Minimap Buttons",
 		["IMPROVEBAGS"] = "Improve Bags (Search/Sort)",
 		["IMPROVETRADESKILLFRAME"] = "Improve Tradeskillframe (Has Materials, Search)",
+		["CHARACTERFRAMEAUTOEXPAND"] = "Auto expand Characterframe",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

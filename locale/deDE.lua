@@ -109,6 +109,7 @@ function ImproveAny:Lang_deDE()
 		["COMBINEMMBTNS"] = "Minimap Knöpfe zusammenfassen",
 		["IMPROVEBAGS"] = "Taschen verbessern (Suche/Sortieren)",
 		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
+		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)
