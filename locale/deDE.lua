@@ -110,6 +110,7 @@ function ImproveAny:Lang_deDE()
 		["IMPROVEBAGS"] = "Taschen verbessern (Suche/Sortieren)",
 		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
 		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
+		["FRAMEANCHOR"] = "Fenster Anker",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

@@ -50,10 +50,10 @@ local cas = {}
 local cbs = {}
 local ebs = {}
 local sls = {}
-function ImproveAny:SetPos(ele, key, x)
+function ImproveAny:SetPos(ele, key, x, extra)
 	if ele == nil then return false end
 	ele:ClearAllPoints()
-	if strfind(strlower(key), strlower(searchStr), 1, true) then
+	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(key)), strlower(searchStr), 1, true) or (extra and (strfind(strlower(extra), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(extra)), strlower(searchStr), 1, true))) then
 		ele:Show()
 		if posy < -4 then
 			posy = posy - 10
@@ -148,7 +148,7 @@ local function AddEditBox(x, key, val, func)
 	ImproveAny:SetPos(ebs[key], key, x + 8)
 end
 
-local function AddSlider(x, key, val, func, vmin, vmax, steps)
+local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 	if sls[key] == nil then
 		sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "OptionsSliderTemplate")
 		sls[key]:SetWidth(IASettings.SC:GetWidth() - 30 - x)
@@ -202,7 +202,7 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps)
 		posy = posy - 10
 	end
 
-	ImproveAny:SetPos(sls[key], key, x)
+	ImproveAny:SetPos(sls[key], key, x, extra)
 end
 
 function ImproveAny:UpdateILVLIcons()
@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.87")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.87"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.88")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.88"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -434,12 +434,12 @@ function ImproveAny:InitIASettings()
 		AddCategory("GENERAL")
 		AddCheckBox(4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton)
 		--AddSlider(x, key, val, func, vmin, vmax, steps)
-		AddSlider(4, "UIFONTINDEX", 1, ImproveAny.Fonts, IAFONTS, nil, 1)
-		AddSlider(4, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1)
-		AddSlider(4, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1)
+		AddSlider(10, "UIFONTINDEX", 1, ImproveAny.Fonts, IAFONTS, nil, 1)
+		AddSlider(10, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1)
+		AddSlider(10, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1)
 		AddCheckBox(4, "HIDEPVPBADGE", false)
 		if StatusTrackingBarManager then
-			AddSlider(4, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
+			AddSlider(10, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
 		end
 
 		AddCheckBox(4, "FREESPACEBAGS", false)
@@ -462,8 +462,8 @@ function ImproveAny:InitIASettings()
 		AddCategory("COMBAT")
 		AddCheckBox(4, "COMBATTEXTICONS", false)
 		AddCheckBox(4, "COMBATTEXTPOSITION", false)
-		AddSlider(4, "COMBATTEXTX", 0, nil, -600, 600, 10)
-		AddSlider(4, "COMBATTEXTY", 0, nil, -250, 250, 10)
+		AddSlider(10, "COMBATTEXTX", 0, nil, -600, 600, 10)
+		AddSlider(10, "COMBATTEXTY", 0, nil, -250, 250, 10)
 		AddCategory("CHAT")
 		AddCheckBox(4, "CHAT", false)
 		AddCheckBox(24, "CHATSHORTCHANNELS", false)
@@ -517,9 +517,10 @@ function ImproveAny:InitIASettings()
 		AddCategory("FRAMES")
 		AddCheckBox(4, "WIDEFRAMES", false)
 		AddCheckBox(4, "IMPROVETRADESKILLFRAME", true)
-		AddSlider(4, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5)
-		AddSlider(4, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5)
-		AddSlider(4, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1)
+		AddCategory("FRAMEANCHOR")
+		AddSlider(10, "TOP_OFFSET", 116, ImproveAny.UpdateUIParentAttribute, 0.0, 1000.0, 5, "FRAMEANCHOR")
+		AddSlider(10, "LEFT_OFFSET", 16, ImproveAny.UpdateUIParentAttribute, 16.0, 1000.0, 5, "FRAMEANCHOR")
+		AddSlider(10, "PANEl_SPACING_X", 32, ImproveAny.UpdateUIParentAttribute, 10.0, 300.0, 1, "FRAMEANCHOR")
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("XPBAR")
 			AddCheckBox(4, "XPBAR", false)
