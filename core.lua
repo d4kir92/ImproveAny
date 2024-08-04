@@ -239,7 +239,7 @@ function ImproveAny:Event(event, ...)
 		end
 
 		function ImproveAny:UpdateMinimapButton()
-			if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", true) then
+			if ImproveAny:IsEnabled("SHOWMINIMAPBUTTON", ImproveAny:GetWoWBuild() ~= "RETAIL") then
 				ImproveAny:ShowMMBtn("ImproveAny")
 			else
 				ImproveAny:HideMMBtn("ImproveAny")
@@ -258,25 +258,32 @@ function ImproveAny:Event(event, ...)
 			ExtraActionButton1.style:Hide()
 		end
 
-		local mmbtn = nil
-		ImproveAny:CreateMinimapButton(
-			{
-				["name"] = "ImproveAny",
-				["icon"] = 136033,
-				["var"] = mmbtn,
-				["dbtab"] = IATAB,
-				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.89"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
-				["funcL"] = function()
-					ImproveAny:ToggleSettings()
-				end,
-				["funcR"] = function()
-					ImproveAny:MSG("Minimap Button is now hidden.")
-					ImproveAny:HideMMBtn("ImproveAny")
-				end,
-			}
+		C_Timer.After(
+			0,
+			function()
+				local mmbtn = nil
+				ImproveAny:CreateMinimapButton(
+					{
+						["name"] = "ImproveAny",
+						["icon"] = 136033,
+						["var"] = mmbtn,
+						["dbtab"] = IATAB,
+						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.90"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+						["funcL"] = function()
+							ImproveAny:ToggleSettings()
+						end,
+						["funcR"] = function()
+							ImproveAny:MSG("Minimap Button is now hidden.")
+							ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", false)
+							ImproveAny:HideMMBtn("ImproveAny")
+						end,
+					}
+				)
+
+				ImproveAny:UpdateMinimapButton()
+			end
 		)
 
-		ImproveAny:UpdateMinimapButton()
 		ImproveAny:UpdateMaxZoom()
 		ImproveAny:UpdateWorldTextScale()
 		ImproveAny:CheckCVars()

@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.89")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.89"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.90")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.90"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -432,7 +432,7 @@ function ImproveAny:InitIASettings()
 	function ImproveAny:UpdateElementList(sel)
 		posy = -8
 		AddCategory("GENERAL")
-		AddCheckBox(4, "SHOWMINIMAPBUTTON", true, ImproveAny.UpdateMinimapButton)
+		AddCheckBox(4, "SHOWMINIMAPBUTTON", ImproveAny:GetWoWBuild() ~= "RETAIL", ImproveAny.UpdateMinimapButton)
 		--AddSlider(x, key, val, func, vmin, vmax, steps)
 		AddSlider(10, "UIFONTINDEX", 1, ImproveAny.Fonts, IAFONTS, nil, 1)
 		AddSlider(10, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1)
