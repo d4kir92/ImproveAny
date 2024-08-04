@@ -1,5 +1,5 @@
 local _, ImproveAny = ...
-local mmdelay = 0.1
+local mmdelay = 0.4
 local minimapshape = "ROUND"
 function ImproveAny:UpdateMinimapSettings()
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
@@ -209,11 +209,12 @@ function ImproveAny:InitMinimap()
 							["icon"] = 1120721,
 							["var"] = mmbtn,
 							["dbtab"] = IATAB["MMBtns"],
-							["vTT"] = {"Minimap Buttons"},
+							["vTT"] = {{"Minimap Buttons", "ImproveAny"}, {"Leftclick", "Toggle Visibility"}},
 							["funcL"] = function()
 								IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
 								ImproveAny:UpdateIAMMBtns()
 							end,
+							["addoncomp"] = false
 						}
 					)
 				end
@@ -512,11 +513,8 @@ function ImproveAny:InitMinimap()
 						end
 					end
 
-					mmdelay = mmdelay + 0.1
-					if mmdelay <= 1.0 then
-						ImproveAny:Debug("minimap.lua: mmdelay", "retry")
-						C_Timer.After(mmdelay, ImproveAny.UpdateMMBtns)
-					end
+					ImproveAny:UpdateIAMMBtns()
+					C_Timer.After(mmdelay, ImproveAny.UpdateMMBtns)
 				end
 
 				ImproveAny:UpdateMMBtns()

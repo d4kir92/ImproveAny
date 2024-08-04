@@ -9,8 +9,10 @@ end
 
 function ImproveAny:Lang_enUS()
 	local tab = {
-		["MMBTNLEFT"] = "Left Click => Options",
-		["MMBTNRIGHT"] = "Right Click => Hide Minimap Button",
+		["LEFTCLICK"] = "Leftclick",
+		["RIGHTCLICK"] = "Rightclick",
+		["MMBTNLEFT"] = "Options",
+		["MMBTNRIGHT"] = "Hide Minimap Button",
 		["GENERAL"] = "General",
 		["SHOWMINIMAPBUTTON"] = "Show Minimap Button",
 		["UIFONT"] = "Ui Font",
