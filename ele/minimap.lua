@@ -219,25 +219,25 @@ function ImproveAny:InitMinimap()
 					)
 				end
 
+				local function sortFunc(a, b)
+					local a1 = a:GetName()
+					local b1 = b:GetName()
+					for i, v in pairs(mmBtnsNames) do
+						a1 = string.gsub(a1, v, "")
+						b1 = string.gsub(b1, v, "")
+					end
+
+					return a1 < b1
+				end
+
 				function ImproveAny:UpdateIAMMBtns()
 					local br = 7
 					local sr = 1
 					local sum = 0
 					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() then
+						if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
 							sum = sum + 1
 						end
-					end
-
-					local function sortFunc(a, b)
-						local a1 = a:GetName()
-						local b1 = b:GetName()
-						for i, v in pairs(mmBtnsNames) do
-							a1 = string.gsub(a1, v, "")
-							b1 = string.gsub(b1, v, "")
-						end
-
-						return a1 < b1
 					end
 
 					table.sort(IAMMBtns, sortFunc)
@@ -245,7 +245,7 @@ function ImproveAny:InitMinimap()
 					IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
 					local row, col = 0, 0
 					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() then
+						if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
 							if col == cols then
 								col = 0
 								row = row + 1
