@@ -268,7 +268,7 @@ function ImproveAny:Event(event, ...)
 						["icon"] = 136033,
 						["var"] = mmbtn,
 						["dbtab"] = IATAB,
-						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.94"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.95"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 						["funcL"] = function()
 							ImproveAny:ToggleSettings()
 						end,
@@ -1288,6 +1288,8 @@ AddEQ(2845) -- Wandering Shay (Feralas (Alliance))
 AddEQ(10337) -- When the Cows Come Home (TBC, Netherstorm)
 AddEQ(1144) -- Willix the Importer  (Razorfen Kraul)
 AddEQ(9165) -- Writ of Safe Passage (Eastern Plaguelands)
+AddEQ(78714) -- TWW SKIP QUEST 1
+AddEQ(84365) -- TWW SKIP QUEST 2
 local f2 = CreateFrame("Frame")
 f2:RegisterEvent("LOOT_READY")
 f2:SetScript("OnEvent", ImproveAny.FastLooting)
