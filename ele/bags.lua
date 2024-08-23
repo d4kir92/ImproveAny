@@ -66,7 +66,7 @@ function ImproveAny:InitBags()
 				local COUNT = _G[slot .. "Count"]
 				local id = BAGSIDS[slot]
 				if SLOT and ImproveAny:IsEnabled("BAGSAMESIZE", false) then
-					local size = ImproveAny:GV("BAGSIZE", 30)
+					local size = ImproveAny:IAGV("BAGSIZE", 30)
 					local scale = size / 30
 					if SLOT == BagToggle then
 						SLOT:SetSize(size * 0.5, size * 0.8)
@@ -122,11 +122,11 @@ function ImproveAny:InitBags()
 				end
 
 				IABagBar = CreateFrame("FRAME", "IABagBar", BagsBar or UIParent)
-				if ImproveAny:IsAddOnLoaded("Dominos") and ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
-					ImproveAny:MSG(format("Dominos is enabled, BAGMODE: %s may can break Domonis moving the bag bar.", ImproveAny:GV("BAGMODE", "RETAIL")))
+				if ImproveAny:IsAddOnLoaded("Dominos") and ImproveAny:IAGV("BAGMODE", "RETAIL") ~= "DISABLED" then
+					ImproveAny:MSG(format("Dominos is enabled, BAGMODE: %s may can break Domonis moving the bag bar.", ImproveAny:IAGV("BAGMODE", "RETAIL")))
 				end
 
-				if ImproveAny:GV("BAGMODE", "RETAIL") == "RETAIL" then
+				if ImproveAny:IAGV("BAGMODE", "RETAIL") == "RETAIL" then
 					if ImproveAny:GetWoWBuild() ~= "RETAIL" and BagsBar then
 						BagToggle = CreateFrame("BUTTON", "BagToggle", BagsBar or UIParent)
 						local mainBag = _G["MainMenuBarBackpackButton"]
@@ -216,7 +216,7 @@ function ImproveAny:InitBags()
 							BagsBar:SetSize(sw, sh)
 						end
 					end
-				elseif ImproveAny:GV("BAGMODE", "RETAIL") == "CLASSIC" then
+				elseif ImproveAny:IAGV("BAGMODE", "RETAIL") == "CLASSIC" then
 					local BBET = _G["BagBarExpandToggle"]
 					if BBET then
 						BBET:SetParent(IAHIDDEN)
@@ -265,7 +265,7 @@ function ImproveAny:InitBags()
 							IABagBar:SetPoint("TOPRIGHT", MicroButtonAndBagsBar, "TOPRIGHT", 0, 0)
 						end
 					end
-				elseif ImproveAny:GV("BAGMODE", "RETAIL") == "ONEBAG" then
+				elseif ImproveAny:IAGV("BAGMODE", "RETAIL") == "ONEBAG" then
 					for i, slot in pairs(BAGS) do
 						local SLOT = _G[slot]
 						if SLOT and slot ~= "MainMenuBarBackpackButton" then
@@ -301,8 +301,8 @@ function ImproveAny:InitBags()
 						SLOT:ClearAllPoints()
 						SLOT:SetPoint("RIGHT", IABagBar, "RIGHT", 0, 0)
 					end
-				elseif ImproveAny:GV("BAGMODE", "RETAIL") ~= "DISABLED" then
-					ImproveAny:MSG("BAGMODE NOT FOUND: " .. ImproveAny:GV("BAGMODE", "RETAIL"))
+				elseif ImproveAny:IAGV("BAGMODE", "RETAIL") ~= "DISABLED" then
+					ImproveAny:MSG("BAGMODE NOT FOUND: " .. ImproveAny:IAGV("BAGMODE", "RETAIL"))
 				end
 			end
 		)

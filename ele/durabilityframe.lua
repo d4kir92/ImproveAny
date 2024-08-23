@@ -42,7 +42,7 @@ function ImproveAny:InitDurabilityFrame()
 				end
 
 				if not InCombatLockdown() then
-					if perc <= ImproveAny:GV("SHOWDURABILITYUNDER", 100) then
+					if perc <= ImproveAny:IAGV("SHOWDURABILITYUNDER", 100) then
 						DurabilityFrame:Show()
 					else
 						DurabilityFrame:Hide()

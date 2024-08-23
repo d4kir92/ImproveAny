@@ -103,17 +103,17 @@ function ImproveAny:SetElePoint(key, p1, p2, p3, p4, p5)
 	end
 end
 
-function ImproveAny:SV(name, value)
+function ImproveAny:IASV(name, value)
 	IATAB = IATAB or {}
 	IATAB["VALUES"] = IATAB["VALUES"] or {}
 	IATAB["VALUES"][name] = value
 end
 
-function ImproveAny:GV(name, value)
+function ImproveAny:IAGV(name, value)
 	IATAB = IATAB or {}
 	IATAB["VALUES"] = IATAB["VALUES"] or {}
 	if IATAB["VALUES"][name] == nil then
-		ImproveAny:SV(name, value)
+		ImproveAny:IASV(name, value)
 	end
 
 	return IATAB["VALUES"][name] or value

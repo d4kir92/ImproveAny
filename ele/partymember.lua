@@ -20,7 +20,7 @@ end
 function ImproveAny:UnitXP(unit)
 	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit(unit, "player") then return UnitXP("player") end
-	if ImproveAny:GV("XPTAB") and ImproveAny:GV("XPTAB")[target] and ImproveAny:GV("XPTAB")[target]["XP"] then return tonumber(ImproveAny:GV("XPTAB")[target]["XP"]) end
+	if ImproveAny:IAGV("XPTAB") and ImproveAny:IAGV("XPTAB")[target] and ImproveAny:IAGV("XPTAB")[target]["XP"] then return tonumber(ImproveAny:IAGV("XPTAB")[target]["XP"]) end
 
 	return 0
 end
@@ -28,7 +28,7 @@ end
 function ImproveAny:UnitXPMax(unit)
 	local target = ImproveAny:UnitName(unit)
 	if UnitIsUnit(unit, "player") then return UnitXPMax("player") end
-	if ImproveAny:GV("XPTAB") and ImproveAny:GV("XPTAB")[target] and ImproveAny:GV("XPTAB")[target]["XPMAX"] then return tonumber(ImproveAny:GV("XPTAB")[target]["XPMAX"]) end
+	if ImproveAny:IAGV("XPTAB") and ImproveAny:IAGV("XPTAB")[target] and ImproveAny:IAGV("XPTAB")[target]["XPMAX"] then return tonumber(ImproveAny:IAGV("XPTAB")[target]["XPMAX"]) end
 
 	return 1
 end
@@ -41,8 +41,8 @@ end
 function ImproveAny:UpdatePartyXPAPI()
 	for i = 1, 4 do
 		local target = ImproveAny:UnitName("PARTY" .. i)
-		if target and ImproveAny:GV("XPTAB")[target] == nil then
-			ImproveAny:GV("XPTAB")[target] = {}
+		if target and ImproveAny:IAGV("XPTAB")[target] == nil then
+			ImproveAny:IAGV("XPTAB")[target] = {}
 		end
 	end
 
@@ -57,16 +57,16 @@ end
 local function OnEventXP(self, event, prefix, ...)
 	if event == "CHAT_MSG_ADDON" then
 		-- new xp values
-		if prefix == XPPREFIX and ImproveAny:GV("XPTAB") then
+		if prefix == XPPREFIX and ImproveAny:IAGV("XPTAB") then
 			local values, _, target = ...
 			local xp, xpmax = string.split(";", values)
-			if ImproveAny:GV("XPTAB")[target] == nil then
-				ImproveAny:GV("XPTAB")[target] = {}
+			if ImproveAny:IAGV("XPTAB")[target] == nil then
+				ImproveAny:IAGV("XPTAB")[target] = {}
 			end
 
-			ImproveAny:GV("XPTAB")[target]["XP"] = xp
-			ImproveAny:GV("XPTAB")[target]["XPMAX"] = xpmax
-			ImproveAny:GV("XPTAB")[target]["useapi"] = true -- it uses the api
+			ImproveAny:IAGV("XPTAB")[target]["XP"] = xp
+			ImproveAny:IAGV("XPTAB")[target]["XPMAX"] = xpmax
+			ImproveAny:IAGV("XPTAB")[target]["useapi"] = true -- it uses the api
 		elseif prefix == XPAPIPREFIX then
 			local values, _, target = ...
 			-- PING
@@ -78,11 +78,11 @@ local function OnEventXP(self, event, prefix, ...)
 					C_ChatInfo.SendAddonMessage(XPAPIPREFIX, message, "PARTY")
 				end
 			else -- PONG
-				if ImproveAny:GV("XPTAB")[target] == nil then
-					ImproveAny:GV("XPTAB")[target] = {}
+				if ImproveAny:IAGV("XPTAB")[target] == nil then
+					ImproveAny:IAGV("XPTAB")[target] = {}
 				end
 
-				ImproveAny:GV("XPTAB")[target]["useapi"] = true -- received answer
+				ImproveAny:IAGV("XPTAB")[target]["useapi"] = true -- received answer
 			end
 		end
 	end
@@ -97,10 +97,7 @@ local function OnEventXPInit(self, event, ...)
 		if isInitialLogin or isReloadingUi then
 			C_ChatInfo.RegisterAddonMessagePrefix(XPPREFIX)
 			C_ChatInfo.RegisterAddonMessagePrefix(XPAPIPREFIX)
-			if ImproveAny:GV("XPTAB") == nil then
-				ImproveAny:SV("XPTAB", {})
-			end
-
+			ImproveAny:IASV("XPTAB", {})
 			for i = 1, 4 do
 				local PartyFrame = _G["PartyMemberFrame" .. i]
 				local PartyPortrait = _G["PartyMemberFrame" .. i .. "Portrait"]
@@ -158,8 +155,8 @@ local function OnEventXPInit(self, event, ...)
 					PartyFrameXPBar.levelText:SetText("" .. math.random(1, 59))
 					local c = GetQuestDifficultyColor(PartyFrameXPBar.levelText:GetText())
 					PartyFrameXPBar.levelText:SetTextColor(c.r, c.g, c.b, 1)
-					if ImproveAny:GV("nochanges") == nil then
-						ImproveAny:SV("nochanges", false)
+					if ImproveAny:IAGV("nochanges") == nil then
+						ImproveAny:IASV("nochanges", false)
 					end
 
 					function PartyFrameXPBar.think()
@@ -170,7 +167,7 @@ local function OnEventXPInit(self, event, ...)
 							PartyFrameXPBar.levelText:SetTextColor(co.r, co.g, co.b, 1)
 							local xp = ImproveAny:UnitXP("PARTY" .. i, 0)
 							local xpmax = ImproveAny:UnitXPMax("PARTY" .. i, 1)
-							if (xp > 0 or xpmax > 1) and not ImproveAny:GV("nochanges") then
+							if (xp > 0 or xpmax > 1) and not ImproveAny:IAGV("nochanges") then
 								local per = xp / xpmax
 								PartyFrameXPBar.textureBar:SetWidth(per * PartyFrameXPBar:GetWidth() - 4)
 								if GetCVar("statusTextDisplay") == "PERCENT" then

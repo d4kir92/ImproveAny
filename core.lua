@@ -66,19 +66,19 @@ end
 
 IAMaxZoom = tonumber(GetCVar("cameraDistanceMaxZoomFactor")) or 4
 function ImproveAny:UpdateMaxZoom()
-	ConsoleExec("cameraDistanceMaxZoomFactor " .. ImproveAny:GV("MAXZOOM", ImproveAny:GetMaxZoom()))
+	ConsoleExec("cameraDistanceMaxZoomFactor " .. ImproveAny:IAGV("MAXZOOM", ImproveAny:GetMaxZoom()))
 end
 
 function ImproveAny:UpdateWorldTextScale()
-	ConsoleExec("WorldTextScale " .. ImproveAny:GV("WORLDTEXTSCALE", 1.0))
+	ConsoleExec("WorldTextScale " .. ImproveAny:IAGV("WORLDTEXTSCALE", 1.0))
 end
 
 function ImproveAny:CheckCVars()
-	if ImproveAny:GV("MAXZOOM", ImproveAny:GetMaxZoom()) ~= tonumber(GetCVar("cameraDistanceMaxZoomFactor")) then
+	if ImproveAny:IAGV("MAXZOOM", ImproveAny:GetMaxZoom()) ~= tonumber(GetCVar("cameraDistanceMaxZoomFactor")) then
 		ImproveAny:UpdateMaxZoom()
 	end
 
-	if ImproveAny:GV("WORLDTEXTSCALE", 1.0) ~= tonumber(GetCVar("WorldTextScale")) then
+	if ImproveAny:IAGV("WORLDTEXTSCALE", 1.0) ~= tonumber(GetCVar("WorldTextScale")) then
 		ImproveAny:UpdateWorldTextScale()
 	end
 
@@ -162,7 +162,7 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitSlash()
 		ImproveAny:InitDB()
 		ImproveAny:InitIASettings()
-		if ImproveAny:GV("fontName", "Default") ~= "Default" and ImproveAny.Fonts then
+		if ImproveAny:IAGV("fontName", "Default") ~= "Default" and ImproveAny.Fonts then
 			ImproveAny:Fonts()
 		end
 
@@ -268,7 +268,7 @@ function ImproveAny:Event(event, ...)
 						["icon"] = 136033,
 						["var"] = mmbtn,
 						["dbtab"] = IATAB,
-						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.92"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.93"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 						["funcL"] = function()
 							ImproveAny:ToggleSettings()
 						end,

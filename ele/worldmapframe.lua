@@ -17,11 +17,11 @@ end
 
 local fontsize = 8
 function ImproveAny:UpdateCoordsFontSize()
-	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
+	fontsize = ImproveAny:IAGV("COORDSFONTSIZE", 10)
 end
 
 function ImproveAny:InitWorldMapFrame()
-	fontsize = ImproveAny:GV("COORDSFONTSIZE", 10)
+	fontsize = ImproveAny:IAGV("COORDSFONTSIZE", 10)
 	if WorldMapFrame and ImproveAny:GetWoWBuild() ~= "RETAIL" then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(fr)
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(fr)

@@ -11,8 +11,8 @@ function ImproveAny:UpdateCombatTextPos()
 			oey = COMBAT_TEXT_LOCATIONS.endY
 		end
 
-		local x = ImproveAny:GV("COMBATTEXTX", 0)
-		local y = ImproveAny:GV("COMBATTEXTY", 0)
+		local x = ImproveAny:IAGV("COMBATTEXTX", 0)
+		local y = ImproveAny:IAGV("COMBATTEXTY", 0)
 		if x ~= 0 or y ~= 0 then
 			COMBAT_TEXT_LOCATIONS.startX = x
 			COMBAT_TEXT_LOCATIONS.startY = y + 384

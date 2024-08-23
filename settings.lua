@@ -11,9 +11,9 @@ end
 
 local IAFONTS = {"Default", "Prototype"}
 function ImproveAny:Fonts()
-	local index = ImproveAny:GV("UIFONTINDEX", 1)
+	local index = ImproveAny:IAGV("UIFONTINDEX", 1)
 	local val = IAFONTS[index]
-	ImproveAny:SV("fontName", val)
+	ImproveAny:IASV("fontName", val)
 	for i, fontName in pairs(BlizDefaultFonts) do
 		ImproveAny:SaveOldFonts(fontName)
 	end
@@ -28,7 +28,7 @@ function ImproveAny:Fonts()
 			end
 
 			oldSize = ForcedFontSize[i] or oldSize
-			if ImproveAny:GV("fontName", "Default") == "Default" then
+			if ImproveAny:IAGV("fontName", "Default") == "Default" then
 				fontObject:SetFont(IAOldFonts[i], oldSize, oldStyle)
 			else
 				fontObject:SetFont(font, oldSize, oldStyle)
@@ -39,9 +39,9 @@ end
 
 local IABAGMODES = {"RETAIL", "CLASSIC", "ONEBAG", "DISABLED"}
 function ImproveAny:UpdateBagMode()
-	local index = ImproveAny:GV("BAGMODEINDEX", 1)
+	local index = ImproveAny:IAGV("BAGMODEINDEX", 1)
 	local val = IABAGMODES[index]
-	ImproveAny:SV("BAGMODE", val)
+	ImproveAny:IASV("BAGMODE", val)
 end
 
 local searchStr = ""
@@ -126,13 +126,13 @@ local function AddEditBox(x, key, val, func)
 		ebs[key]:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x, posy)
 		ebs[key]:SetSize(IASettings:GetWidth() - 40, 24)
 		ebs[key]:SetAutoFocus(false)
-		ebs[key].text = ImproveAny:GV(key, val)
-		ebs[key]:SetText(ImproveAny:GV(key, val))
+		ebs[key].text = ImproveAny:IAGV(key, val)
+		ebs[key]:SetText(ImproveAny:IAGV(key, val))
 		ebs[key]:SetScript(
 			"OnTextChanged",
 			function(self, ...)
 				if self.text ~= ebs[key]:GetText() then
-					ImproveAny:SV(key, ebs[key]:GetText())
+					ImproveAny:IASV(key, ebs[key]:GetText())
 					if func then
 						func(self, ...)
 					end
@@ -157,12 +157,12 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 			sls[key].Low:SetText(vmin)
 			sls[key].High:SetText(vmax)
 			sls[key]:SetMinMaxValues(vmin, vmax)
-			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:GV(key, val))
+			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:IAGV(key, val))
 		else
 			sls[key].Low:SetText("")
 			sls[key].High:SetText("")
 			sls[key]:SetMinMaxValues(1, #vmin)
-			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:GV(key, val)])
+			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:IAGV(key, val)])
 		end
 
 		sls[key]:SetObeyStepOnDrag(true)
@@ -170,7 +170,7 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 			sls[key]:SetValueStep(steps)
 		end
 
-		sls[key]:SetValue(ImproveAny:GV(key, val))
+		sls[key]:SetValue(ImproveAny:IAGV(key, val))
 		sls[key]:SetScript(
 			"OnValueChanged",
 			function(self, valu)
@@ -179,12 +179,12 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 					valu = tonumber(string.format("%" .. steps .. "f", valu))
 				end
 
-				if valu and valu ~= ImproveAny:GV(key) then
+				if valu and valu ~= ImproveAny:IAGV(key) then
 					if type(vmin) == "number" then
-						ImproveAny:SV(key, valu)
+						ImproveAny:IASV(key, valu)
 						sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. valu)
 					else
-						ImproveAny:SV(key, valu)
+						ImproveAny:IASV(key, valu)
 						sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[valu])
 					end
 
@@ -221,8 +221,8 @@ function ImproveAny:UpdateRaidFrameSize()
 		local frame = _G["CompactRaidFrame" .. i]
 		if frame then
 			local options = DefaultCompactMiniFrameSetUpOptions
-			if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:GV("RAIDFRAMEW", options.width) and ImproveAny:GV("RAIDFRAMEH", options.height) then
-				frame:SetSize(ImproveAny:GV("RAIDFRAMEW", options.width), ImproveAny:GV("RAIDFRAMEH", options.height))
+			if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:IAGV("RAIDFRAMEW", options.width) and ImproveAny:IAGV("RAIDFRAMEH", options.height) then
+				frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width), ImproveAny:IAGV("RAIDFRAMEH", options.height))
 			end
 
 			if true then
@@ -235,7 +235,7 @@ function ImproveAny:UpdateRaidFrameSize()
 						if buffName then
 							local buffFrame = _G[frame:GetName() .. "Buff" .. i]
 							if buffFrame then
-								buffFrame:SetScale(ImproveAny:GV("BUFFSCALE", 0.8))
+								buffFrame:SetScale(ImproveAny:IAGV("BUFFSCALE", 0.8))
 							end
 
 							frameNum = frameNum + 1
@@ -260,7 +260,7 @@ function ImproveAny:UpdateRaidFrameSize()
 						if debuffName then
 							local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
 							if debuffFrame then
-								debuffFrame:SetScale(ImproveAny:GV("DEBUFFSCALE", 1))
+								debuffFrame:SetScale(ImproveAny:IAGV("DEBUFFSCALE", 1))
 							end
 
 							frameNum = frameNum + 1
@@ -291,13 +291,13 @@ hooksecurefunc(
 		if iasetattribute then return end
 		iasetattribute = true
 		if key == "TOP_OFFSET" then
-			local topOffset = ImproveAny:GV("TOP_OFFSET", 116)
+			local topOffset = ImproveAny:IAGV("TOP_OFFSET", 116)
 			self:SetAttribute("TOP_OFFSET", -topOffset)
 		elseif key == "LEFT_OFFSET" then
-			local leftOffset = ImproveAny:GV("LEFT_OFFSET", 16)
+			local leftOffset = ImproveAny:IAGV("LEFT_OFFSET", 16)
 			self:SetAttribute("LEFT_OFFSET", leftOffset)
 		elseif key == "PANEl_SPACING_X" then
-			local panelSpacingX = ImproveAny:GV("PANEl_SPACING_X", 32)
+			local panelSpacingX = ImproveAny:IAGV("PANEl_SPACING_X", 32)
 			self:SetAttribute("PANEl_SPACING_X", panelSpacingX)
 		end
 
@@ -307,9 +307,9 @@ hooksecurefunc(
 
 function ImproveAny:UpdateUIParentAttribute()
 	if not InCombatLockdown() then
-		local topOffset = ImproveAny:GV("TOP_OFFSET", 116)
-		local leftOffset = ImproveAny:GV("LEFT_OFFSET", 16)
-		local panelSpacingX = ImproveAny:GV("PANEl_SPACING_X", 32)
+		local topOffset = ImproveAny:IAGV("TOP_OFFSET", 116)
+		local leftOffset = ImproveAny:IAGV("LEFT_OFFSET", 16)
+		local panelSpacingX = ImproveAny:IAGV("PANEl_SPACING_X", 32)
 		UIParent:SetAttribute("TOP_OFFSET", -topOffset)
 		UIParent:SetAttribute("LEFT_OFFSET", leftOffset)
 		UIParent:SetAttribute("PANEl_SPACING_X", panelSpacingX)
@@ -317,7 +317,7 @@ function ImproveAny:UpdateUIParentAttribute()
 end
 
 function ImproveAny:UpdateStatusBar()
-	local w = ImproveAny:GV("STATUSBARWIDTH", 570)
+	local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
 	if StatusTrackingBarManager then
 		StatusTrackingBarManager:SetWidth(w)
 		if StatusTrackingBarManager.TopBarFrameTexture then
@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.92")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.92"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.93")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.93"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -483,10 +483,10 @@ function ImproveAny:InitIASettings()
 					1,
 					function()
 						if eb.lastchange < GetTime() - 0.9 then
-							ImproveAny:SV("BLOCKWORDS", eb:GetText())
+							ImproveAny:IASV("BLOCKWORDS", eb:GetText())
 							if eb:GetText() ~= "" then
 								print("|cFF00FF00" .. "[ImproveAny] " .. "BLOCKWORDS changed to: |r")
-								for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+								for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
 									if strlen(v) < 3 then
 										print(" • |cFFFF0000" .. v .. " [TO SHORT!]")
 									else
@@ -681,8 +681,8 @@ function ImproveAny:InitIASettings()
 end
 
 function ImproveAny:CheckBlockedWords()
-	if IATAB and ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
-		for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+	if IATAB and ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
+		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
 			if strlen(v) < 3 then
 				print("|cFFFF0000" .. "[ImproveAny] " .. "Blockword \"" .. v .. "\" is to short!")
 			end
@@ -693,8 +693,8 @@ end
 C_Timer.After(2, ImproveAny.CheckBlockedWords)
 function ImproveAny:RemoveBadWords(self, msg, author, ...)
 	msg = strlower(msg)
-	if ImproveAny:GV("BLOCKWORDS") and ImproveAny:GV("BLOCKWORDS") ~= "" and ImproveAny:GV("BLOCKWORDS") ~= " " then
-		for i, v in pairs({string.split(",", ImproveAny:GV("BLOCKWORDS"))}) do
+	if ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
+		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
 			if v ~= "" and msg:find(strlower(v)) then return true end
 		end
 	end

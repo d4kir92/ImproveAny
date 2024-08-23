@@ -30,8 +30,8 @@ function ImproveAny:InitRaidFrames()
 						if sel.iasetsize then return end
 						sel.iasetsize = true
 						local options = DefaultCompactMiniFrameSetUpOptions
-						if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:GV("RAIDFRAMEW", options.width) and ImproveAny:GV("RAIDFRAMEH", options.height) then
-							frame:SetSize(ImproveAny:GV("RAIDFRAMEW", options.width), ImproveAny:GV("RAIDFRAMEH", options.height))
+						if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:IAGV("RAIDFRAMEW", options.width) and ImproveAny:IAGV("RAIDFRAMEH", options.height) then
+							frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width), ImproveAny:IAGV("RAIDFRAMEH", options.height))
 						end
 
 						sel.iasetsize = false
@@ -410,14 +410,14 @@ function ImproveAny:InitRaidFrames()
 		local old1 = ""
 		local old2 = ""
 		function ImproveAny:ShowMsgForBuffs()
-			if old1 ~= ImproveAny:GV("RFHIDEBUFFIDSINCOMBAT", "") then
-				old1 = ImproveAny:GV("RFHIDEBUFFIDSINCOMBAT", "")
+			if old1 ~= ImproveAny:IAGV("RFHIDEBUFFIDSINCOMBAT", "") then
+				old1 = ImproveAny:IAGV("RFHIDEBUFFIDSINCOMBAT", "")
 				local text = string.gsub(old1, ",", "\n")
 				ImproveAny:MSG("[HIDE-BUFFS] Hide Buffs In Combat changed to: \n" .. text)
 			end
 
-			if old2 ~= ImproveAny:GV("RFHIDEBUFFIDSINNOTCOMBAT", "") then
-				old2 = ImproveAny:GV("RFHIDEBUFFIDSINNOTCOMBAT", "")
+			if old2 ~= ImproveAny:IAGV("RFHIDEBUFFIDSINNOTCOMBAT", "") then
+				old2 = ImproveAny:IAGV("RFHIDEBUFFIDSINNOTCOMBAT", "")
 				local text = string.gsub(old1, ",", "\n")
 				ImproveAny:MSG("[HIDE-BUFFS] Hide Buffs Outside of Combat changed to: " .. text)
 			end
