@@ -116,7 +116,7 @@ function ImproveAny:UpdateMinimapSettings()
 					MiniMapWorldMapButton:SetPushedTexture("Interface\\AddOns\\ImproveAny\\media\\UI-Minimap-WorldMapSquare")
 				end
 			else
-				if GetMinimapShape() == "ROUND" then
+				if minimapshape == "ROUND" then
 					if MinimapBorder then
 						MinimapBorder:SetParent(Minimap)
 					end
@@ -142,10 +142,6 @@ local IAMMBtns = {}
 local IAMMBtnsConverted = {}
 local MMBtnSize = 31
 function ImproveAny:InitMinimap()
-	function GetMinimapShape()
-		return minimapshape
-	end
-
 	function ImproveAny:SHAPE(msg)
 		msg = msg:upper()
 		if minimapshape ~= msg then
@@ -325,7 +321,7 @@ function ImproveAny:InitMinimap()
 							end
 
 							if btn.moving then
-								if GetMinimapShape() == "ROUND" then
+								if minimapshape == "ROUND" then
 									local Xpoa, Ypoa = GetCursorPosition()
 									local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
 									Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius

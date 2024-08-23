@@ -84,10 +84,15 @@ function ImproveAny:InitMoneyBar()
 		end
 
 		IAMoneyBar:MoneyThink()
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" and (GOLD_AMOUNT_SYMBOL == nil or GOLD_AMOUNT_SYMBOL == "G") then
-			GOLD_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:2:0|t"
-			SILVER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:2:0|t"
-			COPPER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:2:0|t"
-		end
+		C_Timer.After(
+			4,
+			function()
+				if ImproveAny:GetWoWBuild() ~= "RETAIL" and (GOLD_AMOUNT_SYMBOL == nil or GOLD_AMOUNT_SYMBOL == "G") then
+					GOLD_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:2:0|t"
+					SILVER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:2:0|t"
+					COPPER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:2:0|t"
+				end
+			end
+		)
 	end
 end
