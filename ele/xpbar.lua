@@ -228,10 +228,12 @@ function ImproveAny:InitXPBar()
 						function(sel, event, ...)
 							if event == "QUEST_ACCEPTED" then
 								local _, questID = ...
-								local xp = GetRewardXP()
-								if xp > 0 then
-									IATAB["QUESTS"] = IATAB["QUESTS"] or {}
-									IATAB["QUESTS"][questID] = xp
+								if questID then
+									local xp = GetRewardXP()
+									if xp > 0 then
+										IATAB["QUESTS"] = IATAB["QUESTS"] or {}
+										IATAB["QUESTS"][questID] = xp
+									end
 								end
 							end
 
