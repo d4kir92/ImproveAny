@@ -76,26 +76,28 @@ function ImproveAny:UpdateMinimapSettings()
 		end
 	end
 
-	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", false) then
-		function ImproveAny:OnMouseWheel(dir)
-			if dir > 0 then
-				if MinimapZoomIn then
-					MinimapZoomIn:Click()
+	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+		if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSCROLLZOOM", false) then
+			function ImproveAny:OnMouseWheel(dir)
+				if dir > 0 then
+					if MinimapZoomIn then
+						MinimapZoomIn:Click()
+					else
+						Minimap.ZoomIn:Click()
+					end
 				else
-					Minimap.ZoomIn:Click()
-				end
-			else
-				if MinimapZoomOut then
-					MinimapZoomOut:Click()
-				else
-					Minimap.ZoomOut:Click()
+					if MinimapZoomOut then
+						MinimapZoomOut:Click()
+					else
+						Minimap.ZoomOut:Click()
+					end
 				end
 			end
-		end
 
-		Minimap:SetScript("OnMouseWheel", ImproveAny.OnMouseWheel)
-	else
-		Minimap:SetScript("OnMouseWheel", function() end) --
+			Minimap:SetScript("OnMouseWheel", ImproveAny.OnMouseWheel)
+		else
+			Minimap:SetScript("OnMouseWheel", function() end) --
+		end
 	end
 
 	C_Timer.After(

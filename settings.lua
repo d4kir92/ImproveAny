@@ -420,8 +420,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.95")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.95"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.96")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.96"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -450,8 +450,6 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "AUTOACCEPTQUESTS", false)
 		AddCheckBox(4, "AUTOCHECKINQUESTS", false)
 		AddCheckBox(4, "FASTLOOTING", false)
-		AddCheckBox(4, "COORDSP", false)
-		AddCheckBox(4, "COORDSC", false)
 		AddCheckBox(4, "IMPROVEBAGS", true)
 		if CharacterFrameExpandButton then
 			AddCheckBox(4, "CHARACTERFRAMEAUTOEXPAND", true)
@@ -506,7 +504,10 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPHIDEZOOMBUTTONS", false, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+			AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
+		end
+
 		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(4, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
@@ -567,6 +568,9 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
 		AddCheckBox(4, "WORLDMAP", false)
+		AddCheckBox(24, "WORLDMAPZOOM", false)
+		AddCheckBox(24, "WORLDMAPCOORDSP", false)
+		AddCheckBox(24, "WORLDMAPCOORDSC", false)
 		AddCheckBox(4, "TOOLTIPSELLPRICE", false)
 		AddCheckBox(4, "TOOLTIPEXPANSION", false)
 		AddCheckBox(4, "LFGSHOWLANGUAGEFLAG", false)

@@ -68,7 +68,7 @@ function ImproveAny:InitWorldMapFrame()
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 
-		if WorldMapFrame.ScrollContainer then
+		if WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("WORLDMAPZOOM", false) then
 			WorldMapFrame.ScrollContainer:HookScript(
 				"OnMouseWheel",
 				function(sel, delta)
@@ -88,19 +88,7 @@ function ImproveAny:InitWorldMapFrame()
 		end
 	end
 
-	function ImproveAny:GetNormalizedPosition(frame, x, y)
-		local frameLeft = frame:GetLeft()
-		local frameTop = frame:GetTop()
-		local frameWidth = frame:GetWidth()
-		local frameHeight = frame:GetHeight()
-		local scale = frame:GetEffectiveScale()
-		local normalizedX = (x / scale - frameLeft) / frameWidth
-		local normalizedY = (frameTop - y / scale) / frameHeight
-
-		return normalizedX, normalizedY
-	end
-
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSP", false) then
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("WORLDMAPCOORDSP", false) then
 		local plyCoords = CreateFrame("FRAME", "plyCoords", WorldMapFrame.ScrollContainer)
 		plyCoords:SetSize(200, 60)
 		plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
@@ -171,7 +159,19 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords:IAUpdate()
 	end
 
-	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("COORDSC", false) then
+	if WorldMapFrame and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("WORLDMAPCOORDSC", false) then
+		function ImproveAny:GetNormalizedPosition(frame, x, y)
+			local frameLeft = frame:GetLeft()
+			local frameTop = frame:GetTop()
+			local frameWidth = frame:GetWidth()
+			local frameHeight = frame:GetHeight()
+			local scale = frame:GetEffectiveScale()
+			local normalizedX = (x / scale - frameLeft) / frameWidth
+			local normalizedY = (frameTop - y / scale) / frameHeight
+
+			return normalizedX, normalizedY
+		end
+
 		local curCoords = CreateFrame("FRAME", "curCoords", WorldMapFrame.ScrollContainer)
 		curCoords:SetSize(200, 60)
 		curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", 0, 0)
