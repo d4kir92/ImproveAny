@@ -44,7 +44,7 @@ function ImproveAny:GetTokenList()
 				text = text .. " "
 			end
 
-			text = text .. token.count .. "|T" .. token.icon .. ":0:0:0:0:64:64:2:38:2:38|t"
+			text = text .. token.count .. "|T" .. token.icon .. ":0:0:0:0:64:64|t"
 		end
 
 		IATokenBar.text:SetText(text)
