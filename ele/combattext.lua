@@ -65,17 +65,17 @@ function ImproveAny:InitCombatText()
 						if subevent == "SPELL_PERIODIC_HEAL" then
 							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
-								cle.tabhot[tonumber(amount)] = select(3, GetSpellInfo(spellId))
+								cle.tabhot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
 						elseif subevent == "SPELL_PERIODIC_DAMAGE" then
 							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
-								cle.tabdot[tonumber(amount)] = select(3, GetSpellInfo(spellId))
+								cle.tabdot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
 						elseif subevent == "SPELL_HEAL" then
 							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
-								cle.tabhot[tonumber(amount)] = select(3, GetSpellInfo(spellId))
+								cle.tabhot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
 						end
 					end
@@ -100,7 +100,7 @@ function ImproveAny:InitCombatText()
 						local done = false
 						if not hasT and s1 and s2 then
 							local msg = strsub(text, s1 + 1, s2 - 1)
-							local _, _, spellIcon = GetSpellInfo(msg)
+							local _, _, spellIcon = ImproveAny:GetSpellInfo(msg)
 							local talentIcon = IATabTalents[msg]
 							local icon = spellIcon or talentIcon or IATabBuffs[msg]
 							if icon == nil then
