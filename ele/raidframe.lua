@@ -170,7 +170,7 @@ function ImproveAny:InitRaidFrames()
 		end
 
 		function ImproveAny:CompactUnitFrame_UtilSetBuff(buffFrame, unit, index, filter)
-			local _, icon, count, _, duration, expirationTime, _, _, _, _, _ = UnitBuff(unit, index, filter)
+			local _, icon, count, _, duration, expirationTime, _, _, _, _, _ = ImproveAny:UnitAura(unit, index, filter)
 			buffFrame.icon:SetTexture(icon)
 			if count > 1 then
 				local countText = count
@@ -195,9 +195,9 @@ function ImproveAny:InitRaidFrames()
 			--isBossBuff looks in HELPFULL auras otherwise it looks in HARMFULL ones
 			local _, icon, count, debuffType, duration, expirationTime, _, _, _, _
 			if isBossBuff then
-				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = UnitBuff(unit, index, filter)
+				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = ImproveAny:UnitAura(unit, index, filter)
 			else
-				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = UnitDebuff(unit, index, filter)
+				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = ImproveAny:UnitAura(unit, index, filter)
 			end
 
 			debuffFrame.filter = filter
@@ -241,7 +241,7 @@ function ImproveAny:InitRaidFrames()
 						local filter = nil
 						while frameNum <= 10 do
 							if frame.displayedUnit then
-								local buffName = UnitBuff(frame.displayedUnit, index, filter)
+								local buffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if buffName then
 									if CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
 										local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
@@ -284,7 +284,7 @@ function ImproveAny:InitRaidFrames()
 						local filter = nil
 						while frameNum <= 10 do
 							if frame.displayedUnit then
-								local debuffName = UnitDebuff(frame.displayedUnit, index, filter)
+								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) then
 										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
@@ -313,7 +313,7 @@ function ImproveAny:InitRaidFrames()
 						index = 1
 						while frameNum <= 10 do
 							if frame.displayedUnit then
-								local debuffName = UnitBuff(frame.displayedUnit, index, filter)
+								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
 										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
@@ -342,7 +342,7 @@ function ImproveAny:InitRaidFrames()
 						index = 1
 						while frameNum <= 10 do
 							if frame.displayedUnit then
-								local debuffName = UnitDebuff(frame.displayedUnit, index, filter)
+								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter) then
 										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
@@ -373,7 +373,7 @@ function ImproveAny:InitRaidFrames()
 						if frame.optionTable.displayNonBossDebuffs then
 							while frameNum <= 10 do
 								if frame.displayedUnit then
-									local debuffName = UnitDebuff(frame.displayedUnit, index, filter)
+									local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 									if debuffName then
 										if CompactUnitFrame_UtilShouldDisplayDebuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) and not CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter) then
 											local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]

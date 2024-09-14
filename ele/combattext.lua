@@ -105,7 +105,7 @@ function ImproveAny:InitCombatText()
 							local icon = spellIcon or talentIcon or IATabBuffs[msg]
 							if icon == nil then
 								for id = 1, 32 do
-									name, ico, rank, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff("PLAYER", id)
+									name, ico, rank, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = ImproveAny:UnitAura("PLAYER", id)
 									if name then
 										if name == msg then
 											IATabBuffs[msg] = ico
