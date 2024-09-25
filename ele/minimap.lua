@@ -441,7 +441,7 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("MiniMapMailFrame", true) -- Mail
 				-- Retail
 				ImproveAny:ConvertToMinimapButton("MiniMapTrackingButton", true) -- Tracking
-				if MiniMapTracking then
+				if MiniMapTracking and MiniMapTrackingButton then
 					hooksecurefunc(
 						MiniMapTrackingButton,
 						"SetPoint",

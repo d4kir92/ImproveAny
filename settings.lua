@@ -150,9 +150,30 @@ end
 
 local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 	if sls[key] == nil then
-		sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "OptionsSliderTemplate")
-		sls[key]:SetWidth(IASettings.SC:GetWidth() - 30 - x)
+		sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "UISliderTemplate")
+		sls[key]:SetSize(IASettings.SC:GetWidth() - 30 - x, 16)
 		sls[key]:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x + 5, posy)
+		if sls[key].Low == nil then
+			sls[key].Low = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
+			sls[key].Low:SetPoint("BOTTOMLEFT", sls[key], "BOTTOMLEFT", 0, -12)
+			sls[key].Low:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
+			sls[key].Low:SetTextColor(1, 1, 1)
+		end
+
+		if sls[key].High == nil then
+			sls[key].High = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
+			sls[key].High:SetPoint("BOTTOMRIGHT", sls[key], "BOTTOMRIGHT", 0, -12)
+			sls[key].High:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
+			sls[key].High:SetTextColor(1, 1, 1)
+		end
+
+		if sls[key].Text == nil then
+			sls[key].Text = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
+			sls[key].Text:SetPoint("TOP", sls[key], "TOP", 0, 16)
+			sls[key].Text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
+			sls[key].Text:SetTextColor(1, 1, 1)
+		end
+
 		if type(vmin) == "number" then
 			sls[key].Low:SetText(vmin)
 			sls[key].High:SetText(vmax)
@@ -420,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.100")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.100"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.101")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.101"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
