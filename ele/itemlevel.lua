@@ -211,7 +211,12 @@ function ImproveAny:InitItemLevel()
 			end
 		)
 
-		-- Inspect
+		function ImproveAny:CheckInspectSlot(slot)
+			if ImproveAny:GetWoWBuild() == "RETAIL" then return slot ~= "AmmoSlot" and slot ~= "ShirtSlot" and slot ~= "TabardSlot" and slot ~= "RangedSlot" end
+
+			return slot ~= "AmmoSlot" and slot ~= "ShirtSlot" and slot ~= "TabardSlot"
+		end
+
 		function ImproveAny:WaitForInspectFrame()
 			if InspectPaperDollFrame then
 				IFThink = CreateFrame("FRAME")
@@ -236,7 +241,7 @@ function ImproveAny:InitItemLevel()
 								local color = ITEM_QUALITY_COLORS[rarity]
 								if ImproveAny:IsEnabled("ITEMLEVEL", false) and ilvl and color then
 									-- ignore: shirt, tabard, ammo
-									if i ~= 4 and i ~= 19 and i ~= 20 and ilvl and ilvl > 1 then
+									if ImproveAny:CheckInspectSlot(slot) and ilvl and ilvl > 1 then
 										count = count + 1
 										sum = sum + ilvl
 									end
@@ -272,7 +277,7 @@ function ImproveAny:InitItemLevel()
 					end
 
 					if count > 0 then
-						local max = 16 -- when only IAnhand
+						local max = 16 -- when only Mainhand
 						local ItemID = GetInventoryItemLink("TARGET", 17)
 						if GetItemInfo and GetInventoryItemID and ItemID ~= nil then
 							local t1 = ImproveAny:GetItemInfo(ItemID)
