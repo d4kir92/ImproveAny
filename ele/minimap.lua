@@ -505,7 +505,7 @@ function ImproveAny:InitMinimap()
 							for x, w in pairs(mmBtnsNames) do
 								if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
 									tinsert(mmbtns, child)
-									ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil)
+									ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
 								end
 							end
 						end
