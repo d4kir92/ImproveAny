@@ -268,7 +268,7 @@ function ImproveAny:Event(event, ...)
 						["icon"] = 136033,
 						["var"] = mmbtn,
 						["dbtab"] = IATAB,
-						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.103"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.104"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 						["funcL"] = function()
 							ImproveAny:ToggleSettings()
 						end,
@@ -1010,19 +1010,30 @@ function ImproveAny:Event(event, ...)
 					DetailsInset:SetSize(302, 339 + tall)
 					DetailsInset:SetPoint("TOPLEFT", _G["ClassTrainerFrame"], "TOPLEFT", 348, -72)
 					DetailsInset:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated")
-					_G["ClassTrainerTrainButton"]:ClearAllPoints()
-					_G["ClassTrainerTrainButton"]:SetPoint("RIGHT", _G["ClassTrainerCancelButton"], "LEFT", -1, 0)
-					_G["ClassTrainerCancelButton"]:SetSize(80, 22)
-					_G["ClassTrainerCancelButton"]:SetText(CLOSE)
-					_G["ClassTrainerCancelButton"]:ClearAllPoints()
-					_G["ClassTrainerCancelButton"]:SetPoint("BOTTOMRIGHT", _G["ClassTrainerFrame"], "BOTTOMRIGHT", -42, 54)
-					_G["ClassTrainerFrameCloseButton"]:ClearAllPoints()
-					_G["ClassTrainerFrameCloseButton"]:SetPoint("TOPRIGHT", _G["ClassTrainerFrame"], "TOPRIGHT", -30, -8)
-					ClassTrainerFrameFilterDropDown:ClearAllPoints()
-					ClassTrainerFrameFilterDropDown:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 501, -40)
-					ClassTrainerMoneyFrame:ClearAllPoints()
-					ClassTrainerMoneyFrame:SetPoint("TOPLEFT", _G["ClassTrainerFrame"], "TOPLEFT", 143, -49)
-					ClassTrainerGreetingText:Hide()
+					if _G["ClassTrainerTrainButton"] and _G["ClassTrainerCancelButton"] and _G["ClassTrainerFrameCloseButton"] then
+						_G["ClassTrainerTrainButton"]:ClearAllPoints()
+						_G["ClassTrainerTrainButton"]:SetPoint("RIGHT", _G["ClassTrainerCancelButton"], "LEFT", -1, 0)
+						_G["ClassTrainerCancelButton"]:SetSize(80, 22)
+						_G["ClassTrainerCancelButton"]:SetText(CLOSE)
+						_G["ClassTrainerCancelButton"]:ClearAllPoints()
+						_G["ClassTrainerCancelButton"]:SetPoint("BOTTOMRIGHT", _G["ClassTrainerFrame"], "BOTTOMRIGHT", -42, 54)
+						_G["ClassTrainerFrameCloseButton"]:ClearAllPoints()
+						_G["ClassTrainerFrameCloseButton"]:SetPoint("TOPRIGHT", _G["ClassTrainerFrame"], "TOPRIGHT", -30, -8)
+					end
+
+					if ClassTrainerFrameFilterDropDown then
+						ClassTrainerFrameFilterDropDown:ClearAllPoints()
+						ClassTrainerFrameFilterDropDown:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 501, -40)
+					end
+
+					if ClassTrainerMoneyFrame then
+						ClassTrainerMoneyFrame:ClearAllPoints()
+						ClassTrainerMoneyFrame:SetPoint("TOPLEFT", _G["ClassTrainerFrame"], "TOPLEFT", 143, -49)
+					end
+
+					if ClassTrainerGreetingText then
+						ClassTrainerGreetingText:Hide()
+					end
 				end
 
 				if ImproveAny:IsAddOnLoaded("Blizzard_TrainerUI") then
