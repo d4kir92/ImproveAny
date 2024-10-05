@@ -268,7 +268,7 @@ function ImproveAny:Event(event, ...)
 						["icon"] = 136033,
 						["var"] = mmbtn,
 						["dbtab"] = IATAB,
-						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.104"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+						["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.105"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 						["funcL"] = function()
 							ImproveAny:ToggleSettings()
 						end,
@@ -719,10 +719,22 @@ function ImproveAny:Event(event, ...)
 					_G["TradeSkillCancelButton"]:SetPoint("BOTTOMRIGHT", _G["TradeSkillFrame"], "BOTTOMRIGHT", -42, 54)
 					_G["TradeSkillFrameCloseButton"]:ClearAllPoints()
 					_G["TradeSkillFrameCloseButton"]:SetPoint("TOPRIGHT", _G["TradeSkillFrame"], "TOPRIGHT", -30, -8)
-					TradeSkillInvSlotDropDown:ClearAllPoints()
-					TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
-					TradeSkillSubClassDropDown:ClearAllPoints()
-					TradeSkillSubClassDropDown:SetPoint("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 0, 0)
+					if TradeSkillInvSlotDropDown then
+						TradeSkillInvSlotDropDown:ClearAllPoints()
+						TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+					elseif TradeSkillInvSlotDropdown then
+						TradeSkillInvSlotDropdown:ClearAllPoints()
+						TradeSkillInvSlotDropdown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+					end
+
+					if TradeSkillSubClassDropDown then
+						TradeSkillSubClassDropDown:ClearAllPoints()
+						TradeSkillSubClassDropDown:SetPoint("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 0, 0)
+					elseif TradeSkillSubClassDropdown then
+						TradeSkillSubClassDropdown:ClearAllPoints()
+						TradeSkillSubClassDropdown:SetPoint("RIGHT", TradeSkillInvSlotDropdown, "LEFT", 0, -0)
+					end
+
 					if ImproveAny:IsAddOnLoaded("ClassicProfessionFilter") and TradeSkillFrame.SearchBox and TradeSkillFrame.HaveMats and TradeSkillFrame.HaveMats.text and ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:GetWoWBuild() ~= "CATA" then
 						TradeSkillFrame.SearchBox:ClearAllPoints()
 						TradeSkillFrame.SearchBox:SetPoint("LEFT", TradeSkillRankFrame, "RIGHT", 20, -10)
@@ -1024,13 +1036,13 @@ function ImproveAny:Event(event, ...)
 					if ClassTrainerFrameFilterDropDown then
 						ClassTrainerFrameFilterDropDown:ClearAllPoints()
 						ClassTrainerFrameFilterDropDown:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 501, -40)
+					elseif ClassTrainerFrame.FilterDropdown then
+						ClassTrainerFrame.FilterDropdown:ClearAllPoints()
+						ClassTrainerFrame.FilterDropdown:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 501, -40)
 					end
 
-					if ClassTrainerMoneyFrame then
-						ClassTrainerMoneyFrame:ClearAllPoints()
-						ClassTrainerMoneyFrame:SetPoint("TOPLEFT", _G["ClassTrainerFrame"], "TOPLEFT", 143, -49)
-					end
-
+					ClassTrainerMoneyFrame:ClearAllPoints()
+					ClassTrainerMoneyFrame:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 143, -49)
 					if ClassTrainerGreetingText then
 						ClassTrainerGreetingText:Hide()
 					end
