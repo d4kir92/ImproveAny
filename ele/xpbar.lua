@@ -157,7 +157,7 @@ function ImproveAny:UpdateQuestFrame()
 					if lvltext and qnt then
 						questNormalText:SetText(format("[%s]%s", lvltext, qnt))
 					else
-						print("[ImproveAny:UpdateQuestFrame] FAILED", lvltext, qnt)
+						ImproveAny:MSG("[UpdateQuestFrame] FAILED", lvltext, qnt)
 					end
 				end
 

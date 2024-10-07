@@ -1,14 +1,4 @@
 local _, ImproveAny = ...
-local COL_R = "|cFFFF0000"
-local COL_Y = "|cFFFFFF00"
-function ImproveAny:MSG(msg)
-	print("|cff3FC7EB" .. "[ImproveAny |T136033:16:16:0:0|t]|r " .. COL_Y .. msg)
-end
-
-function ImproveAny:MSG_Error(msg)
-	print("|cff3FC7EB" .. "[ImproveAny |T136033:16:16:0:0|t]|r " .. COL_R .. "[ERROR] |r" .. msg)
-end
-
 function ImproveAny:GetCP()
 	IATAB = IATAB or {}
 	IATAB["CURRENTPROFILE"] = IATAB["CURRENTPROFILE"] or "DEFAULT"
@@ -56,13 +46,13 @@ end
 
 function ImproveAny:IsEnabled(element, value)
 	if element == nil then
-		ImproveAny:MSG_Error("[IsEnabled] Missing Name")
+		ImproveAny:MSG("[IsEnabled] Missing Name")
 
 		return false
 	end
 
 	if value == nil then
-		ImproveAny:MSG_Error("[IsEnabled] Missing Value")
+		ImproveAny:MSG("[IsEnabled] Missing Value")
 
 		return false
 	end

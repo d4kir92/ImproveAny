@@ -27,7 +27,7 @@ if IMPORTREALMS[portal] then
 			if REALMS[portal][realmName] == nil then
 				REALMS[portal][realmName] = lang
 			else
-				print(">>> [ImproveAny |T136033:16:16:0:0|t] EXISTS ALREADY", realmName)
+				ImproveAny:MSG(">>> EXISTS ALREADY", realmName)
 			end
 		end
 	end

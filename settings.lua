@@ -441,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.105")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.105"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.106")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.106"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -504,16 +504,16 @@ function ImproveAny:InitIASettings()
 						if eb.lastchange < GetTime() - 0.9 then
 							ImproveAny:IASV("BLOCKWORDS", eb:GetText())
 							if eb:GetText() ~= "" then
-								print("|cFF00FF00" .. "[ImproveAny] " .. "BLOCKWORDS changed to: |r")
+								ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
 								for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
 									if strlen(v) < 3 then
-										print(" • |cFFFF0000" .. v .. " [TO SHORT!]")
+										ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
 									else
-										print(" • |cFF00FF00" .. v)
+										ImproveAny:MSG(" • |cFF00FF00" .. v)
 									end
 								end
 							else
-								print("|cFFFF0000" .. "[ImproveAny] " .. "BLOCKWORDS are disabled")
+								ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
 							end
 						end
 					end
@@ -530,8 +530,12 @@ function ImproveAny:InitIASettings()
 		end
 
 		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(4, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(4, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(24, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
+		AddCheckBox(24, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
+		if ImproveAny:GetWoWBuild() == "RETAIL" then
+			AddCheckBox(24, "SHOWVAULTMMBTN", true, ImproveAny.UpdateMinimapSettings)
+		end
+
 		AddCategory("ITEMLEVEL")
 		AddCheckBox(4, "ITEMLEVELSYSTEM")
 		AddCheckBox(24, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
@@ -709,7 +713,7 @@ function ImproveAny:CheckBlockedWords()
 	if IATAB and ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
 		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
 			if strlen(v) < 3 then
-				print("|cFFFF0000" .. "[ImproveAny] " .. "Blockword \"" .. v .. "\" is to short!")
+				ImproveAny:MSG("|cFFFF0000" .. "Blockword \"" .. v .. "\" is to short!")
 			end
 		end
 	end

@@ -1,6 +1,13 @@
 local _, ImproveAny = ...
+local deg, atan2 = math.deg, math.atan2
 local mmdelay = 0.4
 local minimapshape = "ROUND"
+if GetMinimapShape == nil then
+	function GetMinimapShape()
+		return minimapshape
+	end
+end
+
 function ImproveAny:UpdateMinimapSettings()
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
 		ImproveAny:SHAPE("SQUARE")
@@ -143,6 +150,89 @@ end
 local IAMMBtns = {}
 local IAMMBtnsConverted = {}
 local MMBtnSize = 31
+local function GetVaultData()
+	local vaultData = C_WeeklyRewards.GetActivities()
+	if not vaultData then return {}, {}, {} end
+	local res = {}
+	res["raid"] = {}
+	res["mplus"] = {}
+	res["world"] = {}
+	for x, data in pairs(vaultData) do
+		if data.type == 1 then
+			table.insert(res["mplus"], data)
+		elseif data.type == 3 then
+			table.insert(res["raid"], data)
+		elseif data.type == 6 then
+			table.insert(res["world"], data)
+		else
+			ImproveAny:MSG("[GetVaultData] Missing Type")
+		end
+	end
+
+	return res
+end
+
+local function GetVaultStatus(vaultData, name)
+	local res = ""
+	for i, data in pairs(vaultData[name]) do
+		local color = "|cFFFFFFFF"
+		if data.progress == 0 then
+			color = "|cFFFF0000"
+		elseif data.progress >= data.threshold then
+			color = "|cFF00FF00"
+		else
+			color = "|cFFFFFF00"
+		end
+
+		local status = color .. data.progress .. "|cFFFFFFFF/" .. color .. data.threshold
+		if data.progress > data.threshold then
+			status = color .. data.threshold .. "|cFFFFFFFF/" .. color .. data.threshold
+		end
+
+		if res ~= "" then
+			res = res .. "     "
+		end
+
+		res = res .. status
+	end
+
+	res = res .. "  "
+
+	return res
+end
+
+local function GetVaultStatusIlvl(vaultData, name)
+	local res = ""
+	for i, data in pairs(vaultData[name]) do
+		local ilvl = nil
+		local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(data.id)
+		if itemLink then
+			ilvl = GetDetailedItemLevelInfo(itemLink)
+		end
+
+		local color = "|cFFFFFFFF"
+		if data.progress == 0 then
+			color = "|cFFFF0000"
+		elseif data.progress >= data.threshold then
+			color = "|cFF00FF00"
+		else
+			color = "|cFFFFFF00"
+		end
+
+		if res ~= "" then
+			res = res .. " "
+		end
+
+		if ilvl then
+			res = res .. " |cFFFFFFFF(" .. color .. ilvl .. "|cFFFFFFFF" .. ")"
+		else
+			res = res .. "         "
+		end
+	end
+
+	return res
+end
+
 function ImproveAny:InitMinimap()
 	function ImproveAny:SHAPE(msg)
 		msg = msg:upper()
@@ -164,7 +254,7 @@ function ImproveAny:InitMinimap()
 		C_Timer.After(
 			0.3,
 			function()
-				local mmBtnsNames = {"Lib_GPI_Minimap_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
+				local mmBtnsNames = {"Lib_GPI_Minimap_", "D4Lib_MMBTN_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
 				local IAMMBtnsBliz = {}
 				local IAMMBtnsFrame = CreateFrame("Frame", "IAMMBtnsFrame", UIParent)
 				IAMMBtnsFrame:SetSize(100, 100)
@@ -201,18 +291,90 @@ function ImproveAny:InitMinimap()
 				IAMMBtnsFrame.hide = true
 				if ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
 					local mmbtn = nil
+					IATAB["MMBtns"] = IATAB["MMBtns"] or {}
 					ImproveAny:CreateMinimapButton(
 						{
 							["name"] = "ImproveAnyMMBtns",
 							["icon"] = 1120721,
 							["var"] = mmbtn,
 							["dbtab"] = IATAB["MMBtns"],
-							["vTT"] = {{"Minimap Buttons", "ImproveAny"}, {"Leftclick", "Toggle Visibility"}},
+							["vTT"] = {{"Minimap Buttons", "ImproveAny |T136033:16:16:0:0|t"}, {"Leftclick", "Toggle Visibility"}},
 							["funcL"] = function()
 								IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
 								ImproveAny:UpdateIAMMBtns()
 							end,
 							["addoncomp"] = false
+						}
+					)
+				end
+
+				if ImproveAny:GetWoWBuild() == "RETAIL" and ImproveAny:IsEnabled("SHOWVAULTMMBTN", true) then
+					local mmbtn = nil
+					IATAB["MMBtnGreatVault"] = IATAB["MMBtnGreatVault"] or {}
+					ImproveAny:CreateMinimapButton(
+						{
+							["name"] = "ImproveAnyGreatVault",
+							["atlas"] = "gficon-chest-evergreen-greatvault-complete",
+							["var"] = mmbtn,
+							["dbtab"] = IATAB["MMBtnGreatVault"],
+							["vTT"] = {{"Great Vault", "ImproveAny |T136033:16:16:0:0|t"}, {"Leftclick", "Toggle Great Vault"}},
+							["vTTUpdate"] = function(sel, tt)
+								if C_WeeklyRewards.HasAvailableRewards() or C_WeeklyRewards.HasGeneratedRewards() then
+									tt:AddDoubleLine(" ", " ")
+									tt:AddDoubleLine("GREAT VAULT HAS REWARD", "")
+								end
+
+								tt:AddDoubleLine(" ", " ")
+								local vaultData = GetVaultData()
+								local raid = GetVaultStatus(vaultData, "raid")
+								tt:AddDoubleLine("Raid", raid)
+								local raidIlvl = GetVaultStatusIlvl(vaultData, "raid")
+								if strtrim(raidIlvl) ~= "" then
+									tt:AddDoubleLine(" ", raidIlvl)
+								end
+
+								tt:AddDoubleLine(" ", " ")
+								local mplus = GetVaultStatus(vaultData, "mplus")
+								tt:AddDoubleLine("M+", mplus)
+								local mplusIlvl = GetVaultStatusIlvl(vaultData, "mplus")
+								if strtrim(mplusIlvl) ~= "" then
+									tt:AddDoubleLine(" ", mplusIlvl)
+								end
+
+								tt:AddDoubleLine(" ", " ")
+								local world = GetVaultStatus(vaultData, "world")
+								tt:AddDoubleLine("World", world)
+								local worldIlvl = GetVaultStatusIlvl(vaultData, "world")
+								if strtrim(worldIlvl) ~= "" then
+									tt:AddDoubleLine(" ", worldIlvl)
+								end
+
+								for i = 1, 99 do
+									local tr = _G[tt:GetName() .. "TextRight" .. i]
+									if tr then
+										tr:SetFontObject("ConsoleFontNormal")
+										local f1, _, f3 = tr:GetFont()
+										tr:SetFont(f1, 14, f3)
+									end
+								end
+
+								return false
+							end,
+							["funcL"] = function()
+								if not InCombatLockdown() then
+									if WeeklyRewardsFrame == nil then
+										WeeklyRewards_ShowUI()
+									elseif WeeklyRewardsFrame:IsShown() then
+										WeeklyRewardsFrame:Hide()
+									else
+										WeeklyRewards_ShowUI()
+									end
+								end
+							end,
+							["addoncomp"] = false,
+							["sw"] = 64,
+							["sh"] = 64,
+							["border"] = false,
 						}
 					)
 				end
@@ -229,47 +391,49 @@ function ImproveAny:InitMinimap()
 				end
 
 				function ImproveAny:UpdateIAMMBtns()
-					local br = 7
-					local sr = 1
-					local sum = 0
-					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
-							sum = sum + 1
+					if ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
+						local br = 7
+						local sr = 1
+						local sum = 0
+						for i, v in pairs(IAMMBtns) do
+							if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
+								sum = sum + 1
+							end
 						end
-					end
 
-					table.sort(IAMMBtns, sortFunc)
-					local rows, cols = ImproveAny:GetRowsCols(sum)
-					IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
-					local row, col = 0, 0
-					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
-							if col == cols then
-								col = 0
-								row = row + 1
+						table.sort(IAMMBtns, sortFunc)
+						local rows, cols = ImproveAny:GetRowsCols(sum)
+						IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
+						local row, col = 0, 0
+						for i, v in pairs(IAMMBtns) do
+							if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
+								if col == cols then
+									col = 0
+									row = row + 1
+								end
+
+								v:SetParent(IAMMBtnsFrame)
+								v:ClearAllPoints()
+								local cSpace = 0
+								local rSpace = 0
+								if col > 0 then
+									cSpace = col * sr
+								end
+
+								if row > 0 then
+									rSpace = row * sr
+								end
+
+								v:SetPoint("TOPLEFT", IAMMBtnsFrame, "TOPLEFT", col * MMBtnSize + cSpace + br, -row * MMBtnSize - rSpace - br)
+								col = col + 1
 							end
-
-							v:SetParent(IAMMBtnsFrame)
-							v:ClearAllPoints()
-							local cSpace = 0
-							local rSpace = 0
-							if col > 0 then
-								cSpace = col * sr
-							end
-
-							if row > 0 then
-								rSpace = row * sr
-							end
-
-							v:SetPoint("TOPLEFT", IAMMBtnsFrame, "TOPLEFT", col * MMBtnSize + cSpace + br, -row * MMBtnSize - rSpace - br)
-							col = col + 1
 						end
-					end
 
-					if not IAMMBtnsFrame.hide then
-						IAMMBtnsFrame:Show()
-					else
-						IAMMBtnsFrame:Hide()
+						if not IAMMBtnsFrame.hide then
+							IAMMBtnsFrame:Show()
+						else
+							IAMMBtnsFrame:Hide()
+						end
 					end
 				end
 
@@ -283,128 +447,53 @@ function ImproveAny:InitMinimap()
 							btn:Hide()
 						end
 
-						btn:SetParent(Minimap)
-						btn:SetMovable(true)
-						btn:SetUserPlaced(false)
-						local radius = 80
-						if ImproveAny:GetWoWBuild() == "RETAIL" then
-							radius = 110
-						end
-
-						local pos = random(0, 360)
-						local ofsx = -radius * cos(pos)
-						local ofsy = radius * sin(pos)
-						IATAB[name .. "ofsx"] = IATAB[name .. "ofsx"] or ofsx
-						IATAB[name .. "ofsy"] = IATAB[name .. "ofsy"] or ofsy
-						function btn:UpdatePos()
-							if ImproveAny:IsEnabled("COMBINEMMBTNS", false) and not stay then return end
-							if btn.lockupdate then return end
-							btn.lockupdate = true
-							if btn.maiinit == nil then
-								btn.maiinit = true
-								hooksecurefunc(
-									btn,
-									"SetPoint",
-									function(sel)
-										if sel.ia_setpoint_mmbtn then return end
-										sel.ia_setpoint_mmbtn = true
-										sel:SetParent(Minimap)
-										sel:SetMovable(true)
-										sel:SetUserPlaced(false)
-										sel:ClearAllPoints()
-										sel:SetPoint("CENTER", Minimap, "CENTER", IATAB[name .. "ofsx"], IATAB[name .. "ofsy"])
-										sel.ia_setpoint_mmbtn = false
-									end
-								)
-
-								btn:SetParent(Minimap)
-								btn:ClearAllPoints()
-								btn:SetPoint("CENTER", Minimap, "CENTER", IATAB[name .. "ofsx"], IATAB[name .. "ofsy"])
-							end
-
-							if btn.moving then
-								if minimapshape == "ROUND" then
-									local Xpoa, Ypoa = GetCursorPosition()
-									local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
-									Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius
-									Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - radius
-									myIconPos = math.deg(math.atan2(Ypoa, Xpoa))
-									local ofsx1 = -radius * cos(myIconPos)
-									local ofsy1 = radius * sin(myIconPos)
-									IATAB[name .. "ofsx"] = ofsx1
-									IATAB[name .. "ofsy"] = ofsy1
-									btn:ClearAllPoints()
-									btn:SetPoint("CENTER", Minimap, "CENTER", ofsx1, ofsy1)
-								else
-									local Xpoa, Ypoa = GetCursorPosition()
-									local Xmin, Ymin = Minimap:GetLeft(), Minimap:GetBottom()
-									Xpoa = Xmin - Xpoa / Minimap:GetEffectiveScale() + radius
-									Ypoa = Ypoa / Minimap:GetEffectiveScale() - Ymin - radius
-									local dist = radius
-									if Ypoa >= dist or Ypoa <= -dist then
-										Xpoa = ImproveAny:MathC(Xpoa, -dist, dist)
-									else
-										if Xpoa > 0 then
-											Xpoa = dist
-										else
-											Xpoa = -dist
-										end
-									end
-
-									if Xpoa >= dist or Xpoa <= -dist then
-										Ypoa = ImproveAny:MathC(Ypoa, -dist, dist)
-									else
-										if Ypoa > 0 then
-											Ypoa = dist
-										else
-											Ypoa = -dist
-										end
-									end
-
-									local ofsx2 = -Xpoa
-									local ofsy2 = Ypoa
-									IATAB[name .. "ofsx"] = ofsx2
-									IATAB[name .. "ofsy"] = ofsy2
-									btn:ClearAllPoints()
-									btn:SetPoint("CENTER", Minimap, "CENTER", ofsx2, ofsy2)
-								end
-
-								C_Timer.After(
-									0.006,
-									function()
-										ImproveAny:Debug("minimap.lua: UpdatePos #1", "think")
-										btn.lockupdate = false
-										btn:UpdatePos()
-									end
-								)
-							else
-								C_Timer.After(
-									0.1,
-									function()
-										ImproveAny:Debug("minimap.lua: UpdatePos #2", "think")
-										btn.lockupdate = false
-										btn:UpdatePos()
-									end
-								)
-							end
-						end
-
 						if stay or not ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
-							btn:UpdatePos()
+							IATAB[name .. "db"] = IATAB[name .. "db"] or {}
+							btn:SetParent(Minimap)
+							btn:SetMovable(true)
+							btn.db = IATAB[name .. "db"]
+							btn.db.minimapPos = btn.db.minimapPos or 0
+							btn.minimapPos = btn.minimapPos or 0
+							if not InCombatLockdown() then
+								btn:ClearAllPoints()
+								ImproveAny:UpdatePosition(btn, btn.db.minimapPos)
+							end
+
 							btn:RegisterForDrag("LeftButton")
 							btn:SetScript(
 								"OnDragStart",
-								function()
-									btn:StartMoving()
-									btn.moving = true
+								function(sel)
+									sel.isMouseDown = true
+									sel:SetScript(
+										"OnUpdate",
+										function(se)
+											local mx, my = Minimap:GetCenter()
+											local px, py = GetCursorPosition()
+											local scale = Minimap:GetEffectiveScale()
+											px, py = px / scale, py / scale
+											local pos = 0
+											if se.db then
+												pos = deg(atan2(py - my, px - mx)) % 360
+												se.db.minimapPos = pos
+											else
+												pos = deg(atan2(py - my, px - mx)) % 360
+												se.minimapPos = pos
+											end
+
+											if not InCombatLockdown() then
+												se:ClearAllPoints()
+												ImproveAny:UpdatePosition(se, pos)
+											end
+										end
+									)
 								end
 							)
 
 							btn:SetScript(
 								"OnDragStop",
-								function()
-									btn:StopMovingOrSizing()
-									btn.moving = false
+								function(sel)
+									sel:SetScript("OnUpdate", nil)
+									sel.isMouseDown = false
 								end
 							)
 						end
@@ -505,7 +594,7 @@ function ImproveAny:InitMinimap()
 							for x, w in pairs(mmBtnsNames) do
 								if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
 									tinsert(mmbtns, child)
-									ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
+									ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "ImproveAnyGreatVault") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
 								end
 							end
 						end

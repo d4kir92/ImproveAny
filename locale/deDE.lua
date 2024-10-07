@@ -114,6 +114,7 @@ function ImproveAny:Lang_deDE()
 		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
 		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
 		["FRAMEANCHOR"] = "Fenster Anker",
+		["SHOWVAULTMMBTN"] = "Große Schatzkammer an der Minimap anzeigen",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

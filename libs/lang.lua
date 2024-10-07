@@ -14,7 +14,7 @@ function ImproveAny:GT(str)
 
 		return str
 	else
-		print("[ImproveAny |T136033:16:16:0:0|t] MISSING STR", str)
+		ImproveAny:MSG("MISSING STR", str)
 	end
 end
 

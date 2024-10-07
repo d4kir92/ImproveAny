@@ -3,9 +3,8 @@ ImproveAny:SetAddonOutput("ImproveAny", 136033)
 function ImproveAny:Debug(msg, typ)
 	if typ == "think" then return end
 	if typ == "retry" then return end
-	--if msg ~= "minimap.lua: UpdatePos #2" then return end
 	if false then
-		print("|cFFFF0000" .. "[DEBUG][ImproveAny |T136033:16:16:0:0|t] " .. msg)
+		ImproveAny:MSG("|cFFFF0000" .. "[DEBUG] " .. msg)
 	end
 end
 
