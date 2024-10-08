@@ -254,7 +254,7 @@ function ImproveAny:InitMinimap()
 		C_Timer.After(
 			0.3,
 			function()
-				local mmBtnsNames = {"Lib_GPI_Minimap_", "D4Lib_MMBTN_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
+				local mmBtnsNames = {"Lib_GPI_Minimap_", "MinimapButton_D4Lib_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
 				local IAMMBtnsBliz = {}
 				local IAMMBtnsFrame = CreateFrame("Frame", "IAMMBtnsFrame", UIParent)
 				IAMMBtnsFrame:SetSize(100, 100)
