@@ -160,11 +160,11 @@ local function OnEventXPInit(self, event, ...)
 					end
 
 					function PartyFrameXPBar.think()
-						if UnitExists("PARTY" .. i) and UnitLevel("PARTY" .. i) < ImproveAny:GetMaxLevel() then
+						local co = GetQuestDifficultyColor(UnitLevel("PARTY" .. i))
+						PartyFrameXPBar.levelText:SetText(UnitLevel("PARTY" .. i))
+						PartyFrameXPBar.levelText:SetTextColor(co.r, co.g, co.b, 1)
+						if UnitExists("PARTY" .. i) then
 							PartyFrameXPBar:SetAlpha(1)
-							local co = GetQuestDifficultyColor(UnitLevel("PARTY" .. i))
-							PartyFrameXPBar.levelText:SetText(UnitLevel("PARTY" .. i))
-							PartyFrameXPBar.levelText:SetTextColor(co.r, co.g, co.b, 1)
 							local xp = ImproveAny:UnitXP("PARTY" .. i, 0)
 							local xpmax = ImproveAny:UnitXPMax("PARTY" .. i, 1)
 							if (xp > 0 or xpmax > 1) and not ImproveAny:IAGV("nochanges") then
@@ -198,8 +198,6 @@ local function OnEventXPInit(self, event, ...)
 								PartyFrameXPBar.textureBar:SetAlpha(0)
 								PartyFrameXPBar.textureBorder:SetAlpha(0)
 							end
-						else
-							PartyFrameXPBar:SetAlpha(0)
 						end
 
 						_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:SetPoint(_G["PartyMemberFrame" .. i .. "Debuff" .. 1]:GetPoint())
