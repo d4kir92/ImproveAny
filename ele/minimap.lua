@@ -2,12 +2,6 @@ local _, ImproveAny = ...
 local deg, atan2 = math.deg, math.atan2
 local mmdelay = 0.4
 local minimapshape = "ROUND"
-if GetMinimapShape == nil then
-	function GetMinimapShape()
-		return minimapshape
-	end
-end
-
 function ImproveAny:UpdateMinimapSettings()
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
 		ImproveAny:SHAPE("SQUARE")
@@ -234,6 +228,12 @@ local function GetVaultStatusIlvl(vaultData, name)
 end
 
 function ImproveAny:InitMinimap()
+	if GetMinimapShape == nil then
+		function GetMinimapShape()
+			return minimapshape
+		end
+	end
+
 	function ImproveAny:SHAPE(msg)
 		msg = msg:upper()
 		if minimapshape ~= msg then
