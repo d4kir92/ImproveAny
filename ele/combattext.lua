@@ -1,16 +1,7 @@
 local _, ImproveAny = ...
 local IATabTalents = {}
-local setup = true
 function ImproveAny:UpdateCombatTextPos()
 	if ImproveAny.Setup and ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) and COMBAT_TEXT_LOCATIONS then
-		if setup then
-			setup = false
-			osx = COMBAT_TEXT_LOCATIONS.startX
-			osy = COMBAT_TEXT_LOCATIONS.startY
-			oex = COMBAT_TEXT_LOCATIONS.endX
-			oey = COMBAT_TEXT_LOCATIONS.endY
-		end
-
 		local x = ImproveAny:IAGV("COMBATTEXTX", 0)
 		local y = ImproveAny:IAGV("COMBATTEXTY", 0)
 		if x ~= 0 or y ~= 0 then

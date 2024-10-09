@@ -175,6 +175,7 @@ function ImproveAny:UpdateQuestFrame()
 			if questTag then
 				QuestLogDummyText:SetText("  " .. questLogTitleText)
 				local tempWidth = 274
+				local textWidth = 0
 				if questTitleTag then
 					tempWidth = 274 - questTitleTag:GetWidth()
 				end
@@ -185,7 +186,7 @@ function ImproveAny:UpdateQuestFrame()
 					textWidth = QuestLogDummyText:GetWidth()
 				end
 
-				questNormalText:SetWidth(tempWidth)
+				questNormalText:SetWidth(textWidth)
 			else
 				if questNormalText:GetWidth() > 274 then
 					questNormalText:SetWidth(260)
