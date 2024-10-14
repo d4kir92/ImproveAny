@@ -3160,6 +3160,11 @@ local missingRealmLangs = {}
 function D4:GetRealmFlag(realmName)
     if not (GetLocale() == "enUS" or GetLocale() == "deDE" or GetLocale() == "koKR" or GetLocale() == "zhTW") then return "" end
     local realmLang = D4:GetRealmLang(realmName)
+    if realmLang == nil then return "" end
+    if realmLangs[realmLang] == nil then
+        realmLang = string.trim(realmLang)
+    end
+
     if realmLangs[realmLang] == nil then
         if missingRealmLangs[realmLang] == nil then
             missingRealmLangs[realmLang] = true
