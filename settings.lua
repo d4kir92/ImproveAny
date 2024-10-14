@@ -441,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.110")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.110"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.111")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.111"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -593,7 +593,10 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
 		AddCheckBox(4, "WORLDMAP", false)
-		AddCheckBox(24, "WORLDMAPZOOM", false)
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+			AddCheckBox(24, "WORLDMAPZOOM", false)
+		end
+
 		AddCheckBox(24, "WORLDMAPCOORDSP", false)
 		AddCheckBox(24, "WORLDMAPCOORDSC", false)
 		AddCheckBox(4, "TOOLTIPSELLPRICE", false)

@@ -68,7 +68,7 @@ function ImproveAny:InitWorldMapFrame()
 			WorldMapFrame.ScrollContainer.Child.TiledBackground:Hide()
 		end
 
-		if WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("WORLDMAPZOOM", false) then
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" and WorldMapFrame.ScrollContainer and ImproveAny:IsEnabled("WORLDMAPZOOM", false) then
 			WorldMapFrame.ScrollContainer:HookScript(
 				"OnMouseWheel",
 				function(sel, delta)
@@ -98,9 +98,6 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords.f:SetText("")
 		plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		plyCoords.f:SetPoint("CENTER")
-		--[[plyCoords.t = plyCoords:CreateTexture("plyCoords.t", "ARTWORK")
-		plyCoords.t:SetAllPoints(plyCoords)
-		plyCoords.t:SetColorTexture(0.03, 0.03, 0.03, 0.5)]]
 		function plyCoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
