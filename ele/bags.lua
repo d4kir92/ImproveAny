@@ -2,10 +2,10 @@ local _, ImproveAny = ...
 local BAGS = {"MainMenuBarBackpackButton", "CharacterBag3Slot", "CharacterBag2Slot", "CharacterBag1Slot", "CharacterBag0Slot"}
 local BAGSIDS = {}
 BAGSIDS["MainMenuBarBackpackButton"] = 0
-BAGSIDS["CharacterBag3Slot"] = 1
-BAGSIDS["CharacterBag2Slot"] = 2
-BAGSIDS["CharacterBag1Slot"] = 3
-BAGSIDS["CharacterBag0Slot"] = 4
+BAGSIDS["CharacterBag3Slot"] = 4
+BAGSIDS["CharacterBag2Slot"] = 3
+BAGSIDS["CharacterBag1Slot"] = 2
+BAGSIDS["CharacterBag0Slot"] = 1
 function ImproveAny:BAGSTryAdd(fra, index)
 	if _G[fra] == nil then return end
 	if fra and not tContains(BAGS, fra) then
