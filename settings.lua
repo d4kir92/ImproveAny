@@ -441,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.114")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.114"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.115")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.115"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -468,6 +468,8 @@ function ImproveAny:InitIASettings()
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
 		AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
 		AddCategory("QUICKGAMEPLAY")
+		AddCheckBox(4, "AUTOSELLJUNK", true)
+		AddCheckBox(4, "AUTOREPAIR", true)
 		AddCheckBox(4, "AUTOACCEPTQUESTS", false)
 		AddCheckBox(4, "AUTOCHECKINQUESTS", false)
 		AddCheckBox(4, "FASTLOOTING", false)

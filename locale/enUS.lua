@@ -121,6 +121,9 @@ function ImproveAny:Lang_enUS()
 		["CHARACTERFRAMEAUTOEXPAND"] = "Auto expand Characterframe",
 		["FRAMEANCHOR"] = "Frame Anchor",
 		["SHOWVAULTMMBTN"] = "Show the Great Vault at the minimap",
+		["AUTOSELLJUNK"] = "Auto sell Junk",
+		["AUTOREPAIR"] = "Auto repair Gear",
+		["NEW"] = "NEW",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

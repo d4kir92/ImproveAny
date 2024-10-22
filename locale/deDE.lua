@@ -115,6 +115,9 @@ function ImproveAny:Lang_deDE()
 		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
 		["FRAMEANCHOR"] = "Fenster Anker",
 		["SHOWVAULTMMBTN"] = "Große Schatzkammer an der Minimap anzeigen",
+		["AUTOSELLJUNK"] = "Automatisch Müll verkaufen",
+		["AUTOREPAIR"] = "Automatisch reparieren",
+		["NEW"] = "NEU",
 	}
 
 	ImproveAny:UpdateLanguageTab(tab)

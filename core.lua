@@ -174,6 +174,34 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:InitDurabilityFrame()
 		end
 
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("MERCHANT_SHOW")
+		f:SetScript(
+			"OnEvent",
+			function(sel)
+				if ImproveAny:IsEnabled("AUTOSELLJUNK", true) then
+					for bag = 0, 4 do
+						for slot = 1, C_Container.GetContainerNumSlots(bag) do
+							local itemLink = C_Container.GetContainerItemLink(bag, slot)
+							if itemLink then
+								local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = GetItemInfo(itemLink)
+								if itemRarity == 0 and itemSellPrice > 0 then
+									C_Container.UseContainerItem(bag, slot) -- Sell the item
+								end
+							end
+						end
+					end
+				end
+
+				if ImproveAny:IsEnabled("AUTOREPAIR", true) and CanMerchantRepair() then
+					local repairCost, canRepair = GetRepairAllCost()
+					if canRepair and repairCost > 0 then
+						RepairAllItems()
+					end
+				end
+			end
+		)
+
 		ImproveAny:InitItemLevel()
 		ImproveAny:InitMinimap()
 		ImproveAny:InitMoneyBar()
@@ -206,6 +234,13 @@ function ImproveAny:Event(event, ...)
 		ImproveAny:InitIACoordsFrame()
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			ImproveAny:InitSpellBookFix()
+		end
+
+		IATAB["VERSION"] = IATAB["VERSION"] or 0
+		if IATAB["VERSION"] < 1 then
+			IATAB["VERSION"] = 1
+			ImproveAny:MSG(ImproveAny:GT("NEW") .. ":", ImproveAny:GT("AUTOSELLJUNK"))
+			ImproveAny:MSG(ImproveAny:GT("NEW") .. ":", ImproveAny:GT("AUTOREPAIR"))
 		end
 
 		if CharacterFrameExpandButton and ImproveAny:IsEnabled("CHARACTERFRAMEAUTOEXPAND", true) then
@@ -265,7 +300,7 @@ function ImproveAny:Event(event, ...)
 				["icon"] = 136033,
 				["var"] = mmbtn,
 				["dbtab"] = IATAB,
-				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.114"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.115"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 				["funcL"] = function()
 					ImproveAny:ToggleSettings()
 				end,
