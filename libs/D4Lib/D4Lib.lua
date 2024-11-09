@@ -62,6 +62,16 @@ function D4:IsOldWow()
     return D4.oldWow
 end
 
+function D4:RegisterEvent(frame, event, unit)
+    if C_EventUtils.IsEventValid(event) then
+        if unit then
+            frame:RegisterUnitEvent(event, "player")
+        else
+            frame:RegisterEvent(event)
+        end
+    end
+end
+
 --[[ QOL ]]
 local ICON_TAG_LIST_EN = {
     ["star"] = 1,
@@ -115,6 +125,24 @@ function D4:IsSpellInRange(spellID, spellType, unit)
     if C_Spell and C_Spell.IsSpellInRange then return C_Spell.IsSpellInRange(spellID, spellType, unit) end
     if IsSpellInRange then return IsSpellInRange(spellID, spellType, unit) end
     D4:MSG("[D4][IsSpellInRange] FAILED")
+
+    return nil
+end
+
+function D4:GetSpellCharges(spellID)
+    if spellID == nil then return nil end
+    if C_Spell and C_Spell.GetSpellCharges then return C_Spell.GetSpellCharges(spellID) end
+    if GetSpellCharges then return GetSpellCharges(spellID) end
+    D4:MSG("[D4][GetSpellCharges] FAILED")
+
+    return nil
+end
+
+function D4:GetSpellCastCount(...)
+    if spellID == nil then return nil end
+    if C_Spell and C_Spell.GetSpellCastCount then return C_Spell.GetSpellCastCount(...) end
+    if GetSpellCastCount then return GetSpellCastCount(...) end
+    D4:MSG("[D4][GetSpellCastCount] FAILED")
 
     return nil
 end

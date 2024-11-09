@@ -300,7 +300,7 @@ function ImproveAny:Event(event, ...)
 				["icon"] = 136033,
 				["var"] = mmbtn,
 				["dbtab"] = IATAB,
-				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.116"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.117"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 				["funcL"] = function()
 					ImproveAny:ToggleSettings()
 				end,
@@ -1240,7 +1240,7 @@ f:RegisterEvent("PLAYER_LOGIN")
 f.incombat = false
 local ts = 0
 function ImproveAny:FastLooting()
-	if GetTime() - ts >= 0.24 and ImproveAny:IsEnabled("FASTLOOTING", false) then
+	if GetTime() - ts >= 0.3 and ImproveAny:IsEnabled("FASTLOOTING", false) then
 		ts = GetTime()
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
 			for i = GetNumLootItems(), 1, -1 do
