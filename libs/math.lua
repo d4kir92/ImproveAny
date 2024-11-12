@@ -47,16 +47,6 @@ function ImproveAny:Lerp(pos1, pos2, perc)
 	return (1 - perc) * pos1 + perc * pos2
 end
 
-function ImproveAny:ReplaceStr(text, old, new)
-	if text == nil then return "" end
-	local b, e = text:find(old, 1, true)
-	if b == nil then
-		return text
-	else
-		return text:sub(1, b - 1) .. new .. text:sub(e + 1)
-	end
-end
-
 function ImproveAny:GetRowsCols(amount)
 	local wurzel = math.sqrt(amount)
 	if wurzel % 1 == 0 then return wurzel, wurzel end

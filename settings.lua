@@ -441,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.117")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.117"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.118")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.118"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()
@@ -485,14 +485,6 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "COMBATTEXTPOSITION", false)
 		AddSlider(10, "COMBATTEXTX", 0, nil, -600, 600, 10)
 		AddSlider(10, "COMBATTEXTY", 0, nil, -250, 250, 10)
-		AddCategory("CHAT")
-		AddCheckBox(4, "CHAT", false)
-		AddCheckBox(24, "CHATSHORTCHANNELS", false)
-		AddCheckBox(24, "CHATITEMICONS", false)
-		AddCheckBox(24, "CHATCLASSICONS", false)
-		AddCheckBox(24, "CHATRACEICONS", false)
-		AddCheckBox(24, "CHATLEVELS", false)
-		AddCheckBox(24, "CHATCLASSCOLORS", false)
 		AddEditBox(
 			24,
 			"BLOCKWORDS",
