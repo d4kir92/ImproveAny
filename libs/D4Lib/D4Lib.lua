@@ -366,12 +366,12 @@ function D4:ReplaceStr(text, old, new)
 end
 
 local genderNames = {"", "Male", "Female"}
-local classes = {}
-function D4:GetClassIcon(class, size)
-    size = size or 0
-    if classes and classes[class] then return classes[class] end
+function D4:GetClassAtlas(class)
+    return ("classicon-%s"):format(class)
+end
 
-    return ""
+function D4:GetClassIcon(class)
+    return "|A:" .. D4:GetClassAtlas(class) .. ":16:16:0:0|a"
 end
 
 function D4:GetRaceAtlas(race, gender)
@@ -379,7 +379,7 @@ function D4:GetRaceAtlas(race, gender)
 end
 
 function D4:GetRaceIcon(race, gender)
-    return "|A:" .. D4:GetRaceAtlas(race, genderNames[gender], false) .. ":0:0:0:0|a"
+    return "|A:" .. D4:GetRaceAtlas(race, genderNames[gender]) .. ":16:16:0:0|a"
 end
 
 local units = {"player"}
