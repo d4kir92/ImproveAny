@@ -586,6 +586,10 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("CodexBrowserIcon", true)
 				ImproveAny:ConvertToMinimapButton("CalendarButtonFrame", true)
 				ImproveAny:ConvertToMinimapButton("HelpOpenWebTicketButton", true)
+				if LFGMinimapFrame and LFGMinimapFrame:GetParent() == MinimapBackdrop then
+					ImproveAny:ConvertToMinimapButton("LFGMinimapFrame", true)
+				end
+
 				-- ADDONS
 				local mmbtns = {}
 				function ImproveAny:UpdateMMBtns()
