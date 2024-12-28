@@ -1,6 +1,5 @@
 local _, ImproveAny = ...
 local deg, atan2 = math.deg, math.atan2
-local mmdelay = 0.4
 local minimapshape = "ROUND"
 function ImproveAny:UpdateMinimapSettings()
 	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
@@ -593,7 +592,7 @@ function ImproveAny:InitMinimap()
 				-- ADDONS
 				local mmbtns = {}
 				function ImproveAny:UpdateMMBtns()
-					for i, child in pairs({Minimap:GetChildren()}) do
+					for i, child in ipairs(Minimap:GetChildren()) do
 						if not tContains(mmbtns, child) and child:GetName() then
 							for x, w in pairs(mmBtnsNames) do
 								if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
@@ -605,7 +604,7 @@ function ImproveAny:InitMinimap()
 					end
 
 					ImproveAny:UpdateIAMMBtns()
-					C_Timer.After(mmdelay, ImproveAny.UpdateMMBtns)
+					C_Timer.After(0.9, ImproveAny.UpdateMMBtns)
 				end
 
 				ImproveAny:UpdateMMBtns()

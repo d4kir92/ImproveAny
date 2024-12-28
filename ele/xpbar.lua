@@ -256,7 +256,7 @@ function ImproveAny:InitXPBar()
 						end
 
 						ImproveAny:Debug("xpbar.lua: #3")
-						C_Timer.After(1, ImproveAny.UpdateQAF)
+						C_Timer.After(1.1, ImproveAny.UpdateQAF)
 					end
 
 					ImproveAny:UpdateQAF()

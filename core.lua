@@ -166,11 +166,11 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:Fonts()
 		end
 
-		if ImproveAny:IsEnabled("CASTBAR", false) then
+		if ImproveAny:IsEnabled("CASTBAR", false) and ImproveAny.InitCastBar then
 			ImproveAny:InitCastBar()
 		end
 
-		if ImproveAny:IsEnabled("DURABILITY", false) then
+		if ImproveAny:IsEnabled("DURABILITY", false) and ImproveAny.InitDurabilityFrame then
 			ImproveAny:InitDurabilityFrame()
 		end
 
@@ -202,32 +202,86 @@ function ImproveAny:Event(event, ...)
 			end
 		)
 
-		ImproveAny:InitItemLevel()
-		ImproveAny:InitMinimap()
-		ImproveAny:InitMoneyBar()
-		ImproveAny:InitTokenBar()
-		ImproveAny:InitIAILVLBar()
-		ImproveAny:InitSkillBars()
-		ImproveAny:InitBags()
-		if ImproveAny:IsEnabled("WORLDMAP", false) then
+		if ImproveAny.InitItemLevel then
+			ImproveAny:InitItemLevel()
+		end
+
+		if ImproveAny.InitMinimap then
+			ImproveAny:InitMinimap()
+		end
+
+		if ImproveAny.InitMoneyBar then
+			ImproveAny:InitMoneyBar()
+		end
+
+		if ImproveAny.InitTokenBar then
+			ImproveAny:InitTokenBar()
+		end
+
+		if ImproveAny.InitIAILVLBar then
+			ImproveAny:InitIAILVLBar()
+		end
+
+		if ImproveAny.InitSkillBars then
+			ImproveAny:InitSkillBars()
+		end
+
+		if ImproveAny.InitBags then
+			ImproveAny:InitBags()
+		end
+
+		if ImproveAny:IsEnabled("WORLDMAP", false) and ImproveAny.InitWorldMapFrame then
 			ImproveAny:InitWorldMapFrame()
 		end
 
-		if ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
+		if (ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false)) and ImproveAny.InitAutoAcceptQuests then
 			ImproveAny:InitAutoAcceptQuests()
 		end
 
-		ImproveAny:InitCombatText()
-		ImproveAny:InitXPBar()
-		ImproveAny:InitSuperTrackedFrame()
-		ImproveAny:InitMicroMenu()
-		ImproveAny:InitRaidFrames()
-		ImproveAny:InitPartyFrames()
-		ImproveAny:InitLFGFrame()
-		ImproveAny:UpdateUIParentAttribute()
-		ImproveAny:UpdateStatusBar()
-		ImproveAny:InitIAPingFrame()
-		ImproveAny:InitIACoordsFrame()
+		if ImproveAny.InitCombatText then
+			ImproveAny:InitCombatText()
+		end
+
+		if ImproveAny.InitXPBar then
+			ImproveAny:InitXPBar()
+		end
+
+		if ImproveAny.InitSuperTrackedFrame then
+			ImproveAny:InitSuperTrackedFrame()
+		end
+
+		if ImproveAny.InitMicroMenu then
+			ImproveAny:InitMicroMenu()
+		end
+
+		if ImproveAny.InitRaidFrames then
+			ImproveAny:InitRaidFrames()
+		end
+
+		if ImproveAny.InitPartyFrames then
+			ImproveAny:InitPartyFrames()
+		end
+
+		if ImproveAny.InitLFGFrame then
+			ImproveAny:InitLFGFrame()
+		end
+
+		if ImproveAny.UpdateUIParentAttribute then
+			ImproveAny:UpdateUIParentAttribute()
+		end
+
+		if ImproveAny.UpdateStatusBar then
+			ImproveAny:UpdateStatusBar()
+		end
+
+		if ImproveAny.InitIAPingFrame then
+			ImproveAny:InitIAPingFrame()
+		end
+
+		if ImproveAny.InitIACoordsFrame then
+			ImproveAny:InitIACoordsFrame()
+		end
+
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			ImproveAny:InitSpellBookFix()
 		end
@@ -296,7 +350,7 @@ function ImproveAny:Event(event, ...)
 				["icon"] = 136033,
 				["var"] = mmbtn,
 				["dbtab"] = IATAB,
-				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.123"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.124"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 				["funcL"] = function()
 					ImproveAny:ToggleSettings()
 				end,
