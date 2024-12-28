@@ -591,19 +591,24 @@ function ImproveAny:InitMinimap()
 
 				-- ADDONS
 				local mmbtns = {}
+				local numChilds = -1
 				function ImproveAny:UpdateMMBtns()
-					for i, child in ipairs(Minimap:GetChildren()) do
-						if not tContains(mmbtns, child) and child:GetName() then
-							for x, w in pairs(mmBtnsNames) do
-								if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
-									tinsert(mmbtns, child)
-									ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "ImproveAnyGreatVault") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
+					if numChilds ~= Minimap:GetNumChildren() then
+						numChilds = Minimap:GetNumChildren()
+						for i, child in ipairs({Minimap:GetChildren()}) do
+							if child and not tContains(mmbtns, child) and child:GetName() then
+								for x, w in pairs(mmBtnsNames) do
+									if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
+										tinsert(mmbtns, child)
+										ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "ImproveAnyGreatVault") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
+									end
 								end
 							end
 						end
+
+						ImproveAny:UpdateIAMMBtns()
 					end
 
-					ImproveAny:UpdateIAMMBtns()
 					C_Timer.After(0.9, ImproveAny.UpdateMMBtns)
 				end
 
