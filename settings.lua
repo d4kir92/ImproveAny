@@ -441,8 +441,8 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(AddonName, 136033, "0.9.127")
-	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.127"))
+	ImproveAny:SetVersion(AddonName, 136033, "0.9.128")
+	IASettings.TitleText:SetText(format("ImproveAny |T136033:16:16:0:0|t v|cff3FC7EB%s", "0.9.128"))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
 		function()

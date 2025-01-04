@@ -87,7 +87,7 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 			col2 = textw .. textc
 		end
 
-		if vNum and vNum ~= 0 or vNumMax and vNumMax > 0 then
+		if vNum and vNum ~= 0 then
 			if vNumMax and vNumMax > 0 then
 				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
 					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
