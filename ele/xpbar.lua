@@ -483,8 +483,6 @@ function ImproveAny:InitXPBar()
 							-- XPBAR -> SetText
 							if UnitExists("PET") and GetPetExperience ~= nil then
 								local currXPPet, maxBarPet = GetPetExperience()
-								print("cur: " .. currXPPet)
-								print("max: " .. maxBarPet)
 								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
 							end
 
