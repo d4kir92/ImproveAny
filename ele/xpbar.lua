@@ -87,7 +87,7 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 			col2 = textw .. textc
 		end
 
-		if vNum and vNum ~= 0 then
+		if vNum and vNum ~= 0 or vNumMax and vNumMax > 0 then
 			if vNumMax and vNumMax > 0 then
 				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
 					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
@@ -481,6 +481,13 @@ function ImproveAny:InitXPBar()
 							-- XP KILLSTOLEVELUP
 							text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
 							-- XPBAR -> SetText
+							if UnitExists("PET") and GetPetExperience ~= nil then
+								local currXPPet, maxBarPet = GetPetExperience()
+								print("cur: " .. currXPPet)
+								print("max: " .. maxBarPet)
+								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
+							end
+
 							sel:SetText(text2)
 							if MainMenuExpBar.show then
 								sel:Show()
