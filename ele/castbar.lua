@@ -51,53 +51,47 @@ function ImproveAny:InitCastBar()
 			castbar.timer:SetFont(STANDARD_TEXT_FONT, 10, "")
 			castbar.timer:SetPoint("CENTER", castbar, "RIGHT", 12, 0)
 			castbar.update = 0
-			castbar.tick = 0.01
+			castbar.tick = 0.004
 			function ImproveAny:UpdateCastbarTimer()
 				if castbar.timer ~= nil then
-					if castbar.update and castbar.update < castbar.tick then
-						local name, _, texture = nil, nil, nil
-						if UnitCastingInfo ~= nil then
-							name, _, texture = UnitCastingInfo("PLAYER")
-						end
+					local name, _, texture = nil, nil, nil
+					if UnitCastingInfo ~= nil then
+						name, _, texture = UnitCastingInfo("PLAYER")
+					end
 
-						if name == nil and UnitChannelInfo ~= nil then
-							name, _, texture = UnitChannelInfo("PLAYER")
-						end
+					if name == nil and UnitChannelInfo ~= nil then
+						name, _, texture = UnitChannelInfo("PLAYER")
+					end
 
-						if CastingInfo ~= nil then
-							name, _, texture = CastingInfo()
-						end
+					if CastingInfo ~= nil then
+						name, _, texture = CastingInfo()
+					end
 
-						if name == nil and ChannelInfo ~= nil then
-							name, _, texture = ChannelInfo()
-						end
+					if name == nil and ChannelInfo ~= nil then
+						name, _, texture = ChannelInfo()
+					end
 
-						if ImproveAny:GetWoWBuild() ~= "RETAIL" and texture == 136235 then
-							texture = 136243 -- 136192
-						end
+					if ImproveAny:GetWoWBuild() ~= "RETAIL" and texture == 136235 then
+						texture = 136243 -- 136192
+					end
 
-						if castbar.icon ~= nil and castbar.icon:GetTexture() ~= texture then
-							castbar.icon:SetTexture(texture)
-						end
+					if castbar.icon ~= nil and castbar.icon:GetTexture() ~= texture then
+						castbar.icon:SetTexture(texture)
+					end
 
-						if castbar.casting then
-							castbar.timer:SetText(format("%2.1f", max(castbar.maxValue - castbar.value, 0)))
-						elseif castbar.channeling then
-							castbar.timer:SetText(format("%.1f", max(castbar.value, 0)))
-						else
-							castbar.timer:SetText("")
-						end
-
-						castbar.update = 0.1
+					if castbar.casting then
+						castbar.timer:SetText(format("%2.1f", max(castbar.maxValue - castbar.value, 0)))
+					elseif castbar.channeling then
+						castbar.timer:SetText(format("%.1f", max(castbar.value, 0)))
 					else
-						castbar.update = castbar.update - castbar.tick
+						castbar.timer:SetText("")
 					end
 
 					ImproveAny:Debug("castbar.lua: tick #1", "think")
 					C_Timer.After(castbar.tick, ImproveAny.UpdateCastbarTimer)
 				else
-					ImproveAny:Debug("castbar.lua: tick #2")
-					C_Timer.After(castbar.tick, 0.3)
+					ImproveAny:Debug("castbar.lua: tick #2", "think")
+					C_Timer.After(1, ImproveAny.UpdateCastbarTimer)
 				end
 			end
 
