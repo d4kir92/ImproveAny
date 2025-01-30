@@ -350,7 +350,7 @@ function ImproveAny:Event(event, ...)
 				["icon"] = 136033,
 				["var"] = mmbtn,
 				["dbtab"] = IATAB,
-				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.130"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
+				["vTT"] = {{"ImproveAny |T136033:16:16:0:0|t", "v|cff3FC7EB0.9.131"}, {ImproveAny:GT("LEFTCLICK"), ImproveAny:GT("MMBTNLEFT")}, {ImproveAny:GT("RIGHTCLICK"), ImproveAny:GT("MMBTNRIGHT")}},
 				["funcL"] = function()
 					ImproveAny:ToggleSettings()
 				end,
