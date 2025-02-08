@@ -302,7 +302,8 @@ function ImproveAny:InitMinimap()
 								IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
 								ImproveAny:UpdateIAMMBtns()
 							end,
-							["addoncomp"] = false
+							["addoncomp"] = false,
+							["dbkey"] = ""
 						}
 					)
 				end
@@ -374,6 +375,7 @@ function ImproveAny:InitMinimap()
 							["sw"] = 64,
 							["sh"] = 64,
 							["border"] = false,
+							["dbkey"] = ""
 						}
 					)
 				end
