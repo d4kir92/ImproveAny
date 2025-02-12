@@ -670,10 +670,12 @@ f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript(
     "OnEvent",
     function(self, event, ...)
-        local trackingTexture = GetTrackingTexture()
-        if trackingTexture and MiniMapTracking and MiniMapTrackingIcon and not MiniMapTrackingIcon:GetTexture() then
-            MiniMapTrackingIcon:SetTexture(trackingTexture)
-            MiniMapTracking:Show()
+        if GetTrackingTexture then
+            local trackingTexture = GetTrackingTexture()
+            if trackingTexture and MiniMapTracking and MiniMapTrackingIcon and not MiniMapTrackingIcon:GetTexture() then
+                MiniMapTrackingIcon:SetTexture(trackingTexture)
+                MiniMapTracking:Show()
+            end
         end
     end
 )
