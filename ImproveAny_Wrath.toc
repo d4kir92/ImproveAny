@@ -1,13 +1,15 @@
 ## Interface: 30403
-## Version: 0.9.136
+## Version: 0.9.137
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Improve Any Ui or Frame
 ## Author: D4KiR
+## X-Category: D4KiR
 ## DefaultState: enabled
 ## SavedVariables: IATAB
 ## SavedVariablesPerCharacter: IATABPC
 ## X-Curse-Project-ID: 646135
 ## X-Wago-ID: 5bGoV1K0
+## IconTexture: 136033
 
 libs\D4Lib\D4Lib.xml
 
