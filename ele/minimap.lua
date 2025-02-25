@@ -297,7 +297,7 @@ function ImproveAny:InitMinimap()
 							["icon"] = 1120721,
 							["var"] = mmbtn,
 							["dbtab"] = IATAB["MMBtns"],
-							["vTT"] = {{"Minimap Buttons", "ImproveAny |T136033:16:16:0:0|t"}, {"Leftclick", "Toggle Visibility"}},
+							["vTT"] = {{"Minimap Buttons", "|T136033:16:16:0:0|t ImproveAny"}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Visibility"}},
 							["funcL"] = function()
 								IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
 								ImproveAny:UpdateIAMMBtns()
@@ -317,7 +317,7 @@ function ImproveAny:InitMinimap()
 							["atlas"] = "gficon-chest-evergreen-greatvault-complete",
 							["var"] = mmbtn,
 							["dbtab"] = IATAB["MMBtnGreatVault"],
-							["vTT"] = {{"Great Vault", "ImproveAny |T136033:16:16:0:0|t"}, {"Leftclick", "Toggle Great Vault"}},
+							["vTT"] = {{"Great Vault", "|T136033:16:16:0:0|t ImproveAny"}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Great Vault"}},
 							["vTTUpdate"] = function(sel, tt)
 								if C_WeeklyRewards.HasAvailableRewards() or C_WeeklyRewards.HasGeneratedRewards() then
 									tt:AddDoubleLine(" ", " ")

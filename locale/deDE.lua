@@ -2,10 +2,6 @@
 local _, ImproveAny = ...
 function ImproveAny:Lang_deDE()
 	local tab = {
-		["LEFTCLICK"] = "Leftclick",
-		["RIGHTCLICK"] = "Rightclick",
-		["MMBTNLEFT"] = "Optionen",
-		["MMBTNRIGHT"] = "Minimapknopf verstecken",
 		["GENERAL"] = "Allgemein",
 		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
 		["UIFONT"] = "Ui Schriftart",
