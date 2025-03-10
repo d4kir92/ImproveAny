@@ -69,14 +69,24 @@ function ImproveAny:InitLFGFrame()
 	if LFGListApplicationViewer_UpdateApplicantMember then
 		hooksecurefunc(
 			"LFGListApplicationViewer_UpdateApplicantMember",
-			function(member, id, index)
+			function(member, id, index, status, pendingStatus)
 				local name, class = C_LFGList.GetApplicantMemberInfo(id, index)
 				local activeEntryInfo = C_LFGList.GetActiveEntryInfo()
 				if not activeEntryInfo then return end
 				if name == nil then return end
 				local dName = member.Name:GetText()
 				local text = ""
-				local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(id, index, activeEntryInfo.activityID)
+				if activeEntryInfo.activityIDs == nil or activeEntryInfo.activityIDs[1] == nil then
+					if activeEntryInfo.activityIDs == nil then
+						ImproveAny:MSG("[LFG] activityIDs is nil")
+					elseif activeEntryInfo.activityIDs[1] == nil then
+						ImproveAny:MSG("[LFG] activityIDs[1] is nil")
+					end
+
+					return
+				end
+
+				local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(id, index, activeEntryInfo.activityIDs[1])
 				local dungeonRating = bestDungeonScoreForListing.mapScore
 				if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and dungeonRating and dungeonRating > 0 then
 					local color = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonRating)

@@ -1287,10 +1287,8 @@ end
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", ImproveAny.Event)
 f:RegisterEvent("PLAYER_LOGIN")
-f.incombat = false
-local ts = 0
 function ImproveAny:FastLooting()
-	if GetTime() - ts >= 0.3 and ImproveAny:IsEnabled("FASTLOOTING", false) then
+	if ImproveAny:IsEnabled("FASTLOOTING", false) then
 		ts = GetTime()
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
 			for i = GetNumLootItems(), 1, -1 do
