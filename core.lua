@@ -751,34 +751,36 @@ function ImproveAny:Event(event, ...)
 					DetailsInset:SetPoint("TOPLEFT", _G["TradeSkillFrame"], "TOPLEFT", 348, -72)
 					DetailsInset:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated")
 					_G["TradeSkillExpandTabLeft"]:Hide()
-					local regions = {_G["TradeSkillFrame"]:GetRegions()}
-					for i, v in pairs(regions) do
-						if i > 1 then
-							if ImproveAny:GetWoWBuild() == "CLASSIC" then
-								if i == 2 then
-									regions[i]:SetSize(1024, 512)
-									regions[i]:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
-									regions[i]:SetTexCoord(0, 1, 0, 1)
-								elseif i == 3 then
-									regions[i].Show = regions[i].Hide
-									regions[i]:Hide()
-								elseif regions[i] then
-									regions[i]:Hide()
-								end
-							else
-								if i == 3 then
-									regions[i]:SetSize(1024, 512)
-									regions[i]:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
-									regions[i]:SetTexCoord(0, 1, 0, 1)
-								elseif i == 4 then
-									regions[i].Show = regions[i].Hide
-									regions[i]:Hide()
-								elseif regions[i] then
-									regions[i]:Hide()
+					ImproveAny:ForeachRegions(
+						_G["TradeSkillFrame"],
+						function(region, x)
+							if x > 1 then
+								if ImproveAny:GetWoWBuild() == "CLASSIC" then
+									if x == 2 then
+										region:SetSize(1024, 512)
+										region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
+										region:SetTexCoord(0, 1, 0, 1)
+									elseif x == 3 then
+										region.Show = region.Hide
+										region:Hide()
+									elseif region then
+										region:Hide()
+									end
+								else
+									if x == 3 then
+										region:SetSize(1024, 512)
+										region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
+										region:SetTexCoord(0, 1, 0, 1)
+									elseif x == 4 then
+										region.Show = region.Hide
+										region:Hide()
+									elseif region then
+										region:Hide()
+									end
 								end
 							end
-						end
-					end
+						end, "TradeSkillFrame"
+					)
 
 					if TradeSkillRankFrame and TradeSkillLinkButton then
 						TradeSkillLinkButton:ClearAllPoints()
