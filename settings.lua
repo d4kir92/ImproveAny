@@ -1,4 +1,4 @@
-local AddonName, ImproveAny = ...
+local _, ImproveAny = ...
 local font = "Interface\\AddOns\\ImproveAny\\media\\Prototype.ttf"
 local IAOldFonts = {}
 local BlizDefaultFonts = {"STANDARD_TEXT_FONT", "UNIT_NAME_FONT", "DAMAGE_TEXT_FONT", "NAMEPLATE_FONT", "NAMEPLATE_SPELLCAST_FONT"}
@@ -349,40 +349,55 @@ function ImproveAny:UpdateStatusBar()
 			StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5)
 		end
 
-		for i, v in pairs({StatusTrackingBarManager:GetChildren()}) do
-			v:SetWidth(w)
-			if v.OverlayFrame then
-				v.OverlayFrame:SetWidth(w)
-			end
+		ImproveAny:ForeachChildren(
+			StatusTrackingBarManager,
+			function(child, x)
+				child:SetWidth(w)
+				if child.OverlayFrame then
+					child.OverlayFrame:SetWidth(w)
+				end
 
-			if v.StatusBar then
-				v.StatusBar:SetWidth(w)
-			end
-		end
+				if child.StatusBar then
+					child.StatusBar:SetWidth(w)
+				end
+			end, "UpdateStatusBar"
+		)
 	end
 
 	if MainStatusTrackingBarContainer then
 		MainStatusTrackingBarContainer:SetWidth(w)
-		for i, v in pairs({MainStatusTrackingBarContainer:GetChildren()}) do
-			v:SetWidth(w - 5)
-			for id, va in pairs({v:GetChildren()}) do
-				if id ~= 3 then
-					va:SetWidth(w - 5)
-				end
-			end
-		end
+		ImproveAny:ForeachChildren(
+			MainStatusTrackingBarContainer,
+			function(child, x)
+				child:SetWidth(w - 5)
+				ImproveAny:ForeachChildren(
+					child,
+					function(va, id)
+						if id ~= 3 then
+							va:SetWidth(w - 5)
+						end
+					end, "MainStatusTrackingBarContainer 2"
+				)
+			end, "MainStatusTrackingBarContainer 1"
+		)
 	end
 
 	if SecondaryStatusTrackingBarContainer then
 		SecondaryStatusTrackingBarContainer:SetWidth(w)
-		for i, v in pairs({SecondaryStatusTrackingBarContainer:GetChildren()}) do
-			v:SetWidth(w - 5)
-			for id, va in pairs({v:GetChildren()}) do
-				if id ~= 3 then
-					va:SetWidth(w - 5)
-				end
-			end
-		end
+		ImproveAny:ForeachChildren(
+			SecondaryStatusTrackingBarContainer,
+			function(child, x)
+				child:SetWidth(w - 5)
+				ImproveAny:ForeachChildren(
+					child,
+					function(va, id)
+						if id ~= 3 then
+							va:SetWidth(w - 5)
+						end
+					end, "SecondaryStatusTrackingBarContainer 2"
+				)
+			end, "SecondaryStatusTrackingBarContainer 1"
+		)
 	end
 end
 
@@ -441,7 +456,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.144")
+	ImproveAny:SetVersion(136033, "0.9.145")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
