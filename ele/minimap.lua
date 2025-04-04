@@ -158,7 +158,7 @@ local function GetVaultData()
 		elseif data.type == 6 then
 			table.insert(res["world"], data)
 		else
-			ImproveAny:MSG("[GetVaultData] Missing Type")
+			ImproveAny:MSG("[GetVaultData] Missing Type:", data.type)
 		end
 	end
 
