@@ -314,7 +314,7 @@ function ImproveAny:InitMinimap()
 					ImproveAny:CreateMinimapButton(
 						{
 							["name"] = "ImproveAnyGreatVault",
-							["atlas"] = "gficon-chest-evergreen-greatvault-complete",
+							["atlas"] = "GreatVault-32x32",
 							["var"] = mmbtn,
 							["dbtab"] = IATAB["MMBtnGreatVault"],
 							["vTT"] = {{"Great Vault", "|T136033:16:16:0:0|t ImproveAny"}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Great Vault"}},
