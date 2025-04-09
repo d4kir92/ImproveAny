@@ -1242,7 +1242,7 @@ function ImproveAny:Event(event, ...)
 											skillButton:Hide()
 										else
 											skillButton:ClearAllPoints()
-											skillButton:SetPoint("TOPLEFT", skillButton:GetParent(), "TOPLEFT", 32, -py)
+											skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
 											skillButton:Show()
 											py = py + 16
 										end
@@ -1250,7 +1250,7 @@ function ImproveAny:Event(event, ...)
 								else
 									if headers[headerId] then
 										skillButton:ClearAllPoints()
-										skillButton:SetPoint("TOPLEFT", skillButton:GetParent(), "TOPLEFT", 32, -py)
+										skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
 										skillButton:Show()
 										py = py + 16
 									else

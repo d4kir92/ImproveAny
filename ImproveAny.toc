@@ -1,10 +1,10 @@
-## Interface-Classic: 11506
+## Interface-Classic: 11507
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40401, 40402
 ## Interface: 110007, 110100
 
-## Version: 0.9.148
+## Version: 0.9.149
 ## Title: I|cff3FC7EBmprove|rA|cff3FC7EBny|r |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Improve Any Ui or Frame
 ## Author: D|cff3FC7EB4KiR |T132115:16:16:0:0|t

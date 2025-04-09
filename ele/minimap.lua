@@ -397,7 +397,7 @@ function ImproveAny:InitMinimap()
 						local sr = 1
 						local sum = 0
 						for i, v in pairs(IAMMBtns) do
-							if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
+							if v:IsShown() and (ImproveAny:GetParent(v) == Minimap or ImproveAny:GetParent(v) == IAMMBtnsFrame) then
 								sum = sum + 1
 							end
 						end
@@ -407,7 +407,7 @@ function ImproveAny:InitMinimap()
 						IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
 						local row, col = 0, 0
 						for i, v in pairs(IAMMBtns) do
-							if v:IsShown() and (v:GetParent() == Minimap or v:GetParent() == IAMMBtnsFrame) then
+							if v:IsShown() and (ImproveAny:GetParent(v) == Minimap or ImproveAny:GetParent(v) == IAMMBtnsFrame) then
 								if col == cols then
 									col = 0
 									row = row + 1
@@ -566,7 +566,7 @@ function ImproveAny:InitMinimap()
 					GameTimeFrame:SetFrameLevel(10)
 				end
 
-				if MiniMapInstanceDifficulty and MiniMapInstanceDifficulty:GetParent() == "MinimapCluster" then
+				if MiniMapInstanceDifficulty and ImproveAny:GetParent(MiniMapInstanceDifficulty) == "MinimapCluster" then
 					MiniMapInstanceDifficulty:SetParent(Minimap)
 				end
 
@@ -587,7 +587,7 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("CodexBrowserIcon", true)
 				ImproveAny:ConvertToMinimapButton("CalendarButtonFrame", true)
 				ImproveAny:ConvertToMinimapButton("HelpOpenWebTicketButton", true)
-				if LFGMinimapFrame and LFGMinimapFrame:GetParent() == MinimapBackdrop then
+				if LFGMinimapFrame and ImproveAny:GetParent(LFGMinimapFrame) == MinimapBackdrop then
 					ImproveAny:ConvertToMinimapButton("LFGMinimapFrame", true)
 				end
 

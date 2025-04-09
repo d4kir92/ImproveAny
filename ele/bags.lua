@@ -275,7 +275,7 @@ function ImproveAny:InitBags()
 								function(sel)
 									if sel.ia_setparent then return end
 									sel.ia_setparent = true
-									if sel:GetParent() ~= IAHIDDEN then
+									if ImproveAny:GetParent(sel) ~= IAHIDDEN then
 										sel:SetParent(IAHIDDEN)
 									end
 

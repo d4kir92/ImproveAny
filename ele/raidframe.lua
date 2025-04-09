@@ -58,7 +58,7 @@ function ImproveAny:InitRaidFrames()
 
 		function ImproveAny:RFAddBuffs(frame)
 			if not ImproveAny:IsCompactRaidFrame(frame) then return end
-			if frame.GetName and ImproveAny:GetName(frame) and frame.setup == nil then
+			if ImproveAny:GetName(frame) and frame.setup == nil then
 				frame.setup = true
 				hooksecurefunc(
 					_G[ImproveAny:GetName(frame) .. "Buff" .. 1],
