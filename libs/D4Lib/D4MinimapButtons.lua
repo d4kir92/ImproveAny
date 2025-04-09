@@ -62,7 +62,7 @@ if GetD4MinimapHover == nil then
         function()
             local mouseFocus = D4:GetMouseFocus()
             local btnFocus = false
-            if mouseFocus and mouseFocus.GetParent then
+            if mouseFocus and mouseFocus.GetParent and mouseFocus:GetParent() ~= nil then
                 btnFocus = mouseFocus:GetParent() == Minimap
             end
 
@@ -354,8 +354,9 @@ function D4:UpdateLTP()
         D4:ForeachChildren(
             Minimap,
             function(child)
-                if child and child:GetName() then
-                    local s1 = string.find(string.lower(child:GetName()), "libdbicon")
+                local name = DarkMode:GetName(child)
+                if name then
+                    local s1 = string.find(string.lower(name), "libdbicon")
                     if s1 and s1 > 1 and child.ltp == nil then
                         child.ltp = true
                         child:SetScale(0.75)

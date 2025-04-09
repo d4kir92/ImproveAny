@@ -4,7 +4,7 @@ function ImproveAny:InitRaidFrames()
 		local raidFrames = {}
 		function ImproveAny:IsCompactRaidFrame(frame)
 			if frame == nil then return false end
-			if frame.buffFrames and string.find(frame:GetName(), "CompactUnitFrame") then return true end
+			if frame.buffFrames and string.find(ImproveAny:GetName(frame), "CompactUnitFrame") then return true end
 
 			return false
 		end
@@ -58,47 +58,47 @@ function ImproveAny:InitRaidFrames()
 
 		function ImproveAny:RFAddBuffs(frame)
 			if not ImproveAny:IsCompactRaidFrame(frame) then return end
-			if frame.GetName and frame:GetName() and frame.setup == nil then
+			if frame.GetName and ImproveAny:GetName(frame) and frame.setup == nil then
 				frame.setup = true
 				hooksecurefunc(
-					_G[frame:GetName() .. "Buff" .. 1],
+					_G[ImproveAny:GetName(frame) .. "Buff" .. 1],
 					"SetSize",
 					function(sel, w, h)
-						local sw, sh = _G[frame:GetName() .. "Buff" .. 1]:GetSize()
+						local sw, sh = _G[ImproveAny:GetName(frame) .. "Buff" .. 1]:GetSize()
 						for i = 4, 10 do
-							if _G[frame:GetName() .. "Buff" .. i] ~= nil then
-								_G[frame:GetName() .. "Buff" .. i]:SetSize(sw, sh)
+							if _G[ImproveAny:GetName(frame) .. "Buff" .. i] ~= nil then
+								_G[ImproveAny:GetName(frame) .. "Buff" .. i]:SetSize(sw, sh)
 							end
 						end
 					end
 				)
 
-				_G[frame:GetName() .. "Buff" .. 1]:SetSize(_G[frame:GetName() .. "Buff" .. 1]:GetSize())
+				_G[ImproveAny:GetName(frame) .. "Buff" .. 1]:SetSize(_G[ImproveAny:GetName(frame) .. "Buff" .. 1]:GetSize())
 				hooksecurefunc(
-					_G[frame:GetName() .. "Debuff" .. 1],
+					_G[ImproveAny:GetName(frame) .. "Debuff" .. 1],
 					"SetSize",
 					function(sel, w, h)
-						local sw, sh = _G[frame:GetName() .. "Debuff" .. 1]:GetSize()
+						local sw, sh = _G[ImproveAny:GetName(frame) .. "Debuff" .. 1]:GetSize()
 						for i = 4, 10 do
-							if _G[frame:GetName() .. "Debuff" .. i] ~= nil then
-								_G[frame:GetName() .. "Debuff" .. i]:SetSize(sw, sh)
+							if _G[ImproveAny:GetName(frame) .. "Debuff" .. i] ~= nil then
+								_G[ImproveAny:GetName(frame) .. "Debuff" .. i]:SetSize(sw, sh)
 							end
 						end
 					end
 				)
 
-				_G[frame:GetName() .. "Debuff" .. 1]:SetSize(_G[frame:GetName() .. "Debuff" .. 1]:GetSize())
+				_G[ImproveAny:GetName(frame) .. "Debuff" .. 1]:SetSize(_G[ImproveAny:GetName(frame) .. "Debuff" .. 1]:GetSize())
 			end
 
-			if frame.buffFrames and _G[frame:GetName() .. "Buff" .. 1] then
-				local sw, sh = _G[frame:GetName() .. "Buff" .. 1]:GetSize()
+			if frame.buffFrames and _G[ImproveAny:GetName(frame) .. "Buff" .. 1] then
+				local sw, sh = _G[ImproveAny:GetName(frame) .. "Buff" .. 1]:GetSize()
 				for i = 4, 10 do
-					if _G[frame:GetName() .. "Buff" .. i] == nil then
-						_G[frame:GetName() .. "Buff" .. i] = CreateFrame("Button", frame:GetName() .. "Buff" .. i, frame, "CompactBuffTemplate")
-						local buff = _G[frame:GetName() .. "Buff" .. i]
+					if _G[ImproveAny:GetName(frame) .. "Buff" .. i] == nil then
+						_G[ImproveAny:GetName(frame) .. "Buff" .. i] = CreateFrame("Button", ImproveAny:GetName(frame) .. "Buff" .. i, frame, "CompactBuffTemplate")
+						local buff = _G[ImproveAny:GetName(frame) .. "Buff" .. i]
 						buff:SetParent(frame)
 						buff:SetSize(sw, sh)
-						buff:SetPoint("BOTTOMRIGHT", _G[frame:GetName() .. "Buff" .. (i - 1)], "BOTTOMLEFT", 0, 0)
+						buff:SetPoint("BOTTOMRIGHT", _G[ImproveAny:GetName(frame) .. "Buff" .. (i - 1)], "BOTTOMLEFT", 0, 0)
 						buff:Hide()
 					end
 				end
@@ -107,15 +107,15 @@ function ImproveAny:InitRaidFrames()
 
 		function ImproveAny:RFAddDebuffs(frame)
 			if not ImproveAny:IsCompactRaidFrame(frame) then return end
-			if frame.debuffFrames and _G[frame:GetName() .. "Debuff" .. 1] then
-				local sw, sh = _G[frame:GetName() .. "Debuff" .. 1]:GetSize()
+			if frame.debuffFrames and _G[ImproveAny:GetName(frame) .. "Debuff" .. 1] then
+				local sw, sh = _G[ImproveAny:GetName(frame) .. "Debuff" .. 1]:GetSize()
 				for i = 4, 10 do
-					if _G[frame:GetName() .. "Debuff" .. i] == nil then
-						_G[frame:GetName() .. "Debuff" .. i] = CreateFrame("Button", frame:GetName() .. "Debuff" .. i, frame, "CompactDebuffTemplate")
-						local debuff = _G[frame:GetName() .. "Debuff" .. i]
+					if _G[ImproveAny:GetName(frame) .. "Debuff" .. i] == nil then
+						_G[ImproveAny:GetName(frame) .. "Debuff" .. i] = CreateFrame("Button", ImproveAny:GetName(frame) .. "Debuff" .. i, frame, "CompactDebuffTemplate")
+						local debuff = _G[ImproveAny:GetName(frame) .. "Debuff" .. i]
 						debuff:SetParent(frame)
 						debuff:SetSize(sw, sh)
-						debuff:SetPoint("BOTTOMLEFT", _G[frame:GetName() .. "Debuff" .. (i - 1)], "BOTTOMRIGHT", 0, 0)
+						debuff:SetPoint("BOTTOMLEFT", _G[ImproveAny:GetName(frame) .. "Debuff" .. (i - 1)], "BOTTOMRIGHT", 0, 0)
 						debuff:Hide()
 					end
 				end
@@ -130,7 +130,7 @@ function ImproveAny:InitRaidFrames()
 					if frame then
 						ImproveAny:RFAddBuffs(frame)
 						for i = 1, 10 do
-							local buff = _G[frame:GetName() .. "Buff" .. i]
+							local buff = _G[ImproveAny:GetName(frame) .. "Buff" .. i]
 							if buff then
 								buff:Hide()
 							end
@@ -148,7 +148,7 @@ function ImproveAny:InitRaidFrames()
 					if frame then
 						ImproveAny:RFAddDebuffs(frame)
 						for i = 1, 10 do
-							local debuff = _G[frame:GetName() .. "Debuff" .. i]
+							local debuff = _G[ImproveAny:GetName(frame) .. "Debuff" .. i]
 							if debuff then
 								debuff:Hide()
 							end
@@ -244,7 +244,7 @@ function ImproveAny:InitRaidFrames()
 								local buffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if buffName then
 									if CompactUnitFrame_UtilShouldDisplayBuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
-										local buffFrame = _G[frame:GetName() .. "Buff" .. frameNum]
+										local buffFrame = _G[ImproveAny:GetName(frame) .. "Buff" .. frameNum]
 										if buffFrame then
 											ImproveAny:CompactUnitFrame_UtilSetBuff(buffFrame, frame.displayedUnit, index, filter)
 										end
@@ -262,7 +262,7 @@ function ImproveAny:InitRaidFrames()
 						end
 
 						for i = frameNum, 10 do
-							local buffFrame = _G[frame:GetName() .. "Buff" .. i]
+							local buffFrame = _G[ImproveAny:GetName(frame) .. "Buff" .. i]
 							if buffFrame then
 								buffFrame:Hide()
 							end
@@ -287,7 +287,7 @@ function ImproveAny:InitRaidFrames()
 								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) then
-										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
+										local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. frameNum]
 										if debuffFrame then
 											ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, false)
 										end
@@ -316,7 +316,7 @@ function ImproveAny:InitRaidFrames()
 								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, true) then
-										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
+										local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. frameNum]
 										if debuffFrame then
 											ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, true, true)
 										end
@@ -345,7 +345,7 @@ function ImproveAny:InitRaidFrames()
 								local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 								if debuffName then
 									if CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter) then
-										local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
+										local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. frameNum]
 										if debuffFrame then
 											ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
 										end
@@ -376,7 +376,7 @@ function ImproveAny:InitRaidFrames()
 									local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 									if debuffName then
 										if CompactUnitFrame_UtilShouldDisplayDebuff(frame.displayedUnit, index, filter) and not CompactUnitFrame_UtilIsBossAura(frame.displayedUnit, index, filter, false) and not CompactUnitFrame_UtilIsPriorityDebuff(frame.displayedUnit, index, filter) then
-											local debuffFrame = _G[frame:GetName() .. "Debuff" .. frameNum]
+											local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. frameNum]
 											if debuffFrame then
 												ImproveAny:CompactUnitFrame_UtilSetDebuff(debuffFrame, frame.displayedUnit, index, filter, false, false)
 											end
@@ -397,7 +397,7 @@ function ImproveAny:InitRaidFrames()
 						end
 
 						for i = frameNum, 10 do
-							local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
+							local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. i]
 							if debuffFrame then
 								debuffFrame:Hide()
 							end

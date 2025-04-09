@@ -9,7 +9,7 @@ function ImproveAny:AddIlvl(SLOT, i)
 	if SLOT and SLOT.iainfo == nil then
 		local name = ""
 		if SLOT.GetName then
-			name = SLOT:GetName() .. "."
+			name = ImproveAny:GetName(SLOT) .. "."
 		end
 
 		SLOT.iainfo = CreateFrame("FRAME", name .. ".iainfo", SLOT)
@@ -29,7 +29,7 @@ function ImproveAny:AddIlvl(SLOT, i)
 		SLOT.iaborder:SetAlpha(1)
 		SLOT.iatext:SetPoint("TOP", SLOT.iainfo, "TOP", 0, -slotbry)
 		SLOT.iatexth:SetPoint("BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry)
-		local NormalTexture = _G[SLOT:GetName() .. "NormalTexture"]
+		local NormalTexture = _G[ImproveAny:GetName(SLOT) .. "NormalTexture"]
 		if NormalTexture then
 			local sw, sh = NormalTexture:GetSize()
 			SLOT.iaborder:SetWidth(sw)
@@ -343,7 +343,7 @@ function ImproveAny:InitItemLevel()
 
 		-- BAGS
 		function ImproveAny:UpdateBag(bag, id)
-			local name = bag:GetName()
+			local name = ImproveAny:GetName(bag)
 			local bagID = bag:GetID()
 			if GetCVarBool("combinedBags") then
 				bagID = id

@@ -350,7 +350,7 @@ function ImproveAny:InitMinimap()
 								end
 
 								for i = 1, 99 do
-									local tr = _G[tt:GetName() .. "TextRight" .. i]
+									local tr = _G[ImproveAny:GetName(tt) .. "TextRight" .. i]
 									if tr then
 										tr:SetFontObject("ConsoleFontNormal")
 										local f1, _, f3 = tr:GetFont()
@@ -381,8 +381,8 @@ function ImproveAny:InitMinimap()
 				end
 
 				local function sortFunc(a, b)
-					local a1 = a:GetName()
-					local b1 = b:GetName()
+					local a1 = ImproveAny:GetName(a)
+					local b1 = ImproveAny:GetName(b)
 					for i, v in pairs(mmBtnsNames) do
 						a1 = string.gsub(a1, v, "")
 						b1 = string.gsub(b1, v, "")
@@ -600,11 +600,12 @@ function ImproveAny:InitMinimap()
 						ImproveAny:ForeachChildren(
 							Minimap,
 							function(child, i)
-								if child and not tContains(mmbtns, child) and child:GetName() then
+								local name = ImproveAny:GetName(child)
+								if child and not tContains(mmbtns, child) and name then
 									for x, w in pairs(mmBtnsNames) do
-										if strfind(child:GetName(), w) and not tContains(mmbtns, child) and not strfind(child:GetName(), "Peggle") then
+										if strfind(name, w) and not tContains(mmbtns, child) and not strfind(name, "Peggle") then
 											tinsert(mmbtns, child)
-											ImproveAny:ConvertToMinimapButton(child:GetName(), strfind(child:GetName(), "ImproveAnyMMBtns") ~= nil or strfind(child:GetName(), "ImproveAnyGreatVault") ~= nil or strfind(child:GetName(), "BugSack") ~= nil or strfind(child:GetName(), "AutoQueueWA") ~= nil)
+											ImproveAny:ConvertToMinimapButton(name, strfind(name, "ImproveAnyMMBtns") ~= nil or strfind(name, "ImproveAnyGreatVault") ~= nil or strfind(name, "BugSack") ~= nil or strfind(name, "AutoQueueWA") ~= nil)
 										end
 									end
 								end

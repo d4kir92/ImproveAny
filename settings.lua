@@ -254,7 +254,7 @@ function ImproveAny:UpdateRaidFrameSize()
 					if frame.displayedUnit then
 						local buffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 						if buffName then
-							local buffFrame = _G[frame:GetName() .. "Buff" .. i]
+							local buffFrame = _G[ImproveAny:GetName(frame) .. "Buff" .. i]
 							if buffFrame then
 								buffFrame:SetScale(ImproveAny:IAGV("BUFFSCALE", 0.8))
 							end
@@ -279,7 +279,7 @@ function ImproveAny:UpdateRaidFrameSize()
 					if frame.displayedUnit then
 						local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
 						if debuffName then
-							local debuffFrame = _G[frame:GetName() .. "Debuff" .. i]
+							local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. i]
 							if debuffFrame then
 								debuffFrame:SetScale(ImproveAny:IAGV("DEBUFFSCALE", 1))
 							end
@@ -456,7 +456,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.147")
+	ImproveAny:SetVersion(136033, "0.9.148")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
