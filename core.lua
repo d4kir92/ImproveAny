@@ -787,9 +787,10 @@ function ImproveAny:Event(event, ...)
 						TradeSkillLinkButton:SetPoint("TOP", TradeSkillFrame, "TOP", 0, -15)
 					end
 
-					if TradeSkillRankFrame and TradeSkillRankFrameSkillRank then
+					if TradeSkillRankFrameBorder and TradeSkillRankFrameSkillRank then
 						TradeSkillRankFrameSkillRank:ClearAllPoints()
-						TradeSkillRankFrameSkillRank:SetPoint("CENTER", TradeSkillRankFrame, "CENTER", 0, 0)
+						TradeSkillRankFrameSkillRank:SetPoint("RIGHT", TradeSkillRankFrameBorder, "RIGHT", -6, 0)
+						TradeSkillRankFrameSkillRank:SetJustifyH("RIGHT")
 					end
 
 					_G["TradeSkillCreateButton"]:ClearAllPoints()
