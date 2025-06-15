@@ -75,8 +75,12 @@ function ImproveAny:GetWeaponSkillData(id)
 				itemSubType = string.lower(itemSubType)
 			end
 
-			subTypes[item] = itemSubType
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(itemSubType)
+			subTypes[item] = itemSubType
+			if itemcur == nil then
+				itemname, itemcur, itemmax = ImproveAny:GetSkillData(itemSubType .. "n")
+				subTypes[item] = itemSubType .. "n"
+			end
 		end
 	else
 		if id == 16 then
