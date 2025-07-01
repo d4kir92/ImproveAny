@@ -45,7 +45,7 @@ function ImproveAny:UpdateBagMode()
 end
 
 function ImproveAny:GetBagMode()
-	if not IsAddOnLoaded("DragonflightUi") then return "DISABLED" end
+	if not ImproveAny:IsAddOnLoaded("DragonflightUi") then return "DISABLED" end
 
 	return ImproveAny:IAGV("BAGMODE", "RETAIL")
 end
@@ -462,7 +462,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.158")
+	ImproveAny:SetVersion(136033, "0.9.159")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -487,7 +487,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "FREESPACEBAGS", false)
 		AddCheckBox(4, "BAGSAMESIZE", false)
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
-		if not IsAddOnLoaded("DragonflightUi") then
+		if not ImproveAny:IsAddOnLoaded("DragonflightUi") then
 			AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
 		end
 
@@ -541,7 +541,7 @@ function ImproveAny:InitIASettings()
 
 		AddCategory("MINIMAP")
 		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
-		if not IsAddOnLoaded("DragonflightUi") then
+		if not ImproveAny:IsAddOnLoaded("DragonflightUi") then
 			AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
 		end
 
@@ -550,7 +550,7 @@ function ImproveAny:InitIASettings()
 			AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
 		end
 
-		if not IsAddOnLoaded("DragonflightUi") then
+		if not ImproveAny:IsAddOnLoaded("DragonflightUi") then
 			AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
 		end
 
