@@ -2,13 +2,13 @@ local _, ImproveAny = ...
 local deg, atan2 = math.deg, math.atan2
 local minimapshape = "ROUND"
 function ImproveAny:UpdateMinimapSettings()
-	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPSHAPESQUARE", false) and not IsAddOnLoaded("DragonflightUi") then
 		ImproveAny:SHAPE("SQUARE")
 	else
 		ImproveAny:SHAPE("ROUND")
 	end
 
-	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) then
+	if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) and not IsAddOnLoaded("DragonflightUi") then
 		if MinimapBorder then
 			MinimapBorder:Hide()
 		end
@@ -20,7 +20,7 @@ function ImproveAny:UpdateMinimapSettings()
 		if MinimapCompassTexture then
 			MinimapCompassTexture:Hide()
 		end
-	else
+	elseif not IsAddOnLoaded("DragonflightUi") then
 		if MinimapBorder then
 			MinimapBorder:Show()
 		end
@@ -104,7 +104,7 @@ function ImproveAny:UpdateMinimapSettings()
 		0.1,
 		function()
 			ImproveAny:Debug("minimap.lua: delay")
-			if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) then
+			if ImproveAny:IsEnabled("MINIMAP", false) and ImproveAny:IsEnabled("MINIMAPHIDEBORDER", false) and not IsAddOnLoaded("DragonflightUi") then
 				if MinimapBorder then
 					MinimapBorder:SetParent(IAHIDDEN)
 				end

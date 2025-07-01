@@ -44,6 +44,12 @@ function ImproveAny:UpdateBagMode()
 	ImproveAny:IASV("BAGMODE", val)
 end
 
+function ImproveAny:GetBagMode()
+	if not IsAddOnLoaded("DragonflightUi") then return "DISABLED" end
+
+	return ImproveAny:IAGV("BAGMODE", "RETAIL")
+end
+
 local searchStr = ""
 local posy = -4
 local cas = {}
@@ -436,7 +442,7 @@ function ImproveAny:InitIASettings()
 	IASettings:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	IASettings:SetFrameStrata("HIGH")
 	IASettings:SetFrameLevel(999)
-	IASettings:SetClampedToScreen(true)
+	ImproveAny:SetClampedToScreen(IASettings, true)
 	IASettings:SetMovable(true)
 	IASettings:EnableMouse(true)
 	IASettings:RegisterForDrag("LeftButton")
@@ -456,7 +462,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.157")
+	ImproveAny:SetVersion(136033, "0.9.158")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -481,7 +487,10 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "FREESPACEBAGS", false)
 		AddCheckBox(4, "BAGSAMESIZE", false)
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
-		AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
+		if not IsAddOnLoaded("DragonflightUi") then
+			AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
+		end
+
 		AddCategory("QUICKGAMEPLAY")
 		AddCheckBox(4, "AUTOSELLJUNK", true)
 		AddCheckBox(4, "AUTOREPAIR", true)
@@ -532,13 +541,19 @@ function ImproveAny:InitIASettings()
 
 		AddCategory("MINIMAP")
 		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
-		AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
+		if not IsAddOnLoaded("DragonflightUi") then
+			AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
+		end
+
 		AddCheckBox(24, "MINIMAPHIDEZOOMBUTTONS", false, ImproveAny.UpdateMinimapSettings)
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
 		end
 
-		AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
+		if not IsAddOnLoaded("DragonflightUi") then
+			AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
+		end
+
 		AddCheckBox(24, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
 		if ImproveAny:GetWoWBuild() == "RETAIL" then
