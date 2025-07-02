@@ -122,31 +122,33 @@ function ImproveAny:IsOnActionbar(spellID)
 end
 
 function ImproveAny:InitSpellBookFix()
-	hooksecurefunc(
-		"SpellBookFrame_UpdateSpells",
-		function()
-			for i = 1, SPELLS_PER_PAGE do
-				local sel = _G["SpellButton" .. i]
-				local slot, slotType = SpellBook_GetSpellBookSlot(sel)
-				if slot and slotType ~= "FUTURESPELL" then
-					local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
-					local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
-					local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
-					if isPassive or spellName == nil or texture == 134419 then
-						sel:SetChecked(false)
-					else
-						if spellName and spellID and not ImproveAny:IsOnActionbar(spellID) then
-							sel:SetChecked(true)
-						else
+	if SpellBookFrame_UpdateSpells then
+		hooksecurefunc(
+			"SpellBookFrame_UpdateSpells",
+			function()
+				for i = 1, SPELLS_PER_PAGE do
+					local sel = _G["SpellButton" .. i]
+					local slot, slotType = SpellBook_GetSpellBookSlot(sel)
+					if slot and slotType ~= "FUTURESPELL" then
+						local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
+						local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
+						local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+						if isPassive or spellName == nil or texture == 134419 then
 							sel:SetChecked(false)
+						else
+							if spellName and spellID and not ImproveAny:IsOnActionbar(spellID) then
+								sel:SetChecked(true)
+							else
+								sel:SetChecked(false)
+							end
 						end
+					else
+						sel:SetChecked(false)
 					end
-				else
-					sel:SetChecked(false)
 				end
 			end
-		end
-	)
+		)
+	end
 end
 
 local warningEnhanceDressup = false
