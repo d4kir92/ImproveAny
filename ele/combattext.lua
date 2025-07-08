@@ -13,32 +13,12 @@ function ImproveAny:UpdateCombatTextPos()
 	end
 end
 
-local IATabBuffs = {}
 local once = true
 function ImproveAny:InitCombatText()
 	if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) or ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 		if once then
 			once = false
-			if GetNumTalentTabs and GetNumTalents and GetTalentInfo then
-				for tab = 1, GetNumTalentTabs() do
-					for talent = 1, GetNumTalents(tab) do
-						local name, icon = GetTalentInfo(tab, talent)
-						if name then
-							IATabTalents[name] = icon
-						end
-					end
-				end
-			elseif MAX_TALENT_TIERS and NUM_TALENT_COLUMNS then
-				for tier = 1, MAX_TALENT_TIERS do
-					for column = 1, NUM_TALENT_COLUMNS do
-						local name, icon = GetTalentInfo(tier, column, GetActiveSpecGroup())
-						if name then
-							IATabTalents[name] = icon
-						end
-					end
-				end
-			end
-
+			IATabBuffs = ImproveAny:GetTalentIcons()
 			local cle = CreateFrame("Frame")
 			cle:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 			cle:SetScript(

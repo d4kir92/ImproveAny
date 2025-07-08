@@ -650,16 +650,62 @@ function D4:GetSpecIcon(className, specId)
     return specIcons[className][specId]
 end
 
+local icons = {}
+local searchIcons = true
+function D4:GetTalentIcons()
+    if searchIcons then
+        if GetSpecialization and GetSpecialization() then
+            if GetSpecializationInfo then
+                for i = 1, 4 do
+                    local name, _, _, icon = GetSpecializationInfo(i)
+                    if name and icon then
+                        searchIcons = false
+                        icons[name] = icon
+                    end
+                end
+            end
+        elseif GetPrimaryTalentTree and GetPrimaryTalentTree() then
+            if GetTalentTabInfo then
+                for i = 1, 4 do
+                    local name, _, _, icon = GetTalentTabInfo(i)
+                    if name and icon then
+                        print(name, icon)
+                        searchIcons = false
+                        icons[name] = icon
+                    end
+                end
+            end
+        elseif GetTalentTabInfo then
+            for i = 1, 4 do
+                local name, _, _, icon = GetTalentTabInfo(i)
+                if name and icon then
+                    searchIcons = false
+                    icons[name] = icon
+                end
+            end
+        end
+    end
+
+    return icons
+end
+
 function D4:GetTalentInfo()
     local specid, icon
-    if GetSpecialization then
+    if GetSpecialization and GetSpecialization() then
         specid = GetSpecialization()
         if GetSpecializationInfo then
             _, _, _, icon = GetSpecializationInfo(specid)
         end
 
         return specid, icon
-    else
+    elseif GetPrimaryTalentTree and GetPrimaryTalentTree() then
+        specid = GetPrimaryTalentTree()
+        if specid and GetTalentTabInfo then
+            _, _, _, icon = GetTalentTabInfo(specid)
+        end
+
+        return specid, icon
+    elseif GetTalentTabInfo then
         local ps = 0
         for i = 1, 4 do
             local _, _, _, iconTexture, pointsSpent = GetTalentTabInfo(i)
