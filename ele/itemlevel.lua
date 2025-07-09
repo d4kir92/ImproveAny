@@ -127,30 +127,34 @@ function ImproveAny:PDUpdateItemInfos()
 					local ilvl, _, _ = GetDetailedItemLevelInfo(Link)
 					local color = ITEM_QUALITY_COLORS[rarity]
 					local current, maximum = GetInventoryItemDurability(i)
-					local tooltipData = C_TooltipInfo.GetInventoryItem("player", slotId)
-					local foundEnchant = false
-					if tooltipData ~= nil then
-						for x, line in pairs(tooltipData.lines) do
-							local text = line.leftText
-							local enchantString = string.match(text, ENCHANTED_TOOLTIP_LINE:gsub("%%s", "(.*)"))
-							if enchantString ~= nil then
-								foundEnchant = true
-								if string.find(enchantString, "|A:") then
-									local itemEnchant, itemEnchantAtlas = string.match(enchantString, "(.*)|A:(.*):20:20|a")
-									if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
-										SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":16:16:0:0|a " .. itemEnchant .. "|r")
+					if C_TooltipInfo then
+						local tooltipData = C_TooltipInfo.GetInventoryItem("player", slotId)
+						local foundEnchant = false
+						if tooltipData ~= nil then
+							for x, line in pairs(tooltipData.lines) do
+								local text = line.leftText
+								local enchantString = string.match(text, ENCHANTED_TOOLTIP_LINE:gsub("%%s", "(.*)"))
+								if enchantString ~= nil then
+									foundEnchant = true
+									if string.find(enchantString, "|A:") then
+										local itemEnchant, itemEnchantAtlas = string.match(enchantString, "(.*)|A:(.*):20:20|a")
+										if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
+											SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":16:16:0:0|a " .. itemEnchant .. "|r")
+										else
+											SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":24:24:0:0|a")
+										end
 									else
-										SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":24:24:0:0|a")
+										local itemEnchant = enchantString
+										SLOT.iatexte:SetText("|cFF00FF00" .. itemEnchant .. "|r")
 									end
-								else
-									local itemEnchant = enchantString
-									SLOT.iatexte:SetText("|cFF00FF00" .. itemEnchant .. "|r")
 								end
 							end
 						end
-					end
 
-					if not foundEnchant then
+						if not foundEnchant then
+							SLOT.iatexte:SetText("")
+						end
+					else
 						SLOT.iatexte:SetText("")
 					end
 
