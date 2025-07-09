@@ -275,7 +275,9 @@ function ImproveAny:InitMinimap()
 					function()
 						IAMMBtnsFrame:StopMovingOrSizing()
 						local p1, _, p3, p4, p5 = IAMMBtnsFrame:GetPoint()
-						ImproveAny:SetElePoint("IAMMBtnsFrame", p1, _, p3, p4, p5)
+						if p1 and p3 then
+							ImproveAny:SetElePoint("IAMMBtnsFrame", p1, _, p3, p4, p5)
+						end
 					end
 				)
 
@@ -455,11 +457,7 @@ function ImproveAny:InitMinimap()
 							btn.db = IATAB[name .. "db"]
 							btn.db.minimapPos = btn.db.minimapPos or 0
 							btn.minimapPos = btn.minimapPos or 0
-							if not InCombatLockdown() then
-								btn:ClearAllPoints()
-								ImproveAny:UpdatePosition(btn, btn.db.minimapPos)
-							end
-
+							ImproveAny:UpdatePosition(btn, btn.db.minimapPos)
 							btn:RegisterForDrag("LeftButton")
 							btn:SetScript(
 								"OnDragStart",
@@ -481,10 +479,7 @@ function ImproveAny:InitMinimap()
 												se.minimapPos = pos
 											end
 
-											if not InCombatLockdown() then
-												se:ClearAllPoints()
-												ImproveAny:UpdatePosition(se, pos)
-											end
+											ImproveAny:UpdatePosition(se, pos)
 										end
 									)
 								end

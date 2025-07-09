@@ -452,7 +452,9 @@ function ImproveAny:InitIASettings()
 		function()
 			IASettings:StopMovingOrSizing()
 			local p1, _, p3, p4, p5 = IASettings:GetPoint()
-			ImproveAny:SetElePoint("IASettings", p1, _, p3, p4, p5)
+			if p1 and p3 then
+				ImproveAny:SetElePoint("IASettings", p1, _, p3, p4, p5)
+			end
 		end
 	)
 
@@ -462,7 +464,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.161")
+	ImproveAny:SetVersion(136033, "0.9.162")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -562,6 +564,7 @@ function ImproveAny:InitIASettings()
 
 		AddCategory("ITEMLEVEL")
 		AddCheckBox(4, "ITEMLEVELSYSTEM")
+		AddCheckBox(24, "ITEMLEVELSYSTEMSIDEWAYS", true)
 		AddCheckBox(24, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
 		AddCheckBox(24, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 		AddCategory("FRAMES")

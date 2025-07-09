@@ -103,6 +103,7 @@ function ImproveAny:Lang_deDE()
 		["FRAMES"] = "Fenster",
 		["WIDEFRAMES"] = "Weite Fenster",
 		["ITEMLEVELSYSTEM"] = "ItemLevel System",
+		["ITEMLEVELSYSTEMSIDEWAYS"] = "ItemLevel System (Seitlich anzeigen)",
 		["AUTOACCEPTQUESTS"] = "Automatisch Quests annehmen",
 		["AUTOCHECKINQUESTS"] = "Automatisch Quests abgeben",
 		["COMBINEMMBTNS"] = "Minimap Knöpfe zusammenfassen",

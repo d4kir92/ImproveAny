@@ -5,11 +5,31 @@ local IAClassIDs = {2, 3, 4, 6, 8}
 local IASubClassIDs15 = {5, 6}
 local slotbry = 0
 local IACharSlots = {"AmmoSlot", "HeadSlot", "NeckSlot", "ShoulderSlot", "ShirtSlot", "ChestSlot", "WaistSlot", "LegsSlot", "FeetSlot", "WristSlot", "HandsSlot", "Finger0Slot", "Finger1Slot", "Trinket0Slot", "Trinket1Slot", "BackSlot", "MainHandSlot", "SecondaryHandSlot", "RangedSlot", "TabardSlot",}
+local IACharSlotsLeft = {}
+IACharSlotsLeft["CharacterHeadSlot"] = true
+IACharSlotsLeft["CharacterNeckSlot"] = true
+IACharSlotsLeft["CharacterShoulderSlot"] = true
+IACharSlotsLeft["CharacterBackSlot"] = true
+IACharSlotsLeft["CharacterChestSlot"] = true
+IACharSlotsLeft["CharacterShirtSlot"] = true
+IACharSlotsLeft["CharacterTabardSlot"] = true
+IACharSlotsLeft["CharacterWristSlot"] = true
+IACharSlotsLeft["CharacterSecondaryHandSlot"] = true
+local IACharSlotsRight = {}
+IACharSlotsRight["CharacterHandsSlot"] = true
+IACharSlotsRight["CharacterWaistSlot"] = true
+IACharSlotsRight["CharacterLegsSlot"] = true
+IACharSlotsRight["CharacterFeetSlot"] = true
+IACharSlotsRight["CharacterFinger0Slot"] = true
+IACharSlotsRight["CharacterFinger1Slot"] = true
+IACharSlotsRight["CharacterTrinket0Slot"] = true
+IACharSlotsRight["CharacterTrinket1Slot"] = true
+IACharSlotsRight["CharacterMainHandSlot"] = true
 function ImproveAny:AddIlvl(SLOT, i)
 	if SLOT and SLOT.iainfo == nil then
 		local name = ""
 		if SLOT.GetName then
-			name = ImproveAny:GetName(SLOT) .. "."
+			name = ImproveAny:GetName(SLOT)
 		end
 
 		SLOT.iainfo = CreateFrame("FRAME", name .. ".iainfo", SLOT)
@@ -23,12 +43,58 @@ function ImproveAny:AddIlvl(SLOT, i)
 		SLOT.iatexth = SLOT.iainfo:CreateFontString(nil, "OVERLAY")
 		SLOT.iatexth:SetFont(STANDARD_TEXT_FONT, 9, "THINOUTLINE")
 		SLOT.iatexth:SetShadowOffset(1, -1)
+		SLOT.iatexte = SLOT.iainfo:CreateFontString(nil, "OVERLAY")
+		SLOT.iatexte:SetFont(STANDARD_TEXT_FONT, 6, "THINOUTLINE")
+		SLOT.iatexte:SetShadowOffset(1, -1)
 		SLOT.iaborder = SLOT.iainfo:CreateTexture("SLOT.iaborder", "OVERLAY")
 		SLOT.iaborder:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
 		SLOT.iaborder:SetBlendMode("ADD")
 		SLOT.iaborder:SetAlpha(1)
-		SLOT.iatext:SetPoint("TOP", SLOT.iainfo, "TOP", 0, -slotbry)
-		SLOT.iatexth:SetPoint("BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry)
+		if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
+			slotbry = 4
+			if IACharSlotsLeft[name] then
+				SLOT.iatexte:SetPoint("LEFT", SLOT.iainfo, "RIGHT", 6, -1)
+			elseif IACharSlotsRight[name] then
+				SLOT.iatexte:SetPoint("RIGHT", SLOT.iainfo, "LEFT", -6, -1)
+			else
+				slotbry = 0
+				SLOT.iatexte:SetPoint("CENTER", SLOT.iainfo, "CENTER", 0, 0)
+			end
+		else
+			slotbry = 0
+			SLOT.iatexte:SetPoint("CENTER", SLOT.iainfo, "CENTER", 0, 0)
+		end
+
+		if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
+			slotbry = 4
+			if IACharSlotsLeft[name] then
+				SLOT.iatext:SetPoint("TOPLEFT", SLOT.iainfo, "TOPRIGHT", 6, -slotbry)
+			elseif IACharSlotsRight[name] then
+				SLOT.iatext:SetPoint("TOPRIGHT", SLOT.iainfo, "TOPLEFT", -6, -slotbry)
+			else
+				slotbry = 0
+				SLOT.iatext:SetPoint("TOP", SLOT.iainfo, "TOP", 0, -slotbry)
+			end
+		else
+			slotbry = 0
+			SLOT.iatext:SetPoint("TOP", SLOT.iainfo, "TOP", 0, -slotbry)
+		end
+
+		if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
+			slotbry = 4
+			if IACharSlotsLeft[name] then
+				SLOT.iatexth:SetPoint("BOTTOMLEFT", SLOT.iainfo, "BOTTOMRIGHT", 6, slotbry)
+			elseif IACharSlotsRight[name] then
+				SLOT.iatexth:SetPoint("BOTTOMRIGHT", SLOT.iainfo, "BOTTOMLEFT", -6, slotbry)
+			else
+				slotbry = 0
+				SLOT.iatexth:SetPoint("BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry)
+			end
+		else
+			slotbry = 0
+			SLOT.iatexth:SetPoint("BOTTOM", SLOT.iainfo, "BOTTOM", 0, slotbry)
+		end
+
 		local NormalTexture = _G[ImproveAny:GetName(SLOT) .. "NormalTexture"]
 		if NormalTexture then
 			local sw, sh = NormalTexture:GetSize()
@@ -54,12 +120,40 @@ function ImproveAny:PDUpdateItemInfos()
 			i = i - 1
 			local SLOT = _G["Character" .. slot]
 			if SLOT and SLOT.iatext ~= nil and GetInventoryItemLink and SLOT.GetID and SLOT:GetID() then
-				local ItemID = GetInventoryItemLink("PLAYER", SLOT:GetID()) or GetInventoryItemID("PLAYER", SLOT:GetID())
-				if ItemID ~= nil and GetDetailedItemLevelInfo then
-					local _, _, rarity = ImproveAny:GetItemInfo(ItemID)
-					local ilvl, _, _ = GetDetailedItemLevelInfo(ItemID)
+				local slotId = SLOT:GetID()
+				local Link = GetInventoryItemLink("player", slotId) or GetInventoryItemID("player", slotId)
+				if Link ~= nil and GetDetailedItemLevelInfo then
+					local _, _, rarity = ImproveAny:GetItemInfo(Link)
+					local ilvl, _, _ = GetDetailedItemLevelInfo(Link)
 					local color = ITEM_QUALITY_COLORS[rarity]
 					local current, maximum = GetInventoryItemDurability(i)
+					local tooltipData = C_TooltipInfo.GetInventoryItem("player", slotId)
+					local foundEnchant = false
+					if tooltipData ~= nil then
+						for x, line in pairs(tooltipData.lines) do
+							local text = line.leftText
+							local enchantString = string.match(text, ENCHANTED_TOOLTIP_LINE:gsub("%%s", "(.*)"))
+							if enchantString ~= nil then
+								foundEnchant = true
+								if string.find(enchantString, "|A:") then
+									local itemEnchant, itemEnchantAtlas = string.match(enchantString, "(.*)|A:(.*):20:20|a")
+									if ImproveAny:IsEnabled("ITEMLEVELSYSTEMSIDEWAYS", true) then
+										SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":16:16:0:0|a " .. itemEnchant .. "|r")
+									else
+										SLOT.iatexte:SetText("|cFF00FF00|A:" .. itemEnchantAtlas .. ":24:24:0:0|a")
+									end
+								else
+									local itemEnchant = enchantString
+									SLOT.iatexte:SetText("|cFF00FF00" .. itemEnchant .. "|r")
+								end
+							end
+						end
+					end
+
+					if not foundEnchant then
+						SLOT.iatexte:SetText("")
+					end
+
 					if current and maximum then
 						local per = current / maximum
 						-- 100%
@@ -123,16 +217,19 @@ function ImproveAny:PDUpdateItemInfos()
 						else
 							SLOT.iatext:SetText("")
 							SLOT.iatexth:SetText("")
+							SLOT.iatexte:SetText("")
 							SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 						end
 					else
 						SLOT.iatext:SetText("")
 						SLOT.iatexth:SetText("")
+						SLOT.iatexte:SetText("")
 						SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 					end
 				else
 					SLOT.iatext:SetText("")
 					SLOT.iatexth:SetText("")
+					SLOT.iatexte:SetText("")
 					SLOT.iaborder:SetVertexColor(1, 1, 1, 0)
 				end
 			end
@@ -154,14 +251,18 @@ function ImproveAny:PDUpdateItemInfos()
 
 			IAILVL = string.format("%0.2f", sum / max)
 			if PaperDollFrame.ilvl then
-				if true then
-					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. ImproveAny:GetIAILVL())
-				else
+				if ImproveAny:GetWoWBuild() == "RETAIL" then
 					PaperDollFrame.ilvl:SetText("")
+				else
+					PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": |r" .. ImproveAny:GetIAILVL())
 				end
 			end
 		elseif PaperDollFrame.ilvl then
-			PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
+			if ImproveAny:GetWoWBuild() == "RETAIL" then
+				PaperDollFrame.ilvl:SetText("")
+			else
+				PaperDollFrame.ilvl:SetText("|cFFFFFF00" .. ITEM_LEVEL_ABBR .. ": " .. "|cFFFF0000?")
+			end
 		end
 	end
 end
@@ -171,7 +272,12 @@ function ImproveAny:InitItemLevel()
 		PaperDollFrame.ilvl = PaperDollFrame:CreateFontString(nil, "ARTWORK")
 		PaperDollFrame.ilvl:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
 		PaperDollFrame.ilvl:SetPoint("TOPLEFT", CharacterWristSlot, "BOTTOMLEFT", 24, -15)
-		PaperDollFrame.ilvl:SetText(ITEM_LEVEL_ABBR .. ": ?")
+		if ImproveAny:GetWoWBuild() == "RETAIL" then
+			PaperDollFrame.ilvl:SetText("")
+		else
+			PaperDollFrame.ilvl:SetText(ITEM_LEVEL_ABBR .. ": ?")
+		end
+
 		for i, slot in pairs(IACharSlots) do
 			ImproveAny:AddIlvl(_G["Character" .. slot], i)
 		end
