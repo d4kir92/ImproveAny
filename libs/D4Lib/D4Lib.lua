@@ -48,6 +48,36 @@ if C_Timer == nil then
     D4.oldWow = true
 end
 
+local countAfter = {}
+local debug = false
+function D4:SetDebug(bo)
+    debug = bo
+end
+
+function D4:After(time, callback, from)
+    if from == nil then
+        D4:INFO("[AFTER] MISSING FROM", time)
+
+        return
+    end
+
+    if debug then
+        countAfter[from] = countAfter[from] or 0
+        countAfter[from] = countAfter[from] + 1
+    end
+
+    C_Timer.After(
+        time,
+        function()
+            callback()
+        end
+    )
+end
+
+function D4:GetCountAfter()
+    return countAfter
+end
+
 function D4:GetClassColor(class)
     local colorTab = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
     if CUSTOM_CLASS_COLORS == nil and D4:GetWoWBuild() == "CLASSIC" and class == "SHAMAN" then return 0, 0.44, 0.87, "FF0070DE" end
@@ -265,7 +295,7 @@ local function FixIconChat(sel, event, message, author, ...)
     return false, message, author, ...
 end
 
-C_Timer.After(
+D4:After(
     2,
     function()
         local chatChannels = {}
@@ -280,11 +310,11 @@ C_Timer.After(
         end
 
         ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", FixIconChat)
-    end
+    end, "D4 1"
 )
 
 if D4:GetWoWBuild() == "CLASSIC" then
-    C_Timer.After(
+    D4:After(
         2,
         function()
             -- FIX HEALTH
@@ -424,7 +454,7 @@ if D4:GetWoWBuild() == "CLASSIC" then
                     hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", TextStatusBar_UpdateTextStringWithValues)
                 end
             end
-        end
+        end, "FixHealth"
     )
 end
 
@@ -834,3 +864,37 @@ f:SetScript(
         end
     end
 )
+
+function D4:DrawDebug(name, callback, fontSize, sw, sh, p1, p2, p3, p4, p5)
+    sw = sw or 100
+    sh = sh or 50
+    p1 = p1 or "CENTER"
+    p2 = p2 or UIParent
+    p3 = p3 or "CENTER"
+    p4 = p4 or 0
+    p5 = p5 or 0
+    local fDebug = CreateFrame("Frame", name)
+    fDebug:SetSize(sw, sh)
+    fDebug:SetPoint(p1, p2, p3, p4, p5)
+    fDebug.text = fDebug:CreateFontString(nil, nil, "GameFontNormal")
+    fDebug.text:SetPoint("CENTER", fDebug, "CENTER", 0, 0)
+    fDebug.text:SetSize(sw, sh)
+    if fontSize then
+        D4:SetFontSize(fDebug.text, fontSize)
+    end
+
+    local function Think()
+        local text = callback()
+        fDebug.text:SetText(text)
+        D4:After(
+            0.1,
+            function()
+                Think()
+            end, "DrawDebug Think"
+        )
+    end
+
+    Think()
+
+    return fDebug
+end

@@ -48,11 +48,11 @@ function D4:UpdatePosition(button, position, parent)
     end
 
     if InCombatLockdown() and button:IsProtected() then
-        C_Timer.After(
+        D4:After(
             0.1,
             function()
                 D4:UpdatePosition(button, position, parent)
-            end
+            end, "UpdatePosition"
         )
 
         return false
@@ -70,20 +70,23 @@ end
 
 if GetD4MinimapHover == nil then
     local MinimapHover = false
-    local minimapHover = CreateFrame("Frame")
-    minimapHover:HookScript(
-        "OnUpdate",
-        function()
-            local mouseFocus = D4:GetMouseFocus()
-            local btnFocus = false
-            if mouseFocus and D4:GetParent(mouseFocus) ~= nil then
-                btnFocus = D4:GetParent(mouseFocus) == Minimap
-            end
-
-            MinimapHover = MouseIsOver(Minimap) or btnFocus
+    local function MinimapHoverThink()
+        local mouseFocus = D4:GetMouseFocus()
+        local btnFocus = false
+        if mouseFocus and D4:GetParent(mouseFocus) ~= nil then
+            btnFocus = D4:GetParent(mouseFocus) == Minimap
         end
-    )
 
+        MinimapHover = MouseIsOver(Minimap) or btnFocus
+        D4:After(
+            0.04,
+            function()
+                MinimapHoverThink()
+            end, "MinimapHoverThink"
+        )
+    end
+
+    MinimapHoverThink()
     function GetD4MinimapHover()
         return MinimapHover
     end
@@ -281,31 +284,36 @@ function D4:CreateMinimapButton(params)
     animOut:SetStartDelay(1)
     btn.fadeOut:SetToFinalAlpha(true)
     btn.ia_visible = false
-    btn:HookScript(
-        "OnUpdate",
-        function()
-            if btn.ia_visible_old ~= GetD4MinimapHover() then
-                btn.ia_visible_old = GetD4MinimapHover()
-                if GetD4MinimapHover() then
-                    if D4:GetParent(btn) == Minimap then
-                        btn.fadeOut:Stop()
-                        btn:SetAlpha(1)
-                    else
-                        btn.fadeOut:Stop()
-                        btn:SetAlpha(1)
-                    end
+    local function BtnThink()
+        if btn.ia_visible_old ~= GetD4MinimapHover() then
+            btn.ia_visible_old = GetD4MinimapHover()
+            if GetD4MinimapHover() then
+                if D4:GetParent(btn) == Minimap then
+                    btn.fadeOut:Stop()
+                    btn:SetAlpha(1)
                 else
-                    if D4:GetParent(btn) == Minimap then
-                        btn.fadeOut:Play()
-                    else
-                        btn.fadeOut:Stop()
-                        btn:SetAlpha(1)
-                    end
+                    btn.fadeOut:Stop()
+                    btn:SetAlpha(1)
+                end
+            else
+                if D4:GetParent(btn) == Minimap then
+                    btn.fadeOut:Play()
+                else
+                    btn.fadeOut:Stop()
+                    btn:SetAlpha(1)
                 end
             end
         end
-    )
 
+        D4:After(
+            0.2,
+            function()
+                BtnThink()
+            end, "D4 BtnThink"
+        )
+    end
+
+    BtnThink()
     if D4:GetParent(btn) == Minimap then
         btn.fadeOut:Play()
     end
@@ -385,9 +393,9 @@ function D4:UpdateLTP()
     end
 end
 
-C_Timer.After(
+D4:After(
     4,
     function()
         D4:UpdateLTP()
-    end
+    end, "UpdateLTP"
 )
