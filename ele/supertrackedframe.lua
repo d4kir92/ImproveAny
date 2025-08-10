@@ -93,7 +93,7 @@ function ImproveAny:InitSuperTrackedFrame()
 				lastDistPerSec = distPerSec
 				lastDist = distance
 				ImproveAny:Debug("supertrackedframe.lua: ThinkSTF " .. distance, "think")
-				C_Timer.After(0.5, ImproveAny.ThinkSTF)
+				ImproveAny:After(0.5, ImproveAny.ThinkSTF, "ThinkSTF")
 			end
 
 			ImproveAny:ThinkSTF()

@@ -99,16 +99,16 @@ function ImproveAny:InitBags()
 		end
 
 		BAGThink.UpdateItemInfos()
-		BAGThink:RegisterEvent("BAG_UPDATE")
-		BAGThink:SetScript(
-			"OnEvent",
+		ImproveAny:RegisterEvent(BAGThink, "BAG_UPDATE")
+		ImproveAny:OnEvent(
+			BAGThink,
 			function(sel, event, slotid, ...)
 				BAGThink.UpdateItemInfos()
-			end
+			end, "BAGThink"
 		)
 
 		ImproveAny:Debug("bags #1")
-		C_Timer.After(
+		ImproveAny:After(
 			1,
 			function()
 				if not BagsBar then
@@ -304,12 +304,12 @@ function ImproveAny:InitBags()
 				elseif ImproveAny:GetBagMode() ~= "DISABLED" then
 					ImproveAny:MSG("BAGMODE NOT FOUND: " .. ImproveAny:GetBagMode())
 				end
-			end
+			end, "bags #1"
 		)
 	end
 
 	ImproveAny:Debug("bags #2")
-	C_Timer.After(
+	ImproveAny:After(
 		1,
 		function()
 			for i, v in pairs(BAGS) do
@@ -324,6 +324,6 @@ function ImproveAny:InitBags()
 					end
 				end
 			end
-		end
+		end, "bags #2"
 	)
 end

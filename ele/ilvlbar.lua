@@ -45,7 +45,7 @@ function ImproveAny:InitIAILVLBar()
 			end
 
 			ImproveAny:Debug("IAILVLBar.lua: Think", "think")
-			C_Timer.After(1, IAILVLBar.Think)
+			ImproveAny:After(1, IAILVLBar.Think, "IAILVLBar.Think")
 		end
 
 		IAILVLBar.Think()

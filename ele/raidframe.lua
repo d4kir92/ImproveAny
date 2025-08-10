@@ -13,13 +13,13 @@ function ImproveAny:InitRaidFrames()
 			if frame == nil then return end
 			if InCombatLockdown() then
 				ImproveAny:Debug("raidframe.lua: RFModifySetSize")
-				C_Timer.After(
+				ImproveAny:After(
 					0.1,
 					function()
 						if frame then
 							ImproveAny:RFModifySetSize(frame)
 						end
-					end
+					end, "ImproveAny:RFModifySetSize(frame)"
 				)
 			else
 				local sw, sh = frame:GetSize()

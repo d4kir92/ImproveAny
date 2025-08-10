@@ -100,7 +100,7 @@ function ImproveAny:UpdateMinimapSettings()
 		end
 	end
 
-	C_Timer.After(
+	ImproveAny:After(
 		0.1,
 		function()
 			ImproveAny:Debug("minimap.lua: delay")
@@ -136,7 +136,7 @@ function ImproveAny:UpdateMinimapSettings()
 					end
 				end
 			end
-		end
+		end, "UpdateMinimapSettings"
 	)
 end
 
@@ -250,7 +250,7 @@ function ImproveAny:InitMinimap()
 	if ImproveAny:IsEnabled("MINIMAP", false) then
 		if ElvUI then return end
 		ImproveAny:Debug("minimap.lua: delay #2")
-		C_Timer.After(
+		ImproveAny:After(
 			0.3,
 			function()
 				local mmBtnsNames = {"Lib_GPI_Minimap_", "MinimapButton_D4Lib_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
@@ -610,11 +610,11 @@ function ImproveAny:InitMinimap()
 						ImproveAny:UpdateIAMMBtns()
 					end
 
-					C_Timer.After(0.9, ImproveAny.UpdateMMBtns)
+					ImproveAny:After(0.9, ImproveAny.UpdateMMBtns, "UpdateMMBtns")
 				end
 
 				ImproveAny:UpdateMMBtns()
-			end
+			end, "InitMinimap"
 		)
 	end
 end

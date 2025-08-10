@@ -88,10 +88,10 @@ function ImproveAny:InitCastBar()
 					end
 
 					ImproveAny:Debug("castbar.lua: tick #1", "think")
-					C_Timer.After(castbar.tick, ImproveAny.UpdateCastbarTimer)
+					ImproveAny:After(castbar.tick, ImproveAny.UpdateCastbarTimer, "UpdateCastbarTimer 1")
 				else
 					ImproveAny:Debug("castbar.lua: tick #2", "think")
-					C_Timer.After(1, ImproveAny.UpdateCastbarTimer)
+					ImproveAny:After(1, ImproveAny.UpdateCastbarTimer, "UpdateCastbarTimer 2")
 				end
 			end
 

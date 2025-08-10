@@ -1,6 +1,6 @@
 local _, ImproveAny = ...
 ImproveAny:Debug("repbar.lua: Init")
-C_Timer.After(
+ImproveAny:After(
 	0.01,
 	function()
 		if ImproveAny:IsEnabled("REPBAR", false) then
@@ -188,5 +188,5 @@ C_Timer.After(
 				ReputationWatchBar.OverlayFrame.Text:SetText(ReputationWatchBar.OverlayFrame.Text:GetText() or "")
 			end
 		end
-	end
+	end, "RepBar"
 )

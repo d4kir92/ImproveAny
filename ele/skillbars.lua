@@ -147,7 +147,7 @@ function ImproveAny:SkillsThink()
 	end
 
 	ImproveAny:Debug("skillbars.lua: SkillsThink", "think")
-	C_Timer.After(1, ImproveAny.SkillsThink)
+	ImproveAny:After(1, ImproveAny.SkillsThink, "SkillsThink")
 end
 
 local skillid = 0

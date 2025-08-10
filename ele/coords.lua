@@ -19,7 +19,7 @@ function ImproveAny:InitIACoordsFrame()
 			end
 
 			ImproveAny:Debug("coords.lua: CoordsThink")
-			C_Timer.After(config_update, ImproveAny.CoordsThink)
+			ImproveAny:After(config_update, ImproveAny.CoordsThink, "CoordsThink")
 		end
 
 		ImproveAny:CoordsThink()

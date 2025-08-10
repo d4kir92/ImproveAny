@@ -214,18 +214,18 @@ function ImproveAny:InitXPBar()
 		end
 
 		ImproveAny:Debug("xpbar.lua: #1")
-		C_Timer.After(
+		ImproveAny:After(
 			0.01,
 			function()
 				if GetRewardXP ~= nil then
 					local qaf = CreateFrame("FRAME")
-					qaf:RegisterEvent("QUEST_ACCEPTED")
-					qaf:RegisterEvent("QUEST_COMPLETE")
-					qaf:RegisterEvent("QUEST_TURNED_IN")
-					qaf:RegisterEvent("LOOT_OPENED")
-					qaf:RegisterEvent("LOOT_CLOSED")
-					qaf:SetScript(
-						"OnEvent",
+					ImproveAny:RegisterEvent(qaf, "QUEST_ACCEPTED")
+					ImproveAny:RegisterEvent(qaf, "QUEST_COMPLETE")
+					ImproveAny:RegisterEvent(qaf, "QUEST_TURNED_IN")
+					ImproveAny:RegisterEvent(qaf, "LOOT_OPENED")
+					ImproveAny:RegisterEvent(qaf, "LOOT_CLOSED")
+					ImproveAny:OnEvent(
+						qaf,
 						function(sel, event, ...)
 							if event == "QUEST_ACCEPTED" then
 								local _, questID = ...
@@ -239,15 +239,15 @@ function ImproveAny:InitXPBar()
 							end
 
 							ImproveAny:Debug("xpbar.lua: #2")
-							C_Timer.After(
+							ImproveAny:After(
 								0.05,
 								function()
 									if MainMenuBarExpText then
 										MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
 									end
-								end
+								end, "qaf"
 							)
-						end
+						end, "qaf"
 					)
 
 					function ImproveAny:UpdateQAF()
@@ -256,7 +256,7 @@ function ImproveAny:InitXPBar()
 						end
 
 						ImproveAny:Debug("xpbar.lua: #3")
-						C_Timer.After(1.1, ImproveAny.UpdateQAF)
+						ImproveAny:After(1.1, ImproveAny.UpdateQAF, "UpdateQAF")
 					end
 
 					ImproveAny:UpdateQAF()
@@ -342,7 +342,7 @@ function ImproveAny:InitXPBar()
 
 					for sec = 1, 3 do
 						ImproveAny:Debug("xpbar.lua: #4")
-						C_Timer.After(
+						ImproveAny:After(
 							sec,
 							function()
 								if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
@@ -352,7 +352,7 @@ function ImproveAny:InitXPBar()
 									MainMenuExpBar.show = false
 									MainMenuBarExpText:Hide()
 								end
-							end
+							end, "xpbar.lua: #4"
 						)
 					end
 				end
@@ -368,7 +368,7 @@ function ImproveAny:InitXPBar()
 
 				if true then
 					local frame = CreateFrame("Frame")
-					frame:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN")
+					ImproveAny:RegisterEvent(frame, "CHAT_MSG_COMBAT_XP_GAIN")
 					if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", 1, true) then
 						COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", "%s")
 					end
@@ -378,8 +378,8 @@ function ImproveAny:InitXPBar()
 					end
 
 					local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%s", "(.-)"), "%d", "(%d+)")
-					frame:SetScript(
-						"OnEvent",
+					ImproveAny:OnEvent(
+						frame,
 						function(sel, event, message, ...)
 							-- Only if it is a kill
 							if strfind(message, xpKillText) then
@@ -394,7 +394,7 @@ function ImproveAny:InitXPBar()
 									end
 								end
 							end
-						end
+						end, "xpKillText"
 					)
 				end
 
@@ -517,7 +517,7 @@ function ImproveAny:InitXPBar()
 
 					MainMenuBarExpText:SetText("LOADING")
 				end
-			end
+			end, "XPBar"
 		)
 	end
 end

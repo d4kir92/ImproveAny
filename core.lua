@@ -83,7 +83,7 @@ function ImproveAny:CheckCVars()
 	end
 
 	ImproveAny:Debug("CHECK CVARS", "retry")
-	C_Timer.After(5, ImproveAny.CheckCVars)
+	ImproveAny:After(5, ImproveAny.CheckCVars, "CheckCVars")
 end
 
 function ImproveAny:AddRightClick()
@@ -97,7 +97,7 @@ function ImproveAny:AddRightClick()
 		end
 	else
 		ImproveAny:Debug("AdddRightClick")
-		C_Timer.After(0.1, ImproveAny.AddRightClick)
+		ImproveAny:After(0.1, ImproveAny.AddRightClick, "AddRightClick 1")
 	end
 end
 
@@ -177,9 +177,9 @@ function ImproveAny:Event(event, ...)
 		end
 
 		local f = CreateFrame("Frame")
-		f:RegisterEvent("MERCHANT_SHOW")
-		f:SetScript(
-			"OnEvent",
+		ImproveAny:RegisterEvent(f, "MERCHANT_SHOW")
+		ImproveAny:OnEvent(
+			f,
 			function(sel)
 				if ImproveAny:IsEnabled("AUTOSELLJUNK", true) then
 					for bag = 0, 4 do
@@ -201,7 +201,7 @@ function ImproveAny:Event(event, ...)
 						RepairAllItems()
 					end
 				end
-			end
+			end, "AUTOSELLJUNK"
 		)
 
 		if ImproveAny.InitItemLevel then
@@ -317,11 +317,11 @@ function ImproveAny:Event(event, ...)
 
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
 			ImproveAny:Debug("RIGHTCLICKSELFCAST")
-			C_Timer.After(
+			ImproveAny:After(
 				2,
 				function()
 					ImproveAny:AddRightClick()
-				end
+				end, "AddRightClick 2"
 			)
 		end
 
@@ -579,9 +579,9 @@ function ImproveAny:Event(event, ...)
 		ids[151086] = 1 -- Mythic Invitational Keystone	Added in patch 9.2.0.42698
 		ids[186159] = 1 -- Mythic DF? 					Added in patch 10.0.0.44592
 		local MythicAuto = CreateFrame("Frame")
-		MythicAuto:RegisterEvent("ADDON_LOADED")
-		MythicAuto:SetScript(
-			"OnEvent",
+		ImproveAny:RegisterEvent(MythicAuto, "ADDON_LOADED")
+		ImproveAny:OnEvent(
+			MythicAuto,
 			function(sel, event2, addon)
 				if addon ~= "Blizzard_ChallengesUI" then return end
 				if ChallengesKeystoneFrame then
@@ -599,7 +599,7 @@ function ImproveAny:Event(event, ...)
 
 					sel:UnregisterEvent(event2)
 				end
-			end
+			end, "MythicAuto"
 		)
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
@@ -850,15 +850,15 @@ function ImproveAny:Event(event, ...)
 					TradeSkillFunc("TradeSkill")
 				else
 					local waitFrame = CreateFrame("FRAME")
-					waitFrame:RegisterEvent("ADDON_LOADED")
-					waitFrame:SetScript(
-						"OnEvent",
+					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
+					ImproveAny:OnEvent(
+						waitFrame,
 						function(sel, even, arg1)
 							if arg1 == "Blizzard_TradeSkillUI" then
 								TradeSkillFunc("TradeSkill")
 								waitFrame:UnregisterAllEvents()
 							end
-						end
+						end, "Blizzard_TradeSkillUI"
 					)
 				end
 
@@ -1002,15 +1002,15 @@ function ImproveAny:Event(event, ...)
 					CraftFunc()
 				else
 					local waitFrame = CreateFrame("FRAME")
-					waitFrame:RegisterEvent("ADDON_LOADED")
-					waitFrame:SetScript(
-						"OnEvent",
+					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
+					ImproveAny:OnEvent(
+						waitFrame,
 						function(sel, even, arg1)
 							if arg1 == "Blizzard_CraftUI" then
 								CraftFunc()
 								waitFrame:UnregisterAllEvents()
 							end
-						end
+						end, "Blizzard_CraftUI"
 					)
 				end
 			end
@@ -1136,15 +1136,15 @@ function ImproveAny:Event(event, ...)
 					TrainerFunc()
 				else
 					local waitFrame = CreateFrame("FRAME")
-					waitFrame:RegisterEvent("ADDON_LOADED")
-					waitFrame:SetScript(
-						"OnEvent",
+					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
+					ImproveAny:OnEvent(
+						waitFrame,
 						function(sel, even, arg1)
 							if arg1 == "Blizzard_TrainerUI" then
 								TrainerFunc()
 								waitFrame:UnregisterAllEvents()
 							end
-						end
+						end, "Blizzard_TrainerUI"
 					)
 				end
 			end
@@ -1274,15 +1274,15 @@ function ImproveAny:Event(event, ...)
 				InitTSF()
 			else
 				local waitFrame = CreateFrame("FRAME")
-				waitFrame:RegisterEvent("ADDON_LOADED")
-				waitFrame:SetScript(
-					"OnEvent",
+				ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
+				ImproveAny:OnEvent(
+					waitFrame,
 					function(sel, even, arg1)
 						if arg1 == "Blizzard_TradeSkillUI" then
 							InitTSF()
 							waitFrame:UnregisterAllEvents()
 						end
-					end
+					end, "Blizzard_TradeSkillUI"
 				)
 			end
 		end
@@ -1290,8 +1290,8 @@ function ImproveAny:Event(event, ...)
 end
 
 local f = CreateFrame("Frame")
-f:SetScript("OnEvent", ImproveAny.Event)
-f:RegisterEvent("PLAYER_LOGIN")
+ImproveAny:OnEvent(f, ImproveAny.Event, "FastLooting")
+ImproveAny:RegisterEvent(f, "PLAYER_LOGIN")
 function ImproveAny:FastLooting()
 	if ImproveAny:IsEnabled("FASTLOOTING", false) then
 		ts = GetTime()
@@ -1396,8 +1396,8 @@ AddEQ(9165) -- Writ of Safe Passage (Eastern Plaguelands)
 AddEQ(78714) -- TWW SKIP QUEST 1
 AddEQ(84365) -- TWW SKIP QUEST 2
 local f2 = CreateFrame("Frame")
-f2:RegisterEvent("LOOT_READY")
-f2:SetScript("OnEvent", ImproveAny.FastLooting)
+ImproveAny:RegisterEvent(f2, "LOOT_READY")
+ImproveAny:OnEvent(f2, ImproveAny.FastLooting, "FastLooting 2")
 function ImproveAny:InitAutoAcceptQuests()
 	local default = 1
 	local function RegisterAutoQuestsEvents()
@@ -1483,15 +1483,55 @@ function ImproveAny:InitAutoAcceptQuests()
 		end
 
 		local raaf = CreateFrame("Frame")
-		raaf:RegisterEvent("MODIFIER_STATE_CHANGED")
-		raaf:RegisterEvent("GOSSIP_SHOW")
-		raaf:RegisterEvent("QUEST_PROGRESS")
-		raaf:RegisterEvent("QUEST_DETAIL")
-		raaf:RegisterEvent("QUEST_COMPLETE")
-		raaf:RegisterEvent("QUEST_GREETING")
-		raaf:RegisterEvent("QUEST_ACCEPT_CONFIRM")
-		raaf:SetScript("OnEvent", Autoquests)
+		ImproveAny:RegisterEvent(raaf, "MODIFIER_STATE_CHANGED")
+		ImproveAny:RegisterEvent(raaf, "GOSSIP_SHOW")
+		ImproveAny:RegisterEvent(raaf, "QUEST_PROGRESS")
+		ImproveAny:RegisterEvent(raaf, "QUEST_DETAIL")
+		ImproveAny:RegisterEvent(raaf, "QUEST_COMPLETE")
+		ImproveAny:RegisterEvent(raaf, "QUEST_GREETING")
+		ImproveAny:RegisterEvent(raaf, "QUEST_ACCEPT_CONFIRM")
+		ImproveAny:OnEvent(raaf, Autoquests, "Autoquests")
 	end
 
 	RegisterAutoQuestsEvents()
+end
+
+if false then
+	ImproveAny:After(
+		1,
+		function()
+			ImproveAny:SetDebug(true)
+			if true then
+				ImproveAny:DrawDebug(
+					"ImproveAny DD 1",
+					function()
+						local text = ""
+						for i, v in pairs(ImproveAny:GetCountAfter()) do
+							if v > 200 then
+								text = text .. v .. "x: " .. i .. "\n"
+							end
+						end
+
+						return text
+					end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 1200, 0
+				)
+			end
+
+			if true then
+				ImproveAny:DrawDebug(
+					"ImproveAny DD 2",
+					function()
+						local text = ""
+						for i, v in pairs(ImproveAny:GetCountAfterEvents()) do
+							if v > 1 then
+								text = text .. v .. "x: " .. i .. "\n"
+							end
+						end
+
+						return text
+					end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 100, 0
+				)
+			end
+		end, "DEBUG"
+	)
 end

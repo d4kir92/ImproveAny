@@ -2,7 +2,7 @@ local _, ImproveAny = ...
 local IACHARSLOTS = {CharacterHeadSlot, CharacterNeckSlot, CharacterShoulderSlot, CharacterBackSlot, CharacterChestSlot, CharacterWristSlot, CharacterHandsSlot, CharacterWaistSlot, CharacterLegsSlot, CharacterFeetSlot, CharacterFinger0Slot, CharacterFinger1Slot, CharacterTrinket0Slot, CharacterTrinket1Slot, CharacterMainHandSlot, CharacterSecondaryHandSlot, CharacterRangedSlot}
 -- Classic
 function ImproveAny:InitDurabilityFrame()
-	C_Timer.After(
+	ImproveAny:After(
 		1,
 		function()
 			ImproveAny:Debug("durabilityframe.lua: Init")
@@ -74,7 +74,7 @@ function ImproveAny:InitDurabilityFrame()
 				end
 
 				ImproveAny:Debug("durabilityframe.lua: Think", "think")
-				C_Timer.After(1, DurabilityFrame.Think)
+				ImproveAny:After(1, DurabilityFrame.Think, "DurabilityFrame.Think")
 			end
 
 			DurabilityFrame.Think()
@@ -112,6 +112,6 @@ function ImproveAny:InitDurabilityFrame()
 
 				DurabilityFrame_SetAlerts()
 			end
-		end
+		end, "InitDurabilityFrame"
 	)
 end

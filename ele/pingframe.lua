@@ -23,7 +23,7 @@ function ImproveAny:InitIAPingFrame()
 			end
 
 			ImproveAny:Debug("pingframe.lua: PingThink", "think")
-			C_Timer.After(config_update, ImproveAny.PingThink)
+			ImproveAny:After(config_update, ImproveAny.PingThink, "ImproveAny.PingThink")
 		end
 
 		ImproveAny:PingThink()

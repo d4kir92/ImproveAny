@@ -20,9 +20,9 @@ function ImproveAny:InitCombatText()
 			once = false
 			IATabBuffs = ImproveAny:GetTalentIcons()
 			local cle = CreateFrame("Frame")
-			cle:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-			cle:SetScript(
-				"OnEvent",
+			ImproveAny:RegisterEvent(cle, "COMBAT_LOG_EVENT_UNFILTERED")
+			ImproveAny:OnEvent(
+				cle,
 				function(sel, eventName, ...)
 					if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) then
 						ImproveAny:UpdateCombatTextPos()
@@ -50,7 +50,7 @@ function ImproveAny:InitCombatText()
 							end
 						end
 					end
-				end
+				end, "COMBATTEXTICONS"
 			)
 		end
 
@@ -132,7 +132,7 @@ function ImproveAny:InitCombatText()
 			ImproveAny:Debug("combattext.lua: found")
 		else
 			ImproveAny:Debug("combattext.lua: not found", "retry")
-			C_Timer.After(1, ImproveAny.InitCombatText)
+			ImproveAny:After(1, ImproveAny.InitCombatText, "InitCombatText")
 		end
 	end
 end

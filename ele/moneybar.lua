@@ -80,11 +80,11 @@ function ImproveAny:InitMoneyBar()
 			end
 
 			ImproveAny:Debug("moneybar.lua: MoneyThink", "think")
-			C_Timer.After(1.5, IAMoneyBar.MoneyThink)
+			ImproveAny:After(1.5, IAMoneyBar.MoneyThink, "MoneyThink 1")
 		end
 
 		IAMoneyBar:MoneyThink()
-		C_Timer.After(
+		ImproveAny:After(
 			4,
 			function()
 				if ImproveAny:GetWoWBuild() ~= "RETAIL" and (GOLD_AMOUNT_SYMBOL == nil or GOLD_AMOUNT_SYMBOL == "G") then
@@ -92,7 +92,7 @@ function ImproveAny:InitMoneyBar()
 					SILVER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:2:0|t"
 					COPPER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:2:0|t"
 				end
-			end
+			end, "MoneyThink 2"
 		)
 	end
 end

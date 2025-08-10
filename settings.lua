@@ -464,7 +464,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.165")
+	ImproveAny:SetVersion(136033, "0.9.166")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -518,7 +518,7 @@ function ImproveAny:InitIASettings()
 			function(eb, ...)
 				eb.lastchange = GetTime()
 				ImproveAny:Debug("settings, lastchange")
-				C_Timer.After(
+				ImproveAny:After(
 					1,
 					function()
 						if eb.lastchange < GetTime() - 0.9 then
@@ -536,7 +536,7 @@ function ImproveAny:InitIASettings()
 								ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
 							end
 						end
-					end
+					end, "lastchange"
 				)
 			end
 		)
@@ -749,7 +749,7 @@ function ImproveAny:CheckBlockedWords()
 	end
 end
 
-C_Timer.After(2, ImproveAny.CheckBlockedWords)
+ImproveAny:After(2, ImproveAny.CheckBlockedWords, "CheckBlockedWords")
 function ImproveAny:RemoveBadWords(self, msg, author, ...)
 	msg = strlower(msg)
 	if ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then

@@ -61,12 +61,12 @@ function ImproveAny:InitTokenBar()
 		IATokenBar.text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
 		IATokenBar.text:SetPoint("CENTER", IATokenBar, "CENTER", 0, 0)
 		IATokenBar.text:SetText("ImproveAny - Tokenbar")
-		IATokenBar:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
-		IATokenBar:SetScript(
-			"OnEvent",
+		ImproveAny:RegisterEvent(IATokenBar, "CURRENCY_DISPLAY_UPDATE")
+		ImproveAny:OnEvent(
+			IATokenBar,
 			function(sel, ...)
 				ImproveAny:GetTokenList()
-			end
+			end, "IATokenBar"
 		)
 
 		if TokenFrame_Update then

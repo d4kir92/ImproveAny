@@ -137,19 +137,19 @@ function ImproveAny:InitWorldMapFrame()
 						local fh = plyCoords.f:GetStringHeight()
 						plyCoords:SetSize(fw, fh)
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #1")
-						C_Timer.After(0.01, plyCoords.IAUpdate)
+						ImproveAny:After(0.01, plyCoords.IAUpdate, "IAUpdate 1")
 					else
 						plyCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #2")
-						C_Timer.After(0.5, plyCoords.IAUpdate)
+						ImproveAny:After(0.5, plyCoords.IAUpdate, "IAUpdate 2")
 					end
 				else
 					ImproveAny:Debug("worldmapframe.lua: IAUpdate #3", "retry")
-					C_Timer.After(1, plyCoords.IAUpdate)
+					ImproveAny:After(1, plyCoords.IAUpdate, "IAUpdate 3")
 				end
 			else
 				ImproveAny:Debug("worldmapframe.lua: IAUpdate #4", "retry")
-				C_Timer.After(1, plyCoords.IAUpdate)
+				ImproveAny:After(1, plyCoords.IAUpdate, "IAUpdate 4")
 			end
 		end
 
@@ -208,19 +208,19 @@ function ImproveAny:InitWorldMapFrame()
 						local fh = curCoords.f:GetStringHeight()
 						curCoords:SetSize(fw, fh)
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #5")
-						C_Timer.After(0.01, curCoords.IAUpdate)
+						ImproveAny:After(0.01, curCoords.IAUpdate, "IAUpdate 5")
 					else
 						curCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #6")
-						C_Timer.After(0.5, curCoords.IAUpdate)
+						ImproveAny:After(0.5, curCoords.IAUpdate, "IAUpdate 6")
 					end
 				else
 					ImproveAny:Debug("worldmapframe.lua: IAUpdate #7", "retry")
-					C_Timer.After(1, curCoords.IAUpdate)
+					ImproveAny:After(1, curCoords.IAUpdate, "IAUpdate 7")
 				end
 			else
 				ImproveAny:Debug("worldmapframe.lua: IAUpdate #8", "retry")
-				C_Timer.After(1, curCoords.IAUpdate)
+				ImproveAny:After(1, curCoords.IAUpdate, "IAUpdate 8")
 			end
 		end
 

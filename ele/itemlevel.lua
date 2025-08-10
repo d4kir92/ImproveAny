@@ -289,16 +289,16 @@ function ImproveAny:InitItemLevel()
 		function PDThink.Loop()
 			ImproveAny:PDUpdateItemInfos()
 			ImproveAny:Debug("PDThink.lua: Loop", "think")
-			C_Timer.After(1, PDThink.Loop)
+			ImproveAny:After(1, PDThink.Loop, "PDThink.Loop 2")
 		end
 
-		C_Timer.After(1, PDThink.Loop)
-		PDThink:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-		PDThink:SetScript(
-			"OnEvent",
+		ImproveAny:After(1, PDThink.Loop, "PDThink.Loop 1")
+		ImproveAny:RegisterEvent(PDThink, "PLAYER_EQUIPMENT_CHANGED")
+		ImproveAny:OnEvent(
+			PDThink,
 			function(sel, event, slotid, ...)
 				ImproveAny:PDUpdateItemInfos()
-			end
+			end, "PDThink"
 		)
 
 		PaperDollFrame.btn = CreateFrame("CheckButton", "PaperDollFrame" .. "btn", PaperDollFrame, "UICheckButtonTemplate")
@@ -413,18 +413,18 @@ function ImproveAny:InitItemLevel()
 				end
 
 				ImproveAny:Debug("itemlevel.lua: IFUpdateItemInfos")
-				C_Timer.After(0.5, ImproveAny.IFUpdateItemInfos)
-				IFThink:RegisterEvent("INSPECT_READY")
-				IFThink:SetScript(
-					"OnEvent",
+				ImproveAny:After(0.5, ImproveAny.IFUpdateItemInfos, "ImproveAny.IFUpdateItemInfos 1")
+				ImproveAny:RegisterEvent(IFThink, "INSPECT_READY")
+				ImproveAny:OnEvent(
+					IFThink,
 					function(sel, event, slotid, ...)
 						ImproveAny:Debug("itemlevel.lua: IFUpdateItemInfos")
-						C_Timer.After(0.1, ImproveAny.IFUpdateItemInfos)
-					end
+						ImproveAny:After(0.1, ImproveAny.IFUpdateItemInfos, "ImproveAny.IFUpdateItemInfos 2")
+					end, "IFThink"
 				)
 			else
 				ImproveAny:Debug("itemlevel.lua: WaitForInspectFrame", "retry")
-				C_Timer.After(0.3, ImproveAny.WaitForInspectFrame)
+				ImproveAny:After(0.3, ImproveAny.WaitForInspectFrame, "ImproveAny.WaitForInspectFrame")
 			end
 		end
 
@@ -540,23 +540,22 @@ function ImproveAny:InitItemLevel()
 		end
 
 		local frame = CreateFrame("FRAME")
-		frame:RegisterEvent("BAG_OPEN")
-		frame:RegisterEvent("BAG_CLOSED")
-		frame:RegisterEvent("QUEST_ACCEPTED")
-		frame:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
-		frame:RegisterEvent("BAG_UPDATE")
-		frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
-		frame:RegisterEvent("ITEM_LOCK_CHANGED")
-		frame:RegisterEvent("BAG_UPDATE_COOLDOWN")
-		frame:RegisterEvent("DISPLAY_SIZE_CHANGED")
-		frame:RegisterEvent("INVENTORY_SEARCH_UPDATE")
-		frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
-		frame:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
-		frame:SetScript(
-			"OnEvent",
+		ImproveAny:RegisterEvent(frame, "BAG_OPEN")
+		ImproveAny:RegisterEvent(frame, "BAG_CLOSED")
+		ImproveAny:RegisterEvent(frame, "QUEST_ACCEPTED")
+		ImproveAny:RegisterEvent(frame, "UNIT_QUEST_LOG_CHANGED")
+		ImproveAny:RegisterEvent(frame, "BAG_UPDATE")
+		ImproveAny:RegisterEvent(frame, "UNIT_INVENTORY_CHANGED")
+		ImproveAny:RegisterEvent(frame, "ITEM_LOCK_CHANGED")
+		ImproveAny:RegisterEvent(frame, "DISPLAY_SIZE_CHANGED")
+		ImproveAny:RegisterEvent(frame, "INVENTORY_SEARCH_UPDATE")
+		ImproveAny:RegisterEvent(frame, "BAG_NEW_ITEMS_UPDATED")
+		ImproveAny:RegisterEvent(frame, "BAG_SLOT_FLAGS_UPDATED")
+		ImproveAny:OnEvent(
+			frame,
 			function(sel, event)
 				ImproveAny:UpdateBagsIlvl()
-			end
+			end, "UpdateBagsIlvl"
 		)
 
 		ImproveAny:UpdateBagsIlvl()
