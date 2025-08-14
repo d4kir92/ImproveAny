@@ -111,7 +111,6 @@ function ImproveAny:Lang_deDE()
 		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
 		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
 		["FRAMEANCHOR"] = "Fenster Anker",
-		["SHOWVAULTMMBTN"] = "Große Schatzkammer an der Minimap anzeigen",
 		["AUTOSELLJUNK"] = "Automatisch Müll verkaufen",
 		["AUTOREPAIR"] = "Automatisch reparieren",
 		["NEW"] = "NEU",
