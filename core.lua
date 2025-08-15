@@ -204,10 +204,6 @@ function ImproveAny:Event(event, ...)
 			end, "AUTOSELLJUNK"
 		)
 
-		if ImproveAny.InitItemLevel then
-			ImproveAny:InitItemLevel()
-		end
-
 		if ImproveAny.InitMinimap then
 			ImproveAny:InitMinimap()
 		end

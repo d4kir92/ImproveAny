@@ -464,7 +464,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.167")
+	ImproveAny:SetVersion(136033, "0.9.168")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -558,11 +558,6 @@ function ImproveAny:InitIASettings()
 
 		AddCheckBox(24, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(24, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
-		AddCategory("ITEMLEVEL")
-		AddCheckBox(4, "ITEMLEVELSYSTEM")
-		AddCheckBox(24, "ITEMLEVELSYSTEMSIDEWAYS", true)
-		AddCheckBox(24, "ITEMLEVELNUMBER", false, ImproveAny.UpdateILVLIcons)
-		AddCheckBox(24, "ITEMLEVELBORDER", false, ImproveAny.UpdateILVLIcons)
 		AddCategory("FRAMES")
 		AddCheckBox(4, "WIDEFRAMES", false)
 		AddCheckBox(4, "IMPROVETRADESKILLFRAME", true)

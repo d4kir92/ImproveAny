@@ -16,7 +16,7 @@ function ImproveAny:InitIAILVLBar()
 		IAILVLBar.textilvlequipped:SetTextColor(1.0, 1.0, 0.1)
 		function IAILVLBar.Think()
 			if IAILVLBar.textilvloverall and IAILVLBar.textilvlequipped then
-				local overall, equipped = ImproveAny:GetIAILVL(), ImproveAny:GetIAILVL()
+				local overall, equipped = 0, 0
 				if GetAverageItemLevel then
 					overall, equipped = GetAverageItemLevel()
 					overall = string.format("%.2f", overall)
