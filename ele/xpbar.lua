@@ -297,6 +297,14 @@ function ImproveAny:InitXPBar()
 					maxlevel = 80
 				end
 
+				if ImproveAny:GetWoWBuild() == "CATA" then
+					maxlevel = 85
+				end
+
+				if ImproveAny:GetWoWBuild() == "MISTS" then
+					maxlevel = 90
+				end
+
 				if GetMaxLevelForPlayerExpansion then
 					maxlevel = GetMaxLevelForPlayerExpansion()
 				end

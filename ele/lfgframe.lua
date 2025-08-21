@@ -56,10 +56,10 @@ function ImproveAny:GetRealmLang(name)
 	return nil
 end
 
-function ImproveAny:GetFlagString(realmName, text)
+function ImproveAny:GetFlagString(realmName, text, ts)
 	local realmLang = ImproveAny:GetRealmLang(realmName)
 	if realmLang and ImproveAny:IsEnabled("LFGSHOWLANGUAGEFLAG", false) then
-		return "|T" .. "Interface\\Addons\\ImproveAny\\media\\flags\\" .. realmLang .. ":12:24:0:0|t" .. " " .. text
+		return "|T" .. "Interface\\Addons\\ImproveAny\\media\\flags\\" .. realmLang .. ":" .. ts .. ":" .. (ts * 2) .. ":0:0|t" .. " " .. text
 	else
 		return text
 	end
@@ -115,7 +115,8 @@ function ImproveAny:InitLFGFrame()
 					server = GetRealmName()
 				end
 
-				local lang = ImproveAny:GetFlagString(server, text)
+				local _, fontSize = member.Name:GetFont()
+				local lang = ImproveAny:GetFlagString(server, text, fontSize)
 				if lang then
 					member.Name:SetText(lang)
 				end
@@ -128,49 +129,52 @@ function ImproveAny:InitLFGFrame()
 			"LFGListSearchEntry_Update",
 			function(sel, ...)
 				local sri = C_LFGList.GetSearchResultInfo(sel.resultID)
-				local name = sri.leaderName
-				if name == nil then return end
-				local text = sel.Name:GetText()
-				if sri.isWarMode then
-					text = "[WM] " .. text
-				end
+				if sri then
+					local name = sri.leaderName
+					if name == nil then return end
+					local text = sel.Name:GetText()
+					if sri.isWarMode then
+						text = "[WM] " .. text
+					end
 
-				if sri.requiredItemLevel > 0 then
-					text = "[ilvl: " .. sri.requiredItemLevel .. "+] " .. text
-				end
+					if sri.requiredItemLevel > 0 then
+						text = "[ilvl: " .. sri.requiredItemLevel .. "+] " .. text
+					end
 
-				-- only when its for dungeon
-				if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then
-					if ImproveAny:IsEnabled("LFGSHOWOVERALLSCORE", false) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
-						local color = C_ChallengeMode.GetDungeonScoreRarityColor(sri.leaderOverallDungeonScore)
-						if color then
-							text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+					-- only when its for dungeon
+					if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then
+						if ImproveAny:IsEnabled("LFGSHOWOVERALLSCORE", false) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
+							local color = C_ChallengeMode.GetDungeonScoreRarityColor(sri.leaderOverallDungeonScore)
+							if color then
+								text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+							end
+						end
+
+						if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
+							local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(sri.leaderDungeonScoreInfo.mapScore)
+							if color then
+								text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
+							end
 						end
 					end
 
-					if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
-						local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(sri.leaderDungeonScoreInfo.mapScore)
-						if color then
-							text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
-						end
+					if text then
+						sel.Name:SetText(text)
 					end
-				end
 
-				if text then
-					sel.Name:SetText(text)
-				end
+					local server = ""
+					local s, _ = string.find(name, "-")
+					if s then
+						server = strsub(name, s + 1)
+					else
+						server = GetRealmName()
+					end
 
-				local server = ""
-				local s, _ = string.find(name, "-")
-				if s then
-					server = strsub(name, s + 1)
-				else
-					server = GetRealmName()
-				end
-
-				local lang = ImproveAny:GetFlagString(server, sel.ActivityName:GetText())
-				if lang then
-					sel.ActivityName:SetText(lang)
+					local _, fontSize = sel.ActivityName:GetFont()
+					local lang = ImproveAny:GetFlagString(server, sel.ActivityName:GetText(), fontSize)
+					if lang then
+						sel.ActivityName:SetText(lang)
+					end
 				end
 			end
 		)

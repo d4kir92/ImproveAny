@@ -351,6 +351,10 @@ function D4:IsAddOnLoaded(name, from)
     return nil
 end
 
+function D4:IsAddonLoaded(name, from)
+    return D4:IsAddOnLoaded(name, from)
+end
+
 local function FixIconChat(sel, event, message, author, ...)
     if ICON_LIST then
         for tag in string.gmatch(message, "%b{}") do
@@ -976,4 +980,38 @@ function D4:DrawDebug(name, callback, fontSize, sw, sh, p1, p2, p3, p4, p5)
     Think()
 
     return fDebug
+end
+
+function D4:FindInGlobal(name, exact, ...)
+    local args = {...}
+    D4:After(
+        0.1,
+        function()
+            for i, v in pairs(_G) do
+                if exact then
+                    if v and type(v) == "string" and v == name then
+                        print("i", i, "v", v)
+                    end
+                else
+                    if v and type(v) == "string" and string.find(v, name, 1, true) then
+                        if #args > 0 then
+                            local all = true
+                            for x, w in pairs(args) do
+                                if string.find(v, w, 1, true) == nil then
+                                    all = false
+                                    break
+                                end
+                            end
+
+                            if all then
+                                print("v", v, "i", i)
+                            end
+                        else
+                            print("v", v, "i", i)
+                        end
+                    end
+                end
+            end
+        end, "FindInGlobal"
+    )
 end
