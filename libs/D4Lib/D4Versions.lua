@@ -1,4 +1,6 @@
 local AddonName, D4 = ...
+local CreateFrame = getglobal("CreateFrame")
+local tinsert = getglobal("tinsert")
 local pre = AddonName .. "D4PREFIX"
 D4.VersionTab = D4.VersionTab or {}
 if C_ChatInfo then
@@ -90,7 +92,7 @@ function D4:CheckVersion(name, ver)
     end
 
     local ov1, ov2, ov3 = string.split(".", ver)
-    local cv1, cv2, cv3 = string.split(".", D4:GetVersion(name))
+    local cv1, cv2, cv3 = string.split(".", D4:GetVersion(name) or "0.0.0")
     local higher = D4:IsHigherVersion(ov1, ov2, ov3, cv1, cv2, cv3)
     if higher and name and D4.VersionTab and D4.VersionTab[string.lower(name)] then
         D4.VersionTab[string.lower(name)].foundHigher = true
@@ -118,29 +120,34 @@ D4:OnEvent(
                 end
             end
         elseif event == "PLAYER_ENTERING_WORLD" then
-            if C_ChatInfo and D4.VersionTab[string.lower(AddonName)] then
-                D4:RegisterEvent(f, "CHAT_MSG_ADDON")
-                D4:UnregisterEvent(f, event)
-                D4:After(
-                    2,
-                    function()
-                        local id = D4.VersionTab[string.lower(AddonName)].id or 0
+            D4:UnregisterEvent(f, event)
+            D4:After(
+                3,
+                function()
+                    if C_ChatInfo and D4.VersionTab[string.lower(AddonName)] then
+                        D4:RegisterEvent(f, "CHAT_MSG_ADDON")
                         D4:After(
-                            id * 0.1,
+                            2,
                             function()
-                                local ver = D4:GetVersion()
-                                if ver == nil then
-                                    D4:MSG(AddonName, 0, "|cffff0000MISSING VERSION", AddonName)
-                                end
+                                local id = D4.VersionTab[string.lower(AddonName)].id or 0
+                                D4:After(
+                                    id * 0.1,
+                                    function()
+                                        local ver = D4:GetVersion()
+                                        if ver == nil then
+                                            D4:MSG(AddonName, 0, "|cffff0000MISSING VERSION", AddonName)
+                                        end
 
-                                if ver then
-                                    C_ChatInfo.SendAddonMessage(pre, string.format("A;%s;V;%s", AddonName, ver))
-                                end
-                            end, "D4 PLAYER_ENTERING_WORLD 2"
+                                        if ver then
+                                            C_ChatInfo.SendAddonMessage(pre, string.format("A;%s;V;%s", AddonName, ver))
+                                        end
+                                    end, "D4 PLAYER_ENTERING_WORLD 2"
+                                )
+                            end, "D4 PLAYER_ENTERING_WORLD 1"
                         )
-                    end, "D4 PLAYER_ENTERING_WORLD 1"
-                )
-            end
+                    end
+                end, "[D4] CHECK VERSION"
+            )
         end
     end, "VERSION"
 )
