@@ -47,6 +47,7 @@ function ImproveAny:InitSlash()
 		cmds["/RL"] = C_UI.Reload
 		cmds["/REL"] = C_UI.Reload
 	else
+		local ReloadUi = getglobal("ReloadUi")
 		cmds["/RL"] = ReloadUi
 		cmds["/REL"] = ReloadUi
 	end
@@ -186,7 +187,7 @@ function ImproveAny:Event(event, ...)
 						for slot = 1, C_Container.GetContainerNumSlots(bag) do
 							local itemLink = C_Container.GetContainerItemLink(bag, slot)
 							if itemLink then
-								local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = GetItemInfo(itemLink)
+								local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = ImproveAny:GetItemInfo(itemLink)
 								if itemRarity == 0 and itemSellPrice > 0 then
 									C_Container.UseContainerItem(bag, slot) -- Sell the item
 								end
@@ -507,8 +508,8 @@ function ImproveAny:Event(event, ...)
 					end
 				end
 
-				if price and tt.shownMoneyFrames == nil and price > 0 and GetItemCount and GetCoinTextureString then
-					local count = GetItemCount(itemId)
+				if price and tt.shownMoneyFrames == nil and price > 0 and GetCoinTextureString then
+					local count = ImproveAny:GetItemCount(itemId)
 					if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
 						if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
 							tt:AddDoubleLine(AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString(price))

@@ -67,8 +67,8 @@ function ImproveAny:GetWeaponSkillData(id)
 					if s1 and e1 then
 						local onehanded = string.gsub(AUCTION_SUBCATEGORY_ONE_HANDED, "%-", "_")
 						itemSubType = string.gsub(itemSubType, "%-", "_")
-						itemSubType, count = string.gsub(itemSubType, "(" .. onehanded .. ") ", "") -- english
-						itemSubType, count = string.gsub(itemSubType, "(" .. onehanded .. ")", "") -- german
+						itemSubType = string.gsub(itemSubType, "(" .. onehanded .. ") ", "") -- english
+						itemSubType = string.gsub(itemSubType, "(" .. onehanded .. ")", "") -- german
 					end
 				end
 

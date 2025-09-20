@@ -31,7 +31,6 @@ function ImproveAny:Lang_deDE()
 		["MINIMAPHIDEBORDER"] = "Rand der Minimap ausblenden",
 		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap-Zoom-Schaltflächen ausblenden",
 		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
-		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
 		["MINIMAPSHAPESQUARE"] = "Quadratische Minimap",
 		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Minimap-Knöpfe verschiebbar machen",
 		["XPBAR"] = "XPBar",

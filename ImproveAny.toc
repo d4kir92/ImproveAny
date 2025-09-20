@@ -5,9 +5,11 @@
 ## Interface-Mists: 50500
 ## Interface: 110200
 
-## Version: 0.9.170
+## Version: 0.9.171
 ## Title: I|cff3FC7EBmprove|rA|cff3FC7EBny|r |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
-## Notes: Improve Any Ui or Frame
+## Notes: Improved user interfaces
+## Notes-deDE: Verbessert Benutzeroberflächen
+## Notes-ruRU: Improved user interfaces
 ## Author: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
 ## Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
 ## X-Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
@@ -25,6 +27,7 @@ libs\db.lua
 
 locale\enUS.lua
 locale\deDE.lua
+locale\ruRU.lua
 libs\lang.lua
 
 ele\bags.lua

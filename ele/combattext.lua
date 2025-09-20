@@ -14,12 +14,12 @@ function ImproveAny:UpdateCombatTextPos()
 end
 
 local once = true
+local cle = CreateFrame("Frame")
 function ImproveAny:InitCombatText()
 	if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) or ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 		if once then
 			once = false
 			IATabBuffs = ImproveAny:GetTalentIcons()
-			local cle = CreateFrame("Frame")
 			ImproveAny:RegisterEvent(cle, "COMBAT_LOG_EVENT_UNFILTERED")
 			ImproveAny:OnEvent(
 				cle,
@@ -32,19 +32,19 @@ function ImproveAny:InitCombatText()
 						cle.tabhot = cle.tabhot or {}
 						cle.tabdot = cle.tabdot or {}
 						local _, subevent, _, _, _, _, _, _, _, _, _ = CombatLogGetCurrentEventInfo()
-						local amount = nil
+						local spellId, amount = nil, nil
 						if subevent == "SPELL_PERIODIC_HEAL" then
-							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
+							spellId, _, _, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
 								cle.tabhot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
 						elseif subevent == "SPELL_PERIODIC_DAMAGE" then
-							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
+							spellId, _, _, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
 								cle.tabdot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
 						elseif subevent == "SPELL_HEAL" then
-							spellId, spellName, spellSchool, amount = select(12, CombatLogGetCurrentEventInfo())
+							spellId, _, _, amount = select(12, CombatLogGetCurrentEventInfo())
 							if amount then
 								cle.tabhot[tonumber(amount)] = select(3, ImproveAny:GetSpellInfo(spellId))
 							end
@@ -76,7 +76,7 @@ function ImproveAny:InitCombatText()
 							local icon = spellIcon or talentIcon or IATabBuffs[msg]
 							if icon == nil then
 								for id = 1, 32 do
-									name, ico, rank, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = ImproveAny:UnitAura("PLAYER", id)
+									local name, ico = ImproveAny:UnitAura("PLAYER", id)
 									if name then
 										if name == msg then
 											IATabBuffs[msg] = ico

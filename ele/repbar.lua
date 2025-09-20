@@ -110,7 +110,6 @@ ImproveAny:After(
 							-- do something different for friendships
 							if friendshipID then
 								local _, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-								level = GetFriendshipReputationRanks(factionID)
 								if nextFriendThreshold then
 									minBar, maxBar, value = friendThreshold, nextFriendThreshold, friendRep
 								else
@@ -118,8 +117,6 @@ ImproveAny:After(
 									minBar, maxBar, value = 0, 1, 1
 									isCapped = true
 								end
-
-								colorIndex = 5 -- always color friendships green
 							elseif C_Reputation.IsFactionParagon(factionID) then
 								local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
 								minBar, maxBar = 0, threshold
@@ -128,7 +125,6 @@ ImproveAny:After(
 									value = value + threshold
 								end
 							else
-								level = reaction
 								if reaction == MAX_REPUTATION_REACTION then
 									isCapped = true
 								end

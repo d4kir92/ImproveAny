@@ -22,6 +22,8 @@ function ImproveAny:UpdateLanguage()
 	ImproveAny:Lang_enUS()
 	if GetLocale() == "deDE" then
 		ImproveAny:Lang_deDE()
+	elseif GetLocale() == "ruRU" then
+		ImproveAny:Lang_ruRU()
 	elseif GetLocale() == "enUS" then
 		ImproveAny:Lang_enUS()
 	end

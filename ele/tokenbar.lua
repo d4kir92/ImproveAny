@@ -10,15 +10,17 @@ function ImproveAny:GetTokenList()
 	end
 
 	for index = 1, max do
-		local name, _, _, _, isWatched, count, icon, _, _, _ = nil
+		local name, isWatched, count, icon = nil, nil, nil, nil
 		if GetCurrencyListInfo then
-			name, _, _, _, isWatched, count, icon, _, _, _ = GetCurrencyListInfo(index)
+			name, _, _, _, isWatched, count, icon = GetCurrencyListInfo(index)
 		elseif C_CurrencyInfo.GetCurrencyListInfo then
-			info = C_CurrencyInfo.GetCurrencyListInfo(index)
-			name = info.name
-			isWatched = info.isShowInBackpack
-			icon = info.iconFileID
-			count = info.quantity
+			local info = C_CurrencyInfo.GetCurrencyListInfo(index)
+			if info then
+				name = info.name
+				isWatched = info.isShowInBackpack
+				icon = info.iconFileID
+				count = info.quantity
+			end
 		end
 
 		if name then

@@ -46,6 +46,7 @@ function BAGThink.UpdateItemInfos()
 end
 
 function ImproveAny:InitBags()
+	local oldslot = nil
 	if CharacterBag0Slot then
 		local br = 5
 		for i, slot in pairs(BAGS) do
@@ -166,7 +167,6 @@ function ImproveAny:InitBags()
 						local sw = 0
 						local sh = 0
 						local count = 0
-						local oldslot = nil
 						for i, slot in pairs(BAGS) do
 							local SLOT = _G[slot]
 							if SLOT then

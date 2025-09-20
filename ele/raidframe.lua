@@ -195,9 +195,9 @@ function ImproveAny:InitRaidFrames()
 			--isBossBuff looks in HELPFULL auras otherwise it looks in HARMFULL ones
 			local _, icon, count, debuffType, duration, expirationTime, _, _, _, _
 			if isBossBuff then
-				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = ImproveAny:UnitAura(unit, index, filter)
+				_, icon, count, debuffType, duration, expirationTime, _, _, _, _ = ImproveAny:UnitAura(unit, index, filter)
 			else
-				name, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId = ImproveAny:UnitAura(unit, index, filter)
+				_, icon, count, debuffType, duration, expirationTime, _, _, _, _ = ImproveAny:UnitAura(unit, index, filter)
 			end
 
 			debuffFrame.filter = filter
@@ -293,9 +293,6 @@ function ImproveAny:InitRaidFrames()
 										end
 
 										frameNum = frameNum + 1
-										--Boss debuffs are about twice as big as normal debuffs, so display one less.
-										local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE) / debuffFrame.baseSize
-										maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
 									else
 										break
 									end
@@ -322,9 +319,6 @@ function ImproveAny:InitRaidFrames()
 										end
 
 										frameNum = frameNum + 1
-										--Boss debuffs are about twice as big as normal debuffs, so display one less.
-										local bossDebuffScale = (debuffFrame.baseSize + BOSS_DEBUFF_SIZE_INCREASE) / debuffFrame.baseSize
-										maxDebuffs = maxDebuffs - (bossDebuffScale - 1)
 									else
 										break
 									end
