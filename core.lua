@@ -550,8 +550,8 @@ function ImproveAny:Event(event, ...)
 								local itemId = tonumber(strmatch(itemLink, "item:(%d*)"))
 								if itemId then
 									local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = ImproveAny:GetItemInfo(itemId)
-									if price and tt.shownMoneyFrames == nil and price > 0 and GetItemCount and GetCoinTextureString then
-										local count = GetItemCount(itemId)
+									if price and tt.shownMoneyFrames == nil and price > 0 and GetCoinTextureString then
+										local count = ImproveAny:GetItemCount(itemId)
 										if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
 											if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
 												tt:AddDoubleLine(AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString(price))
