@@ -1289,14 +1289,9 @@ local f = CreateFrame("Frame")
 ImproveAny:OnEvent(f, ImproveAny.Event, "FastLooting")
 ImproveAny:RegisterEvent(f, "PLAYER_LOGIN")
 function ImproveAny:FastLooting()
-	if ImproveAny:IsEnabled("FASTLOOTING", false) then
-		ts = GetTime()
-		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
-			for i = GetNumLootItems(), 1, -1 do
-				LootSlot(i)
-			end
-
-			ts = GetTime()
+	if ImproveAny:IsEnabled("FASTLOOTING", false) and GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
+		for i = GetNumLootItems(), 1, -1 do
+			LootSlot(i)
 		end
 	end
 end
