@@ -217,8 +217,11 @@ function ImproveAny:InitXPBar()
 		ImproveAny:After(
 			0.01,
 			function()
-				local xpBarText = XPBarText or MainMenuBarExpText
+				local xpBarText = MainMenuBarExpText
+				local xpBar = MainMenuExpBar
 				if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
+					xpBar = DragonflightUIXPBar.Bar
+					xpBarText = XPBarText
 					ImproveAny:ForeachRegions(
 						DragonflightUIXPBar.Bar,
 						function(region)
@@ -321,42 +324,42 @@ function ImproveAny:InitXPBar()
 					maxlevel = GetMaxLevelForPlayerExpansion()
 				end
 
-				if MainMenuExpBar then
+				if xpBar then
 					if not ImproveAny:IsAddOnLoaded("MoveAny") then
-						MainMenuExpBar:SetHeight(15)
+						xpBar:SetHeight(15)
 					end
 
-					MainMenuExpBar:HookScript(
+					xpBar:HookScript(
 						"OnEnter",
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
-								MainMenuExpBar.show = true
+								xpBar.show = true
 								xpBarText:Show()
 							else
-								MainMenuExpBar.show = false
+								xpBar.show = false
 								xpBarText:Hide()
 							end
 						end
 					)
 
-					MainMenuExpBar:HookScript(
+					xpBar:HookScript(
 						"OnLeave",
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
-								MainMenuExpBar.show = false
+								xpBar.show = false
 								xpBarText:Hide()
 							else
-								MainMenuExpBar.show = true
+								xpBar.show = true
 								xpBarText:Show()
 							end
 						end
 					)
 
 					if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
-						MainMenuExpBar.show = true
+						xpBar.show = true
 						xpBarText:Show()
 					else
-						MainMenuExpBar.show = false
+						xpBar.show = false
 						xpBarText:Hide()
 					end
 
@@ -366,10 +369,10 @@ function ImproveAny:InitXPBar()
 							sec,
 							function()
 								if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
-									MainMenuExpBar.show = true
+									xpBar.show = true
 									xpBarText:Show()
 								else
-									MainMenuExpBar.show = false
+									xpBar.show = false
 									xpBarText:Hide()
 								end
 							end, "xpbar.lua: #4"
@@ -418,27 +421,32 @@ function ImproveAny:InitXPBar()
 					)
 				end
 
-				if MainMenuExpBar then
-					MainMenuExpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
+				if xpBar then
+					xpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
 					if ExhaustionLevelFillBar then
 						ExhaustionLevelFillBar:SetVertexColor(0.21, 0.40, 0.64, 0.75)
 						ExhaustionLevelFillBar:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
 						ExhaustionLevelFillBar:SetDrawLayer("BACKGROUND", -1)
 					end
 
-					local _, sh = MainMenuExpBar:GetSize()
-					MainMenuExpBar.qcx = MainMenuExpBar:CreateTexture(nil, "BACKGROUND")
-					MainMenuExpBar.qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-					MainMenuExpBar.qcx:SetVertexColor(1, 1, 0, 1)
-					MainMenuExpBar.qcx:SetSize(1, sh)
-					MainMenuExpBar.qcx:SetDrawLayer("BACKGROUND", -2)
+					local _, sh = xpBar:GetSize()
+					xpBar.qcx = xpBar:CreateTexture(nil, "BACKGROUND")
+					xpBar.qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+					xpBar.qcx:SetVertexColor(1, 1, 0, 1)
+					if xpBar == MainMenuExpBar then
+						xpBar.qcx:SetSize(1, sh)
+					else
+						xpBar.qcx:SetSize(1, 13)
+					end
+
+					xpBar.qcx:SetDrawLayer("BACKGROUND", -2)
 				end
 
-				if MainMenuExpBar and xpBarText then
+				if xpBar and xpBarText then
 					local fontName, _, fontFlags = xpBarText:GetFont()
-					xpBarText:SetFont(fontName, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fontFlags)
+					xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fontFlags)
 					if xpBarText == MainMenuBarExpText then
-						xpBarText:SetPoint("CENTER", MainMenuExpBar, "CENTER", 0, 1)
+						xpBarText:SetPoint("CENTER", xpBar, "CENTER", 0, 1)
 					else
 						if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
 							xpBarText:ClearAllPoints()
@@ -461,7 +469,7 @@ function ImproveAny:InitXPBar()
 							end
 
 							local ff, _, fflags = sel:GetFont()
-							sel:SetFont(ff, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fflags)
+							sel:SetFont(ff, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fflags)
 							if GameLimitedMode_IsActive() then
 								local rLevel = GetRestrictedAccountData()
 								if UnitLevel("player") >= rLevel then
@@ -472,23 +480,23 @@ function ImproveAny:InitXPBar()
 							local missingXp = maxBar - currXP
 							local questCompleteXP = ImproveAny:GetQuestCompleteXP()
 							local text2 = ""
-							if MainMenuExpBar and MainMenuExpBar.qcx then
-								local sw, _ = MainMenuExpBar:GetSize()
+							if xpBar and xpBar.qcx then
+								local sw, _ = xpBar:GetSize()
 								local px = currXP / maxBar * sw
 								local wi = questCompleteXP / maxBar * sw
 								if wi <= 1 then
-									MainMenuExpBar.qcx:Hide()
+									xpBar.qcx:Hide()
 								else
 									if px + wi > sw then
 										wi = sw - px
 									end
 
 									if ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false) then
-										MainMenuExpBar.qcx:SetPoint("LEFT", MainMenuExpBar, "LEFT", px, 0)
-										MainMenuExpBar.qcx:SetWidth(wi)
-										MainMenuExpBar.qcx:Show()
+										xpBar.qcx:SetPoint("LEFT", xpBar, "LEFT", px, 0)
+										xpBar.qcx:SetWidth(wi)
+										xpBar.qcx:Show()
 									else
-										MainMenuExpBar.qcx:Hide()
+										xpBar.qcx:Hide()
 									end
 								end
 							end
@@ -516,7 +524,7 @@ function ImproveAny:InitXPBar()
 
 							text2 = string.gsub(text2, "%s+$", "")
 							sel:SetText(text2)
-							if MainMenuExpBar.show then
+							if xpBar.show then
 								sel:Show()
 							end
 
@@ -528,7 +536,7 @@ function ImproveAny:InitXPBar()
 						xpBarText,
 						"Hide",
 						function(sel, text)
-							if MainMenuExpBar.show then
+							if xpBar.show then
 								sel:Show()
 							end
 						end
@@ -538,7 +546,7 @@ function ImproveAny:InitXPBar()
 						xpBarText,
 						"Show",
 						function(sel, text)
-							if not MainMenuExpBar.show then
+							if not xpBar.show then
 								sel:Hide()
 							end
 						end
