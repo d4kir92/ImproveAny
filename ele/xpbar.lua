@@ -87,7 +87,7 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 			col2 = textw .. textc
 		end
 
-		if vNum and vNum ~= 0 then
+		if (vNum and vNum ~= 0) or (bNum == "XPNUMBER") then
 			if vNumMax and vNumMax > 0 then
 				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
 					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
@@ -217,6 +217,18 @@ function ImproveAny:InitXPBar()
 		ImproveAny:After(
 			0.01,
 			function()
+				local xpBarText = XPBarText or MainMenuBarExpText
+				if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
+					ImproveAny:ForeachRegions(
+						DragonflightUIXPBar.Bar,
+						function(region)
+							if ImproveAny:GetName(region) == "Text" then
+								region:Hide()
+							end
+						end
+					)
+				end
+
 				if GetRewardXP ~= nil then
 					local qaf = CreateFrame("FRAME")
 					ImproveAny:RegisterEvent(qaf, "QUEST_ACCEPTED")
@@ -242,8 +254,8 @@ function ImproveAny:InitXPBar()
 							ImproveAny:After(
 								0.05,
 								function()
-									if MainMenuBarExpText then
-										MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
+									if xpBarText then
+										xpBarText:SetText(xpBarText:GetText())
 									end
 								end, "qaf"
 							)
@@ -251,8 +263,8 @@ function ImproveAny:InitXPBar()
 					)
 
 					function ImproveAny:UpdateQAF()
-						if MainMenuBarExpText then
-							MainMenuBarExpText:SetText(MainMenuBarExpText:GetText())
+						if xpBarText then
+							xpBarText:SetText(xpBarText:GetText())
 						end
 
 						ImproveAny:Debug("xpbar.lua: #3")
@@ -319,10 +331,10 @@ function ImproveAny:InitXPBar()
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 								MainMenuExpBar.show = true
-								MainMenuBarExpText:Show()
+								xpBarText:Show()
 							else
 								MainMenuExpBar.show = false
-								MainMenuBarExpText:Hide()
+								xpBarText:Hide()
 							end
 						end
 					)
@@ -332,20 +344,20 @@ function ImproveAny:InitXPBar()
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 								MainMenuExpBar.show = false
-								MainMenuBarExpText:Hide()
+								xpBarText:Hide()
 							else
 								MainMenuExpBar.show = true
-								MainMenuBarExpText:Show()
+								xpBarText:Show()
 							end
 						end
 					)
 
 					if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 						MainMenuExpBar.show = true
-						MainMenuBarExpText:Show()
+						xpBarText:Show()
 					else
 						MainMenuExpBar.show = false
-						MainMenuBarExpText:Hide()
+						xpBarText:Hide()
 					end
 
 					for sec = 1, 3 do
@@ -355,10 +367,10 @@ function ImproveAny:InitXPBar()
 							function()
 								if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 									MainMenuExpBar.show = true
-									MainMenuBarExpText:Show()
+									xpBarText:Show()
 								else
 									MainMenuExpBar.show = false
-									MainMenuBarExpText:Hide()
+									xpBarText:Hide()
 								end
 							end, "xpbar.lua: #4"
 						)
@@ -422,12 +434,20 @@ function ImproveAny:InitXPBar()
 					MainMenuExpBar.qcx:SetDrawLayer("BACKGROUND", -2)
 				end
 
-				if MainMenuExpBar and MainMenuBarExpText then
-					local fontName, _, fontFlags = MainMenuBarExpText:GetFont()
-					MainMenuBarExpText:SetFont(fontName, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fontFlags)
-					MainMenuBarExpText:SetPoint("CENTER", MainMenuExpBar, "CENTER", 0, 1)
+				if MainMenuExpBar and xpBarText then
+					local fontName, _, fontFlags = xpBarText:GetFont()
+					xpBarText:SetFont(fontName, ImproveAny:Clamp(MainMenuExpBar:GetHeight() * 0.7, 8, 30), fontFlags)
+					if xpBarText == MainMenuBarExpText then
+						xpBarText:SetPoint("CENTER", MainMenuExpBar, "CENTER", 0, 1)
+					else
+						if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
+							xpBarText:ClearAllPoints()
+							xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
+						end
+					end
+
 					hooksecurefunc(
-						MainMenuBarExpText,
+						xpBarText,
 						"SetText",
 						function(sel, text)
 							if sel.iasettext then return end
@@ -494,6 +514,7 @@ function ImproveAny:InitXPBar()
 								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
 							end
 
+							text2 = string.gsub(text2, "%s+$", "")
 							sel:SetText(text2)
 							if MainMenuExpBar.show then
 								sel:Show()
@@ -504,7 +525,7 @@ function ImproveAny:InitXPBar()
 					)
 
 					hooksecurefunc(
-						MainMenuBarExpText,
+						xpBarText,
 						"Hide",
 						function(sel, text)
 							if MainMenuExpBar.show then
@@ -514,7 +535,7 @@ function ImproveAny:InitXPBar()
 					)
 
 					hooksecurefunc(
-						MainMenuBarExpText,
+						xpBarText,
 						"Show",
 						function(sel, text)
 							if not MainMenuExpBar.show then
@@ -523,7 +544,7 @@ function ImproveAny:InitXPBar()
 						end
 					)
 
-					MainMenuBarExpText:SetText("LOADING")
+					xpBarText:SetText("LOADING")
 				end
 			end, "XPBar"
 		)

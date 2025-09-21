@@ -165,6 +165,7 @@ ImproveAny:After(
 									end
 								end
 
+								text = string.gsub(text, "%s+$", "")
 								if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
 									self:SetText(name .. ": " .. text)
 								else
