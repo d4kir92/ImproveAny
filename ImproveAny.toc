@@ -2,10 +2,10 @@
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30300, 30403
 ## Interface-Cata: 40402
-## Interface-Mists: 50500
+## Interface-Mists: 50501
 ## Interface: 110200
 
-## Version: 0.9.174
+## Version: 0.9.175
 ## Title: I|cff3FC7EBmprove|rA|cff3FC7EBny|r |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen

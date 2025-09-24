@@ -226,6 +226,13 @@ function ImproveAny:InitXPBar()
 						DragonflightUIXPBar.Bar,
 						function(region)
 							if ImproveAny:GetName(region) == "Text" then
+								region:HookScript(
+									"OnShow",
+									function(sel)
+										sel:Hide()
+									end
+								)
+
 								region:Hide()
 							end
 						end
