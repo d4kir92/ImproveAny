@@ -242,7 +242,12 @@ function ImproveAny:Event(event, ...)
 		end
 
 		if ImproveAny.InitXPBar then
-			ImproveAny:InitXPBar()
+			ImproveAny:After(
+				1,
+				function()
+					ImproveAny:InitXPBar()
+				end, "InitXPBar"
+			)
 		end
 
 		if ImproveAny.InitSuperTrackedFrame then
