@@ -1,4 +1,4 @@
--- ruRU Russian
+-- ruRU Russian Translator ZamestoTV
 local _, ImproveAny = ...
 function ImproveAny:Lang_ruRU()
 	local tab = {
