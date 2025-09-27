@@ -85,9 +85,7 @@ function ImproveAny:GetWeaponSkillData(id)
 		if id == 16 then
 			if GetLocale() == "enGB" or GetLocale() == "enUS" then
 				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unarmed")
-			end
-
-			if GetLocale() == "deDE" then
+			elseif GetLocale() == "deDE" then
 				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unbewaffnet")
 			end
 		end
@@ -198,6 +196,12 @@ function ImproveAny:InitSkillBars()
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FIRST_AID))
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_COOKING))
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FISHING))
+		if GetLocale() == "enGB" or GetLocale() == "enUS" then
+			ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower("Lockpicking"))
+		elseif GetLocale() == "deDE" then
+			ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower("Schlossknacken"))
+		end
+
 		ImproveAny:SkillsThink()
 	end
 end
