@@ -65,7 +65,7 @@ function ImproveAny:Lang_ruRU()
 		["EXTRAS"] = "Дополнительно",
 		["MONEYBAR"] = "Полоса денег",
 		["MONEYBARPERHOUR"] = "Полоса денег за час",
-		["TOKENBAR"] = "Полоса жетона",
+		["TOKENBAR"] = "Полоса жетона WoW",
 		["IAILVLBAR"] = "Полоса уровня предметов",
 		["SKILLBARS"] = "Полосы навыков (профессии, навыки оружия)",
 		["CASTBAR"] = "Полоса каста",
