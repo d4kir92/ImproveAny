@@ -116,22 +116,30 @@ function ImproveAny:SkillsThink()
 
 	local id = 1
 	local jobid = 1
+	local oldName = ""
 	for i, bar in pairs(IASkills.bars) do
 		local name, cur, max = bar:func(bar.args)
-		if bar.args == "job" and jobs[jobid] then
-			name, cur, max = bar:func(string.lower(jobs[jobid]))
-			jobid = jobid + 1
-		end
-
-		if name and cur and max and cur < max then
-			if not bar:IsShown() then
-				bar:Show()
+		if name ~= oldName or name == nil then
+			oldName = name
+			if bar.args == "job" and jobs[jobid] then
+				name, cur, max = bar:func(string.lower(jobs[jobid]))
+				jobid = jobid + 1
 			end
 
-			bar:SetPoint("TOPLEFT", IASkills, "TOPLEFT", 0, -(id - 1) * sh)
-			bar.text:SetText(name .. " " .. textc .. cur .. textw .. "/" .. textc .. max)
-			bar.bar:SetWidth(cur / max * bar.bar.sw)
-			id = id + 1
+			if name and cur and max and cur < max then
+				if not bar:IsShown() then
+					bar:Show()
+				end
+
+				bar:SetPoint("TOPLEFT", IASkills, "TOPLEFT", 0, -(id - 1) * sh)
+				bar.text:SetText(name .. " " .. textc .. cur .. textw .. "/" .. textc .. max)
+				bar.bar:SetWidth(cur / max * bar.bar.sw)
+				id = id + 1
+			else
+				if bar:IsShown() then
+					bar:Hide()
+				end
+			end
 		else
 			if bar:IsShown() then
 				bar:Hide()

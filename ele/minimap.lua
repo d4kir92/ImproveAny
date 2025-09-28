@@ -360,7 +360,7 @@ function ImproveAny:InitMinimap()
 					TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -4)
 				end
 
-				if MinimapZoneTextButton then
+				if MinimapZoneTextButton and not ImproveAny:IsAddOnLoaded("DragonflightUI") then
 					MinimapZoneTextButton:ClearAllPoints()
 					MinimapZoneTextButton:SetPoint("BOTTOM", Minimap, "TOP", 0, 6)
 				end
