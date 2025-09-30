@@ -140,7 +140,7 @@ function ImproveAny:UpdateQuestFrame()
 				questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
 				if questNormalText then
 					questNormalText:ClearAllPoints()
-					questNormalText:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 18, 0)
+					questNormalText:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 4, 0)
 				end
 
 				if lvl and lvl > 0 then
@@ -155,6 +155,20 @@ function ImproveAny:UpdateQuestFrame()
 					end
 
 					if lvltext and qnt then
+						hooksecurefunc(
+							questNormalText,
+							"SetText",
+							function(sel, text)
+								if sel.ia_settext then return end
+								sel.ia_settext = true
+								if text then
+									sel:SetText(string.gsub(text, "%[([%da-zA-Z]+)%] %[%1%]", "[%1]"))
+								end
+
+								sel.ia_settext = false
+							end
+						)
+
 						questNormalText:SetText(format("[%s]%s", lvltext, qnt))
 					else
 						ImproveAny:MSG("[UpdateQuestFrame] FAILED", lvltext, qnt)
