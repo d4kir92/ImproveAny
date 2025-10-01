@@ -110,6 +110,7 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 end
 
 local questlogWarning = false
+local once = {}
 function ImproveAny:UpdateQuestFrame()
 	if not questlogWarning and LeaPlusDB and LeaPlusDB["EnhanceQuestLevels"] and LeaPlusDB["EnhanceQuestLevels"] == "On" then
 		ImproveAny:MSG("LeatrixPlus \"EnhanceQuestLevels\" is enabled, may break QuestLog")
@@ -140,7 +141,7 @@ function ImproveAny:UpdateQuestFrame()
 				questNormalText = _G["QuestLogTitle" .. i .. "NormalText"]
 				if questNormalText then
 					questNormalText:ClearAllPoints()
-					questNormalText:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 4, 0)
+					questNormalText:SetPoint("LEFT", _G["QuestLogTitle" .. i], "LEFT", 16, 0)
 				end
 
 				if lvl and lvl > 0 then
@@ -155,19 +156,22 @@ function ImproveAny:UpdateQuestFrame()
 					end
 
 					if lvltext and qnt then
-						hooksecurefunc(
-							questNormalText,
-							"SetText",
-							function(sel, text)
-								if sel.ia_settext then return end
-								sel.ia_settext = true
-								if text then
-									sel:SetText(string.gsub(text, "%[([%da-zA-Z]+)%] %[%1%]", "[%1]"))
-								end
+						if once[questNormalText] == nil then
+							once[questNormalText] = true
+							hooksecurefunc(
+								questNormalText,
+								"SetText",
+								function(sel, text)
+									if sel.ia_settext then return end
+									sel.ia_settext = true
+									if text then
+										sel:SetText(string.gsub(text, "%[([%da-zA-Z]+)%] %[%1%]", "[%1]"))
+									end
 
-								sel.ia_settext = false
-							end
-						)
+									sel.ia_settext = false
+								end
+							)
+						end
 
 						questNormalText:SetText(format("[%s]%s", lvltext, qnt))
 					else
