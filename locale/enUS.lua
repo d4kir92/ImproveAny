@@ -106,7 +106,7 @@ function ImproveAny:Lang_enUS()
 		["FRAMES"] = "Windows (Frames)",
 		["WIDEFRAMES"] = "Wide Windows (Wide Frames)",
 		["AUTOACCEPTQUESTS"] = "Auto Accept Quests",
-		["AUTOCHECKINQUESTS"] = "Autom Submit Quests",
+		["AUTOCHECKINQUESTS"] = "Auto Complete Quests",
 		["COMBINEMMBTNS"] = "Combine Minimap Buttons",
 		["IMPROVEBAGS"] = "Improve Bags (Search/Sort)",
 		["IMPROVETRADESKILLFRAME"] = "Improve Tradeskillframe (Has Materials, Search)",
