@@ -103,7 +103,7 @@ function ImproveAny:AddRightClick()
 end
 
 function ImproveAny:IsOnActionbar(spellID)
-	for i = 1, 120 do
+	for i = 1, 140 do
 		local actionType, id, _ = GetActionInfo(i)
 		if actionType == "macro" then
 			id = GetMacroSpell(id)

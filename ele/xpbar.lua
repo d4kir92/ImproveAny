@@ -165,7 +165,21 @@ function ImproveAny:UpdateQuestFrame()
 									if sel.ia_settext then return end
 									sel.ia_settext = true
 									if text then
-										sel:SetText(string.gsub(text, "%[([%da-zA-Z]+)%] %[%1%]", "[%1]"))
+										sel:SetText(
+											string.gsub(
+												text,
+												"%[([%da-zA-Z]+)%] (%[([%da-zA-Z]+)%])",
+												function(id1, id2_full, id2)
+													local num1 = tonumber(id1)
+													local num2 = tonumber(id2)
+													if num1 and num2 and num1 == num2 then
+														return "[" .. id1 .. "]"
+													else
+														return "[" .. id1 .. "] " .. id2_full
+													end
+												end
+											)
+										)
 									end
 
 									sel.ia_settext = false
