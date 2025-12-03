@@ -1,5 +1,5 @@
 ## Interface: 30300, 30403
-## Version: 0.9.189
+## Version: 0.9.190
 ## Title: I|cff3FC7EBmprove|rA|cff3FC7EBny|r |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen
