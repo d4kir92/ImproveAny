@@ -31,7 +31,7 @@ function ImproveAny:InitRaidFrames()
 						sel.iasetsize = true
 						local options = DefaultCompactMiniFrameSetUpOptions
 						if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:IAGV("RAIDFRAMEW", options.width) and ImproveAny:IAGV("RAIDFRAMEH", options.height) then
-							frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width), ImproveAny:IAGV("RAIDFRAMEH", options.height))
+							frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width or 30), ImproveAny:IAGV("RAIDFRAMEH", options.height or 30))
 						end
 
 						sel.iasetsize = false

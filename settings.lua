@@ -156,7 +156,14 @@ end
 
 local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 	if sls[key] == nil then
-		sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "UISliderTemplate")
+		if DoesTemplateExist and DoesTemplateExist("MinimalSliderTemplate") then
+			sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "MinimalSliderTemplate")
+		elseif DoesTemplateExist and DoesTemplateExist("UISliderTemplate") then
+			sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "UISliderTemplate")
+		else
+			sls[key] = CreateFrame("Slider", "sls[" .. key .. "]", IASettings.SC, "OptionsSliderTemplate")
+		end
+
 		sls[key]:SetSize(IASettings.SC:GetWidth() - 30 - x, 16)
 		sls[key]:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x + 5, posy)
 		if sls[key].Low == nil then
@@ -180,16 +187,20 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 			sls[key].Text:SetTextColor(1, 1, 1)
 		end
 
-		if type(vmin) == "number" then
-			sls[key].Low:SetText(vmin)
-			sls[key].High:SetText(vmax)
-			sls[key]:SetMinMaxValues(vmin, vmax)
-			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:IAGV(key, val))
-		else
-			sls[key].Low:SetText("")
-			sls[key].High:SetText("")
-			sls[key]:SetMinMaxValues(1, #vmin)
-			sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:IAGV(key, val)])
+		if val then
+			if type(vmin) == "number" then
+				sls[key].Low:SetText(vmin)
+				sls[key].High:SetText(vmax)
+				sls[key]:SetMinMaxValues(vmin, vmax)
+				sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:IAGV(key, val))
+			else
+				sls[key].Low:SetText("")
+				sls[key].High:SetText("")
+				sls[key]:SetMinMaxValues(1, #vmin)
+				sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:IAGV(key, val)])
+			end
+
+			sls[key]:SetValue(ImproveAny:IAGV(key, val))
 		end
 
 		sls[key]:SetObeyStepOnDrag(true)
@@ -197,7 +208,6 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 			sls[key]:SetValueStep(steps)
 		end
 
-		sls[key]:SetValue(ImproveAny:IAGV(key, val))
 		sls[key]:SetScript(
 			"OnValueChanged",
 			function(self, valu)
@@ -249,7 +259,7 @@ function ImproveAny:UpdateRaidFrameSize()
 		if frame then
 			local options = DefaultCompactMiniFrameSetUpOptions
 			if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:IAGV("RAIDFRAMEW", options.width) and ImproveAny:IAGV("RAIDFRAMEH", options.height) then
-				frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width), ImproveAny:IAGV("RAIDFRAMEH", options.height))
+				frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width or 30), ImproveAny:IAGV("RAIDFRAMEH", options.height or 30))
 			end
 
 			if true then
@@ -464,7 +474,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.192")
+	ImproveAny:SetVersion(136033, "0.9.193")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -596,8 +606,8 @@ function ImproveAny:InitIASettings()
 			AddSlider(24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
 			local options = DefaultCompactMiniFrameSetUpOptions
 			AddCheckBox(4, "OVERWRITERAIDFRAMESIZE", false)
-			AddSlider(24, "RAIDFRAMEW", options.width, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
-			AddSlider(24, "RAIDFRAMEH", options.height, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
+			AddSlider(24, "RAIDFRAMEW", options.width or 30, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
+			AddSlider(24, "RAIDFRAMEH", options.height or 30, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
 		end
 
 		AddCategory("EXTRAS")

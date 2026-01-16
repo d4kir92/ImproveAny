@@ -1,59 +1,17 @@
 local _, ImproveAny = ...
--- TAINTFREE SLASH COMMANDS --
-local lastMessage = ""
-local cmds = {}
-if ChatEdit_ParseText then
-	hooksecurefunc(
-		"ChatEdit_ParseText",
-		function(editBox, send, parseIfNoSpace)
-			if send == 0 then
-				lastMessage = editBox:GetText()
-			end
-		end
-	)
-else
-	ImproveAny:MSG("FAILED TO ADD SLASH HANDLE #1")
-end
-
-if ChatFrame_DisplayHelpTextSimple then
-	hooksecurefunc(
-		"ChatFrame_DisplayHelpTextSimple",
-		function(frame)
-			if lastMessage and lastMessage ~= "" then
-				local cmd = string.upper(lastMessage)
-				cmd = strsplit(" ", cmd)
-				if cmds[cmd] ~= nil then
-					local count = 1
-					local numMessages = frame:GetNumMessages()
-					local function predicateFunction(entry)
-						if count == numMessages and entry == HELP_TEXT_SIMPLE then return true end
-						count = count + 1
-					end
-
-					frame:RemoveMessagesByPredicate(predicateFunction)
-					cmds[cmd]()
-				end
-			end
-		end
-	)
-else
-	ImproveAny:MSG("FAILED TO ADD SLASH HANDLE #2")
-end
-
 function ImproveAny:InitSlash()
-	cmds["/IMPROVE"] = ImproveAny.ToggleSettings
-	cmds["/IMPROVEANY"] = ImproveAny.ToggleSettings
+	ImproveAny:AddSlash("IMPROVE", ImproveAny.ToggleSettings)
+	ImproveAny:AddSlash("IMPROVEANY", ImproveAny.ToggleSettings)
 	if C_UI then
-		cmds["/RL"] = C_UI.Reload
-		cmds["/REL"] = C_UI.Reload
+		ImproveAny:AddSlash("RL", C_UI.Reload)
+		ImproveAny:AddSlash("REL", C_UI.Reload)
 	else
 		local ReloadUi = getglobal("ReloadUi")
-		cmds["/RL"] = ReloadUi
-		cmds["/REL"] = ReloadUi
+		ImproveAny:AddSlash("RL", ReloadUi)
+		ImproveAny:AddSlash("REL", ReloadUi)
 	end
 end
 
--- TAINTFREE SLASH COMMANDS --
 IAHIDDEN = CreateFrame("FRAME", "IAHIDDEN")
 IAHIDDEN:Hide()
 local IAMaxZoom = 5
