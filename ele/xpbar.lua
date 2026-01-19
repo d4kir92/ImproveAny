@@ -238,6 +238,27 @@ function ImproveAny:Clamp(vval, vmin, vmax)
 	return vval
 end
 
+function ImproveAny:FindXpTextFrame(frame, str)
+	local test = nil
+	ImproveAny:ForeachChildren(
+		frame,
+		function(child, x)
+			if child.OverlayFrame then
+				ImproveAny:ForeachRegions(
+					child.OverlayFrame,
+					function(cchild, cx)
+						if cchild.SetText then
+							test = cchild
+						end
+					end
+				)
+			end
+		end
+	)
+
+	return test
+end
+
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", false) then
 		if QuestLogFrame then
@@ -269,6 +290,9 @@ function ImproveAny:InitXPBar()
 							end
 						end
 					)
+				elseif xpBar == nil then
+					xpBar = MainStatusTrackingBarContainer
+					xpBarText = ImproveAny:FindXpTextFrame(MainStatusTrackingBarContainer, "Text")
 				end
 
 				if GetRewardXP ~= nil then
@@ -373,10 +397,14 @@ function ImproveAny:InitXPBar()
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 								xpBar.show = true
-								xpBarText:Show()
+								if xpBarText then
+									xpBarText:Show()
+								end
 							else
 								xpBar.show = false
-								xpBarText:Hide()
+								if xpBarText then
+									xpBarText:Hide()
+								end
 							end
 						end
 					)
@@ -386,20 +414,28 @@ function ImproveAny:InitXPBar()
 						function(sel)
 							if ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 								xpBar.show = false
-								xpBarText:Hide()
+								if xpBarText then
+									xpBarText:Hide()
+								end
 							else
 								xpBar.show = true
-								xpBarText:Show()
+								if xpBarText then
+									xpBarText:Show()
+								end
 							end
 						end
 					)
 
 					if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 						xpBar.show = true
-						xpBarText:Show()
+						if xpBarText then
+							xpBarText:Show()
+						end
 					else
 						xpBar.show = false
-						xpBarText:Hide()
+						if xpBarText then
+							xpBarText:Hide()
+						end
 					end
 
 					for sec = 1, 3 do
@@ -409,10 +445,14 @@ function ImproveAny:InitXPBar()
 							function()
 								if not ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false) then
 									xpBar.show = true
-									xpBarText:Show()
+									if xpBarText then
+										xpBarText:Show()
+									end
 								else
 									xpBar.show = false
-									xpBarText:Hide()
+									if xpBarText then
+										xpBarText:Hide()
+									end
 								end
 							end, "xpbar.lua: #4"
 						)
@@ -461,7 +501,10 @@ function ImproveAny:InitXPBar()
 				end
 
 				if xpBar then
-					xpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
+					if xpBar.SetStatusBarColor then
+						xpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
+					end
+
 					if ExhaustionLevelFillBar then
 						ExhaustionLevelFillBar:SetVertexColor(0.21, 0.40, 0.64, 0.75)
 						ExhaustionLevelFillBar:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
@@ -484,13 +527,24 @@ function ImproveAny:InitXPBar()
 				if xpBar and xpBarText then
 					local fontName, _, fontFlags = xpBarText:GetFont()
 					xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fontFlags)
-					if xpBarText == MainMenuBarExpText then
+					if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
+						local xpBarSetPoint
+						hooksecurefunc(
+							xpBarText,
+							"SetPoint",
+							function()
+								if xpBarSetPoint then return end
+								xpBarSetPoint = true
+								xpBarText:ClearAllPoints()
+								xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
+								xpBarSetPoint = false
+							end
+						)
+
+						xpBarText:ClearAllPoints()
+						xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
+					elseif xpBarText == MainMenuBarExpText then
 						xpBarText:SetPoint("CENTER", xpBar, "CENTER", 0, 1)
-					else
-						if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
-							xpBarText:ClearAllPoints()
-							xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
-						end
 					end
 
 					hooksecurefunc(
