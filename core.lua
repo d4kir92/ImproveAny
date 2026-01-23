@@ -61,7 +61,7 @@ function ImproveAny:AddRightClick()
 end
 
 function ImproveAny:IsOnActionbar(spellID)
-	for i = 1, 140 do
+	for i = 1, 200 do
 		local actionType, id, _ = GetActionInfo(i)
 		if actionType == "macro" then
 			id = GetMacroSpell(id)
@@ -85,6 +85,7 @@ function ImproveAny:InitSpellBookFix()
 		hooksecurefunc(
 			"SpellBookFrame_UpdateSpells",
 			function()
+				print("TEST")
 				for i = 1, SPELLS_PER_PAGE do
 					local sel = _G["SpellButton" .. i]
 					local slot, slotType = SpellBook_GetSpellBookSlot(sel)
@@ -107,6 +108,41 @@ function ImproveAny:InitSpellBookFix()
 				end
 			end
 		)
+	else
+		if SpellBookFrame and SpellBookFrame.Update then
+			hooksecurefunc(
+				SpellBookFrame,
+				"Update",
+				function(selfi)
+					-- Falls du sichergehen willst, dass es nur feuert, wenn Zauber geladen werden
+					if not SpellBookFrame:IsShown() then return end
+					-- print("TEST") -- Debugging
+					for i = 1, SPELLS_PER_PAGE do
+						local sel = _G["SpellButton" .. i]
+						if sel and sel:IsShown() then
+							local slot, slotType = SpellBook_GetSpellBookSlot(sel)
+							if slot and slotType ~= "FUTURESPELL" then
+								local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
+								local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
+								local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+								if isPassive or not spellName or texture == 134419 then
+									sel:SetChecked(false)
+								else
+									-- Deine Logik für das Highlighten (z.B. Check ob auf Actionbar)
+									if spellID and not ImproveAny:IsOnActionbar(spellID) then
+										sel:SetChecked(true)
+									else
+										sel:SetChecked(false)
+									end
+								end
+							else
+								sel:SetChecked(false)
+							end
+						end
+					end
+				end
+			)
+		end
 	end
 end
 
