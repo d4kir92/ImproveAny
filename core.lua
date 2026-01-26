@@ -80,69 +80,79 @@ function ImproveAny:IsOnActionbar(spellID)
 	return false
 end
 
+local setChecked = false
+local hookedSpellBookButtons = {}
+function ImproveAny:UpdateSpellBookButton(sel)
+	local slot, slotType = SpellBook_GetSpellBookSlot(sel)
+	if slot and slotType ~= "FUTURESPELL" then
+		local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
+		local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
+		local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+		if isPassive or not spellName or texture == 134419 then
+			sel:SetChecked(false)
+		else
+			if spellID and not ImproveAny:IsOnActionbar(spellID) then
+				sel:SetChecked(true)
+			else
+				sel:SetChecked(false)
+			end
+		end
+	else
+		sel:SetChecked(false)
+	end
+end
+
 function ImproveAny:InitSpellBookFix()
-	if SpellBookFrame_UpdateSpells then
-		hooksecurefunc(
-			"SpellBookFrame_UpdateSpells",
-			function()
-				print("TEST")
-				for i = 1, SPELLS_PER_PAGE do
-					local sel = _G["SpellButton" .. i]
-					local slot, slotType = SpellBook_GetSpellBookSlot(sel)
-					if slot and slotType ~= "FUTURESPELL" then
-						local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
-						local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
-						local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
-						if isPassive or spellName == nil or texture == 134419 then
-							sel:SetChecked(false)
-						else
-							if spellName and spellID and not ImproveAny:IsOnActionbar(spellID) then
-								sel:SetChecked(true)
-							else
-								sel:SetChecked(false)
-							end
+	local function UpdateSpellbook(from)
+		if not SpellBookFrame:IsShown() then return end
+		for i = 1, SPELLS_PER_PAGE do
+			local sel = _G["SpellButton" .. i]
+			if sel and sel:IsShown() then
+				if hookedSpellBookButtons[sel] == nil then
+					hookedSpellBookButtons[sel] = true
+					hooksecurefunc(
+						sel,
+						"SetChecked",
+						function()
+							if setChecked then return end
+							setChecked = true
+							ImproveAny:UpdateSpellBookButton(sel)
+							setChecked = false
 						end
-					else
-						sel:SetChecked(false)
-					end
+					)
 				end
+
+				ImproveAny:UpdateSpellBookButton(sel)
+			end
+		end
+	end
+
+	if SpellBookFrame then
+		SpellBookFrame:HookScript(
+			"OnEvent",
+			function(selfi)
+				UpdateSpellbook("SpellBookFrame.OnEvent")
 			end
 		)
-	else
-		if SpellBookFrame and SpellBookFrame.Update then
+
+		if SpellBookFrame.Update then
 			hooksecurefunc(
 				SpellBookFrame,
 				"Update",
 				function(selfi)
-					-- Falls du sichergehen willst, dass es nur feuert, wenn Zauber geladen werden
-					if not SpellBookFrame:IsShown() then return end
-					-- print("TEST") -- Debugging
-					for i = 1, SPELLS_PER_PAGE do
-						local sel = _G["SpellButton" .. i]
-						if sel and sel:IsShown() then
-							local slot, slotType = SpellBook_GetSpellBookSlot(sel)
-							if slot and slotType ~= "FUTURESPELL" then
-								local texture = GetSpellTexture(slot, SpellBookFrame.bookType)
-								local spellName, _, spellID = GetSpellBookItemName(slot, SpellBookFrame.bookType)
-								local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
-								if isPassive or not spellName or texture == 134419 then
-									sel:SetChecked(false)
-								else
-									-- Deine Logik für das Highlighten (z.B. Check ob auf Actionbar)
-									if spellID and not ImproveAny:IsOnActionbar(spellID) then
-										sel:SetChecked(true)
-									else
-										sel:SetChecked(false)
-									end
-								end
-							else
-								sel:SetChecked(false)
-							end
-						end
-					end
+					UpdateSpellbook("SpellBookFrame.Update")
 				end
 			)
 		end
+	end
+
+	if SpellBookFrame_UpdateSpells then
+		hooksecurefunc(
+			"SpellBookFrame_UpdateSpells",
+			function()
+				UpdateSpellbook("SpellBookFrame_UpdateSpells")
+			end
+		)
 	end
 end
 
