@@ -637,68 +637,70 @@ function ImproveAny:Event(event, ...)
 					whileDead = 1
 				}
 
-				QuestLogFrame:SetWidth(714)
-				QuestLogFrame:SetHeight(487 + tall)
-				QuestLogTitleText:ClearAllPoints()
-				QuestLogTitleText:SetPoint("TOP", QuestLogFrame, "TOP", 0, -17)
-				QuestLogDetailScrollFrame:ClearAllPoints()
-				QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogListScrollFrame, "TOPRIGHT", 31, 1)
-				QuestLogDetailScrollFrame:SetHeight(336 + tall)
-				QuestLogListScrollFrame:SetHeight(336 + tall)
-				local oldQuestsDisplayed = QUESTS_DISPLAYED
-				_G.QUESTS_DISPLAYED = _G.QUESTS_DISPLAYED + numTallQuests
-				for i = oldQuestsDisplayed + 1, QUESTS_DISPLAYED do
-					local button = CreateFrame("Button", "QuestLogTitle" .. i, QuestLogFrame, "QuestLogTitleButtonTemplate")
-					button:SetID(i)
-					button:Hide()
-					button:ClearAllPoints()
-					button:SetPoint("TOPLEFT", _G["QuestLogTitle" .. (i - 1)], "BOTTOMLEFT", 0, 1)
-				end
-
-				local regions = {QuestLogFrame:GetRegions()}
-				regions[3]:SetSize(1024, 512)
-				regions[3]:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
-				regions[3]:SetTexCoord(0, 1, 0, 1)
-				regions[4].Show = regions[4].Hide
-				regions[4]:Hide()
-				for i = 5, 6 do
-					if regions[i] then
-						regions[i]:Hide()
+				if QuestLogFrame and QuestLogTitleText and QuestLogDetailScrollFrame and QuestLogListScrollFrame then
+					QuestLogFrame:SetWidth(714)
+					QuestLogFrame:SetHeight(487 + tall)
+					QuestLogTitleText:ClearAllPoints()
+					QuestLogTitleText:SetPoint("TOP", QuestLogFrame, "TOP", 0, -17)
+					QuestLogDetailScrollFrame:ClearAllPoints()
+					QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogListScrollFrame, "TOPRIGHT", 31, 1)
+					QuestLogDetailScrollFrame:SetHeight(336 + tall)
+					QuestLogListScrollFrame:SetHeight(336 + tall)
+					local oldQuestsDisplayed = QUESTS_DISPLAYED
+					_G.QUESTS_DISPLAYED = _G.QUESTS_DISPLAYED + numTallQuests
+					for i = oldQuestsDisplayed + 1, QUESTS_DISPLAYED do
+						local button = CreateFrame("Button", "QuestLogTitle" .. i, QuestLogFrame, "QuestLogTitleButtonTemplate")
+						button:SetID(i)
+						button:Hide()
+						button:ClearAllPoints()
+						button:SetPoint("TOPLEFT", _G["QuestLogTitle" .. (i - 1)], "BOTTOMLEFT", 0, 1)
 					end
-				end
 
-				QuestLogFrameAbandonButton:SetSize(110, 21)
-				QuestLogFrameAbandonButton:SetText(ABANDON_QUEST_ABBREV)
-				QuestLogFrameAbandonButton:ClearAllPoints()
-				QuestLogFrameAbandonButton:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 17, 54)
-				QuestFramePushQuestButton:SetSize(100, 21)
-				QuestFramePushQuestButton:SetText(SHARE_QUEST_ABBREV)
-				QuestFramePushQuestButton:ClearAllPoints()
-				QuestFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", -3, 0)
-				local mapButton = CreateFrame("Button", nil, QuestLogFrame, "UIPanelButtonTemplate")
-				mapButton:SetText("Map")
-				mapButton:ClearAllPoints()
-				mapButton:SetPoint("LEFT", QuestFramePushQuestButton, "RIGHT", -3, 0)
-				mapButton:SetSize(100, 21)
-				mapButton:SetScript("OnClick", ToggleWorldMap)
-				if QuestFrameExitButton then
-					QuestFrameExitButton:SetSize(80, 22)
-					QuestFrameExitButton:SetText(CLOSE)
-					QuestFrameExitButton:ClearAllPoints()
-					QuestFrameExitButton:SetPoint("BOTTOMRIGHT", QuestLogFrame, "BOTTOMRIGHT", -42, 54)
-				end
-
-				QuestLogNoQuestsText:ClearAllPoints()
-				QuestLogNoQuestsText:SetPoint("TOP", QuestLogListScrollFrame, 0, -50)
-				hooksecurefunc(
-					EmptyQuestLogFrame,
-					"Show",
-					function()
-						EmptyQuestLogFrame:ClearAllPoints()
-						EmptyQuestLogFrame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 20, -76)
-						EmptyQuestLogFrame:SetHeight(487)
+					local regions = {QuestLogFrame:GetRegions()}
+					regions[3]:SetSize(1024, 512)
+					regions[3]:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
+					regions[3]:SetTexCoord(0, 1, 0, 1)
+					regions[4].Show = regions[4].Hide
+					regions[4]:Hide()
+					for i = 5, 6 do
+						if regions[i] then
+							regions[i]:Hide()
+						end
 					end
-				)
+
+					QuestLogFrameAbandonButton:SetSize(110, 21)
+					QuestLogFrameAbandonButton:SetText(ABANDON_QUEST_ABBREV)
+					QuestLogFrameAbandonButton:ClearAllPoints()
+					QuestLogFrameAbandonButton:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 17, 54)
+					QuestFramePushQuestButton:SetSize(100, 21)
+					QuestFramePushQuestButton:SetText(SHARE_QUEST_ABBREV)
+					QuestFramePushQuestButton:ClearAllPoints()
+					QuestFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", -3, 0)
+					local mapButton = CreateFrame("Button", nil, QuestLogFrame, "UIPanelButtonTemplate")
+					mapButton:SetText("Map")
+					mapButton:ClearAllPoints()
+					mapButton:SetPoint("LEFT", QuestFramePushQuestButton, "RIGHT", -3, 0)
+					mapButton:SetSize(100, 21)
+					mapButton:SetScript("OnClick", ToggleWorldMap)
+					if QuestFrameExitButton then
+						QuestFrameExitButton:SetSize(80, 22)
+						QuestFrameExitButton:SetText(CLOSE)
+						QuestFrameExitButton:ClearAllPoints()
+						QuestFrameExitButton:SetPoint("BOTTOMRIGHT", QuestLogFrame, "BOTTOMRIGHT", -42, 54)
+					end
+
+					QuestLogNoQuestsText:ClearAllPoints()
+					QuestLogNoQuestsText:SetPoint("TOP", QuestLogListScrollFrame, 0, -50)
+					hooksecurefunc(
+						EmptyQuestLogFrame,
+						"Show",
+						function()
+							EmptyQuestLogFrame:ClearAllPoints()
+							EmptyQuestLogFrame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 20, -76)
+							EmptyQuestLogFrame:SetHeight(487)
+						end
+					)
+				end
 			end
 
 			if true then

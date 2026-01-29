@@ -43,6 +43,7 @@ end
 
 local lastTotalXp = 0
 function ImproveAny:GetQuestCompleteXP()
+	if QuestLogFrame == nil then return lastTotalXp end
 	if QuestLogFrame:IsShown() then return lastTotalXp end
 	local oldQuestId = QuestLogFrame.selectedButtonID
 	local totalXP = 0
