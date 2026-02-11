@@ -1398,6 +1398,13 @@ AddEQ(1144) -- Willix the Importer  (Razorfen Kraul)
 AddEQ(9165) -- Writ of Safe Passage (Eastern Plaguelands)
 AddEQ(78714) -- TWW SKIP QUEST 1
 AddEQ(84365) -- TWW SKIP QUEST 2
+local decisionQuests = {}
+local function AddDQ(id)
+	decisionQuests[id] = true
+end
+
+AddDQ(10551) -- Allegiance to the Aldor
+AddDQ(10552) -- Allegiance to the Scryers
 local f2 = CreateFrame("Frame")
 ImproveAny:RegisterEvent(f2, "LOOT_READY")
 ImproveAny:OnEvent(f2, ImproveAny.FastLooting, "FastLooting 2")
@@ -1465,11 +1472,20 @@ function ImproveAny:InitAutoAcceptQuests()
 						end
 					end
 				elseif event == "QUEST_DETAIL" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
-					if escortQuests[GetQuestID()] == nil then
-						AcceptQuest()
-					else
-						ImproveAny:MSG("Is Escort Quest")
+					local questId = GetQuestID()
+					if decisionQuests[questId] then
+						ImproveAny:MSG("Auto Accept Quest: This is a decision quest!")
+
+						return
 					end
+
+					if escortQuests[questId] then
+						ImproveAny:MSG("Auto Accept Quest: This is an escort quest!")
+
+						return
+					end
+
+					AcceptQuest()
 				elseif event == "QUEST_ACCEPT_CONFIRM" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
 					ConfirmAcceptQuest()
 				elseif event == "QUEST_PROGRESS" and ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then

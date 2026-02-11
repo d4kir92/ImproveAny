@@ -56,9 +56,12 @@ function ImproveAny:GetQuestCompleteXP()
 			if xp and xp > 0 then
 				IATAB["QUESTS"] = IATAB["QUESTS"] or {}
 				IATAB["QUESTS"][questID] = xp
-				if IsQuestComplete(questID) then
-					totalXP = totalXP + xp
-				end
+			else
+				xp = IATAB["QUESTS"][questID] or 0
+			end
+
+			if IsQuestComplete(questID) then
+				totalXP = totalXP + xp
 			end
 		end
 	end
@@ -319,7 +322,7 @@ function ImproveAny:InitXPBar()
 
 							ImproveAny:Debug("xpbar.lua: #2")
 							ImproveAny:After(
-								0.05,
+								0.1,
 								function()
 									if xpBarText then
 										xpBarText:SetText(xpBarText:GetText())
@@ -359,7 +362,7 @@ function ImproveAny:InitXPBar()
 					end
 				end
 
-				if ImproveAny:GetWoWBuild() == "CLASSIC" then
+				if ImproveAny:GetWoWBuild() ~= "CLASSIC" then
 					hooksecurefunc(
 						"QuestLog_Update",
 						function()
