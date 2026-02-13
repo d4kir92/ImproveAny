@@ -362,7 +362,7 @@ function ImproveAny:InitXPBar()
 					end
 				end
 
-				if ImproveAny:GetWoWBuild() ~= "CLASSIC" then
+				if ImproveAny:GetWoWBuild() ~= "CLASSIC" and QuestLog_Update then
 					hooksecurefunc(
 						"QuestLog_Update",
 						function()
