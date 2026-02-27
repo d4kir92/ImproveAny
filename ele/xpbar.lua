@@ -488,18 +488,22 @@ function ImproveAny:InitXPBar()
 						frame,
 						function(sel, event, message, ...)
 							-- Only if it is a kill
-							if strfind(message, xpKillText) then
-								local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
-								xpGained = tonumber(xpGained)
-								if xpGained then
-									if xpGainedEx then
-										xpGainedEx = tonumber(xpGainedEx)
-										ImproveAny:AddXPPerMob(xpGained)
-									else
-										ImproveAny:AddXPPerMob(xpGained)
+							pcall(
+								function()
+									if strfind(message, xpKillText) then
+										local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
+										xpGained = tonumber(xpGained)
+										if xpGained then
+											if xpGainedEx then
+												xpGainedEx = tonumber(xpGainedEx)
+												ImproveAny:AddXPPerMob(xpGained)
+											else
+												ImproveAny:AddXPPerMob(xpGained)
+											end
+										end
 									end
 								end
-							end
+							)
 						end, "xpKillText"
 					)
 				end
