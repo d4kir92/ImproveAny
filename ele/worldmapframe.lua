@@ -1,18 +1,28 @@
 local _, ImproveAny = ...
 function ImproveAny:GetBestPosXY(unit)
-	local mapID = nil
-	if WorldMapFrame.mapID then
-		mapID = WorldMapFrame.mapID
-	elseif C_Map then
-		mapID = C_Map.GetBestMapForUnit(unit)
-	end
+	local ok, nx, ny = xpcall(
+		function()
+			local mapID = nil
+			if C_Map then
+				mapID = C_Map.GetBestMapForUnit(unit)
+			end
 
-	if mapID and unit then
-		local mapPos = C_Map.GetPlayerMapPosition(mapID, unit)
-		if mapPos then return mapPos:GetXY() end
-	end
+			if mapID == nil and WorldMapFrame.mapID then
+				mapID = WorldMapFrame.mapID
+			end
 
-	return nil, nil
+			if mapID and unit then
+				local mapPos = C_Map.GetPlayerMapPosition(mapID, unit)
+				if mapPos then return mapPos.x, mapPos.y end
+			end
+
+			return nil, nil
+		end, function(err) end
+	)
+
+	if not ok then return nil, nil end
+
+	return nx, ny
 end
 
 local fontsize = 8

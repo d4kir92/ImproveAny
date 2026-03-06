@@ -262,10 +262,6 @@ function ImproveAny:Event(event, ...)
 			ImproveAny:InitMicroMenu()
 		end
 
-		if ImproveAny.InitRaidFrames then
-			ImproveAny:InitRaidFrames()
-		end
-
 		if ImproveAny.InitPartyFrames then
 			ImproveAny:InitPartyFrames()
 		end

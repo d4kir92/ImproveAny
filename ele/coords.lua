@@ -9,17 +9,32 @@ function ImproveAny:InitIACoordsFrame()
 		IACoordsFrame.coords:SetPoint("CENTER", IACoordsFrame, "CENTER", 0, 0)
 		IACoordsFrame.coords:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE")
 		function ImproveAny:CoordsThink()
-			if ImproveAny.GetBestPosXY then
-				local x, y = ImproveAny:GetBestPosXY("PLAYER")
-				if x and y then
-					IACoordsFrame.coords:SetText(format("|cff3FC7EB%0.1f, %0.1f", x * 100, y * 100))
-				else
-					IACoordsFrame.coords:SetText("")
-				end
+			local ok = xpcall(
+				function()
+					if ImproveAny.GetBestPosXY then
+						local rawX, rawY = ImproveAny:GetBestPosXY("PLAYER")
+						if rawX and rawY then
+							local displayX = rawX * 100
+							local displayY = rawY * 100
+							IACoordsFrame.coords:SetText(format("|cff3FC7EB%0.1f, %0.1f", displayX, displayY))
+						else
+							IACoordsFrame.coords:SetText("")
+						end
+					end
+				end, function(err) end
+			)
+
+			if not ok then
+				IACoordsFrame.coords:SetText("")
 			end
 
 			ImproveAny:Debug("coords.lua: CoordsThink")
-			ImproveAny:After(config_update, ImproveAny.CoordsThink, "CoordsThink")
+			ImproveAny:After(
+				config_update,
+				function()
+					ImproveAny:CoordsThink()
+				end, "CoordsThink"
+			)
 		end
 
 		ImproveAny:CoordsThink()

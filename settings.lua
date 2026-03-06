@@ -253,68 +253,6 @@ function ImproveAny:UpdateILVLIcons()
 	end
 end
 
-function ImproveAny:UpdateRaidFrameSize()
-	for i = 1, 40 do
-		local frame = _G["CompactRaidFrame" .. i]
-		if frame then
-			local options = DefaultCompactMiniFrameSetUpOptions
-			if ImproveAny:IsEnabled("OVERWRITERAIDFRAMESIZE", false) and ImproveAny:IAGV("RAIDFRAMEW", options.width) and ImproveAny:IAGV("RAIDFRAMEH", options.height) then
-				frame:SetSize(ImproveAny:IAGV("RAIDFRAMEW", options.width or 30), ImproveAny:IAGV("RAIDFRAMEH", options.height or 30))
-			end
-
-			if true then
-				local index = 1
-				local frameNum = 1
-				local filter = nil
-				while frameNum <= 10 do
-					if frame.displayedUnit then
-						local buffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
-						if buffName then
-							local buffFrame = _G[ImproveAny:GetName(frame) .. "Buff" .. i]
-							if buffFrame then
-								buffFrame:SetScale(ImproveAny:IAGV("BUFFSCALE", 0.8))
-							end
-
-							frameNum = frameNum + 1
-						else
-							break
-						end
-					else
-						break
-					end
-
-					index = index + 1
-				end
-			end
-
-			if true then
-				local index = 1
-				local frameNum = 1
-				local filter = nil
-				while frameNum <= 10 do
-					if frame.displayedUnit then
-						local debuffName = ImproveAny:UnitAura(frame.displayedUnit, index, filter)
-						if debuffName then
-							local debuffFrame = _G[ImproveAny:GetName(frame) .. "Debuff" .. i]
-							if debuffFrame then
-								debuffFrame:SetScale(ImproveAny:IAGV("DEBUFFSCALE", 1))
-							end
-
-							frameNum = frameNum + 1
-						else
-							break
-						end
-					else
-						break
-					end
-
-					index = index + 1
-				end
-			end
-		end
-	end
-end
-
 local keys = {}
 keys["TOP_OFFSET"] = true
 keys["LEFT_OFFSET"] = true
@@ -474,7 +412,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.203")
+	ImproveAny:SetVersion(136033, "0.9.204")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t I|cff3FC7EBmprove|rA|cff3FC7EBny|r v|cff3FC7EB%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
@@ -601,13 +539,6 @@ function ImproveAny:InitIASettings()
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
 			AddCategory("UNITFRAMES")
-			AddCheckBox(4, "RAIDFRAMEMOREBUFFS", false)
-			AddSlider(24, "BUFFSCALE", 0.8, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
-			AddSlider(24, "DEBUFFSCALE", 1.0, ImproveAny.UpdateRaidFrameSize, 0.4, 1.6, 0.1)
-			local options = DefaultCompactMiniFrameSetUpOptions
-			AddCheckBox(4, "OVERWRITERAIDFRAMESIZE", false)
-			AddSlider(24, "RAIDFRAMEW", options.width or 30, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
-			AddSlider(24, "RAIDFRAMEH", options.height or 30, ImproveAny.UpdateRaidFrameSize, 20, 300, 10)
 		end
 
 		AddCategory("EXTRAS")
