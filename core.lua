@@ -187,13 +187,17 @@ function ImproveAny:Event(event, ...)
 			f,
 			function(sel)
 				if ImproveAny:IsEnabled("AUTOSELLJUNK", true) then
-					for bag = 0, 4 do
-						for slot = 1, C_Container.GetContainerNumSlots(bag) do
-							local itemLink = C_Container.GetContainerItemLink(bag, slot)
-							if itemLink then
-								local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = ImproveAny:GetItemInfo(itemLink)
-								if itemRarity == 0 and itemSellPrice > 0 then
-									C_Container.UseContainerItem(bag, slot) -- Sell the item
+					if C_MerchantFrame and C_MerchantFrame.SellAllJunkItems then
+						C_MerchantFrame.SellAllJunkItems()
+					else
+						for bag = 0, 4 do
+							for slot = 1, C_Container.GetContainerNumSlots(bag) do
+								local itemLink = C_Container.GetContainerItemLink(bag, slot)
+								if itemLink then
+									local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = ImproveAny:GetItemInfo(itemLink)
+									if itemRarity == 0 and itemSellPrice > 0 then
+										C_Container.UseContainerItem(bag, slot) -- Sell the item
+									end
 								end
 							end
 						end
