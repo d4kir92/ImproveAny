@@ -1,12 +1,21 @@
 ## Interface: 30300, 30403
-## Version: 0.9.206
-## Title: I|cff3FC7EBmprove|rA|cff3FC7EBny|r |T136033:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
+## Version: 0.9.207
+## Title: ImproveAny |T136033:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen
 ## Notes-ruRU: Улучшает пользовательский интерфейс
-## Author: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
-## Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
-## X-Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
+## Author: D4KiR |T132115:16:16:0:0|t
+## Category: Other
+## Category-deDE: Anderes
+## Category-esES: Otros
+## Category-esMX: Otros
+## Category-frFR: Autre
+## Category-itIT: Altro
+## Category-koKR: 기타
+## Category-ptBR: Outro
+## Category-ruRU: Другое
+## Category-zhCN: 其它
+## Category-zhTW: 其他
 ## DefaultState: enabled
 ## SavedVariables: IATAB
 ## SavedVariablesPerCharacter: IATABPC
