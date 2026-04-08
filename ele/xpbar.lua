@@ -470,190 +470,233 @@ function ImproveAny:InitXPBar()
 							art:Hide()
 						end
 					end
-				end
 
-				if true then
-					local frame = CreateFrame("Frame")
-					ImproveAny:RegisterEvent(frame, "CHAT_MSG_COMBAT_XP_GAIN")
-					if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", 1, true) then
-						COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", "%s")
+					local editFrames = {"MainStatusTrackingBarContainer", "SecondaryStatusTrackingBarContainer"}
+					local endCaps = {"StandaloneFrameTextureLeftCapTop", "StandaloneFrameTextureLeftCapBottom", "StandaloneFrameTextureRightCapTop", "StandaloneFrameTextureRightCapBottom"}
+					for x, editFrame in pairs(editFrames) do
+						local frame = _G[editFrame]
+						if frame then
+							for i = 1, 5 do
+								if frame["StandaloneFrameTexture" .. i] then
+									local ia_hide = false
+									hooksecurefunc(
+										frame["StandaloneFrameTexture" .. i],
+										"SetTexture",
+										function(sel)
+											if ia_hide then return end
+											ia_hide = true
+											sel:SetTexture("")
+											ia_hide = false
+										end
+									)
+
+									frame["StandaloneFrameTexture" .. i]:SetTexture("")
+								end
+							end
+
+							for w, cap in pairs(endCaps) do
+								if frame[cap] then
+									local ia_hide = false
+									hooksecurefunc(
+										frame[cap],
+										"SetTexture",
+										function(sel)
+											if ia_hide then return end
+											ia_hide = true
+											sel:SetTexture("")
+											ia_hide = false
+										end
+									)
+
+									frame[cap]:SetTexture("")
+								end
+							end
+						end
 					end
 
-					if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", 1, true) then
-						COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", "%d")
-					end
+					if true then
+						local frame = CreateFrame("Frame")
+						ImproveAny:RegisterEvent(frame, "CHAT_MSG_COMBAT_XP_GAIN")
+						if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", 1, true) then
+							COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", "%s")
+						end
 
-					local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%s", "(.-)"), "%d", "(%d+)")
-					ImproveAny:OnEvent(
-						frame,
-						function(sel, event, message, ...)
-							-- Only if it is a kill
-							pcall(
-								function()
-									if strfind(message, xpKillText) then
-										local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
-										xpGained = tonumber(xpGained)
-										if xpGained then
-											if xpGainedEx then
-												xpGainedEx = tonumber(xpGainedEx)
-												ImproveAny:AddXPPerMob(xpGained)
-											else
-												ImproveAny:AddXPPerMob(xpGained)
+						if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", 1, true) then
+							COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", "%d")
+						end
+
+						local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%s", "(.-)"), "%d", "(%d+)")
+						ImproveAny:OnEvent(
+							frame,
+							function(sel, event, message, ...)
+								-- Only if it is a kill
+								pcall(
+									function()
+										if strfind(message, xpKillText) then
+											local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
+											xpGained = tonumber(xpGained)
+											if xpGained then
+												if xpGainedEx then
+													xpGainedEx = tonumber(xpGainedEx)
+													ImproveAny:AddXPPerMob(xpGained)
+												else
+													ImproveAny:AddXPPerMob(xpGained)
+												end
 											end
 										end
 									end
+								)
+							end, "xpKillText"
+						)
+					end
+
+					if xpBar then
+						if xpBar.SetStatusBarColor then
+							xpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
+						end
+
+						if ExhaustionLevelFillBar then
+							ExhaustionLevelFillBar:SetVertexColor(0.21, 0.40, 0.64, 0.75)
+							ExhaustionLevelFillBar:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+							ExhaustionLevelFillBar:SetDrawLayer("BACKGROUND", -1)
+						end
+
+						local _, sh = xpBar:GetSize()
+						xpBar.qcx = xpBar:CreateTexture(nil, "BACKGROUND")
+						xpBar.qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+						xpBar.qcx:SetVertexColor(1, 1, 0, 1)
+						if xpBar == MainMenuExpBar then
+							xpBar.qcx:SetSize(1, sh)
+						else
+							xpBar.qcx:SetSize(1, 13)
+						end
+
+						xpBar.qcx:SetDrawLayer("BACKGROUND", -2)
+					end
+
+					if xpBar and xpBarText then
+						local fontName, _, fontFlags = xpBarText:GetFont()
+						xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fontFlags)
+						if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
+							local xpBarSetPoint
+							hooksecurefunc(
+								xpBarText,
+								"SetPoint",
+								function()
+									if xpBarSetPoint then return end
+									xpBarSetPoint = true
+									xpBarText:ClearAllPoints()
+									xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
+									xpBarSetPoint = false
 								end
 							)
-						end, "xpKillText"
-					)
-				end
 
-				if xpBar then
-					if xpBar.SetStatusBarColor then
-						xpBar:SetStatusBarColor(0.34, 0.38, 1, 1)
-					end
+							xpBarText:ClearAllPoints()
+							xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
+						elseif xpBarText == MainMenuBarExpText then
+							xpBarText:SetPoint("CENTER", xpBar, "CENTER", 0, 1)
+						end
 
-					if ExhaustionLevelFillBar then
-						ExhaustionLevelFillBar:SetVertexColor(0.21, 0.40, 0.64, 0.75)
-						ExhaustionLevelFillBar:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-						ExhaustionLevelFillBar:SetDrawLayer("BACKGROUND", -1)
-					end
-
-					local _, sh = xpBar:GetSize()
-					xpBar.qcx = xpBar:CreateTexture(nil, "BACKGROUND")
-					xpBar.qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-					xpBar.qcx:SetVertexColor(1, 1, 0, 1)
-					if xpBar == MainMenuExpBar then
-						xpBar.qcx:SetSize(1, sh)
-					else
-						xpBar.qcx:SetSize(1, 13)
-					end
-
-					xpBar.qcx:SetDrawLayer("BACKGROUND", -2)
-				end
-
-				if xpBar and xpBarText then
-					local fontName, _, fontFlags = xpBarText:GetFont()
-					xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fontFlags)
-					if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
-						local xpBarSetPoint
 						hooksecurefunc(
 							xpBarText,
-							"SetPoint",
-							function()
-								if xpBarSetPoint then return end
-								xpBarSetPoint = true
-								xpBarText:ClearAllPoints()
-								xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
-								xpBarSetPoint = false
+							"SetText",
+							function(sel, text)
+								if sel.iasettext then return end
+								sel.iasettext = true
+								local currXP = UnitXP("PLAYER")
+								local maxBar = UnitXPMax("PLAYER")
+								if maxBar == 0 then
+									sel.iasettext = false
+
+									return
+								end
+
+								local ff, _, fflags = sel:GetFont()
+								sel:SetFont(ff, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fflags)
+								if GameLimitedMode_IsActive() then
+									local rLevel = GetRestrictedAccountData()
+									if UnitLevel("player") >= rLevel then
+										currXP = UnitTrialXP("player")
+									end
+								end
+
+								local missingXp = maxBar - currXP
+								local questCompleteXP = ImproveAny:GetQuestCompleteXP()
+								local text2 = ""
+								if xpBar and xpBar.qcx then
+									local sw, _ = xpBar:GetSize()
+									local px = currXP / maxBar * sw
+									local wi = questCompleteXP / maxBar * sw
+									if wi <= 1 then
+										xpBar.qcx:Hide()
+									else
+										if px + wi > sw then
+											wi = sw - px
+										end
+
+										if ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false) then
+											xpBar.qcx:SetPoint("LEFT", xpBar, "LEFT", px, 0)
+											xpBar.qcx:SetWidth(wi)
+											xpBar.qcx:Show()
+										else
+											xpBar.qcx:Hide()
+										end
+									end
+								end
+
+								-- Level
+								text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, UnitLevel("PLAYER"), ImproveAny:GetMaxLevel())
+								-- XP
+								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
+								-- XP Missing
+								text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, missingXp, maxBar)
+								-- XP Exhaustion
+								if GetXPExhaustion() and GetXPExhaustion() >= 0 then
+									text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, GetXPExhaustion(), maxBar)
+								end
+
+								-- XP QuestComplete
+								text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
+								-- XP KILLSTOLEVELUP
+								text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
+								-- XPBAR -> SetText
+								if UnitExists("PET") and GetPetExperience ~= nil then
+									local currXPPet, maxBarPet = GetPetExperience()
+									text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
+								end
+
+								text2 = string.gsub(text2, "%s+$", "")
+								sel:SetText(text2)
+								if xpBar.show then
+									sel:Show()
+								end
+
+								sel.iasettext = false
 							end
 						)
 
-						xpBarText:ClearAllPoints()
-						xpBarText:SetPoint("CENTER", DragonflightUIXPBar.Bar, "CENTER", 0, 1)
-					elseif xpBarText == MainMenuBarExpText then
-						xpBarText:SetPoint("CENTER", xpBar, "CENTER", 0, 1)
+						hooksecurefunc(
+							xpBarText,
+							"Hide",
+							function(sel, text)
+								if xpBar.show then
+									sel:Show()
+								end
+							end
+						)
+
+						hooksecurefunc(
+							xpBarText,
+							"Show",
+							function(sel, text)
+								if not xpBar.show then
+									sel:Hide()
+								end
+							end
+						)
+
+						xpBarText:SetText("LOADING")
 					end
-
-					hooksecurefunc(
-						xpBarText,
-						"SetText",
-						function(sel, text)
-							if sel.iasettext then return end
-							sel.iasettext = true
-							local currXP = UnitXP("PLAYER")
-							local maxBar = UnitXPMax("PLAYER")
-							if maxBar == 0 then
-								sel.iasettext = false
-
-								return
-							end
-
-							local ff, _, fflags = sel:GetFont()
-							sel:SetFont(ff, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fflags)
-							if GameLimitedMode_IsActive() then
-								local rLevel = GetRestrictedAccountData()
-								if UnitLevel("player") >= rLevel then
-									currXP = UnitTrialXP("player")
-								end
-							end
-
-							local missingXp = maxBar - currXP
-							local questCompleteXP = ImproveAny:GetQuestCompleteXP()
-							local text2 = ""
-							if xpBar and xpBar.qcx then
-								local sw, _ = xpBar:GetSize()
-								local px = currXP / maxBar * sw
-								local wi = questCompleteXP / maxBar * sw
-								if wi <= 1 then
-									xpBar.qcx:Hide()
-								else
-									if px + wi > sw then
-										wi = sw - px
-									end
-
-									if ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false) then
-										xpBar.qcx:SetPoint("LEFT", xpBar, "LEFT", px, 0)
-										xpBar.qcx:SetWidth(wi)
-										xpBar.qcx:Show()
-									else
-										xpBar.qcx:Hide()
-									end
-								end
-							end
-
-							-- Level
-							text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, UnitLevel("PLAYER"), ImproveAny:GetMaxLevel())
-							-- XP
-							text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
-							-- XP Missing
-							text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, missingXp, maxBar)
-							-- XP Exhaustion
-							if GetXPExhaustion() and GetXPExhaustion() >= 0 then
-								text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, GetXPExhaustion(), maxBar)
-							end
-
-							-- XP QuestComplete
-							text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
-							-- XP KILLSTOLEVELUP
-							text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
-							-- XPBAR -> SetText
-							if UnitExists("PET") and GetPetExperience ~= nil then
-								local currXPPet, maxBarPet = GetPetExperience()
-								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
-							end
-
-							text2 = string.gsub(text2, "%s+$", "")
-							sel:SetText(text2)
-							if xpBar.show then
-								sel:Show()
-							end
-
-							sel.iasettext = false
-						end
-					)
-
-					hooksecurefunc(
-						xpBarText,
-						"Hide",
-						function(sel, text)
-							if xpBar.show then
-								sel:Show()
-							end
-						end
-					)
-
-					hooksecurefunc(
-						xpBarText,
-						"Show",
-						function(sel, text)
-							if not xpBar.show then
-								sel:Hide()
-							end
-						end
-					)
-
-					xpBarText:SetText("LOADING")
 				end
 			end, "XPBar"
 		)

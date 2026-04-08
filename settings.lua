@@ -412,7 +412,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.207")
+	ImproveAny:SetVersion(136033, "0.9.208")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
