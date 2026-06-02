@@ -292,66 +292,68 @@ function ImproveAny:UpdateUIParentAttribute()
 end
 
 function ImproveAny:UpdateStatusBar()
-	local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
-	if StatusTrackingBarManager then
-		StatusTrackingBarManager:SetWidth(w)
-		if StatusTrackingBarManager.TopBarFrameTexture then
-			StatusTrackingBarManager.TopBarFrameTexture:SetWidth(w + 5)
+	if ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false) then
+		local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
+		if StatusTrackingBarManager then
+			StatusTrackingBarManager:SetWidth(w)
+			if StatusTrackingBarManager.TopBarFrameTexture then
+				StatusTrackingBarManager.TopBarFrameTexture:SetWidth(w + 5)
+			end
+
+			if StatusTrackingBarManager.BottomBarFrameTexture then
+				StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5)
+			end
+
+			ImproveAny:ForeachChildren(
+				StatusTrackingBarManager,
+				function(child, x)
+					child:SetWidth(w)
+					if child.OverlayFrame then
+						child.OverlayFrame:SetWidth(w)
+					end
+
+					if child.StatusBar then
+						child.StatusBar:SetWidth(w)
+					end
+				end, "UpdateStatusBar"
+			)
 		end
 
-		if StatusTrackingBarManager.BottomBarFrameTexture then
-			StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5)
+		if MainStatusTrackingBarContainer then
+			MainStatusTrackingBarContainer:SetWidth(w)
+			ImproveAny:ForeachChildren(
+				MainStatusTrackingBarContainer,
+				function(child, x)
+					child:SetWidth(w - 5)
+					ImproveAny:ForeachChildren(
+						child,
+						function(va, id)
+							if id ~= 3 then
+								va:SetWidth(w - 5)
+							end
+						end, "MainStatusTrackingBarContainer 2"
+					)
+				end, "MainStatusTrackingBarContainer 1"
+			)
 		end
 
-		ImproveAny:ForeachChildren(
-			StatusTrackingBarManager,
-			function(child, x)
-				child:SetWidth(w)
-				if child.OverlayFrame then
-					child.OverlayFrame:SetWidth(w)
-				end
-
-				if child.StatusBar then
-					child.StatusBar:SetWidth(w)
-				end
-			end, "UpdateStatusBar"
-		)
-	end
-
-	if MainStatusTrackingBarContainer then
-		MainStatusTrackingBarContainer:SetWidth(w)
-		ImproveAny:ForeachChildren(
-			MainStatusTrackingBarContainer,
-			function(child, x)
-				child:SetWidth(w - 5)
-				ImproveAny:ForeachChildren(
-					child,
-					function(va, id)
-						if id ~= 3 then
-							va:SetWidth(w - 5)
-						end
-					end, "MainStatusTrackingBarContainer 2"
-				)
-			end, "MainStatusTrackingBarContainer 1"
-		)
-	end
-
-	if SecondaryStatusTrackingBarContainer then
-		SecondaryStatusTrackingBarContainer:SetWidth(w)
-		ImproveAny:ForeachChildren(
-			SecondaryStatusTrackingBarContainer,
-			function(child, x)
-				child:SetWidth(w - 5)
-				ImproveAny:ForeachChildren(
-					child,
-					function(va, id)
-						if id ~= 3 then
-							va:SetWidth(w - 5)
-						end
-					end, "SecondaryStatusTrackingBarContainer 2"
-				)
-			end, "SecondaryStatusTrackingBarContainer 1"
-		)
+		if SecondaryStatusTrackingBarContainer then
+			SecondaryStatusTrackingBarContainer:SetWidth(w)
+			ImproveAny:ForeachChildren(
+				SecondaryStatusTrackingBarContainer,
+				function(child, x)
+					child:SetWidth(w - 5)
+					ImproveAny:ForeachChildren(
+						child,
+						function(va, id)
+							if id ~= 3 then
+								va:SetWidth(w - 5)
+							end
+						end, "SecondaryStatusTrackingBarContainer 2"
+					)
+				end, "SecondaryStatusTrackingBarContainer 1"
+			)
+		end
 	end
 end
 
@@ -412,7 +414,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.214")
+	ImproveAny:SetVersion(136033, "0.9.215")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript(
 		"OnClick",
