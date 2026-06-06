@@ -208,7 +208,7 @@ function ImproveAny:UpdateQuestFrame()
 				questTag = COMPLETE
 			end
 
-			if questTag then
+			if questTag and QuestLogDummyText then
 				QuestLogDummyText:SetText("  " .. questLogTitleText)
 				local tempWidth = 274
 				local textWidth = 0
