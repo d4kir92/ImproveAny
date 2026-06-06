@@ -223,10 +223,8 @@ function ImproveAny:UpdateQuestFrame()
 				end
 
 				questNormalText:SetWidth(textWidth)
-			else
-				if questNormalText:GetWidth() > 274 then
-					questNormalText:SetWidth(260)
-				end
+			elseif questNormalText and questNormalText:GetWidth() > 274 then
+				questNormalText:SetWidth(260)
 			end
 		end
 	end
