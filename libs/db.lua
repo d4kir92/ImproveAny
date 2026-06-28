@@ -40,8 +40,9 @@ function ImproveAny:GetTab()
 end
 
 function ImproveAny:SetEnabled(element, value)
-	ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
-	ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+	local opts = ImproveAny:GetTab()["ELES"]["OPTIONS"]
+	if opts[element] == nil then opts[element] = {} end
+	opts[element]["ENABLED"] = value
 end
 
 function ImproveAny:IsEnabled(element, value)
@@ -57,13 +58,19 @@ function ImproveAny:IsEnabled(element, value)
 		return false
 	end
 
-	if ImproveAny:GetTab() and ImproveAny:GetTab()["ELES"] then
-		ImproveAny:GetTab()["ELES"]["OPTIONS"][element] = ImproveAny:GetTab()["ELES"]["OPTIONS"][element] or {}
-		if ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] == nil then
-			ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"] = value
+	local tab = ImproveAny:GetTab()
+	if tab and tab["ELES"] then
+		local opts = tab["ELES"]["OPTIONS"]
+		local entry = opts[element]
+		if entry == nil then
+			entry = {}
+			opts[element] = entry
+		end
+		if entry["ENABLED"] == nil then
+			entry["ENABLED"] = value
 		end
 
-		return ImproveAny:GetTab()["ELES"]["OPTIONS"][element]["ENABLED"]
+		return entry["ENABLED"]
 	end
 
 	return value
@@ -81,11 +88,12 @@ function ImproveAny:GetElePoint(key)
 end
 
 function ImproveAny:SetElePoint(key, p1, p2, p3, p4, p5)
-	ImproveAny:GetTab()["ELES"]["POINTS"][key]["AN"] = p1
-	ImproveAny:GetTab()["ELES"]["POINTS"][key]["PA"] = p2
-	ImproveAny:GetTab()["ELES"]["POINTS"][key]["RE"] = p3
-	ImproveAny:GetTab()["ELES"]["POINTS"][key]["PX"] = p4
-	ImproveAny:GetTab()["ELES"]["POINTS"][key]["PY"] = p5
+	local pt = ImproveAny:GetTab()["ELES"]["POINTS"][key]
+	pt["AN"] = p1
+	pt["PA"] = p2
+	pt["RE"] = p3
+	pt["PX"] = p4
+	pt["PY"] = p5
 	local frame = _G[key]
 	if frame then
 		frame:ClearAllPoints()
