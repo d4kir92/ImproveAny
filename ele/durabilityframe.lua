@@ -28,6 +28,7 @@ function ImproveAny:InitDurabilityFrame()
 					end
 
 					if v.tt and v.tt.SetInventoryItem then
+						v.tt:ClearLines()
 						local cost = select(3, v.tt:SetInventoryItem("player", id))
 						costs = costs + cost
 					end
@@ -43,6 +44,7 @@ function ImproveAny:InitDurabilityFrame()
 			local durFrame = CreateFrame("Frame")
 			ImproveAny:RegisterEvent(durFrame, "PLAYER_EQUIPMENT_CHANGED")
 			ImproveAny:RegisterEvent(durFrame, "PLAYER_ENTERING_WORLD")
+			ImproveAny:RegisterEvent(durFrame, "UPDATE_INVENTORY_DURABILITY")
 			ImproveAny:OnEvent(durFrame, UpdateRepairCosts, "DurabilityRepairCosts")
 			UpdateRepairCosts()
 
