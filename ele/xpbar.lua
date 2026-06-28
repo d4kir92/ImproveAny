@@ -619,7 +619,10 @@ function ImproveAny:InitXPBar()
 								end
 
 								local missingXp = maxBar - currXP
-								local questCompleteXP = ImproveAny:GetQuestCompleteXP()
+								local questCompleteXP = 0
+								if ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false) then
+									questCompleteXP = ImproveAny:GetQuestCompleteXP()
+								end
 								local text2 = ""
 								if xpBar and xpBar.qcx then
 									local sw, _ = xpBar:GetSize()

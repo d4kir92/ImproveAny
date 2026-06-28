@@ -96,7 +96,7 @@ end
 
 function ImproveAny:SkillsThink()
 	if GetNumSkillLines and GetNumSkillLines() ~= skillMax then
-		skillMax = GetNumSkillLines
+		skillMax = GetNumSkillLines()
 		skillIds = {}
 		jobs = {}
 		subTypes = {}

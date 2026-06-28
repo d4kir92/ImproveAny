@@ -14,6 +14,7 @@ function ImproveAny:InitIAILVLBar()
 		IAILVLBar.textilvlequipped:SetPoint("BOTTOM", IAILVLBar, "BOTTOM", 0, 0)
 		IAILVLBar.textilvlequipped:SetText("")
 		IAILVLBar.textilvlequipped:SetTextColor(1.0, 1.0, 0.1)
+		local ilvlLayoutSingle = nil
 		function IAILVLBar.Think()
 			if IAILVLBar.textilvloverall and IAILVLBar.textilvlequipped then
 				local overall, equipped = 0, 0
@@ -25,13 +26,19 @@ function ImproveAny:InitIAILVLBar()
 
 				if overall and equipped then
 					if tonumber(overall) == tonumber(equipped) then
-						IAILVLBar.textilvloverall:ClearAllPoints()
-						IAILVLBar.textilvloverall:SetPoint("CENTER", IAILVLBar, "CENTER", 0, 0)
+						if ilvlLayoutSingle ~= true then
+							ilvlLayoutSingle = true
+							IAILVLBar.textilvloverall:ClearAllPoints()
+							IAILVLBar.textilvloverall:SetPoint("CENTER", IAILVLBar, "CENTER", 0, 0)
+						end
 						IAILVLBar.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
 						IAILVLBar.textilvlequipped:SetText("")
 					else
-						IAILVLBar.textilvloverall:ClearAllPoints()
-						IAILVLBar.textilvloverall:SetPoint("TOP", IAILVLBar, "TOP", 0, 0)
+						if ilvlLayoutSingle ~= false then
+							ilvlLayoutSingle = false
+							IAILVLBar.textilvloverall:ClearAllPoints()
+							IAILVLBar.textilvloverall:SetPoint("TOP", IAILVLBar, "TOP", 0, 0)
+						end
 						IAILVLBar.textilvloverall:SetText(overall .. " " .. ITEM_LEVEL_ABBR)
 						IAILVLBar.textilvlequipped:SetText(equipped .. " " .. ITEM_LEVEL_ABBR)
 					end

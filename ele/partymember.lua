@@ -178,15 +178,16 @@ ImproveAny:OnEvent(
 								if (xp > 0 or xpmax > 1) and not ImproveAny:IAGV("nochanges") then
 									local per = xp / xpmax
 									PartyFrameXPBar.textureBar:SetWidth(per * PartyFrameXPBar:GetWidth() - 4)
-									if GetCVar("statusTextDisplay") == "PERCENT" then
+									local statusDisplay = GetCVar("statusTextDisplay")
+									if statusDisplay == "PERCENT" then
 										PartyFrameXPBar.XPC:SetText(string.format("%.0f", xp / xpmax * 100) .. "%")
 										PartyFrameXPBar.XPL:SetText("")
 										PartyFrameXPBar.XPR:SetText("")
-									elseif GetCVar("statusTextDisplay") == "NUMERIC" then
+									elseif statusDisplay == "NUMERIC" then
 										PartyFrameXPBar.XPC:SetText(string.format("%s/%s", ImproveAny:MathR(xp), ImproveAny:MathR(xpmax)))
 										PartyFrameXPBar.XPL:SetText("")
 										PartyFrameXPBar.XPR:SetText("")
-									elseif GetCVar("statusTextDisplay") == "BOTH" then
+									elseif statusDisplay == "BOTH" then
 										PartyFrameXPBar.XPC:SetText("")
 										PartyFrameXPBar.XPL:SetText(string.format("%.0f", xp / xpmax * 100) .. "%")
 										PartyFrameXPBar.XPR:SetText(string.format("%s", ImproveAny:MathR(xp)))
