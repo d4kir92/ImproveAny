@@ -15,6 +15,9 @@ end
 
 local once = true
 local cle = CreateFrame("Frame")
+local cacheTime = 0
+local cachedPosition = false
+local cachedIcons = false
 function ImproveAny:InitCombatText()
 	if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) or ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 		if once then
@@ -24,11 +27,18 @@ function ImproveAny:InitCombatText()
 			ImproveAny:OnEvent(
 				cle,
 				function(sel, eventName, ...)
-					if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) then
+					local now = GetTime()
+					if now - cacheTime > 1 then
+						cacheTime = now
+						cachedPosition = ImproveAny:IsEnabled("COMBATTEXTPOSITION", false)
+						cachedIcons = ImproveAny:IsEnabled("COMBATTEXTICONS", false)
+					end
+
+					if cachedPosition then
 						ImproveAny:UpdateCombatTextPos()
 					end
 
-					if ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
+					if cachedIcons then
 						cle.tabhot = cle.tabhot or {}
 						cle.tabdot = cle.tabdot or {}
 						local _, subevent, _, _, _, _, _, _, _, _, _ = CombatLogGetCurrentEventInfo()
@@ -89,7 +99,7 @@ function ImproveAny:InitCombatText()
 								end
 							end
 
-							if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
+							if icon and cachedIcons then
 								local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
 								sel:SetText(t)
 								done = true
@@ -107,7 +117,7 @@ function ImproveAny:InitCombatText()
 
 							if cle and cle.tabhot then
 								local icon = cle.tabhot[amount]
-								if icon and ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
+								if icon and cachedIcons then
 									local t = "|T" .. icon .. ":16:16:-8:-8|t" .. " " .. text
 									sel:SetText(t)
 								else

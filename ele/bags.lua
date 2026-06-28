@@ -59,8 +59,8 @@ function ImproveAny:InitBags()
 			end
 		end
 
+		ImproveAny:UpdateBagsTable()
 		function BAGThink.UpdateItemInfos()
-			ImproveAny:UpdateBagsTable()
 			local sum = 0
 			for i, slot in pairs(BAGS) do
 				local SLOT = _G[slot]
