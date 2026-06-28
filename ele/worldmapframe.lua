@@ -108,6 +108,7 @@ function ImproveAny:InitWorldMapFrame()
 		plyCoords.f:SetText("")
 		plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		plyCoords.f:SetPoint("CENTER")
+		local plyLastPx, plyLastPy = nil, nil
 		function plyCoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
@@ -124,7 +125,6 @@ function ImproveAny:InitWorldMapFrame()
 						local top = WorldMapFrame.ScrollContainer:GetTop() - WorldMapFrame.ScrollContainer.Child:GetTop() * WorldMapFrame.ScrollContainer.Child:GetScale()
 						local my = y * scale + top / WorldMapFrame.ScrollContainer:GetHeight()
 						local bx, by = mx, my
-						plyCoords:ClearAllPoints()
 						local offsetY = 0.1
 						local px = bx
 						local py = by + offsetY
@@ -140,14 +140,18 @@ function ImproveAny:InitWorldMapFrame()
 							py = 0.1
 						end
 
-						plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
-						plyCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
-						plyCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
-						local fw = plyCoords.f:GetStringWidth()
-						local fh = plyCoords.f:GetStringHeight()
-						plyCoords:SetSize(fw, fh)
+						if plyLastPx ~= px or plyLastPy ~= py then
+							plyLastPx, plyLastPy = px, py
+							plyCoords:ClearAllPoints()
+							plyCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
+							plyCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
+							local fw = plyCoords.f:GetStringWidth()
+							local fh = plyCoords.f:GetStringHeight()
+							plyCoords:SetSize(fw, fh)
+						end
+
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #1")
-						ImproveAny:After(0.01, plyCoords.IAUpdate, "IAUpdate 1")
+						ImproveAny:After(0.013, plyCoords.IAUpdate, "IAUpdate 1")
 					else
 						plyCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #2")
@@ -188,6 +192,7 @@ function ImproveAny:InitWorldMapFrame()
 		curCoords.f:SetText("")
 		curCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
 		curCoords.f:SetPoint("CENTER")
+		local curLastPx, curLastPy = nil, nil
 		function curCoords:IAUpdate()
 			if WorldMapFrame.ScrollContainer.GetNormalizedCursorPosition then
 				if WorldMapFrame:IsShown() then
@@ -195,7 +200,6 @@ function ImproveAny:InitWorldMapFrame()
 					local w, h = WorldMapFrame.ScrollContainer:GetSize()
 					if x and y then
 						local bx, by = ImproveAny:GetNormalizedPosition(WorldMapFrame.ScrollContainer, GetCursorPosition())
-						curCoords:ClearAllPoints()
 						local offsetY = 0.1
 						local px = bx
 						local py = by + offsetY
@@ -211,14 +215,18 @@ function ImproveAny:InitWorldMapFrame()
 							py = 0.1
 						end
 
-						curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
-						curCoords.f:SetFont(STANDARD_TEXT_FONT, fontsize, "THINOUTLINE")
-						curCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
-						local fw = curCoords.f:GetStringWidth()
-						local fh = curCoords.f:GetStringHeight()
-						curCoords:SetSize(fw, fh)
+						if curLastPx ~= px or curLastPy ~= py then
+							curLastPx, curLastPy = px, py
+							curCoords:ClearAllPoints()
+							curCoords:SetPoint("CENTER", WorldMapFrame.ScrollContainer, "TOPLEFT", w * px, -h * py)
+							curCoords.f:SetText(format("%0.1f, %0.1f", x * 100, y * 100))
+							local fw = curCoords.f:GetStringWidth()
+							local fh = curCoords.f:GetStringHeight()
+							curCoords:SetSize(fw, fh)
+						end
+
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #5")
-						ImproveAny:After(0.01, curCoords.IAUpdate, "IAUpdate 5")
+						ImproveAny:After(0.013, curCoords.IAUpdate, "IAUpdate 5")
 					else
 						curCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #6")

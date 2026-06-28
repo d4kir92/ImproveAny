@@ -18,9 +18,8 @@ function ImproveAny:InitDurabilityFrame()
 			textrepaircosts:SetText("")
 			textrepaircosts:SetTextColor(1.0, 1.0, 0.1)
 			local function Think()
-				local ok = xpcall(
+				pcall(
 					function()
-						if true then return end
 						local ccur = 0
 						local cmax = 0
 						for i = 0, 20 do

@@ -8,7 +8,7 @@ ImproveAny:After(
 				ReputationWatchBar.show = true
 				ReputationWatchBar:HookScript(
 					"OnEnter",
-					function(self)
+					function(sel)
 						ReputationWatchBar.show = false
 						ReputationWatchBar.OverlayFrame.Text:Hide()
 					end
@@ -16,7 +16,7 @@ ImproveAny:After(
 
 				ReputationWatchBar:HookScript(
 					"OnLeave",
-					function(self)
+					function(sel)
 						ReputationWatchBar.show = true
 						ReputationWatchBar.OverlayFrame.Text:Show()
 					end
@@ -27,11 +27,11 @@ ImproveAny:After(
 						hooksecurefunc(
 							ReputationWatchBar,
 							"SetHeight",
-							function(self, h)
-								if self.iasetheight then return end
-								self.iasetheight = true
-								self:SetHeight(15)
-								self.iasetheight = false
+							function(sel, h)
+								if sel.iasetheight then return end
+								sel.iasetheight = true
+								sel:SetHeight(15)
+								sel.iasetheight = false
 							end
 						)
 
@@ -39,11 +39,11 @@ ImproveAny:After(
 						hooksecurefunc(
 							ReputationWatchBar.StatusBar,
 							"SetHeight",
-							function(self, h)
-								if self.iasetheight then return end
-								self.iasetheight = true
-								self:SetHeight(15)
-								self.iasetheight = false
+							function(sel, h)
+								if sel.iasetheight then return end
+								sel.iasetheight = true
+								sel:SetHeight(15)
+								sel.iasetheight = false
 							end
 						)
 
@@ -57,11 +57,11 @@ ImproveAny:After(
 							hooksecurefunc(
 								art,
 								"Show",
-								function(self)
-									if self.iahide then return end
-									self.iahide = true
-									self:Hide()
-									self.iahide = false
+								function(sel)
+									if sel.iahide then return end
+									sel.iahide = true
+									sel:Hide()
+									sel.iahide = false
 								end
 							)
 
@@ -72,11 +72,11 @@ ImproveAny:After(
 							hooksecurefunc(
 								art2,
 								"Show",
-								function(self)
-									if self.iahide then return end
-									self.iahide = true
-									self:Hide()
-									self.iahide = false
+								function(sel)
+									if sel.iahide then return end
+									sel.iahide = true
+									sel:Hide()
+									sel.iahide = false
 								end
 							)
 
@@ -93,23 +93,22 @@ ImproveAny:After(
 				hooksecurefunc(
 					ReputationWatchBar.OverlayFrame.Text,
 					"SetText",
-					function(self, orgText)
-						if self.iasettext then return end
-						self.iasettext = true
-						local ff, _, fflags = self:GetFont()
-						self:SetFont(ff, ImproveAny:Clamp(ReputationWatchBar:GetHeight() * 0.7, 8, 30), fflags)
+					function(sel, orgText)
+						if sel.iasettext then return end
+						sel.iasettext = true
+						local ff, _, fflags = sel:GetFont()
+						sel:SetFont(ff, ImproveAny:Clamp(ReputationWatchBar:GetHeight() * 0.7, 8, 30), fflags)
 						local name, reaction, minBar, maxBar, value, factionID = GetWatchedFactionInfo()
 						local isCapped
 						if GetFriendshipReputation then
-							local friendshipID = GetFriendshipReputation(factionID)
-							if self.factionID ~= factionID then
-								self.factionID = factionID
-								self.friendshipID = GetFriendshipReputation(factionID)
+							local friendshipID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
+							if sel.factionID ~= factionID then
+								sel.factionID = factionID
+								sel.friendshipID = friendshipID
 							end
 
 							-- do something different for friendships
 							if friendshipID then
-								local _, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 								if nextFriendThreshold then
 									minBar, maxBar, value = friendThreshold, nextFriendThreshold, friendRep
 								else
@@ -145,7 +144,7 @@ ImproveAny:After(
 						local textw = "|r" -- WHITE
 						local text = ""
 						if name ~= nil then
-							self.rep = value
+							sel.rep = value
 							local per = (value - minBar) / (maxBar - minBar)
 							local percent = per * 100
 							if maxBar - minBar > 0 then
@@ -167,18 +166,18 @@ ImproveAny:After(
 
 								text = string.gsub(text, "%s+$", "")
 								if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
-									self:SetText(name .. ": " .. text)
+									sel:SetText(name .. ": " .. text)
 								else
-									self:SetText(orgText)
+									sel:SetText(orgText)
 								end
 
 								if ReputationWatchBar.show then
-									self:Show()
+									sel:Show()
 								end
 							end
 						end
 
-						self.iasettext = false
+						sel.iasettext = false
 					end
 				)
 
