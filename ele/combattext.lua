@@ -18,6 +18,7 @@ local cle = CreateFrame("Frame")
 local cacheTime = 0
 local cachedPosition = false
 local cachedIcons = false
+local IANoAuraCache = {}
 function ImproveAny:InitCombatText()
 	if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) or ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 		if once then
@@ -84,7 +85,7 @@ function ImproveAny:InitCombatText()
 							local _, _, spellIcon = ImproveAny:GetSpellInfo(msg)
 							local talentIcon = IATabTalents[msg]
 							local icon = spellIcon or talentIcon or IATabBuffs[msg]
-							if icon == nil then
+							if icon == nil and (IANoAuraCache[msg] == nil or IANoAuraCache[msg] < GetTime()) then
 								for id = 1, 32 do
 									local name, ico = ImproveAny:UnitAura("PLAYER", id)
 									if name then
@@ -96,6 +97,10 @@ function ImproveAny:InitCombatText()
 									else
 										break
 									end
+								end
+
+								if icon == nil then
+									IANoAuraCache[msg] = GetTime() + 2
 								end
 							end
 

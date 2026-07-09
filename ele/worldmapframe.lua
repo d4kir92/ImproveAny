@@ -151,7 +151,7 @@ function ImproveAny:InitWorldMapFrame()
 						end
 
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #1")
-						ImproveAny:After(0.013, plyCoords.IAUpdate, "IAUpdate 1")
+						ImproveAny:After(0.05, plyCoords.IAUpdate, "IAUpdate 1")
 					else
 						plyCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #2")
@@ -226,7 +226,7 @@ function ImproveAny:InitWorldMapFrame()
 						end
 
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #5")
-						ImproveAny:After(0.013, curCoords.IAUpdate, "IAUpdate 5")
+						ImproveAny:After(0.05, curCoords.IAUpdate, "IAUpdate 5")
 					else
 						curCoords.f:SetText("")
 						ImproveAny:Debug("worldmapframe.lua: IAUpdate #6")

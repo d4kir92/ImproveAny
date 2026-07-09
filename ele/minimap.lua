@@ -455,7 +455,7 @@ function ImproveAny:InitMinimap()
 						ImproveAny:UpdateIAMMBtns()
 					end
 
-					ImproveAny:After(0.9, ImproveAny.UpdateMMBtns, "UpdateMMBtns")
+					ImproveAny:After(3, ImproveAny.UpdateMMBtns, "UpdateMMBtns")
 				end
 
 				ImproveAny:UpdateMMBtns()

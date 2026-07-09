@@ -51,7 +51,7 @@ function ImproveAny:InitCastBar()
 			castbar.timer:SetFont(STANDARD_TEXT_FONT, 10, "")
 			castbar.timer:SetPoint("CENTER", castbar, "RIGHT", 12, 0)
 			castbar.update = 0
-			castbar.tick = 0.004
+			castbar.tick = 0.05
 			function ImproveAny:UpdateCastbarTimer()
 				if castbar.timer ~= nil then
 					local name, _, texture = nil, nil, nil
