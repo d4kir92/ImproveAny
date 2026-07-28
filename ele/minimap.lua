@@ -418,7 +418,13 @@ function ImproveAny:InitMinimap()
 				ImproveAny:ConvertToMinimapButton("GarrisonLandingPageMinimapButton", true) -- Sanctum
 				ImproveAny:ConvertToMinimapButton("QueueStatusMinimapButton", true) -- LFG
 				-- Classic ERA
-				ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame", true) -- Tracking
+				if MiniMapTrackingFrame then
+					ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame", true) -- Tracking
+				else
+					MiniMapTracking:SetScale(1)
+					ImproveAny:ConvertToMinimapButton("MiniMapTracking", true) -- Tracking
+				end
+
 				ImproveAny:ConvertToMinimapButton("MiniMapLFGFrame", true) -- LFG
 				-- Blizzard Minimap Buttons Dragging
 				ImproveAny:ConvertToMinimapButton("MiniMapBattlefieldFrame", true) -- PVP
