@@ -420,7 +420,7 @@ function ImproveAny:InitMinimap()
 				-- Classic ERA
 				if MiniMapTrackingFrame then
 					ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame", true) -- Tracking
-				else
+				elseif MiniMapTracking then
 					MiniMapTracking:SetScale(1)
 					ImproveAny:ConvertToMinimapButton("MiniMapTracking", true) -- Tracking
 				end
