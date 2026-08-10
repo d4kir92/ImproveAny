@@ -143,21 +143,18 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 		if sls[key].Low == nil then
 			sls[key].Low = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
 			sls[key].Low:SetPoint("BOTTOMLEFT", sls[key], "BOTTOMLEFT", 0, -12)
-			sls[key].Low:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
 			sls[key].Low:SetTextColor(1, 1, 1)
 		end
 
 		if sls[key].High == nil then
 			sls[key].High = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
 			sls[key].High:SetPoint("BOTTOMRIGHT", sls[key], "BOTTOMRIGHT", 0, -12)
-			sls[key].High:SetFont(STANDARD_TEXT_FONT, 10, "THINOUTLINE")
 			sls[key].High:SetTextColor(1, 1, 1)
 		end
 
 		if sls[key].Text == nil then
 			sls[key].Text = sls[key]:CreateFontString(nil, nil, "GameFontNormal")
 			sls[key].Text:SetPoint("TOP", sls[key], "TOP", 0, 16)
-			sls[key].Text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
 			sls[key].Text:SetTextColor(1, 1, 1)
 		end
 
@@ -326,7 +323,7 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 
-	ImproveAny:SetVersion(136033, "0.9.224")
+	ImproveAny:SetVersion(136033, "0.9.225")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()))
 	IASettings.CloseButton:SetScript("OnClick", function() ImproveAny:ToggleSettings() end)
 	function ImproveAny:UpdateElementList(sel)
