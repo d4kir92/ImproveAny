@@ -33,14 +33,8 @@ function ImproveAny:UpdateWorldTextScale()
 end
 
 function ImproveAny:CheckCVars()
-	if ImproveAny:IAGV("MAXZOOM", ImproveAny:GetMaxZoom()) ~= tonumber(GetCVar("cameraDistanceMaxZoomFactor")) then
-		ImproveAny:UpdateMaxZoom()
-	end
-
-	if ImproveAny:IAGV("WORLDTEXTSCALE", 1.0) ~= tonumber(GetCVar("WorldTextScale")) then
-		ImproveAny:UpdateWorldTextScale()
-	end
-
+	if ImproveAny:IAGV("MAXZOOM", ImproveAny:GetMaxZoom()) ~= tonumber(GetCVar("cameraDistanceMaxZoomFactor")) then ImproveAny:UpdateMaxZoom() end
+	if ImproveAny:IAGV("WORLDTEXTSCALE", 1.0) ~= tonumber(GetCVar("WorldTextScale")) then ImproveAny:UpdateWorldTextScale() end
 	ImproveAny:Debug("CHECK CVARS", "retry")
 	ImproveAny:After(5, ImproveAny.CheckCVars, "CheckCVars")
 end
@@ -50,9 +44,7 @@ function ImproveAny:AddRightClick()
 		local bars = {"MainMenuBarArtFrame", "MultiBarBottomLeft", "MultiBarBottomRight", "MultiBarRight", "MultiBarLeft", "PossessBarFrame", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10"}
 		for i, v in ipairs(bars) do
 			local bar = _G[v]
-			if bar ~= nil then
-				bar:SetAttribute("unit2", "player")
-			end
+			if bar ~= nil then bar:SetAttribute("unit2", "player") end
 		end
 	else
 		ImproveAny:Debug("AdddRightClick")
@@ -63,10 +55,7 @@ end
 function ImproveAny:IsOnActionbar(spellID)
 	for i = 1, 200 do
 		local actionType, id, _ = GetActionInfo(i)
-		if actionType == "macro" then
-			id = GetMacroSpell(id)
-		end
-
+		if actionType == "macro" then id = GetMacroSpell(id) end
 		if id == spellID then return true end
 	end
 
@@ -76,7 +65,6 @@ function ImproveAny:IsOnActionbar(spellID)
 			if id == spellID then return true end
 		end
 	end
-
 	return false
 end
 
@@ -110,16 +98,12 @@ function ImproveAny:InitSpellBookFix()
 			if sel and sel:IsShown() then
 				if hookedSpellBookButtons[sel] == nil then
 					hookedSpellBookButtons[sel] = true
-					hooksecurefunc(
-						sel,
-						"SetChecked",
-						function()
-							if setChecked then return end
-							setChecked = true
-							ImproveAny:UpdateSpellBookButton(sel)
-							setChecked = false
-						end
-					)
+					hooksecurefunc(sel, "SetChecked", function()
+						if setChecked then return end
+						setChecked = true
+						ImproveAny:UpdateSpellBookButton(sel)
+						setChecked = false
+					end)
 				end
 
 				ImproveAny:UpdateSpellBookButton(sel)
@@ -128,32 +112,11 @@ function ImproveAny:InitSpellBookFix()
 	end
 
 	if SpellBookFrame then
-		SpellBookFrame:HookScript(
-			"OnEvent",
-			function(selfi)
-				UpdateSpellbook("SpellBookFrame.OnEvent")
-			end
-		)
-
-		if SpellBookFrame.Update then
-			hooksecurefunc(
-				SpellBookFrame,
-				"Update",
-				function(selfi)
-					UpdateSpellbook("SpellBookFrame.Update")
-				end
-			)
-		end
+		SpellBookFrame:HookScript("OnEvent", function(selfi) UpdateSpellbook("SpellBookFrame.OnEvent") end)
+		if SpellBookFrame.Update then hooksecurefunc(SpellBookFrame, "Update", function(selfi) UpdateSpellbook("SpellBookFrame.Update") end) end
 	end
 
-	if SpellBookFrame_UpdateSpells then
-		hooksecurefunc(
-			"SpellBookFrame_UpdateSpells",
-			function()
-				UpdateSpellbook("SpellBookFrame_UpdateSpells")
-			end
-		)
-	end
+	if SpellBookFrame_UpdateSpells then hooksecurefunc("SpellBookFrame_UpdateSpells", function() UpdateSpellbook("SpellBookFrame_UpdateSpells") end) end
 end
 
 local warningEnhanceDressup = false
@@ -162,173 +125,74 @@ local warningEnhanceTrainers = false
 function ImproveAny:Event(event, ...)
 	if ImproveAny.Setup == nil then
 		ImproveAny.Setup = true
-		if ImproveAny:IsAddOnLoaded("D4KiR MoveAndImprove") then
-			ImproveAny:MSG("DON'T use MoveAndImprove, when you use ImproveAny")
-		end
-
+		if ImproveAny:IsAddOnLoaded("D4KiR MoveAndImprove") then ImproveAny:MSG("DON'T use MoveAndImprove, when you use ImproveAny") end
 		ImproveAny:InitSlash()
 		ImproveAny:InitDB()
 		ImproveAny:InitIASettings()
-		if ImproveAny:IAGV("fontName", "Default") ~= "Default" and ImproveAny.Fonts then
-			ImproveAny:Fonts()
-		end
-
-		if ImproveAny:IsEnabled("CASTBAR", false) and ImproveAny.InitCastBar then
-			ImproveAny:InitCastBar()
-		end
-
-		if ImproveAny:IsEnabled("DURABILITY", false) and ImproveAny.InitDurabilityFrame then
-			ImproveAny:InitDurabilityFrame()
-		end
-
+		if ImproveAny:IAGV("fontName", "Default") ~= "Default" and ImproveAny.Fonts then ImproveAny:Fonts() end
+		if ImproveAny:IsEnabled("CASTBAR", false) and ImproveAny.InitCastBar then ImproveAny:InitCastBar() end
+		if ImproveAny:IsEnabled("DURABILITY", false) and ImproveAny.InitDurabilityFrame then ImproveAny:InitDurabilityFrame() end
 		local f = CreateFrame("Frame")
 		ImproveAny:RegisterEvent(f, "MERCHANT_SHOW")
-		ImproveAny:OnEvent(
-			f,
-			function(sel)
-				if ImproveAny:IsEnabled("AUTOSELLJUNK", true) then
-					if C_MerchantFrame and C_MerchantFrame.SellAllJunkItems then
-						C_MerchantFrame.SellAllJunkItems()
-					else
-						for bag = 0, 4 do
-							for slot = 1, C_Container.GetContainerNumSlots(bag) do
-								local itemLink = C_Container.GetContainerItemLink(bag, slot)
-								if itemLink then
-									local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = ImproveAny:GetItemInfo(itemLink)
-									if itemRarity == 0 and itemSellPrice > 0 then
-										C_Container.UseContainerItem(bag, slot) -- Sell the item
-									end
+		ImproveAny:OnEvent(f, function(sel)
+			if ImproveAny:IsEnabled("AUTOSELLJUNK", true) then
+				if C_MerchantFrame and C_MerchantFrame.SellAllJunkItems then
+					C_MerchantFrame.SellAllJunkItems()
+				else
+					for bag = 0, 4 do
+						for slot = 1, C_Container.GetContainerNumSlots(bag) do
+							local itemLink = C_Container.GetContainerItemLink(bag, slot)
+							if itemLink then
+								local _, _, itemRarity, _, _, _, _, _, _, _, itemSellPrice = ImproveAny:GetItemInfo(itemLink)
+								if itemRarity == 0 and itemSellPrice > 0 then
+									C_Container.UseContainerItem(bag, slot) -- Sell the item
 								end
 							end
 						end
 					end
 				end
+			end
 
-				if ImproveAny:IsEnabled("AUTOREPAIR", true) and CanMerchantRepair() then
-					local repairCost, canRepair = GetRepairAllCost()
-					if canRepair and repairCost > 0 then
-						RepairAllItems()
-					end
-				end
-			end, "AUTOSELLJUNK"
-		)
+			if ImproveAny:IsEnabled("AUTOREPAIR", true) and CanMerchantRepair() then
+				local repairCost, canRepair = GetRepairAllCost()
+				if canRepair and repairCost > 0 then RepairAllItems() end
+			end
+		end, "AUTOSELLJUNK")
 
-		if ImproveAny.InitMinimap then
-			ImproveAny:InitMinimap()
-		end
-
-		if ImproveAny.InitMoneyBar then
-			ImproveAny:InitMoneyBar()
-		end
-
-		if ImproveAny.InitTokenBar then
-			ImproveAny:InitTokenBar()
-		end
-
-		if ImproveAny.InitIAILVLBar then
-			ImproveAny:InitIAILVLBar()
-		end
-
-		if ImproveAny.InitSkillBars then
-			ImproveAny:InitSkillBars()
-		end
-
-		if ImproveAny.InitBags then
-			ImproveAny:InitBags()
-		end
-
-		if ImproveAny:IsEnabled("WORLDMAP", false) and ImproveAny.InitWorldMapFrame then
-			ImproveAny:InitWorldMapFrame()
-		end
-
-		if (ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false)) and ImproveAny.InitAutoAcceptQuests then
-			ImproveAny:InitAutoAcceptQuests()
-		end
-
-		if ImproveAny.InitCombatText then
-			ImproveAny:InitCombatText()
-		end
-
-		if ImproveAny.InitXPBar then
-			ImproveAny:After(
-				1,
-				function()
-					ImproveAny:InitXPBar()
-				end, "InitXPBar"
-			)
-		end
-
-		if ImproveAny.InitSuperTrackedFrame then
-			ImproveAny:InitSuperTrackedFrame()
-		end
-
-		if ImproveAny.InitMicroMenu then
-			ImproveAny:InitMicroMenu()
-		end
-
-		if ImproveAny.InitPartyFrames then
-			ImproveAny:InitPartyFrames()
-		end
-
-		if ImproveAny.InitLFGFrame then
-			ImproveAny:InitLFGFrame()
-		end
-
-		if ImproveAny.UpdateUIParentAttribute then
-			ImproveAny:UpdateUIParentAttribute()
-		end
-
-		if ImproveAny.UpdateStatusBar then
-			ImproveAny:UpdateStatusBar()
-		end
-
-		if ImproveAny.InitIAPingFrame then
-			ImproveAny:InitIAPingFrame()
-		end
-
-		if ImproveAny.InitIACoordsFrame then
-			ImproveAny:InitIACoordsFrame()
-		end
-
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
-			ImproveAny:InitSpellBookFix()
-		end
-
+		if ImproveAny.InitMinimap then ImproveAny:InitMinimap() end
+		if ImproveAny.InitMoneyBar then ImproveAny:InitMoneyBar() end
+		if ImproveAny.InitTokenBar then ImproveAny:InitTokenBar() end
+		if ImproveAny.InitIAILVLBar then ImproveAny:InitIAILVLBar() end
+		if ImproveAny.InitSkillBars then ImproveAny:InitSkillBars() end
+		if ImproveAny.InitBags then ImproveAny:InitBags() end
+		if ImproveAny:IsEnabled("WORLDMAP", false) and ImproveAny.InitWorldMapFrame then ImproveAny:InitWorldMapFrame() end
+		if (ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false)) and ImproveAny.InitAutoAcceptQuests then ImproveAny:InitAutoAcceptQuests() end
+		if ImproveAny.InitCombatText then ImproveAny:InitCombatText() end
+		if ImproveAny.InitXPBar then ImproveAny:After(1, function() ImproveAny:InitXPBar() end, "InitXPBar") end
+		if ImproveAny.InitSuperTrackedFrame then ImproveAny:InitSuperTrackedFrame() end
+		if ImproveAny.InitMicroMenu then ImproveAny:InitMicroMenu() end
+		if ImproveAny.InitPartyFrames then ImproveAny:InitPartyFrames() end
+		if ImproveAny.InitLFGFrame then ImproveAny:InitLFGFrame() end
+		if ImproveAny.UpdateUIParentAttribute then ImproveAny:UpdateUIParentAttribute() end
+		if ImproveAny.UpdateStatusBar then ImproveAny:UpdateStatusBar() end
+		if ImproveAny.InitIAPingFrame then ImproveAny:InitIAPingFrame() end
+		if ImproveAny.InitIACoordsFrame then ImproveAny:InitIACoordsFrame() end
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then ImproveAny:InitSpellBookFix() end
 		IATAB["VERSION"] = IATAB["VERSION"] or 0
 		if IATAB["VERSION"] < 1 then
 			IATAB["VERSION"] = 1
-			ImproveAny:MSG(ImproveAny:GT("NEW") .. ":", ImproveAny:GT("AUTOSELLJUNK"))
-			ImproveAny:MSG(ImproveAny:GT("NEW") .. ":", ImproveAny:GT("AUTOREPAIR"))
+			ImproveAny:MSG(ImproveAny:Trans("LID_NEW") .. ":", ImproveAny:Trans("LID_AUTOSELLJUNK"))
+			ImproveAny:MSG(ImproveAny:Trans("LID_NEW") .. ":", ImproveAny:Trans("LID_AUTOREPAIR"))
 		end
 
 		if CharacterFrameExpandButton and ImproveAny:IsEnabled("CHARACTERFRAMEAUTOEXPAND", true) then
-			if CharacterFrame then
-				CharacterFrame:HookScript(
-					"OnShow",
-					function()
-						CharacterFrameExpandButton:Click()
-					end
-				)
-			end
-
-			if CharacterFrameTab1 then
-				CharacterFrameTab1:HookScript(
-					"OnClick",
-					function()
-						CharacterFrameExpandButton:Click()
-					end
-				)
-			end
+			if CharacterFrame then CharacterFrame:HookScript("OnShow", function() CharacterFrameExpandButton:Click() end) end
+			if CharacterFrameTab1 then CharacterFrameTab1:HookScript("OnClick", function() CharacterFrameExpandButton:Click() end) end
 		end
 
 		if ImproveAny:IsEnabled("RIGHTCLICKSELFCAST", false) then
 			ImproveAny:Debug("RIGHTCLICKSELFCAST")
-			ImproveAny:After(
-				2,
-				function()
-					ImproveAny:AddRightClick()
-				end, "AddRightClick 2"
-			)
+			ImproveAny:After(2, function() ImproveAny:AddRightClick() end, "AddRightClick 2")
 		end
 
 		function ImproveAny:UpdateMinimapButton()
@@ -340,137 +204,63 @@ function ImproveAny:Event(event, ...)
 		end
 
 		if ExtraActionButton1 and ExtraActionButton1.style and ImproveAny:IsEnabled("HIDEEXTRAACTIONBUTTONARTWORK", false) then
-			hooksecurefunc(
-				ExtraActionButton1.style,
-				"Show",
-				function(sel, ...)
-					sel:Hide()
-				end
-			)
-
+			hooksecurefunc(ExtraActionButton1.style, "Show", function(sel, ...) sel:Hide() end)
 			ExtraActionButton1.style:Hide()
 		end
 
 		local mmbtn = nil
-		ImproveAny:CreateMinimapButton(
-			{
-				["name"] = "ImproveAny",
-				["icon"] = 136033,
-				["var"] = mmbtn,
-				["dbtab"] = IATAB,
-				["vTT"] = {{"|T136033:16:16:0:0|t ImproveAny", "v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
-				["funcL"] = function()
-					ImproveAny:ToggleSettings()
-				end,
-				["funcR"] = function()
-					ImproveAny:MSG("Minimap Button is now hidden.")
-					ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", false)
-					ImproveAny:HideMMBtn("ImproveAny")
-				end,
-				["dbkey"] = "SHOWMINIMAPBUTTON"
-			}
-		)
+		ImproveAny:CreateMinimapButton({
+			["name"] = "ImproveAny",
+			["icon"] = 136033,
+			["var"] = mmbtn,
+			["dbtab"] = IATAB,
+			["vTT"] = {{"|T136033:16:16:0:0|t ImproveAny", "v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
+			["funcL"] = function() ImproveAny:ToggleSettings() end,
+			["funcR"] = function()
+				ImproveAny:MSG("Minimap Button is now hidden.")
+				ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", false)
+				ImproveAny:HideMMBtn("ImproveAny")
+			end,
+			["dbkey"] = "SHOWMINIMAPBUTTON"
+		})
 
 		ImproveAny:UpdateMaxZoom()
 		ImproveAny:UpdateWorldTextScale()
 		ImproveAny:CheckCVars()
 		if ImproveAny:IsEnabled("HIDEPVPBADGE", false) then
 			if PlayerFrame and PlayerFrame.PlayerFrameContent and PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual then
-				hooksecurefunc(
-					PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigePortrait,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigePortrait, "Show", function(sel) sel:Hide() end)
 				PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigePortrait:Hide()
-				hooksecurefunc(
-					PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigeBadge,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigeBadge, "Show", function(sel) sel:Hide() end)
 				PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PrestigeBadge:Hide()
 			end
 
 			if TargetFrame and TargetFrame.TargetFrameContent and TargetFrame.TargetFrameContent.TargetFrameContentContextual then
-				hooksecurefunc(
-					TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait, "Show", function(sel) sel:Hide() end)
 				TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait:Hide()
-				hooksecurefunc(
-					TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge, "Show", function(sel) sel:Hide() end)
 				TargetFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge:Hide()
 			end
 
 			if FocusFrame and FocusFrame.TargetFrameContent and FocusFrame.TargetFrameContent.TargetFrameContentContextual then
-				hooksecurefunc(
-					FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait, "Show", function(sel) sel:Hide() end)
 				FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigePortrait:Hide()
-				hooksecurefunc(
-					FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge, "Show", function(sel) sel:Hide() end)
 				FocusFrame.TargetFrameContent.TargetFrameContentContextual.PrestigeBadge:Hide()
 			end
 
 			if PlayerPVPIcon then
-				hooksecurefunc(
-					PlayerPVPIcon,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(PlayerPVPIcon, "Show", function(sel) sel:Hide() end)
 				PlayerPVPIcon:Hide()
 			end
 
 			if TargetFrameTextureFramePVPIcon then
-				hooksecurefunc(
-					TargetFrameTextureFramePVPIcon,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(TargetFrameTextureFramePVPIcon, "Show", function(sel) sel:Hide() end)
 				TargetFrameTextureFramePVPIcon:Hide()
 			end
 
 			if FocusFrameTextureFramePVPIcon then
-				hooksecurefunc(
-					FocusFrameTextureFramePVPIcon,
-					"Show",
-					function(sel)
-						sel:Hide()
-					end
-				)
-
+				hooksecurefunc(FocusFrameTextureFramePVPIcon, "Show", function(sel) sel:Hide() end)
 				FocusFrameTextureFramePVPIcon:Hide()
 			end
 		end
@@ -494,27 +284,17 @@ function ImproveAny:Event(event, ...)
 					_, spellID = tt:GetSpell()
 				else
 					local _, itemLink = tt:GetItem()
-					if itemLink then
-						itemId = string.match(itemLink, "item:(%d*)")
-					end
+					if itemLink then itemId = string.match(itemLink, "item:(%d*)") end
 				end
 			end
 
-			if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
-				tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
-			end
-
+			if spellID and ImproveAny:IsEnabled("SETTINGS", false) then tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID) end
 			if itemId then
 				local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, expacID, _, _ = ImproveAny:GetItemInfo(itemId)
 				if expacID and ImproveAny:IsEnabled("TOOLTIPEXPANSION", false) then
 					local textcolor = "|cFFFF1111"
-					if expacID >= GetExpansionLevel() then
-						textcolor = "|cFF11FF11"
-					end
-
-					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then
-						tt:AddDoubleLine(ImproveAny:GT("ADDEDIN"), format(ImproveAny:GT("EXPANSION"), textcolor, _G["EXPANSION_NAME" .. expacID]))
-					end
+					if expacID >= GetExpansionLevel() then textcolor = "|cFF11FF11" end
+					if ImproveAny:GetWoWBuild() == "RETAIL" and expacID < GetExpansionLevel() then tt:AddDoubleLine(ImproveAny:Trans("LID_ADDEDIN"), format(ImproveAny:Trans("LID_EXPANSION"), textcolor, _G["EXPANSION_NAME" .. expacID])) end
 				end
 
 				if price and tt.shownMoneyFrames == nil and price > 0 and GetCoinTextureString then
@@ -537,43 +317,35 @@ function ImproveAny:Event(event, ...)
 		else
 			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
 				if frame then
-					frame:HookScript(
-						"OnTooltipSetSpell",
-						function(tt)
-							local _, spellID = tt:GetSpell()
-							if spellID and ImproveAny:IsEnabled("SETTINGS", false) then
-								tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID)
-							end
-						end
-					)
+					frame:HookScript("OnTooltipSetSpell", function(tt)
+						local _, spellID = tt:GetSpell()
+						if spellID and ImproveAny:IsEnabled("SETTINGS", false) then tt:AddDoubleLine("SpellID" .. ":", "|cFFFFFFFF" .. spellID) end
+					end)
 				end
 			end
 
 			for _, frame in pairs{GameTooltip, ItemRefTooltip, WhatevahTooltip} do
 				if frame then
-					frame:HookScript(
-						"OnTooltipSetItem",
-						function(tt)
-							local _, itemLink = tt:GetItem()
-							if itemLink then
-								local itemId = tonumber(strmatch(itemLink, "item:(%d*)"))
-								if itemId then
-									local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = ImproveAny:GetItemInfo(itemId)
-									if price and tt.shownMoneyFrames == nil and price > 0 and GetCoinTextureString then
-										local count = ImproveAny:GetItemCount(itemId)
-										if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
-											if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
-												tt:AddDoubleLine(AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString(price))
-												tt:AddDoubleLine(SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString(price * count))
-											else
-												tt:AddDoubleLine(SELL_PRICE .. ":", GetCoinTextureString(price))
-											end
+					frame:HookScript("OnTooltipSetItem", function(tt)
+						local _, itemLink = tt:GetItem()
+						if itemLink then
+							local itemId = tonumber(strmatch(itemLink, "item:(%d*)"))
+							if itemId then
+								local _, _, _, _, _, _, _, itemStackCount, _, _, price, _, _, _, _, _, _ = ImproveAny:GetItemInfo(itemId)
+								if price and tt.shownMoneyFrames == nil and price > 0 and GetCoinTextureString then
+									local count = ImproveAny:GetItemCount(itemId)
+									if ImproveAny:IsEnabled("TOOLTIPSELLPRICE", false) then
+										if count and count > 1 and itemStackCount and AUCTION_BROWSE_UNIT_PRICE_SORT then
+											tt:AddDoubleLine(AUCTION_BROWSE_UNIT_PRICE_SORT .. "", GetCoinTextureString(price))
+											tt:AddDoubleLine(SELL_PRICE .. " (" .. count .. "/" .. itemStackCount .. ")", GetCoinTextureString(price * count))
+										else
+											tt:AddDoubleLine(SELL_PRICE .. ":", GetCoinTextureString(price))
 										end
 									end
 								end
 							end
 						end
-					)
+					end)
 				end
 			end
 		end
@@ -586,27 +358,21 @@ function ImproveAny:Event(event, ...)
 		ids[186159] = 1 -- Mythic DF? 					Added in patch 10.0.0.44592
 		local MythicAuto = CreateFrame("Frame")
 		ImproveAny:RegisterEvent(MythicAuto, "ADDON_LOADED")
-		ImproveAny:OnEvent(
-			MythicAuto,
-			function(sel, event2, addon)
-				if addon ~= "Blizzard_ChallengesUI" then return end
-				if ChallengesKeystoneFrame then
-					ChallengesKeystoneFrame:HookScript(
-						"OnShow",
-						function()
-							for bagId = 0, Constants.InventoryConstants.NumBagSlots do
-								for slotId = 1, C_Container.GetContainerNumSlots(bagId) do
-									local id = C_Container.GetContainerItemID(bagId, slotId)
-									if id and ids[id] then return C_Container.UseContainerItem(bagId, slotId) end
-								end
-							end
+		ImproveAny:OnEvent(MythicAuto, function(sel, event2, addon)
+			if addon ~= "Blizzard_ChallengesUI" then return end
+			if ChallengesKeystoneFrame then
+				ChallengesKeystoneFrame:HookScript("OnShow", function()
+					for bagId = 0, Constants.InventoryConstants.NumBagSlots do
+						for slotId = 1, C_Container.GetContainerNumSlots(bagId) do
+							local id = C_Container.GetContainerItemID(bagId, slotId)
+							if id and ids[id] then return C_Container.UseContainerItem(bagId, slotId) end
 						end
-					)
+					end
+				end)
 
-					sel:UnregisterEvent(event2)
-				end
-			end, "MythicAuto"
-		)
+				sel:UnregisterEvent(event2)
+			end
+		end, "MythicAuto")
 
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("WIDEFRAMES", false) then
 			if not warningEnhanceDressup and LeaPlusDB and LeaPlusDB["EnhanceDressup"] and LeaPlusDB["EnhanceDressup"] == "On" then
@@ -663,9 +429,7 @@ function ImproveAny:Event(event, ...)
 					regions[4].Show = regions[4].Hide
 					regions[4]:Hide()
 					for i = 5, 6 do
-						if regions[i] then
-							regions[i]:Hide()
-						end
+						if regions[i] then regions[i]:Hide() end
 					end
 
 					QuestLogFrameAbandonButton:SetSize(110, 21)
@@ -691,15 +455,11 @@ function ImproveAny:Event(event, ...)
 
 					QuestLogNoQuestsText:ClearAllPoints()
 					QuestLogNoQuestsText:SetPoint("TOP", QuestLogListScrollFrame, 0, -50)
-					hooksecurefunc(
-						EmptyQuestLogFrame,
-						"Show",
-						function()
-							EmptyQuestLogFrame:ClearAllPoints()
-							EmptyQuestLogFrame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 20, -76)
-							EmptyQuestLogFrame:SetHeight(487)
-						end
-					)
+					hooksecurefunc(EmptyQuestLogFrame, "Show", function()
+						EmptyQuestLogFrame:ClearAllPoints()
+						EmptyQuestLogFrame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 20, -76)
+						EmptyQuestLogFrame:SetHeight(487)
+					end)
 				end
 			end
 
@@ -739,14 +499,7 @@ function ImproveAny:Event(event, ...)
 						button:SetPoint("TOPLEFT", _G["TradeSkillSkill" .. (i - 1)], "BOTTOMLEFT", 0, 1)
 					end
 
-					hooksecurefunc(
-						_G["TradeSkillHighlightFrame"],
-						"Show",
-						function()
-							_G["TradeSkillHighlightFrame"]:SetWidth(290)
-						end
-					)
-
+					hooksecurefunc(_G["TradeSkillHighlightFrame"], "Show", function() _G["TradeSkillHighlightFrame"]:SetWidth(290) end)
 					_G["TradeSkillDetailScrollFrame"]:ClearAllPoints()
 					_G["TradeSkillDetailScrollFrame"]:SetPoint("TOPLEFT", _G["TradeSkillFrame"], "TOPLEFT", 352, -74)
 					_G["TradeSkillDetailScrollFrame"]:SetSize(298, 336 + tall)
@@ -761,36 +514,33 @@ function ImproveAny:Event(event, ...)
 					DetailsInset:SetPoint("TOPLEFT", _G["TradeSkillFrame"], "TOPLEFT", 348, -72)
 					DetailsInset:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated")
 					_G["TradeSkillExpandTabLeft"]:Hide()
-					ImproveAny:ForeachRegions(
-						_G["TradeSkillFrame"],
-						function(region, x)
-							if x > 1 then
-								if ImproveAny:GetWoWBuild() == "CLASSIC" then
-									if x == 2 then
-										region:SetSize(1024, 512)
-										region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
-										region:SetTexCoord(0, 1, 0, 1)
-									elseif x == 3 then
-										region.Show = region.Hide
-										region:Hide()
-									elseif region then
-										region:Hide()
-									end
-								else
-									if x == 3 then
-										region:SetSize(1024, 512)
-										region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
-										region:SetTexCoord(0, 1, 0, 1)
-									elseif x == 4 then
-										region.Show = region.Hide
-										region:Hide()
-									elseif region then
-										region:Hide()
-									end
+					ImproveAny:ForeachRegions(_G["TradeSkillFrame"], function(region, x)
+						if x > 1 then
+							if ImproveAny:GetWoWBuild() == "CLASSIC" then
+								if x == 2 then
+									region:SetSize(1024, 512)
+									region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
+									region:SetTexCoord(0, 1, 0, 1)
+								elseif x == 3 then
+									region.Show = region.Hide
+									region:Hide()
+								elseif region then
+									region:Hide()
+								end
+							else
+								if x == 3 then
+									region:SetSize(1024, 512)
+									region:SetTexture("Interface\\AddOns\\ImproveAny\\media\\wideframe")
+									region:SetTexCoord(0, 1, 0, 1)
+								elseif x == 4 then
+									region.Show = region.Hide
+									region:Hide()
+								elseif region then
+									region:Hide()
 								end
 							end
-						end, "TradeSkillFrame"
-					)
+						end
+					end, "TradeSkillFrame")
 
 					if TradeSkillRankFrame and TradeSkillLinkButton then
 						TradeSkillLinkButton:ClearAllPoints()
@@ -859,15 +609,12 @@ function ImproveAny:Event(event, ...)
 				else
 					local waitFrame = CreateFrame("FRAME")
 					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
-					ImproveAny:OnEvent(
-						waitFrame,
-						function(sel, even, arg1)
-							if arg1 == "Blizzard_TradeSkillUI" then
-								TradeSkillFunc("TradeSkill")
-								waitFrame:UnregisterAllEvents()
-							end
-						end, "Blizzard_TradeSkillUI"
-					)
+					ImproveAny:OnEvent(waitFrame, function(sel, even, arg1)
+						if arg1 == "Blizzard_TradeSkillUI" then
+							TradeSkillFunc("TradeSkill")
+							waitFrame:UnregisterAllEvents()
+						end
+					end, "Blizzard_TradeSkillUI")
 				end
 
 				local function CraftFunc()
@@ -914,28 +661,16 @@ function ImproveAny:Event(event, ...)
 					CraftFramePointsLabel:SetPoint("TOPLEFT", CraftFrame, "TOPLEFT", 100, -50)
 					CraftFramePointsText:ClearAllPoints()
 					CraftFramePointsText:SetPoint("LEFT", CraftFramePointsLabel, "RIGHT", 3, 0)
-					hooksecurefunc(
-						"CraftFrame_Update",
-						function()
-							for i = 1, CRAFTS_DISPLAYED do
-								if _G["Craft" .. i] then
-									local craftButtonCost = _G["Craft" .. i .. "Cost"]
-									if craftButtonCost then
-										craftButtonCost:SetPoint("RIGHT", -30, 0)
-									end
-								end
+					hooksecurefunc("CraftFrame_Update", function()
+						for i = 1, CRAFTS_DISPLAYED do
+							if _G["Craft" .. i] then
+								local craftButtonCost = _G["Craft" .. i .. "Cost"]
+								if craftButtonCost then craftButtonCost:SetPoint("RIGHT", -30, 0) end
 							end
 						end
-					)
+					end)
 
-					hooksecurefunc(
-						_G["CraftHighlightFrame"],
-						"Show",
-						function()
-							_G["CraftHighlightFrame"]:SetWidth(290)
-						end
-					)
-
+					hooksecurefunc(_G["CraftHighlightFrame"], "Show", function() _G["CraftHighlightFrame"]:SetWidth(290) end)
 					_G["CraftDetailScrollFrame"]:ClearAllPoints()
 					_G["CraftDetailScrollFrame"]:SetPoint("TOPLEFT", _G["CraftFrame"], "TOPLEFT", 352, -74)
 					_G["CraftDetailScrollFrame"]:SetSize(298, 336 + tall)
@@ -957,9 +692,7 @@ function ImproveAny:Event(event, ...)
 					regions[3].Show = regions[3].Hide
 					regions[3]:Hide()
 					for i = 4, 10 do
-						if regions[i] then
-							regions[i]:Hide()
-						end
+						if regions[i] then regions[i]:Hide() end
 					end
 
 					_G["CraftCreateButton"]:ClearAllPoints()
@@ -970,14 +703,10 @@ function ImproveAny:Event(event, ...)
 					_G["CraftCancelButton"]:SetPoint("BOTTOMRIGHT", _G["CraftFrame"], "BOTTOMRIGHT", -42, 54)
 					_G["CraftFrameCloseButton"]:ClearAllPoints()
 					_G["CraftFrameCloseButton"]:SetPoint("TOPRIGHT", _G["CraftFrame"], "TOPRIGHT", -30, -8)
-					hooksecurefunc(
-						CraftCreateButton,
-						"SetFrameLevel",
-						function()
-							CraftCreateButton:ClearAllPoints()
-							CraftCreateButton:SetPoint("RIGHT", CraftCancelButton, "LEFT", -1, 0)
-						end
-					)
+					hooksecurefunc(CraftCreateButton, "SetFrameLevel", function()
+						CraftCreateButton:ClearAllPoints()
+						CraftCreateButton:SetPoint("RIGHT", CraftCancelButton, "LEFT", -1, 0)
+					end)
 
 					if ImproveAny:IsAddOnLoaded("ClassicProfessionFilter") and CraftFrame.SearchBox and CraftFrame.HaveMats and CraftFrame.HaveMats.text and CraftFrame.SearchMats and CraftFrame.SearchMats.text then
 						CraftFrame.SearchBox:ClearAllPoints()
@@ -1011,15 +740,12 @@ function ImproveAny:Event(event, ...)
 				else
 					local waitFrame = CreateFrame("FRAME")
 					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
-					ImproveAny:OnEvent(
-						waitFrame,
-						function(sel, even, arg1)
-							if arg1 == "Blizzard_CraftUI" then
-								CraftFunc()
-								waitFrame:UnregisterAllEvents()
-							end
-						end, "Blizzard_CraftUI"
-					)
+					ImproveAny:OnEvent(waitFrame, function(sel, even, arg1)
+						if arg1 == "Blizzard_CraftUI" then
+							CraftFunc()
+							waitFrame:UnregisterAllEvents()
+						end
+					end, "Blizzard_CraftUI")
 				end
 			end
 
@@ -1060,33 +786,20 @@ function ImproveAny:Event(event, ...)
 							button:SetPoint("TOPLEFT", _G["ClassTrainerSkill" .. (i - 1)], "BOTTOMLEFT", 0, 1)
 						end
 
-						hooksecurefunc(
-							"ClassTrainer_SetToTradeSkillTrainer",
-							function()
-								_G.CLASS_TRAINER_SKILLS_DISPLAYED = _G.CLASS_TRAINER_SKILLS_DISPLAYED + numTallTrainers
-								ClassTrainerListScrollFrame:SetHeight(sh + tall)
-								ClassTrainerDetailScrollFrame:SetHeight(sh + tall)
-							end
-						)
+						hooksecurefunc("ClassTrainer_SetToTradeSkillTrainer", function()
+							_G.CLASS_TRAINER_SKILLS_DISPLAYED = _G.CLASS_TRAINER_SKILLS_DISPLAYED + numTallTrainers
+							ClassTrainerListScrollFrame:SetHeight(sh + tall)
+							ClassTrainerDetailScrollFrame:SetHeight(sh + tall)
+						end)
 
-						hooksecurefunc(
-							"ClassTrainer_SetToClassTrainer",
-							function()
-								_G.CLASS_TRAINER_SKILLS_DISPLAYED = _G.CLASS_TRAINER_SKILLS_DISPLAYED + numTallTrainers - 1
-								ClassTrainerListScrollFrame:SetHeight(sh + tall)
-								ClassTrainerDetailScrollFrame:SetHeight(sh + tall)
-							end
-						)
+						hooksecurefunc("ClassTrainer_SetToClassTrainer", function()
+							_G.CLASS_TRAINER_SKILLS_DISPLAYED = _G.CLASS_TRAINER_SKILLS_DISPLAYED + numTallTrainers - 1
+							ClassTrainerListScrollFrame:SetHeight(sh + tall)
+							ClassTrainerDetailScrollFrame:SetHeight(sh + tall)
+						end)
 					end
 
-					hooksecurefunc(
-						_G["ClassTrainerSkillHighlightFrame"],
-						"Show",
-						function()
-							ClassTrainerSkillHighlightFrame:SetWidth(290)
-						end
-					)
-
+					hooksecurefunc(_G["ClassTrainerSkillHighlightFrame"], "Show", function() ClassTrainerSkillHighlightFrame:SetWidth(290) end)
 					_G["ClassTrainerDetailScrollFrame"]:ClearAllPoints()
 					_G["ClassTrainerDetailScrollFrame"]:SetPoint("TOPLEFT", _G["ClassTrainerFrame"], "TOPLEFT", 352, -74)
 					_G["ClassTrainerDetailScrollFrame"]:SetSize(296, sh + tall)
@@ -1100,9 +813,7 @@ function ImproveAny:Event(event, ...)
 					regions[3].Show = regions[3].Hide
 					regions[3]:Hide()
 					for i = 4, 9 do
-						if regions[i] then
-							regions[i]:Hide()
-						end
+						if regions[i] then regions[i]:Hide() end
 					end
 
 					ClassTrainerHorizontalBarLeft:Hide()
@@ -1135,9 +846,7 @@ function ImproveAny:Event(event, ...)
 
 					ClassTrainerMoneyFrame:ClearAllPoints()
 					ClassTrainerMoneyFrame:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 143, -49)
-					if ClassTrainerGreetingText then
-						ClassTrainerGreetingText:Hide()
-					end
+					if ClassTrainerGreetingText then ClassTrainerGreetingText:Hide() end
 				end
 
 				if ImproveAny:IsAddOnLoaded("Blizzard_TrainerUI") then
@@ -1145,15 +854,12 @@ function ImproveAny:Event(event, ...)
 				else
 					local waitFrame = CreateFrame("FRAME")
 					ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
-					ImproveAny:OnEvent(
-						waitFrame,
-						function(sel, even, arg1)
-							if arg1 == "Blizzard_TrainerUI" then
-								TrainerFunc()
-								waitFrame:UnregisterAllEvents()
-							end
-						end, "Blizzard_TrainerUI"
-					)
+					ImproveAny:OnEvent(waitFrame, function(sel, even, arg1)
+						if arg1 == "Blizzard_TrainerUI" then
+							TrainerFunc()
+							waitFrame:UnregisterAllEvents()
+						end
+					end, "Blizzard_TrainerUI")
 				end
 			end
 		end
@@ -1165,13 +871,10 @@ function ImproveAny:Event(event, ...)
 					TradeSkillFrame.hasMaterial:SetSize(20, 20)
 					TradeSkillFrame.hasMaterial:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 70, -54)
 					TradeSkillFrame.hasMaterial:SetChecked(ImproveAny:IsEnabled("HASMATERIAL", false))
-					TradeSkillFrame.hasMaterial:SetScript(
-						"OnClick",
-						function(sel)
-							ImproveAny:SetEnabled("HASMATERIAL", sel:GetChecked())
-							TradeSkillFrame_Update()
-						end
-					)
+					TradeSkillFrame.hasMaterial:SetScript("OnClick", function(sel)
+						ImproveAny:SetEnabled("HASMATERIAL", sel:GetChecked())
+						TradeSkillFrame_Update()
+					end)
 
 					TradeSkillFrame.hasMaterial.f = TradeSkillFrame.hasMaterial:CreateFontString(nil, nil, "GameFontNormalSmall")
 					TradeSkillFrame.hasMaterial.f:SetPoint("LEFT", TradeSkillFrame.hasMaterial, "RIGHT", 0, 0)
@@ -1187,95 +890,87 @@ function ImproveAny:Event(event, ...)
 				end
 
 				TradeSkillFrame.hasSkillUp:SetChecked(ImproveAny:IsEnabled("HASSKILLUP", false))
-				TradeSkillFrame.hasSkillUp:SetScript(
-					"OnClick",
-					function(sel)
-						ImproveAny:SetEnabled("HASSKILLUP", sel:GetChecked())
-						TradeSkillFrame_Update()
-					end
-				)
+				TradeSkillFrame.hasSkillUp:SetScript("OnClick", function(sel)
+					ImproveAny:SetEnabled("HASSKILLUP", sel:GetChecked())
+					TradeSkillFrame_Update()
+				end)
 
 				TradeSkillFrame.hasSkillUp.f = TradeSkillFrame.hasSkillUp:CreateFontString(nil, nil, "GameFontNormalSmall")
 				TradeSkillFrame.hasSkillUp.f:SetPoint("LEFT", TradeSkillFrame.hasSkillUp, "RIGHT", 0, 0)
 				TradeSkillFrame.hasSkillUp.f:SetText(TRADESKILL_FILTER_HAS_SKILL_UP or "Has Skill Up")
-				hooksecurefunc(
-					"TradeSkillFrame_Update",
-					function()
-						local py = 94
-						local numTradeSkills = GetNumTradeSkills()
-						local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame)
-						local headers = {}
-						local headerId = 0
-						local skillCount = 0
-						for i = 1, TRADE_SKILLS_DISPLAYED do
-							local skillIndex = i + skillOffset
-							local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
-							if skillIndex <= numTradeSkills then
-								if isHeader then
-									if i ~= 1 then
-										if skillCount == 0 then
-											headers[headerId] = false
-										else
-											headers[headerId] = true
-										end
-
-										headerId = headerId + 1
-									end
-
-									skillCount = 0
-								else
-									local color = TradeSkillTypeColor[skillType]
-									if not (ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b) and not (numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false)) then
-										skillCount = skillCount + 1
-									end
-								end
-							end
-						end
-
-						if skillCount == 0 then
-							headers[headerId] = false
-						else
-							headers[headerId] = true
-						end
-
-						headerId = 0
-						for i = 1, TRADE_SKILLS_DISPLAYED do
-							local skillIndex = i + skillOffset
-							local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
-							local skillButton = getglobal("TradeSkillSkill" .. i)
-							if skillIndex <= numTradeSkills and i < 25 then
-								local color = TradeSkillTypeColor[skillType]
-								if not isHeader then
-									if ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b then
-										skillButton:Hide()
+				hooksecurefunc("TradeSkillFrame_Update", function()
+					local py = 94
+					local numTradeSkills = GetNumTradeSkills()
+					local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame)
+					local headers = {}
+					local headerId = 0
+					local skillCount = 0
+					for i = 1, TRADE_SKILLS_DISPLAYED do
+						local skillIndex = i + skillOffset
+						local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
+						if skillIndex <= numTradeSkills then
+							if isHeader then
+								if i ~= 1 then
+									if skillCount == 0 then
+										headers[headerId] = false
 									else
-										if numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false) then
-											skillButton:Hide()
-										else
-											skillButton:ClearAllPoints()
-											skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
-											skillButton:Show()
-											py = py + 16
-										end
-									end
-								else
-									if headers[headerId] then
-										skillButton:ClearAllPoints()
-										skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
-										skillButton:Show()
-										py = py + 16
-									else
-										skillButton:Hide()
+										headers[headerId] = true
 									end
 
 									headerId = headerId + 1
 								end
+
+								skillCount = 0
 							else
-								skillButton:Hide()
+								local color = TradeSkillTypeColor[skillType]
+								if not (ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b) and not (numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false)) then skillCount = skillCount + 1 end
 							end
 						end
 					end
-				)
+
+					if skillCount == 0 then
+						headers[headerId] = false
+					else
+						headers[headerId] = true
+					end
+
+					headerId = 0
+					for i = 1, TRADE_SKILLS_DISPLAYED do
+						local skillIndex = i + skillOffset
+						local _, skillType, numAvailable, isHeader = GetTradeSkillInfo(skillIndex)
+						local skillButton = getglobal("TradeSkillSkill" .. i)
+						if skillIndex <= numTradeSkills and i < 25 then
+							local color = TradeSkillTypeColor[skillType]
+							if not isHeader then
+								if ImproveAny:IsEnabled("HASSKILLUP", false) and color and color.r == color.g and color.r == color.b then
+									skillButton:Hide()
+								else
+									if numAvailable <= 0 and ImproveAny:IsEnabled("HASMATERIAL", false) then
+										skillButton:Hide()
+									else
+										skillButton:ClearAllPoints()
+										skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
+										skillButton:Show()
+										py = py + 16
+									end
+								end
+							else
+								if headers[headerId] then
+									skillButton:ClearAllPoints()
+									skillButton:SetPoint("TOPLEFT", ImproveAny:GetParent(skillButton), "TOPLEFT", 32, -py)
+									skillButton:Show()
+									py = py + 16
+								else
+									skillButton:Hide()
+								end
+
+								headerId = headerId + 1
+							end
+						else
+							skillButton:Hide()
+						end
+					end
+				end)
 			end
 
 			if ImproveAny:IsAddOnLoaded("Blizzard_TradeSkillUI") then
@@ -1283,15 +978,12 @@ function ImproveAny:Event(event, ...)
 			else
 				local waitFrame = CreateFrame("FRAME")
 				ImproveAny:RegisterEvent(waitFrame, "ADDON_LOADED")
-				ImproveAny:OnEvent(
-					waitFrame,
-					function(sel, even, arg1)
-						if arg1 == "Blizzard_TradeSkillUI" then
-							InitTSF()
-							waitFrame:UnregisterAllEvents()
-						end
-					end, "Blizzard_TradeSkillUI"
-				)
+				ImproveAny:OnEvent(waitFrame, function(sel, even, arg1)
+					if arg1 == "Blizzard_TradeSkillUI" then
+						InitTSF()
+						waitFrame:UnregisterAllEvents()
+					end
+				end, "Blizzard_TradeSkillUI")
 			end
 		end
 	end
@@ -1430,34 +1122,22 @@ function ImproveAny:InitAutoAcceptQuests()
 							if type(availableQuests) == "table" then
 								autoquestsQuestID = availableQuests[i].questID
 								autoquestsRepeatable = availableQuests[i].repeatable
-								if nAvailable < 2 or autoquestsRepeatable == false then
-									C_GossipInfo.SelectAvailableQuest(autoquestsQuestID)
-								end
+								if nAvailable < 2 or autoquestsRepeatable == false then C_GossipInfo.SelectAvailableQuest(autoquestsQuestID) end
 							end
 						end
 					elseif nActive > 0 then
 						local selectedIndex = 2
-						if GetQuestLogSelection then
-							selectedIndex = GetQuestLogSelection()
-						end
-
+						if GetQuestLogSelection then selectedIndex = GetQuestLogSelection() end
 						for i = 1, nActive do
 							if type(activeQuests) == "table" then
 								autoquestsIsComplete = activeQuests[i].isComplete
 								autoquestsQuestID = activeQuests[i].questID
-								if SelectQuestLogEntry and GetQuestLogIndexByID then
-									SelectQuestLogEntry(GetQuestLogIndexByID(autoquestsQuestID))
-								end
-
-								if autoquestsIsComplete == true or (GetQuestLogLeaderBoard ~= nil and GetQuestLogLeaderBoard(1) == nil) then
-									C_GossipInfo.SelectActiveQuest(autoquestsQuestID)
-								end
+								if SelectQuestLogEntry and GetQuestLogIndexByID then SelectQuestLogEntry(GetQuestLogIndexByID(autoquestsQuestID)) end
+								if autoquestsIsComplete == true or (GetQuestLogLeaderBoard ~= nil and GetQuestLogLeaderBoard(1) == nil) then C_GossipInfo.SelectActiveQuest(autoquestsQuestID) end
 							end
 						end
 
-						if SelectQuestLogEntry and GetQuestLogIndexByID then
-							SelectQuestLogEntry(selectedIndex)
-						end
+						if SelectQuestLogEntry and GetQuestLogIndexByID then SelectQuestLogEntry(selectedIndex) end
 					end
 				elseif event == "QUEST_GREETING" then
 					local npcAvailableQuestCount = GetNumAvailableQuests()
@@ -1475,13 +1155,11 @@ function ImproveAny:InitAutoAcceptQuests()
 					local questId = GetQuestID()
 					if decisionQuests[questId] then
 						ImproveAny:MSG("Auto Accept Quest: This is a decision quest!")
-
 						return
 					end
 
 					if escortQuests[questId] then
 						ImproveAny:MSG("Auto Accept Quest: This is an escort quest!")
-
 						return
 					end
 
@@ -1516,41 +1194,26 @@ function ImproveAny:InitAutoAcceptQuests()
 end
 
 if false then
-	ImproveAny:After(
-		1,
-		function()
-			ImproveAny:SetDebug(true)
-			if true then
-				ImproveAny:DrawDebug(
-					"ImproveAny DD 1",
-					function()
-						local text = ""
-						for i, v in pairs(ImproveAny:GetCountAfter()) do
-							if v > 200 then
-								text = text .. v .. "x: " .. i .. "\n"
-							end
-						end
+	ImproveAny:After(1, function()
+		ImproveAny:SetDebug(true)
+		if true then
+			ImproveAny:DrawDebug("ImproveAny DD 1", function()
+				local text = ""
+				for i, v in pairs(ImproveAny:GetCountAfter()) do
+					if v > 200 then text = text .. v .. "x: " .. i .. "\n" end
+				end
+				return text
+			end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 1200, 0)
+		end
 
-						return text
-					end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 1200, 0
-				)
-			end
-
-			if true then
-				ImproveAny:DrawDebug(
-					"ImproveAny DD 2",
-					function()
-						local text = ""
-						for i, v in pairs(ImproveAny:GetCountAfterEvents()) do
-							if v > 1 then
-								text = text .. v .. "x: " .. i .. "\n"
-							end
-						end
-
-						return text
-					end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 100, 0
-				)
-			end
-		end, "DEBUG"
-	)
+		if true then
+			ImproveAny:DrawDebug("ImproveAny DD 2", function()
+				local text = ""
+				for i, v in pairs(ImproveAny:GetCountAfterEvents()) do
+					if v > 1 then text = text .. v .. "x: " .. i .. "\n" end
+				end
+				return text
+			end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 100, 0)
+		end
+	end, "DEBUG")
 end

@@ -4,9 +4,7 @@ local IAOldFonts = {}
 local BlizDefaultFonts = {"STANDARD_TEXT_FONT", "UNIT_NAME_FONT", "DAMAGE_TEXT_FONT", "NAMEPLATE_FONT", "NAMEPLATE_SPELLCAST_FONT"}
 local BlizFontObjects = {"SystemFont_NamePlateCastBar", "SystemFont_NamePlateFixed", "SystemFont_LargeNamePlateFixed", "SystemFont_World", "SystemFont_World_ThickOutline", "SystemFont_Outline_Small", "SystemFont_Outline", "SystemFont_InverseShadow_Small", "SystemFont_Med2", "SystemFont_Med3", "SystemFont_Shadow_Med3", "SystemFont_Huge1", "SystemFont_Huge1_Outline", "SystemFont_OutlineThick_Huge2", "SystemFont_OutlineThick_Huge4", "SystemFont_OutlineThick_WTF", "NumberFont_GameNormal", "NumberFont_Shadow_Small", "NumberFont_OutlineThick_Mono_Small", "NumberFont_Shadow_Med", "NumberFont_Normal_Med", "NumberFont_Outline_Med", "NumberFont_Outline_Large", "NumberFont_Outline_Huge", "Fancy22Font", "QuestFont_Huge", "QuestFont_Outline_Huge", "QuestFont_Super_Huge", "QuestFont_Super_Huge_Outline", "SplashHeaderFont", "Game11Font", "Game12Font", "Game13Font", "Game13FontShadow", "Game15Font", "Game18Font", "Game20Font", "Game24Font", "Game27Font", "Game30Font", "Game32Font", "Game36Font", "Game48Font", "Game48FontShadow", "Game60Font", "Game72Font", "Game11Font_o1", "Game12Font_o1", "Game13Font_o1", "Game15Font_o1", "QuestFont_Enormous", "DestinyFontLarge", "CoreAbilityFont", "DestinyFontHuge", "QuestFont_Shadow_Small", "MailFont_Large", "SpellFont_Small", "InvoiceFont_Med", "InvoiceFont_Small", "Tooltip_Med", "Tooltip_Small", "AchievementFont_Small", "ReputationDetailFont", "FriendsFont_Normal", "FriendsFont_Small", "FriendsFont_Large", "FriendsFont_UserText", "GameFont_Gigantic", "ChatBubbleFont", "Fancy16Font", "Fancy18Font", "Fancy20Font", "Fancy24Font", "Fancy27Font", "Fancy30Font", "Fancy32Font", "Fancy48Font", "SystemFont_NamePlate", "SystemFont_LargeNamePlate", "GameFontNormal", "SystemFont_Tiny2", "SystemFont_Tiny", "SystemFont_Shadow_Small", "SystemFont_Small", "SystemFont_Small2", "SystemFont_Shadow_Small2", "SystemFont_Shadow_Med1_Outline", "SystemFont_Shadow_Med1", "QuestFont_Large", "SystemFont_Large", "SystemFont_Shadow_Large_Outline", "SystemFont_Shadow_Med2", "SystemFont_Shadow_Large", "SystemFont_Shadow_Large2", "SystemFont_Shadow_Huge1", "SystemFont_Huge2", "SystemFont_Shadow_Huge2", "SystemFont_Shadow_Huge3", "SystemFont_Shadow_Outline_Huge3", "SystemFont_Shadow_Outline_Huge2", "SystemFont_Med1", "SystemFont_WTF2", "SystemFont_Outline_WTF2", "GameTooltipHeader", "System_IME",}
 function ImproveAny:SaveOldFonts(ele)
-	if IAOldFonts[ele] == nil then
-		IAOldFonts[ele] = _G[ele]
-	end
+	if IAOldFonts[ele] == nil then IAOldFonts[ele] = _G[ele] end
 end
 
 local IAFONTS = {"Default", "Prototype"}
@@ -23,10 +21,7 @@ function ImproveAny:Fonts()
 		local fontObject = _G[fontName]
 		if fontObject and fontObject.GetFont then
 			local oldFont, oldSize, oldStyle = fontObject:GetFont()
-			if IAOldFonts[i] == nil then
-				IAOldFonts[i] = oldFont
-			end
-
+			if IAOldFonts[i] == nil then IAOldFonts[i] = oldFont end
 			oldSize = ForcedFontSize[i] or oldSize
 			if ImproveAny:IAGV("fontName", "Default") == "Default" then
 				fontObject:SetFont(IAOldFonts[i], oldSize, oldStyle)
@@ -46,7 +41,6 @@ end
 
 function ImproveAny:GetBagMode()
 	if ImproveAny:IsAddOnLoaded("DragonflightUI", "BagMode") then return "DISABLED" end
-
 	return ImproveAny:IAGV("BAGMODE", "RETAIL")
 end
 
@@ -59,18 +53,14 @@ local sls = {}
 function ImproveAny:SetPos(ele, key, x, extra)
 	if ele == nil then return false end
 	ele:ClearAllPoints()
-	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(key)), strlower(searchStr), 1, true) or (extra and (strfind(strlower(extra), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(extra)), strlower(searchStr), 1, true))) then
+	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:Trans("LID_" .. key)), strlower(searchStr), 1, true) or (extra and (strfind(strlower(extra), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:Trans("LID_" .. extra)), strlower(searchStr), 1, true))) then
 		ele:Show()
-		if posy < -4 then
-			posy = posy - 10
-		end
-
+		if posy < -4 then posy = posy - 10 end
 		ele:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x or 6, posy)
 		posy = posy - 24
 	else
 		ele:Hide()
 	end
-
 	return true
 end
 
@@ -81,43 +71,32 @@ local function AddCategory(key)
 		ca:SetSize(24, 24)
 		ca.f = ca:CreateFontString(nil, nil, "GameFontNormal")
 		ca.f:SetPoint("LEFT", ca, "LEFT", 0, 0)
-		ca.f:SetText(ImproveAny:GT(key))
+		ca.f:SetText(ImproveAny:Trans("LID_" .. key))
 	end
 
 	ImproveAny:SetPos(cas[key], key)
 end
 
 local function AddCheckBox(x, key, val, func)
-	if val == nil then
-		val = true
-	end
-
+	if val == nil then val = true end
 	if cbs[key] == nil then
 		cbs[key] = CreateFrame("CheckButton", key .. "_CB", IASettings.SC, "UICheckButtonTemplate") --CreateFrame( "CheckButton", "moversettingsmove", mover, "UICheckButtonTemplate" )
 		local cb = cbs[key]
 		cb:SetSize(24, 24)
 		cb:SetChecked(ImproveAny:IsEnabled(key, val))
-		cb:SetScript(
-			"OnClick",
-			function(sel)
-				ImproveAny:SetEnabled(key, sel:GetChecked())
-				if func then
-					func()
-				end
-
-				if IASettings.save then
-					IASettings.save:Enable()
-				end
-			end
-		)
+		cb:SetScript("OnClick", function(sel)
+			ImproveAny:SetEnabled(key, sel:GetChecked())
+			if func then func() end
+			if IASettings.save then IASettings.save:Enable() end
+		end)
 
 		cb.f = cb:CreateFontString(nil, nil, "GameFontNormal")
 		cb.f:SetPoint("LEFT", cb, "RIGHT", 0, 0)
-		cb.f:SetText(ImproveAny:GT(key))
+		cb.f:SetText(ImproveAny:Trans("LID_" .. key))
 	end
 
 	cbs[key]:ClearAllPoints()
-	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:GT(key)), strlower(searchStr), 1, true) then
+	if strfind(strlower(key), strlower(searchStr), 1, true) or strfind(strlower(ImproveAny:Trans("LID_" .. key)), strlower(searchStr), 1, true) then
 		cbs[key]:Show()
 		cbs[key]:SetPoint("TOPLEFT", IASettings.SC, "TOPLEFT", x, posy)
 		posy = posy - 24
@@ -134,21 +113,16 @@ local function AddEditBox(x, key, val, func)
 		ebs[key]:SetAutoFocus(false)
 		ebs[key].text = ImproveAny:IAGV(key, val)
 		ebs[key]:SetText(ImproveAny:IAGV(key, val))
-		ebs[key]:SetScript(
-			"OnTextChanged",
-			function(self, ...)
-				if self.text ~= ebs[key]:GetText() then
-					ImproveAny:IASV(key, ebs[key]:GetText())
-					if func then
-						func(self, ...)
-					end
-				end
+		ebs[key]:SetScript("OnTextChanged", function(self, ...)
+			if self.text ~= ebs[key]:GetText() then
+				ImproveAny:IASV(key, ebs[key]:GetText())
+				if func then func(self, ...) end
 			end
-		)
+		end)
 
 		ebs[key].f = ebs[key]:CreateFontString(nil, nil, "GameFontNormal")
 		ebs[key].f:SetPoint("LEFT", ebs[key], "LEFT", 0, 16)
-		ebs[key].f:SetText(ImproveAny:GT(key))
+		ebs[key].f:SetText(ImproveAny:Trans("LID_" .. key))
 	end
 
 	ImproveAny:SetPos(ebs[key], key, x + 8)
@@ -192,49 +166,35 @@ local function AddSlider(x, key, val, func, vmin, vmax, steps, extra)
 				sls[key].Low:SetText(vmin)
 				sls[key].High:SetText(vmax)
 				sls[key]:SetMinMaxValues(vmin, vmax)
-				sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. ImproveAny:IAGV(key, val))
+				sls[key].Text:SetText(ImproveAny:Trans("LID_" .. key) .. ": " .. ImproveAny:IAGV(key, val))
 			else
 				sls[key].Low:SetText("")
 				sls[key].High:SetText("")
 				sls[key]:SetMinMaxValues(1, #vmin)
-				sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[ImproveAny:IAGV(key, val)])
+				sls[key].Text:SetText(ImproveAny:Trans("LID_" .. key) .. ": " .. vmin[ImproveAny:IAGV(key, val)])
 			end
 
 			sls[key]:SetValue(ImproveAny:IAGV(key, val))
 		end
 
 		sls[key]:SetObeyStepOnDrag(true)
-		if steps then
-			sls[key]:SetValueStep(steps)
-		end
-
-		sls[key]:SetScript(
-			"OnValueChanged",
-			function(self, valu)
-				--val = val - val % steps
-				if steps then
-					valu = tonumber(string.format("%" .. steps .. "f", valu))
+		if steps then sls[key]:SetValueStep(steps) end
+		sls[key]:SetScript("OnValueChanged", function(self, valu)
+			--val = val - val % steps
+			if steps then valu = tonumber(string.format("%" .. steps .. "f", valu)) end
+			if valu and valu ~= ImproveAny:IAGV(key) then
+				if type(vmin) == "number" then
+					ImproveAny:IASV(key, valu)
+					sls[key].Text:SetText(ImproveAny:Trans("LID_" .. key) .. ": " .. valu)
+				else
+					ImproveAny:IASV(key, valu)
+					sls[key].Text:SetText(ImproveAny:Trans("LID_" .. key) .. ": " .. vmin[valu])
 				end
 
-				if valu and valu ~= ImproveAny:IAGV(key) then
-					if type(vmin) == "number" then
-						ImproveAny:IASV(key, valu)
-						sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. valu)
-					else
-						ImproveAny:IASV(key, valu)
-						sls[key].Text:SetText(ImproveAny:GT(key) .. ": " .. vmin[valu])
-					end
-
-					if func then
-						func()
-					end
-
-					if IASettings.save then
-						IASettings.save:Enable()
-					end
-				end
+				if func then func() end
+				if IASettings.save then IASettings.save:Enable() end
 			end
-		)
+		end)
 
 		posy = posy - 10
 	end
@@ -244,13 +204,8 @@ end
 
 function ImproveAny:UpdateILVLIcons()
 	ImproveAny:PDUpdateItemInfos()
-	if ImproveAny.IFUpdateItemInfos then
-		ImproveAny:IFUpdateItemInfos()
-	end
-
-	if ImproveAny.UpdateBagsIlvl then
-		ImproveAny:UpdateBagsIlvl()
-	end
+	if ImproveAny.IFUpdateItemInfos then ImproveAny:IFUpdateItemInfos() end
+	if ImproveAny.UpdateBagsIlvl then ImproveAny:UpdateBagsIlvl() end
 end
 
 local keys = {}
@@ -258,27 +213,23 @@ keys["TOP_OFFSET"] = true
 keys["LEFT_OFFSET"] = true
 keys["PANEl_SPACING_X"] = true
 local iasetattribute = false
-hooksecurefunc(
-	UIParent,
-	"SetAttribute",
-	function(self, key, value)
-		if keys[key] == nil then return end
-		if iasetattribute then return end
-		iasetattribute = true
-		if key == "TOP_OFFSET" then
-			local topOffset = ImproveAny:IAGV("TOP_OFFSET", 116)
-			self:SetAttribute("TOP_OFFSET", -topOffset)
-		elseif key == "LEFT_OFFSET" then
-			local leftOffset = ImproveAny:IAGV("LEFT_OFFSET", 16)
-			self:SetAttribute("LEFT_OFFSET", leftOffset)
-		elseif key == "PANEl_SPACING_X" then
-			local panelSpacingX = ImproveAny:IAGV("PANEl_SPACING_X", 32)
-			self:SetAttribute("PANEl_SPACING_X", panelSpacingX)
-		end
-
-		iasetattribute = false
+hooksecurefunc(UIParent, "SetAttribute", function(self, key, value)
+	if keys[key] == nil then return end
+	if iasetattribute then return end
+	iasetattribute = true
+	if key == "TOP_OFFSET" then
+		local topOffset = ImproveAny:IAGV("TOP_OFFSET", 116)
+		self:SetAttribute("TOP_OFFSET", -topOffset)
+	elseif key == "LEFT_OFFSET" then
+		local leftOffset = ImproveAny:IAGV("LEFT_OFFSET", 16)
+		self:SetAttribute("LEFT_OFFSET", leftOffset)
+	elseif key == "PANEl_SPACING_X" then
+		local panelSpacingX = ImproveAny:IAGV("PANEl_SPACING_X", 32)
+		self:SetAttribute("PANEl_SPACING_X", panelSpacingX)
 	end
-)
+
+	iasetattribute = false
+end)
 
 function ImproveAny:UpdateUIParentAttribute()
 	if not InCombatLockdown() then
@@ -296,63 +247,29 @@ function ImproveAny:UpdateStatusBar()
 		local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
 		if StatusTrackingBarManager then
 			StatusTrackingBarManager:SetWidth(w)
-			if StatusTrackingBarManager.TopBarFrameTexture then
-				StatusTrackingBarManager.TopBarFrameTexture:SetWidth(w + 5)
-			end
-
-			if StatusTrackingBarManager.BottomBarFrameTexture then
-				StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5)
-			end
-
-			ImproveAny:ForeachChildren(
-				StatusTrackingBarManager,
-				function(child, x)
-					child:SetWidth(w)
-					if child.OverlayFrame then
-						child.OverlayFrame:SetWidth(w)
-					end
-
-					if child.StatusBar then
-						child.StatusBar:SetWidth(w)
-					end
-				end, "UpdateStatusBar"
-			)
+			if StatusTrackingBarManager.TopBarFrameTexture then StatusTrackingBarManager.TopBarFrameTexture:SetWidth(w + 5) end
+			if StatusTrackingBarManager.BottomBarFrameTexture then StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5) end
+			ImproveAny:ForeachChildren(StatusTrackingBarManager, function(child, x)
+				child:SetWidth(w)
+				if child.OverlayFrame then child.OverlayFrame:SetWidth(w) end
+				if child.StatusBar then child.StatusBar:SetWidth(w) end
+			end, "UpdateStatusBar")
 		end
 
 		if MainStatusTrackingBarContainer then
 			MainStatusTrackingBarContainer:SetWidth(w)
-			ImproveAny:ForeachChildren(
-				MainStatusTrackingBarContainer,
-				function(child, x)
-					child:SetWidth(w - 5)
-					ImproveAny:ForeachChildren(
-						child,
-						function(va, id)
-							if id ~= 3 then
-								va:SetWidth(w - 5)
-							end
-						end, "MainStatusTrackingBarContainer 2"
-					)
-				end, "MainStatusTrackingBarContainer 1"
-			)
+			ImproveAny:ForeachChildren(MainStatusTrackingBarContainer, function(child, x)
+				child:SetWidth(w - 5)
+				ImproveAny:ForeachChildren(child, function(va, id) if id ~= 3 then va:SetWidth(w - 5) end end, "MainStatusTrackingBarContainer 2")
+			end, "MainStatusTrackingBarContainer 1")
 		end
 
 		if SecondaryStatusTrackingBarContainer then
 			SecondaryStatusTrackingBarContainer:SetWidth(w)
-			ImproveAny:ForeachChildren(
-				SecondaryStatusTrackingBarContainer,
-				function(child, x)
-					child:SetWidth(w - 5)
-					ImproveAny:ForeachChildren(
-						child,
-						function(va, id)
-							if id ~= 3 then
-								va:SetWidth(w - 5)
-							end
-						end, "SecondaryStatusTrackingBarContainer 2"
-					)
-				end, "SecondaryStatusTrackingBarContainer 1"
-			)
+			ImproveAny:ForeachChildren(SecondaryStatusTrackingBarContainer, function(child, x)
+				child:SetWidth(w - 5)
+				ImproveAny:ForeachChildren(child, function(va, id) if id ~= 3 then va:SetWidth(w - 5) end end, "SecondaryStatusTrackingBarContainer 2")
+			end, "SecondaryStatusTrackingBarContainer 1")
 		end
 	end
 end
@@ -397,16 +314,11 @@ function ImproveAny:InitIASettings()
 	IASettings:EnableMouse(true)
 	IASettings:RegisterForDrag("LeftButton")
 	IASettings:SetScript("OnDragStart", IASettings.StartMoving)
-	IASettings:SetScript(
-		"OnDragStop",
-		function()
-			IASettings:StopMovingOrSizing()
-			local p1, _, p3, p4, p5 = IASettings:GetPoint()
-			if p1 and p3 then
-				ImproveAny:SetElePoint("IASettings", p1, _, p3, p4, p5)
-			end
-		end
-	)
+	IASettings:SetScript("OnDragStop", function()
+		IASettings:StopMovingOrSizing()
+		local p1, _, p3, p4, p5 = IASettings:GetPoint()
+		if p1 and p3 then ImproveAny:SetElePoint("IASettings", p1, _, p3, p4, p5) end
+	end)
 
 	if ImproveAny:IsEnabled("SETTINGS", false) then
 		IASettings:Show()
@@ -416,13 +328,7 @@ function ImproveAny:InitIASettings()
 
 	ImproveAny:SetVersion(136033, "0.9.224")
 	IASettings.TitleText:SetText(format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()))
-	IASettings.CloseButton:SetScript(
-		"OnClick",
-		function()
-			ImproveAny:ToggleSettings()
-		end
-	)
-
+	IASettings.CloseButton:SetScript("OnClick", function() ImproveAny:ToggleSettings() end)
 	function ImproveAny:UpdateElementList(sel)
 		posy = -8
 		AddCategory("GENERAL")
@@ -432,17 +338,11 @@ function ImproveAny:InitIASettings()
 		AddSlider(10, "WORLDTEXTSCALE", 1.0, ImproveAny.UpdateWorldTextScale, 0.1, 2.0, 0.1)
 		AddSlider(10, "MAXZOOM", ImproveAny:GetMaxZoom(), ImproveAny.UpdateMaxZoom, 1, ImproveAny:GetMaxZoom(), 0.1)
 		AddCheckBox(4, "HIDEPVPBADGE", false)
-		if StatusTrackingBarManager then
-			AddSlider(10, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5)
-		end
-
+		if StatusTrackingBarManager then AddSlider(10, "STATUSBARWIDTH", 570, ImproveAny.UpdateStatusBar, 100.0, 1920.0, 5) end
 		AddCheckBox(4, "FREESPACEBAGS", false)
 		AddCheckBox(4, "BAGSAMESIZE", false)
 		AddSlider(24, "BAGSIZE", 30, BAGThink.UpdateItemInfos, 20.0, 80.0, 1)
-		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then
-			AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1)
-		end
-
+		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddSlider(24, "BAGMODEINDEX", 1, ImproveAny.UpdateBagMode, IABAGMODES, nil, 1) end
 		AddCategory("QUICKGAMEPLAY")
 		AddCheckBox(4, "AUTOSELLJUNK", true)
 		AddCheckBox(4, "AUTOREPAIR", true)
@@ -450,10 +350,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "AUTOCHECKINQUESTS", false)
 		AddCheckBox(4, "FASTLOOTING", false)
 		AddCheckBox(4, "IMPROVEBAGS", true)
-		if CharacterFrameExpandButton then
-			AddCheckBox(4, "CHARACTERFRAMEAUTOEXPAND", true)
-		end
-
+		if CharacterFrameExpandButton then AddCheckBox(4, "CHARACTERFRAMEAUTOEXPAND", true) end
 		AddSlider(24, "COORDSFONTSIZE", 8, ImproveAny.UpdateCoordsFontSize, 6, 20, 1)
 		AddCheckBox(4, "IACoordsFrame", false)
 		AddCategory("COMBAT")
@@ -461,51 +358,34 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "COMBATTEXTPOSITION", false)
 		AddSlider(10, "COMBATTEXTX", 0, nil, -600, 600, 10)
 		AddSlider(10, "COMBATTEXTY", 0, nil, -250, 250, 10)
-		AddEditBox(
-			24,
-			"BLOCKWORDS",
-			"",
-			function(eb, ...)
-				eb.lastchange = GetTime()
-				ImproveAny:Debug("settings, lastchange")
-				ImproveAny:After(
-					1,
-					function()
-						if eb.lastchange < GetTime() - 0.9 then
-							ImproveAny:IASV("BLOCKWORDS", eb:GetText())
-							if eb:GetText() ~= "" then
-								ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
-								for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-									if strlen(v) < 3 then
-										ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
-									else
-										ImproveAny:MSG(" • |cFF00FF00" .. v)
-									end
-								end
+		AddEditBox(24, "BLOCKWORDS", "", function(eb, ...)
+			eb.lastchange = GetTime()
+			ImproveAny:Debug("settings, lastchange")
+			ImproveAny:After(1, function()
+				if eb.lastchange < GetTime() - 0.9 then
+					ImproveAny:IASV("BLOCKWORDS", eb:GetText())
+					if eb:GetText() ~= "" then
+						ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
+						for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
+							if strlen(v) < 3 then
+								ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
 							else
-								ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
+								ImproveAny:MSG(" • |cFF00FF00" .. v)
 							end
 						end
-					end, "lastchange"
-				)
-			end
-		)
+					else
+						ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
+					end
+				end
+			end, "lastchange")
+		end)
 
 		AddCategory("MINIMAP")
 		AddCheckBox(4, "MINIMAP", false, ImproveAny.UpdateMinimapSettings)
-		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then
-			AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings)
-		end
-
+		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddCheckBox(24, "MINIMAPHIDEBORDER", false, ImproveAny.UpdateMinimapSettings) end
 		AddCheckBox(24, "MINIMAPHIDEZOOMBUTTONS", false, ImproveAny.UpdateMinimapSettings)
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
-			AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings)
-		end
-
-		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then
-			AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings)
-		end
-
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCheckBox(24, "MINIMAPSCROLLZOOM", false, ImproveAny.UpdateMinimapSettings) end
+		if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddCheckBox(24, "MINIMAPSHAPESQUARE", false, ImproveAny.UpdateMinimapSettings) end
 		AddCheckBox(24, "MINIMAPMINIMAPBUTTONSMOVABLE", false, ImproveAny.UpdateMinimapSettings)
 		AddCheckBox(44, "COMBINEMMBTNS", false, ImproveAny.UpdateMinimapSettings)
 		AddCategory("FRAMES")
@@ -539,10 +419,7 @@ function ImproveAny:InitIASettings()
 			AddCheckBox(24, "REPHIDEARTWORK", false)
 		end
 
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
-			AddCategory("UNITFRAMES")
-		end
-
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCategory("UNITFRAMES") end
 		AddCategory("EXTRAS")
 		AddCheckBox(4, "MONEYBAR", false)
 		AddCheckBox(24, "MONEYBARPERHOUR", false)
@@ -554,10 +431,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "RIGHTCLICKSELFCAST", false)
 		AddSlider(24, "SHOWDURABILITYUNDER", 100, nil, 5, 100, 5)
 		AddCheckBox(4, "WORLDMAP", false)
-		if ImproveAny:GetWoWBuild() ~= "RETAIL" then
-			AddCheckBox(24, "WORLDMAPZOOM", false)
-		end
-
+		if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCheckBox(24, "WORLDMAPZOOM", false) end
 		AddCheckBox(24, "WORLDMAPCOORDSP", false)
 		AddCheckBox(24, "WORLDMAPCOORDSC", false)
 		AddCheckBox(4, "TOOLTIPSELLPRICE", false)
@@ -567,10 +441,7 @@ function ImproveAny:InitIASettings()
 		AddCheckBox(4, "LFGSHOWOVERALLSCORE", false)
 		AddCheckBox(4, "LFGSHOWDUNGEONSCORE", false)
 		AddCheckBox(4, "LFGSHOWDUNGEONKEY", false)
-		if ExtraActionButton1 and ExtraActionButton1.style then
-			AddCheckBox(4, "HIDEEXTRAACTIONBUTTONARTWORK", false)
-		end
-
+		if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox(4, "HIDEEXTRAACTIONBUTTONARTWORK", false) end
 		AddCheckBox(4, "IAPingFrame", false)
 	end
 
@@ -578,13 +449,10 @@ function ImproveAny:InitIASettings()
 	IASettings.Search:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 12, -26)
 	IASettings.Search:SetSize(IASettings:GetWidth() - 22 - 100, 24)
 	IASettings.Search:SetAutoFocus(false)
-	IASettings.Search:SetScript(
-		"OnTextChanged",
-		function(sel, ...)
-			searchStr = IASettings.Search:GetText()
-			ImproveAny:UpdateElementList()
-		end
-	)
+	IASettings.Search:SetScript("OnTextChanged", function(sel, ...)
+		searchStr = IASettings.Search:GetText()
+		ImproveAny:UpdateElementList()
+	end)
 
 	IASettings.SF = CreateFrame("ScrollFrame", "IASettings_SF", IASettings, "UIPanelScrollFrameTemplate")
 	IASettings.SF:SetPoint("TOPLEFT", IASettings, 8, -30 - 24)
@@ -605,52 +473,43 @@ function ImproveAny:InitIASettings()
 	IASettings.save:SetSize(120, 24)
 	IASettings.save:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 4, -IASettings:GetHeight() + 24 + 4)
 	IASettings.save:SetText(SAVE)
-	IASettings.save:SetScript(
-		"OnClick",
-		function()
-			if C_UI then
-				C_UI.Reload()
-			else
-				ReloadUi()
-			end
+	IASettings.save:SetScript("OnClick", function()
+		if C_UI then
+			C_UI.Reload()
+		else
+			ReloadUi()
 		end
-	)
+	end)
 
 	IASettings.save:Disable()
 	IASettings.reload = CreateFrame("BUTTON", "IASettings" .. ".reload", IASettings, "UIPanelButtonTemplate")
 	IASettings.reload:SetSize(120, 24)
 	IASettings.reload:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 4 + 120 + 4, -IASettings:GetHeight() + 24 + 4)
 	IASettings.reload:SetText(RELOADUI)
-	IASettings.reload:SetScript(
-		"OnClick",
-		function()
+	IASettings.reload:SetScript("OnClick", function()
+		if C_UI then
+			C_UI.Reload()
+		else
+			ReloadUi()
+		end
+	end)
+
+	IASettings.showerrors = CreateFrame("BUTTON", "IASettings" .. ".showerrors", IASettings, "UIPanelButtonTemplate")
+	IASettings.showerrors:SetSize(120, 24)
+	IASettings.showerrors:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 4 + 120 + 4 + 120 + 4, -IASettings:GetHeight() + 24 + 4)
+	IASettings.showerrors:SetText("Show Errors")
+	IASettings.showerrors:SetScript("OnClick", function()
+		if GetCVar("ScriptErrors") == "0" then
+			SetCVar("ScriptErrors", 1)
 			if C_UI then
 				C_UI.Reload()
 			else
 				ReloadUi()
 			end
 		end
-	)
 
-	IASettings.showerrors = CreateFrame("BUTTON", "IASettings" .. ".showerrors", IASettings, "UIPanelButtonTemplate")
-	IASettings.showerrors:SetSize(120, 24)
-	IASettings.showerrors:SetPoint("TOPLEFT", IASettings, "TOPLEFT", 4 + 120 + 4 + 120 + 4, -IASettings:GetHeight() + 24 + 4)
-	IASettings.showerrors:SetText("Show Errors")
-	IASettings.showerrors:SetScript(
-		"OnClick",
-		function()
-			if GetCVar("ScriptErrors") == "0" then
-				SetCVar("ScriptErrors", 1)
-				if C_UI then
-					C_UI.Reload()
-				else
-					ReloadUi()
-				end
-			end
-
-			ImproveAny:UpdateShowErrors()
-		end
-	)
+		ImproveAny:UpdateShowErrors()
+	end)
 
 	function ImproveAny:UpdateShowErrors()
 		if GetCVar("ScriptErrors") == "0" then
@@ -676,9 +535,7 @@ end
 function ImproveAny:CheckBlockedWords()
 	if IATAB and ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
 		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-			if strlen(v) < 3 then
-				ImproveAny:MSG("|cFFFF0000" .. "Blockword \"" .. v .. "\" is to short!")
-			end
+			if strlen(v) < 3 then ImproveAny:MSG("|cFFFF0000" .. "Blockword \"" .. v .. "\" is to short!") end
 		end
 	end
 end

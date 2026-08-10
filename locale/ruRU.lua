@@ -1,114 +1,108 @@
 -- ruRU Russian
 local _, ImproveAny = ...
-function ImproveAny:Lang_ruRU()
-	local tab = {
-		["GENERAL"] = "Общие",
-		["SHOWMINIMAPBUTTON"] = "Показывать кнопку на миникарте",
-		["UIFONT"] = "Шрифт интерфейса",
-		["WORLDTEXTSCALE"] = "Масштаб текста в мире",
-		["MAXZOOM"] = "Максимальное увеличение",
-		["HIDEPVPBADGE"] = "Скрыть значки PvP",
-		["TOP_OFFSET"] = "Отступ крепления фрейма - сверху",
-		["LEFT_OFFSET"] = "Отступ крепления фрейма - слева",
-		["PANEl_SPACING_X"] = "Отступ фреймов",
-		["BAGSAMESIZE"] = "Все сумки одинакового размера",
-		["BAGSIZE"] = "Размер сумки",
-		["QUICKGAMEPLAY"] = "Быстрый игровой процесс",
-		["FASTLOOTING"] = "Быстрый сбор лута",
-		["COMBAT"] = "Бой",
-		["COMBATTEXTICONS"] = "Иконки боевого текста",
-		["COMBATTEXTPOSITION"] = "Позиция боевого текста",
-		["COMBATTEXTX"] = "Позиция боевого текста X",
-		["COMBATTEXTY"] = "Позиция боевого текста Y",
-		["CHAT"] = "Чат",
-		["CHATSHORTCHANNELS"] = "Короткие названия каналов чата",
-		["CHATITEMICONS"] = "Иконки предметов",
-		["CHATCLASSICONS"] = "Иконки классов",
-		["CHATRACEICONS"] = "Иконки расы/типов тела",
-		["CHATLEVELS"] = "Уровни игроков",
-		["CHATCLASSCOLORS"] = "Цвета классов",
-		["MINIMAP"] = "Миникарта",
-		["MINIMAPHIDEBORDER"] = "Скрыть границу миникарты",
-		["MINIMAPHIDEZOOMBUTTONS"] = "Скрыть кнопки масштаба миникарты",
-		["MINIMAPSCROLLZOOM"] = "Масштаб миникарты с помощью колесика мыши",
-		["MINIMAPSHAPESQUARE"] = "Квадратная миникарта",
-		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Сделать кнопки миникарты перемещаемыми",
-		["XPBAR"] = "Полоса опыта",
-		["XPNUMBERLEVEL"] = "Число уровня персонажа",
-		["XPPERCENTLEVEL"] = "Процент уровня персонажа",
-		["XPNUMBER"] = "Число опыта",
-		["XPPERCENT"] = "Процент опыта",
-		["XPNUMBERQUESTCOMPLETE"] = "Число опыта за завершенные квесты",
-		["XPPERCENTQUESTCOMPLETE"] = "Процент опыта за завершенные квесты",
-		["XPNUMBERKILLSTOLEVELUP"] = "Число убийств до повышения уровня",
-		["XPPERCENTKILLSTOLEVELUP"] = "Процент убийств до повышения уровня",
-		["XPNUMBERMISSING"] = "Недостающее число опыта",
-		["XPPERCENTMISSING"] = "Недостающий процент опыта",
-		["XPNUMBEREXHAUSTION"] = "Число опыта усталости",
-		["XPPERCENTEXHAUSTION"] = "Процент опыта усталости",
-		["XPHIDEUNKNOWNVALUES"] = "Скрыть неизвестные значения опыта",
-		["XPHIDEARTWORK"] = "Скрыть оформление полосы опыта",
-		["XPBARTEXTSHOWINVERTED"] = "Инвертировать отображение/скрытие текста полосы опыта",
-		["REPBAR"] = "Полоса репутации",
-		["REPNUMBER"] = "Число репутации",
-		["REPPERCENT"] = "Процент репутации",
-		["REPHIDEARTWORK"] = "Скрыть оформление полосы репутации",
-		["UNITFRAMES"] = "Рамки юнитов",
-		["RFHIDEBUFFIDSINCOMBAT"] = "Скрыть ID баффов для рейдовых фреймов (в бою)",
-		["RFHIDEBUFFIDSINNOTCOMBAT"] = "Скрыть ID баффов для рейдовых фреймов (вне боя)",
-		["RAIDFRAMEMOREBUFFS"] = "Больше баффов для рейдовых фреймов",
-		["BUFFSCALE"] = "Масштаб баффов",
-		["DEBUFFSCALE"] = "Масштаб дебаффов",
-		["OVERWRITERAIDFRAMESIZE"] = "Переопределить размер рейдовых фреймов",
-		["RAIDFRAMEW"] = "Ширина рейдовых фреймов",
-		["RAIDFRAMEH"] = "Высота рейдовых фреймов",
-		["EXTRAS"] = "Дополнительно",
-		["MONEYBAR"] = "Полоса денег",
-		["MONEYBARPERHOUR"] = "Полоса денег за час",
-		["TOKENBAR"] = "Полоса жетона WoW",
-		["IAILVLBAR"] = "Полоса уровня предметов",
-		["SKILLBARS"] = "Полосы навыков (профессии, навыки оружия)",
-		["CASTBAR"] = "Полоса каста",
-		["DURABILITY"] = "Прочность (показывает уровень предмета, стоимость ремонта)",
-		["MICROMENUCOLORED"] = "Цветное микроменю",
-		["SHOWDURABILITYUNDER"] = "Показывать прочность, если ниже:",
-		["FREESPACEBAGS"] = "Показывать свободное место для каждой сумки",
-		["WORLDMAP"] = "Карта мира",
-		["WORLDMAPZOOM"] = "Масштаб карты мира с помощью колесика мыши (расширенный масштаб)",
-		["BAGMODE"] = "Режим сумок",
-		["STATUSBARWIDTH"] = "Ширина полос состояния (полоса опыта, полоса репутации)",
-		["UIFONTINDEX"] = "Шрифт",
-		["BAGMODEINDEX"] = "Режим сумок",
-		["TOOLTIPSELLPRICE"] = "Подсказка - цена продажи",
-		["TOOLTIPEXPANSION"] = "Подсказка - игровое дополнение",
-		["ADDEDIN"] = "Добавлено в:",
-		["EXPANSION"] = "%s%s",
-		["LFGSHOWLANGUAGEFLAG"] = "ЛФГ - Показывать флаг языка",
-		["LFGSHOWCLASSICON"] = "ЛФГ - Показывать иконку класса",
-		["LFGSHOWOVERALLSCORE"] = "ЛФГ - Показывать общий рейтинг",
-		["LFGSHOWDUNGEONSCORE"] = "ЛФГ - Показывать рейтинг подземелий",
-		["LFGSHOWDUNGEONKEY"] = "ЛФГ - Показывать ключ подземелий",
-		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Скрыть оформление дополнительной кнопки действия",
-		["IAPingFrame"] = "Полоса пинга",
-		["WORLDMAPcoordSP"] = "Координаты (игрок) (карта мира)",
-		["WORLDMAPcoordSC"] = "Координаты (курсор) (карта мира)",
-		["COORDSFONTSIZE"] = "Размер шрифта координат",
-		["IACoordsFrame"] = "Рамка координат",
-		["RIGHTCLICKSELFCAST"] = "ПКМ для каста на себя",
-		["BLOCKWORDS"] = "Заблокированные слова",
-		["FRAMES"] = "Окна (фреймы)",
-		["WIDEFRAMES"] = "Широкие окна (широкие фреймы)",
-		["AUTOACCEPTQUESTS"] = "Автоматически принимать задания",
-		["AUTOCHECKINQUESTS"] = "Автоматически сдавать задания",
-		["COMBINEMMBTNS"] = "Объединить кнопки миникарты",
-		["IMPROVEBAGS"] = "Улучшить сумки (поиск/сортировка)",
-		["IMPROVETRADESKILLFRAME"] = "Улучшить окно профессий (наличие материалов, поиск)",
-		["CHARACTERFRAMEAUTOEXPAND"] = "Автоматически раскрывать окно персонажа",
-		["FRAMEANCHOR"] = "Крепление фрейма",
-		["AUTOSELLJUNK"] = "Автоматически продавать хлам",
-		["AUTOREPAIR"] = "Автоматически ремонтировать экипировку",
-		["NEW"] = "НОВОЕ",
-	}
-
-	ImproveAny:UpdateLanguageTab(tab)
-end
+ImproveAny:AddTrans("ruRU", "LID_GENERAL", "Общие")
+ImproveAny:AddTrans("ruRU", "LID_SHOWMINIMAPBUTTON", "Показывать кнопку на миникарте")
+ImproveAny:AddTrans("ruRU", "LID_UIFONT", "Шрифт интерфейса")
+ImproveAny:AddTrans("ruRU", "LID_WORLDTEXTSCALE", "Масштаб текста в мире")
+ImproveAny:AddTrans("ruRU", "LID_MAXZOOM", "Максимальное увеличение")
+ImproveAny:AddTrans("ruRU", "LID_HIDEPVPBADGE", "Скрыть значки PvP")
+ImproveAny:AddTrans("ruRU", "LID_TOP_OFFSET", "Отступ крепления фрейма - сверху")
+ImproveAny:AddTrans("ruRU", "LID_LEFT_OFFSET", "Отступ крепления фрейма - слева")
+ImproveAny:AddTrans("ruRU", "LID_PANEl_SPACING_X", "Отступ фреймов")
+ImproveAny:AddTrans("ruRU", "LID_BAGSAMESIZE", "Все сумки одинакового размера")
+ImproveAny:AddTrans("ruRU", "LID_BAGSIZE", "Размер сумки")
+ImproveAny:AddTrans("ruRU", "LID_QUICKGAMEPLAY", "Быстрый игровой процесс")
+ImproveAny:AddTrans("ruRU", "LID_FASTLOOTING", "Быстрый сбор лута")
+ImproveAny:AddTrans("ruRU", "LID_COMBAT", "Бой")
+ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTICONS", "Иконки боевого текста")
+ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTPOSITION", "Позиция боевого текста")
+ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTX", "Позиция боевого текста X")
+ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTY", "Позиция боевого текста Y")
+ImproveAny:AddTrans("ruRU", "LID_CHAT", "Чат")
+ImproveAny:AddTrans("ruRU", "LID_CHATSHORTCHANNELS", "Короткие названия каналов чата")
+ImproveAny:AddTrans("ruRU", "LID_CHATITEMICONS", "Иконки предметов")
+ImproveAny:AddTrans("ruRU", "LID_CHATCLASSICONS", "Иконки классов")
+ImproveAny:AddTrans("ruRU", "LID_CHATRACEICONS", "Иконки расы/типов тела")
+ImproveAny:AddTrans("ruRU", "LID_CHATLEVELS", "Уровни игроков")
+ImproveAny:AddTrans("ruRU", "LID_CHATCLASSCOLORS", "Цвета классов")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAP", "Миникарта")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAPHIDEBORDER", "Скрыть границу миникарты")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAPHIDEZOOMBUTTONS", "Скрыть кнопки масштаба миникарты")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAPSCROLLZOOM", "Масштаб миникарты с помощью колесика мыши")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAPSHAPESQUARE", "Квадратная миникарта")
+ImproveAny:AddTrans("ruRU", "LID_MINIMAPMINIMAPBUTTONSMOVABLE", "Сделать кнопки миникарты перемещаемыми")
+ImproveAny:AddTrans("ruRU", "LID_XPBAR", "Полоса опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBERLEVEL", "Число уровня персонажа")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENTLEVEL", "Процент уровня персонажа")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBER", "Число опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENT", "Процент опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBERQUESTCOMPLETE", "Число опыта за завершенные квесты")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENTQUESTCOMPLETE", "Процент опыта за завершенные квесты")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBERKILLSTOLEVELUP", "Число убийств до повышения уровня")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENTKILLSTOLEVELUP", "Процент убийств до повышения уровня")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBERMISSING", "Недостающее число опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENTMISSING", "Недостающий процент опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPNUMBEREXHAUSTION", "Число опыта усталости")
+ImproveAny:AddTrans("ruRU", "LID_XPPERCENTEXHAUSTION", "Процент опыта усталости")
+ImproveAny:AddTrans("ruRU", "LID_XPHIDEUNKNOWNVALUES", "Скрыть неизвестные значения опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPHIDEARTWORK", "Скрыть оформление полосы опыта")
+ImproveAny:AddTrans("ruRU", "LID_XPBARTEXTSHOWINVERTED", "Инвертировать отображение/скрытие текста полосы опыта")
+ImproveAny:AddTrans("ruRU", "LID_REPBAR", "Полоса репутации")
+ImproveAny:AddTrans("ruRU", "LID_REPNUMBER", "Число репутации")
+ImproveAny:AddTrans("ruRU", "LID_REPPERCENT", "Процент репутации")
+ImproveAny:AddTrans("ruRU", "LID_REPHIDEARTWORK", "Скрыть оформление полосы репутации")
+ImproveAny:AddTrans("ruRU", "LID_UNITFRAMES", "Рамки юнитов")
+ImproveAny:AddTrans("ruRU", "LID_RFHIDEBUFFIDSINCOMBAT", "Скрыть ID баффов для рейдовых фреймов (в бою)")
+ImproveAny:AddTrans("ruRU", "LID_RFHIDEBUFFIDSINNOTCOMBAT", "Скрыть ID баффов для рейдовых фреймов (вне боя)")
+ImproveAny:AddTrans("ruRU", "LID_RAIDFRAMEMOREBUFFS", "Больше баффов для рейдовых фреймов")
+ImproveAny:AddTrans("ruRU", "LID_BUFFSCALE", "Масштаб баффов")
+ImproveAny:AddTrans("ruRU", "LID_DEBUFFSCALE", "Масштаб дебаффов")
+ImproveAny:AddTrans("ruRU", "LID_OVERWRITERAIDFRAMESIZE", "Переопределить размер рейдовых фреймов")
+ImproveAny:AddTrans("ruRU", "LID_RAIDFRAMEW", "Ширина рейдовых фреймов")
+ImproveAny:AddTrans("ruRU", "LID_RAIDFRAMEH", "Высота рейдовых фреймов")
+ImproveAny:AddTrans("ruRU", "LID_EXTRAS", "Дополнительно")
+ImproveAny:AddTrans("ruRU", "LID_MONEYBAR", "Полоса денег")
+ImproveAny:AddTrans("ruRU", "LID_MONEYBARPERHOUR", "Полоса денег за час")
+ImproveAny:AddTrans("ruRU", "LID_TOKENBAR", "Полоса жетона WoW")
+ImproveAny:AddTrans("ruRU", "LID_IAILVLBAR", "Полоса уровня предметов")
+ImproveAny:AddTrans("ruRU", "LID_SKILLBARS", "Полосы навыков (профессии, навыки оружия)")
+ImproveAny:AddTrans("ruRU", "LID_CASTBAR", "Полоса каста")
+ImproveAny:AddTrans("ruRU", "LID_DURABILITY", "Прочность (показывает уровень предмета, стоимость ремонта)")
+ImproveAny:AddTrans("ruRU", "LID_MICROMENUCOLORED", "Цветное микроменю")
+ImproveAny:AddTrans("ruRU", "LID_SHOWDURABILITYUNDER", "Показывать прочность, если ниже:")
+ImproveAny:AddTrans("ruRU", "LID_FREESPACEBAGS", "Показывать свободное место для каждой сумки")
+ImproveAny:AddTrans("ruRU", "LID_WORLDMAP", "Карта мира")
+ImproveAny:AddTrans("ruRU", "LID_WORLDMAPZOOM", "Масштаб карты мира с помощью колесика мыши (расширенный масштаб)")
+ImproveAny:AddTrans("ruRU", "LID_BAGMODE", "Режим сумок")
+ImproveAny:AddTrans("ruRU", "LID_STATUSBARWIDTH", "Ширина полос состояния (полоса опыта, полоса репутации)")
+ImproveAny:AddTrans("ruRU", "LID_UIFONTINDEX", "Шрифт")
+ImproveAny:AddTrans("ruRU", "LID_BAGMODEINDEX", "Режим сумок")
+ImproveAny:AddTrans("ruRU", "LID_TOOLTIPSELLPRICE", "Подсказка - цена продажи")
+ImproveAny:AddTrans("ruRU", "LID_TOOLTIPEXPANSION", "Подсказка - игровое дополнение")
+ImproveAny:AddTrans("ruRU", "LID_ADDEDIN", "Добавлено в:")
+ImproveAny:AddTrans("ruRU", "LID_EXPANSION", "%s%s")
+ImproveAny:AddTrans("ruRU", "LID_LFGSHOWLANGUAGEFLAG", "ЛФГ - Показывать флаг языка")
+ImproveAny:AddTrans("ruRU", "LID_LFGSHOWCLASSICON", "ЛФГ - Показывать иконку класса")
+ImproveAny:AddTrans("ruRU", "LID_LFGSHOWOVERALLSCORE", "ЛФГ - Показывать общий рейтинг")
+ImproveAny:AddTrans("ruRU", "LID_LFGSHOWDUNGEONSCORE", "ЛФГ - Показывать рейтинг подземелий")
+ImproveAny:AddTrans("ruRU", "LID_LFGSHOWDUNGEONKEY", "ЛФГ - Показывать ключ подземелий")
+ImproveAny:AddTrans("ruRU", "LID_HIDEEXTRAACTIONBUTTONARTWORK", "Скрыть оформление дополнительной кнопки действия")
+ImproveAny:AddTrans("ruRU", "LID_IAPingFrame", "Полоса пинга")
+ImproveAny:AddTrans("ruRU", "LID_WORLDMAPcoordSP", "Координаты (игрок) (карта мира)")
+ImproveAny:AddTrans("ruRU", "LID_WORLDMAPcoordSC", "Координаты (курсор) (карта мира)")
+ImproveAny:AddTrans("ruRU", "LID_COORDSFONTSIZE", "Размер шрифта координат")
+ImproveAny:AddTrans("ruRU", "LID_IACoordsFrame", "Рамка координат")
+ImproveAny:AddTrans("ruRU", "LID_RIGHTCLICKSELFCAST", "ПКМ для каста на себя")
+ImproveAny:AddTrans("ruRU", "LID_BLOCKWORDS", "Заблокированные слова")
+ImproveAny:AddTrans("ruRU", "LID_FRAMES", "Окна (фреймы)")
+ImproveAny:AddTrans("ruRU", "LID_WIDEFRAMES", "Широкие окна (широкие фреймы)")
+ImproveAny:AddTrans("ruRU", "LID_AUTOACCEPTQUESTS", "Автоматически принимать задания")
+ImproveAny:AddTrans("ruRU", "LID_AUTOCHECKINQUESTS", "Автоматически сдавать задания")
+ImproveAny:AddTrans("ruRU", "LID_COMBINEMMBTNS", "Объединить кнопки миникарты")
+ImproveAny:AddTrans("ruRU", "LID_IMPROVEBAGS", "Улучшить сумки (поиск/сортировка)")
+ImproveAny:AddTrans("ruRU", "LID_IMPROVETRADESKILLFRAME", "Улучшить окно профессий (наличие материалов, поиск)")
+ImproveAny:AddTrans("ruRU", "LID_CHARACTERFRAMEAUTOEXPAND", "Автоматически раскрывать окно персонажа")
+ImproveAny:AddTrans("ruRU", "LID_FRAMEANCHOR", "Крепление фрейма")
+ImproveAny:AddTrans("ruRU", "LID_AUTOSELLJUNK", "Автоматически продавать хлам")
+ImproveAny:AddTrans("ruRU", "LID_AUTOREPAIR", "Автоматически ремонтировать экипировку")
+ImproveAny:AddTrans("ruRU", "LID_NEW", "НОВОЕ")

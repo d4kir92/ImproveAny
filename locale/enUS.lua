@@ -1,121 +1,108 @@
 -- enUS English
 local _, ImproveAny = ...
-function ImproveAny:UpdateLanguageTab(tab)
-	local lang = ImproveAny:GetLangTab()
-	for i, v in pairs(tab) do
-		lang[i] = v
-	end
-end
-
-function ImproveAny:Lang_enUS()
-	local tab = {
-		["GENERAL"] = "General",
-		["SHOWMINIMAPBUTTON"] = "Show Minimap Button",
-		["UIFONT"] = "Ui Font",
-		["WORLDTEXTSCALE"] = "World Text Scale",
-		["MAXZOOM"] = "Max Zoom Distance",
-		["HIDEPVPBADGE"] = "Hide PVP Badge Icons",
-		["TOP_OFFSET"] = "Frame Anchor Spacing - Top",
-		["LEFT_OFFSET"] = "Frame Anchor Spacing - Left",
-		["PANEl_SPACING_X"] = "Frame Spacing",
-		["BAGSAMESIZE"] = "All Bags Same Size",
-		["BAGSIZE"] = "Bag size",
-		["QUICKGAMEPLAY"] = "Quick Gameplay",
-		["FASTLOOTING"] = "Fast Looting",
-		["COMBAT"] = "Combat",
-		["COMBATTEXTICONS"] = "CombatText Icons",
-		["COMBATTEXTPOSITION"] = "CombatText Position",
-		["COMBATTEXTX"] = "CombatText Position X",
-		["COMBATTEXTY"] = "CombatText Position Y",
-		["CHAT"] = "Chat",
-		["CHATSHORTCHANNELS"] = "Short Chat Channels",
-		["CHATITEMICONS"] = "Item Icons",
-		["CHATCLASSICONS"] = "Class Icons",
-		["CHATRACEICONS"] = "Race/BodyType Icons",
-		["CHATLEVELS"] = "Player Levels",
-		["CHATCLASSCOLORS"] = "Class Colors",
-		["MINIMAP"] = "Minimap",
-		["MINIMAPHIDEBORDER"] = "Minimap Hide Border",
-		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap Hide Zoom Buttons",
-		["MINIMAPSCROLLZOOM"] = "Minimap Zoom with Mousewheel",
-		["MINIMAPSHAPESQUARE"] = "Square Minimap",
-		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Make minimap buttons movable",
-		["XPBAR"] = "XPBar",
-		["XPNUMBERLEVEL"] = "Character Level Number",
-		["XPPERCENTLEVEL"] = "Character Level Percent",
-		["XPNUMBER"] = "XP Number",
-		["XPPERCENT"] = "XP Percent",
-		["XPNUMBERQUESTCOMPLETE"] = "Quest-Completed-XP Number",
-		["XPPERCENTQUESTCOMPLETE"] = "Quest-Completed-XP Percent",
-		["XPNUMBERKILLSTOLEVELUP"] = "Kills To Level Up Number",
-		["XPPERCENTKILLSTOLEVELUP"] = "Kills To Level Up Percent",
-		["XPNUMBERMISSING"] = "Missing XP Number",
-		["XPPERCENTMISSING"] = "Missing XP Percent",
-		["XPNUMBEREXHAUSTION"] = "XP Exhaustion Number",
-		["XPPERCENTEXHAUSTION"] = "XP Exhaustion Percent",
-		["XPHIDEUNKNOWNVALUES"] = "Hide unknown XP values",
-		["XPHIDEARTWORK"] = "XPBar Hide Artwork",
-		["XPBARTEXTSHOWINVERTED"] = "Invert show/hide XPBar text",
-		["REPBAR"] = "Reputation Bar",
-		["REPNUMBER"] = "Reputation Number",
-		["REPPERCENT"] = "Reputation Percent",
-		["REPHIDEARTWORK"] = "Reputation Bar Hide Artwork",
-		["UNITFRAMES"] = "UnitFrames",
-		["RFHIDEBUFFIDSINCOMBAT"] = "Hide BuffIds for Raidframe (In Combat)",
-		["RFHIDEBUFFIDSINNOTCOMBAT"] = "Hide BuffIds for Raidframe (Outside of Combat)",
-		["RAIDFRAMEMOREBUFFS"] = "Raidframe more Buffs",
-		["BUFFSCALE"] = "Buff-Scale",
-		["DEBUFFSCALE"] = "Debuff-Scale",
-		["OVERWRITERAIDFRAMESIZE"] = "Override Raidframe-Size",
-		["RAIDFRAMEW"] = "Raidframe Width",
-		["RAIDFRAMEH"] = "Raidframe Height",
-		["EXTRAS"] = "Extras",
-		["MONEYBAR"] = "Money Bar",
-		["MONEYBARPERHOUR"] = "Money Bar per Hour",
-		["TOKENBAR"] = "Token Bar",
-		["IAILVLBAR"] = "Itemlevel Bar",
-		["SKILLBARS"] = "Skillbars (Professions, Weaponskills)",
-		["CASTBAR"] = "Castbar",
-		["DURABILITY"] = "Durability (Shows ItemLevel, Repaircosts)",
-		["MICROMENUCOLORED"] = "Micro Menu Colored",
-		["SHOWDURABILITYUNDER"] = "Show Durability, when under:",
-		["FREESPACEBAGS"] = "Show Freespace for each Bag",
-		["WORLDMAP"] = "WorldMap",
-		["WORLDMAPZOOM"] = "WorldMap Zoom with Mousewheel (Extended Zoom)",
-		["BAGMODE"] = "Bag Mode",
-		["STATUSBARWIDTH"] = "Status Bar Width (XPbar, Reputationbar)",
-		["UIFONTINDEX"] = "Font",
-		["BAGMODEINDEX"] = "Bag mode",
-		["TOOLTIPSELLPRICE"] = "Tooltip - Sellprice",
-		["TOOLTIPEXPANSION"] = "Tooltip - Game-Expansion",
-		["ADDEDIN"] = "Added in:",
-		["EXPANSION"] = "%s%s",
-		["LFGSHOWLANGUAGEFLAG"] = "LFG - Show Language Flag",
-		["LFGSHOWCLASSICON"] = "LFG - Show Class Icon",
-		["LFGSHOWOVERALLSCORE"] = "LFG - Show Overall Score",
-		["LFGSHOWDUNGEONSCORE"] = "LFG - Show Dungeon Score",
-		["LFGSHOWDUNGEONKEY"] = "LFG - Show Dungeon Key",
-		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Hide Extra Action Button Artwork",
-		["IAPingFrame"] = "Ping Bar",
-		["WORLDMAPCOORDSP"] = "Coords (Player) (WorldMap)",
-		["WORLDMAPCOORDSC"] = "Coords (Cursor) (WorldMap)",
-		["COORDSFONTSIZE"] = "Coords Fontsize",
-		["IACoordsFrame"] = "Coords Frame",
-		["RIGHTCLICKSELFCAST"] = "Right click to selfcast",
-		["BLOCKWORDS"] = "Blockwords",
-		["FRAMES"] = "Windows (Frames)",
-		["WIDEFRAMES"] = "Wide Windows (Wide Frames)",
-		["AUTOACCEPTQUESTS"] = "Auto Accept Quests",
-		["AUTOCHECKINQUESTS"] = "Auto Complete Quests",
-		["COMBINEMMBTNS"] = "Combine Minimap Buttons",
-		["IMPROVEBAGS"] = "Improve Bags (Search/Sort)",
-		["IMPROVETRADESKILLFRAME"] = "Improve Tradeskillframe (Has Materials, Search)",
-		["CHARACTERFRAMEAUTOEXPAND"] = "Auto expand Characterframe",
-		["FRAMEANCHOR"] = "Frame Anchor",
-		["AUTOSELLJUNK"] = "Auto sell Junk",
-		["AUTOREPAIR"] = "Auto repair Gear",
-		["NEW"] = "NEW",
-	}
-
-	ImproveAny:UpdateLanguageTab(tab)
-end
+ImproveAny:AddTrans("enUS", "LID_GENERAL", "General")
+ImproveAny:AddTrans("enUS", "LID_SHOWMINIMAPBUTTON", "Show Minimap Button")
+ImproveAny:AddTrans("enUS", "LID_UIFONT", "Ui Font")
+ImproveAny:AddTrans("enUS", "LID_WORLDTEXTSCALE", "World Text Scale")
+ImproveAny:AddTrans("enUS", "LID_MAXZOOM", "Max Zoom Distance")
+ImproveAny:AddTrans("enUS", "LID_HIDEPVPBADGE", "Hide PVP Badge Icons")
+ImproveAny:AddTrans("enUS", "LID_TOP_OFFSET", "Frame Anchor Spacing - Top")
+ImproveAny:AddTrans("enUS", "LID_LEFT_OFFSET", "Frame Anchor Spacing - Left")
+ImproveAny:AddTrans("enUS", "LID_PANEl_SPACING_X", "Frame Spacing")
+ImproveAny:AddTrans("enUS", "LID_BAGSAMESIZE", "All Bags Same Size")
+ImproveAny:AddTrans("enUS", "LID_BAGSIZE", "Bag size")
+ImproveAny:AddTrans("enUS", "LID_QUICKGAMEPLAY", "Quick Gameplay")
+ImproveAny:AddTrans("enUS", "LID_FASTLOOTING", "Fast Looting")
+ImproveAny:AddTrans("enUS", "LID_COMBAT", "Combat")
+ImproveAny:AddTrans("enUS", "LID_COMBATTEXTICONS", "CombatText Icons")
+ImproveAny:AddTrans("enUS", "LID_COMBATTEXTPOSITION", "CombatText Position")
+ImproveAny:AddTrans("enUS", "LID_COMBATTEXTX", "CombatText Position X")
+ImproveAny:AddTrans("enUS", "LID_COMBATTEXTY", "CombatText Position Y")
+ImproveAny:AddTrans("enUS", "LID_CHAT", "Chat")
+ImproveAny:AddTrans("enUS", "LID_CHATSHORTCHANNELS", "Short Chat Channels")
+ImproveAny:AddTrans("enUS", "LID_CHATITEMICONS", "Item Icons")
+ImproveAny:AddTrans("enUS", "LID_CHATCLASSICONS", "Class Icons")
+ImproveAny:AddTrans("enUS", "LID_CHATRACEICONS", "Race/BodyType Icons")
+ImproveAny:AddTrans("enUS", "LID_CHATLEVELS", "Player Levels")
+ImproveAny:AddTrans("enUS", "LID_CHATCLASSCOLORS", "Class Colors")
+ImproveAny:AddTrans("enUS", "LID_MINIMAP", "Minimap")
+ImproveAny:AddTrans("enUS", "LID_MINIMAPHIDEBORDER", "Minimap Hide Border")
+ImproveAny:AddTrans("enUS", "LID_MINIMAPHIDEZOOMBUTTONS", "Minimap Hide Zoom Buttons")
+ImproveAny:AddTrans("enUS", "LID_MINIMAPSCROLLZOOM", "Minimap Zoom with Mousewheel")
+ImproveAny:AddTrans("enUS", "LID_MINIMAPSHAPESQUARE", "Square Minimap")
+ImproveAny:AddTrans("enUS", "LID_MINIMAPMINIMAPBUTTONSMOVABLE", "Make minimap buttons movable")
+ImproveAny:AddTrans("enUS", "LID_XPBAR", "XPBar")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBERLEVEL", "Character Level Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENTLEVEL", "Character Level Percent")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBER", "XP Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENT", "XP Percent")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBERQUESTCOMPLETE", "Quest-Completed-XP Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENTQUESTCOMPLETE", "Quest-Completed-XP Percent")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBERKILLSTOLEVELUP", "Kills To Level Up Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENTKILLSTOLEVELUP", "Kills To Level Up Percent")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBERMISSING", "Missing XP Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENTMISSING", "Missing XP Percent")
+ImproveAny:AddTrans("enUS", "LID_XPNUMBEREXHAUSTION", "XP Exhaustion Number")
+ImproveAny:AddTrans("enUS", "LID_XPPERCENTEXHAUSTION", "XP Exhaustion Percent")
+ImproveAny:AddTrans("enUS", "LID_XPHIDEUNKNOWNVALUES", "Hide unknown XP values")
+ImproveAny:AddTrans("enUS", "LID_XPHIDEARTWORK", "XPBar Hide Artwork")
+ImproveAny:AddTrans("enUS", "LID_XPBARTEXTSHOWINVERTED", "Invert show/hide XPBar text")
+ImproveAny:AddTrans("enUS", "LID_REPBAR", "Reputation Bar")
+ImproveAny:AddTrans("enUS", "LID_REPNUMBER", "Reputation Number")
+ImproveAny:AddTrans("enUS", "LID_REPPERCENT", "Reputation Percent")
+ImproveAny:AddTrans("enUS", "LID_REPHIDEARTWORK", "Reputation Bar Hide Artwork")
+ImproveAny:AddTrans("enUS", "LID_UNITFRAMES", "UnitFrames")
+ImproveAny:AddTrans("enUS", "LID_RFHIDEBUFFIDSINCOMBAT", "Hide BuffIds for Raidframe (In Combat)")
+ImproveAny:AddTrans("enUS", "LID_RFHIDEBUFFIDSINNOTCOMBAT", "Hide BuffIds for Raidframe (Outside of Combat)")
+ImproveAny:AddTrans("enUS", "LID_RAIDFRAMEMOREBUFFS", "Raidframe more Buffs")
+ImproveAny:AddTrans("enUS", "LID_BUFFSCALE", "Buff-Scale")
+ImproveAny:AddTrans("enUS", "LID_DEBUFFSCALE", "Debuff-Scale")
+ImproveAny:AddTrans("enUS", "LID_OVERWRITERAIDFRAMESIZE", "Override Raidframe-Size")
+ImproveAny:AddTrans("enUS", "LID_RAIDFRAMEW", "Raidframe Width")
+ImproveAny:AddTrans("enUS", "LID_RAIDFRAMEH", "Raidframe Height")
+ImproveAny:AddTrans("enUS", "LID_EXTRAS", "Extras")
+ImproveAny:AddTrans("enUS", "LID_MONEYBAR", "Money Bar")
+ImproveAny:AddTrans("enUS", "LID_MONEYBARPERHOUR", "Money Bar per Hour")
+ImproveAny:AddTrans("enUS", "LID_TOKENBAR", "Token Bar")
+ImproveAny:AddTrans("enUS", "LID_IAILVLBAR", "Itemlevel Bar")
+ImproveAny:AddTrans("enUS", "LID_SKILLBARS", "Skillbars (Professions, Weaponskills)")
+ImproveAny:AddTrans("enUS", "LID_CASTBAR", "Castbar")
+ImproveAny:AddTrans("enUS", "LID_DURABILITY", "Durability (Shows ItemLevel, Repaircosts)")
+ImproveAny:AddTrans("enUS", "LID_MICROMENUCOLORED", "Micro Menu Colored")
+ImproveAny:AddTrans("enUS", "LID_SHOWDURABILITYUNDER", "Show Durability, when under:")
+ImproveAny:AddTrans("enUS", "LID_FREESPACEBAGS", "Show Freespace for each Bag")
+ImproveAny:AddTrans("enUS", "LID_WORLDMAP", "WorldMap")
+ImproveAny:AddTrans("enUS", "LID_WORLDMAPZOOM", "WorldMap Zoom with Mousewheel (Extended Zoom)")
+ImproveAny:AddTrans("enUS", "LID_BAGMODE", "Bag Mode")
+ImproveAny:AddTrans("enUS", "LID_STATUSBARWIDTH", "Status Bar Width (XPbar, Reputationbar)")
+ImproveAny:AddTrans("enUS", "LID_UIFONTINDEX", "Font")
+ImproveAny:AddTrans("enUS", "LID_BAGMODEINDEX", "Bag mode")
+ImproveAny:AddTrans("enUS", "LID_TOOLTIPSELLPRICE", "Tooltip - Sellprice")
+ImproveAny:AddTrans("enUS", "LID_TOOLTIPEXPANSION", "Tooltip - Game-Expansion")
+ImproveAny:AddTrans("enUS", "LID_ADDEDIN", "Added in:")
+ImproveAny:AddTrans("enUS", "LID_EXPANSION", "%s%s")
+ImproveAny:AddTrans("enUS", "LID_LFGSHOWLANGUAGEFLAG", "LFG - Show Language Flag")
+ImproveAny:AddTrans("enUS", "LID_LFGSHOWCLASSICON", "LFG - Show Class Icon")
+ImproveAny:AddTrans("enUS", "LID_LFGSHOWOVERALLSCORE", "LFG - Show Overall Score")
+ImproveAny:AddTrans("enUS", "LID_LFGSHOWDUNGEONSCORE", "LFG - Show Dungeon Score")
+ImproveAny:AddTrans("enUS", "LID_LFGSHOWDUNGEONKEY", "LFG - Show Dungeon Key")
+ImproveAny:AddTrans("enUS", "LID_HIDEEXTRAACTIONBUTTONARTWORK", "Hide Extra Action Button Artwork")
+ImproveAny:AddTrans("enUS", "LID_IAPingFrame", "Ping Bar")
+ImproveAny:AddTrans("enUS", "LID_WORLDMAPCOORDSP", "Coords (Player) (WorldMap)")
+ImproveAny:AddTrans("enUS", "LID_WORLDMAPCOORDSC", "Coords (Cursor) (WorldMap)")
+ImproveAny:AddTrans("enUS", "LID_COORDSFONTSIZE", "Coords Fontsize")
+ImproveAny:AddTrans("enUS", "LID_IACoordsFrame", "Coords Frame")
+ImproveAny:AddTrans("enUS", "LID_RIGHTCLICKSELFCAST", "Right click to selfcast")
+ImproveAny:AddTrans("enUS", "LID_BLOCKWORDS", "Blockwords")
+ImproveAny:AddTrans("enUS", "LID_FRAMES", "Windows (Frames)")
+ImproveAny:AddTrans("enUS", "LID_WIDEFRAMES", "Wide Windows (Wide Frames)")
+ImproveAny:AddTrans("enUS", "LID_AUTOACCEPTQUESTS", "Auto Accept Quests")
+ImproveAny:AddTrans("enUS", "LID_AUTOCHECKINQUESTS", "Auto Complete Quests")
+ImproveAny:AddTrans("enUS", "LID_COMBINEMMBTNS", "Combine Minimap Buttons")
+ImproveAny:AddTrans("enUS", "LID_IMPROVEBAGS", "Improve Bags (Search/Sort)")
+ImproveAny:AddTrans("enUS", "LID_IMPROVETRADESKILLFRAME", "Improve Tradeskillframe (Has Materials, Search)")
+ImproveAny:AddTrans("enUS", "LID_CHARACTERFRAMEAUTOEXPAND", "Auto expand Characterframe")
+ImproveAny:AddTrans("enUS", "LID_FRAMEANCHOR", "Frame Anchor")
+ImproveAny:AddTrans("enUS", "LID_AUTOSELLJUNK", "Auto sell Junk")
+ImproveAny:AddTrans("enUS", "LID_AUTOREPAIR", "Auto repair Gear")
+ImproveAny:AddTrans("enUS", "LID_NEW", "NEW")

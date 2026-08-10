@@ -3,7 +3,15 @@
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen
+## Notes-esES: Interfaces de usuario mejoradas
+## Notes-esMX: Interfaces de usuario mejoradas
+## Notes-frFR: Interfaces utilisateur améliorées
+## Notes-itIT: Interfacce utente migliorate
+## Notes-koKR: 개선된 사용자 인터페이스
+## Notes-ptBR: Interfaces de usuário aprimoradas
 ## Notes-ruRU: Улучшает пользовательский интерфейс
+## Notes-zhCN: 改进的用户界面
+## Notes-zhTW: 改良的使用者介面
 ## Author: D4KiR |T132115:16:16:0:0|t
 ## Category: Other
 ## Category-deDE: Anderes
@@ -31,7 +39,6 @@ libs\db.lua
 locale\enUS.lua
 locale\deDE.lua
 locale\ruRU.lua
-libs\lang.lua
 
 ele\bags.lua
 ele\castbar.lua

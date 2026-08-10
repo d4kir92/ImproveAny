@@ -1,114 +1,108 @@
 -- deDE German Deutsch
 local _, ImproveAny = ...
-function ImproveAny:Lang_deDE()
-	local tab = {
-		["GENERAL"] = "Allgemein",
-		["SHOWMINIMAPBUTTON"] = "Minimapknopf anzeigen",
-		["UIFONT"] = "Ui Schriftart",
-		["WORLDTEXTSCALE"] = "Welttext Skala",
-		["MAXZOOM"] = "Maximale Zoomstufe",
-		["HIDEPVPBADGE"] = "PVP-Abzeichen-Symbole ausblenden",
-		["TOP_OFFSET"] = "Fenster Anker Abstand - Oben",
-		["LEFT_OFFSET"] = "Fenster Anker Abstand - Links",
-		["PANEl_SPACING_X"] = "Fenster Abstand",
-		["BAGSAMESIZE"] = "Alle Taschen gleich groß",
-		["BAGSIZE"] = "Taschengröße",
-		["QUICKGAMEPLAY"] = "Schnelles Gameplay",
-		["FASTLOOTING"] = "Schnelles Plündern",
-		["COMBAT"] = "Kampf",
-		["COMBATTEXTICONS"] = "Kampftext",
-		["COMBATTEXTPOSITION"] = "Kampftext Position",
-		["COMBATTEXTX"] = "Kampftext Position X",
-		["COMBATTEXTY"] = "Kampftext Position Y",
-		["CHAT"] = "Chat",
-		["CHATSHORTCHANNELS"] = "Kurze Chat-Kanäle",
-		["CHATITEMICONS"] = "Gegenstandssymbole",
-		["CHATCLASSICONS"] = "Klassensymbole",
-		["CHATRACEICONS"] = "Völker/KörperTyp Symbole",
-		["CHATLEVELS"] = "Spieler-Stufen",
-		["CHATCLASSCOLORS"] = "Klassenfarben",
-		["MINIMAP"] = "Minimap",
-		["MINIMAPHIDEBORDER"] = "Rand der Minimap ausblenden",
-		["MINIMAPHIDEZOOMBUTTONS"] = "Minimap-Zoom-Schaltflächen ausblenden",
-		["MINIMAPSCROLLZOOM"] = "Minimap-Zoom mit Mausrad",
-		["MINIMAPSHAPESQUARE"] = "Quadratische Minimap",
-		["MINIMAPMINIMAPBUTTONSMOVABLE"] = "Minimap-Knöpfe verschiebbar machen",
-		["XPBAR"] = "XPBar",
-		["XPNUMBERLEVEL"] = "Charakterstufe Nummer",
-		["XPPERCENTLEVEL"] = "Charakterstufe Prozent",
-		["XPNUMBER"] = "XP Nummer",
-		["XPPERCENT"] = "XP Prozent",
-		["XPNUMBERQUESTCOMPLETE"] = "Fertige-Quests-XP Nummer",
-		["XPPERCENTQUESTCOMPLETE"] = "Fertige-Quests-XP Prozent",
-		["XPNUMBERKILLSTOLEVELUP"] = "Tötungen zum Aufstieg (Level Up) Nummer",
-		["XPPERCENTKILLSTOLEVELUP"] = "Tötungen zum Aufstieg (Level Up) Prozent",
-		["XPNUMBERMISSING"] = "Fehlende XP Nummer",
-		["XPPERCENTMISSING"] = "Fehlende XP Prozent",
-		["XPNUMBEREXHAUSTION"] = "XP-Erschöpfung Nummer",
-		["XPPERCENTEXHAUSTION"] = "XP-Erschöpfung Prozent",
-		["XPHIDEUNKNOWNVALUES"] = "Verstecke unbekannte XP Zahlen",
-		["XPHIDEARTWORK"] = "XP-Leiste Kunstwerk ausblenden",
-		["XPBARTEXTSHOWINVERTED"] = "Ein-/Ausblenden des XPBar-Textes invertieren",
-		["REPBAR"] = "Rufleiste",
-		["REPNUMBER"] = "Ruf Nummer",
-		["REPPERCENT"] = "Ruf Prozent",
-		["REPHIDEARTWORK"] = "Rufleiste - Kunstwerk ausblenden",
-		["UNITFRAMES"] = "Einheitenfenster (UnitFrames)",
-		["RFHIDEBUFFIDSINCOMBAT"] = "BuffIds für RaidFrame verstecken (Im Kampf)",
-		["RFHIDEBUFFIDSINNOTCOMBAT"] = "BuffIds für RaidFrame verstecken (Außerhalb vom Kampf)",
-		["RAIDFRAMEMOREBUFFS"] = "RaidFrame mit mehr Buffs",
-		["BUFFSCALE"] = "Buff-Skalierung (Buff-Scale)",
-		["DEBUFFSCALE"] = "Debuff-Skalierung (Debuff-Scale)",
-		["OVERWRITERAIDFRAMESIZE"] = "Raidfenster-Größe überschreiben",
-		["RAIDFRAMEW"] = "Raidfenster Weite",
-		["RAIDFRAMEH"] = "Raidfenster Höhe",
-		["EXTRAS"] = "Extras",
-		["MONEYBAR"] = "Geldleiste",
-		["MONEYBARPERHOUR"] = "Geldleiste pro Stunde",
-		["TOKENBAR"] = "Wertmarkenleiste",
-		["IAILVLBAR"] = "Gegenstandsstufeleiste (Itemlevel)",
-		["SKILLBARS"] = "Skillbars (Berufe, Waffenfertigkeiten)",
-		["CASTBAR"] = "Zauberleiste (Castbar)",
-		["DURABILITY"] = "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)",
-		["MICROMENUCOLORED"] = "Mikro Menü eingefärbt",
-		["SHOWDURABILITYUNDER"] = "Zeige Haltbarkeit, wenn unter",
-		["FREESPACEBAGS"] = "Freiraum für jede Tasche anzeigen",
-		["WORLDMAP"] = "Weltkarte",
-		["WORLDMAPZOOM"] = "Weltkarten-Zoom mit Mausrad (mit erhöhtem Zoom)",
-		["BAGMODE"] = "Taschen Modus",
-		["STATUSBARWIDTH"] = "Statusleiste weite (XPleiste, Rufleiste)",
-		["UIFONTINDEX"] = "Schriftart",
-		["BAGMODEINDEX"] = "Taschen Modus",
-		["TOOLTIPSELLPRICE"] = "Tooltip - Verkaufspreis",
-		["TOOLTIPEXPANSION"] = "Tooltip - Spiel-Erweiterung",
-		["ADDEDIN"] = "Hinzugefügt in:",
-		["EXPANSION"] = "%s%s",
-		["LFGSHOWLANGUAGEFLAG"] = "LFG - Sprachflaggen anzeigen",
-		["LFGSHOWCLASSICON"] = "LFG - Klassensymbole anzeigen",
-		["LFGSHOWOVERALLSCORE"] = "LFG - Gesamtwertung anzeigen",
-		["LFGSHOWDUNGEONSCORE"] = "LFG - Dungeonwertung anzeigen",
-		["LFGSHOWDUNGEONKEY"] = "LFG - Dungeonstein anzeigen",
-		["HIDEEXTRAACTIONBUTTONARTWORK"] = "Extra-Aktionknopf Kunst ausblenden",
-		["IAPingFrame"] = "Ping Leiste",
-		["WORLDMAPCOORDSP"] = "Koordinaten (Spieler) (Weltkarte)",
-		["WORLDMAPCOORDSC"] = "Koordinaten (Zeiger) (Weltkarte)",
-		["COORDSFONTSIZE"] = "Koordinatenschriftgröße",
-		["IACoordsFrame"] = "Koordinatenfenster",
-		["RIGHTCLICKSELFCAST"] = "Rechtsklick für Selbstzauber",
-		["BLOCKWORDS"] = "Blockwörter",
-		["FRAMES"] = "Fenster",
-		["WIDEFRAMES"] = "Weite Fenster",
-		["AUTOACCEPTQUESTS"] = "Automatisch Quests annehmen",
-		["AUTOCHECKINQUESTS"] = "Automatisch Quests abgeben",
-		["COMBINEMMBTNS"] = "Minimap Knöpfe zusammenfassen",
-		["IMPROVEBAGS"] = "Taschen verbessern (Suche/Sortieren)",
-		["IMPROVETRADESKILLFRAME"] = "Berufsfenster verbessern (Material vorhanden, Suche)",
-		["CHARACTERFRAMEAUTOEXPAND"] = "Charakterfenster automatisch erweitern",
-		["FRAMEANCHOR"] = "Fenster Anker",
-		["AUTOSELLJUNK"] = "Automatisch Müll verkaufen",
-		["AUTOREPAIR"] = "Automatisch reparieren",
-		["NEW"] = "NEU",
-	}
-
-	ImproveAny:UpdateLanguageTab(tab)
-end
+ImproveAny:AddTrans("deDE", "LID_GENERAL", "Allgemein")
+ImproveAny:AddTrans("deDE", "LID_SHOWMINIMAPBUTTON", "Minimapknopf anzeigen")
+ImproveAny:AddTrans("deDE", "LID_UIFONT", "Ui Schriftart")
+ImproveAny:AddTrans("deDE", "LID_WORLDTEXTSCALE", "Welttext Skala")
+ImproveAny:AddTrans("deDE", "LID_MAXZOOM", "Maximale Zoomstufe")
+ImproveAny:AddTrans("deDE", "LID_HIDEPVPBADGE", "PVP-Abzeichen-Symbole ausblenden")
+ImproveAny:AddTrans("deDE", "LID_TOP_OFFSET", "Fenster Anker Abstand - Oben")
+ImproveAny:AddTrans("deDE", "LID_LEFT_OFFSET", "Fenster Anker Abstand - Links")
+ImproveAny:AddTrans("deDE", "LID_PANEl_SPACING_X", "Fenster Abstand")
+ImproveAny:AddTrans("deDE", "LID_BAGSAMESIZE", "Alle Taschen gleich groß")
+ImproveAny:AddTrans("deDE", "LID_BAGSIZE", "Taschengröße")
+ImproveAny:AddTrans("deDE", "LID_QUICKGAMEPLAY", "Schnelles Gameplay")
+ImproveAny:AddTrans("deDE", "LID_FASTLOOTING", "Schnelles Plündern")
+ImproveAny:AddTrans("deDE", "LID_COMBAT", "Kampf")
+ImproveAny:AddTrans("deDE", "LID_COMBATTEXTICONS", "Kampftext")
+ImproveAny:AddTrans("deDE", "LID_COMBATTEXTPOSITION", "Kampftext Position")
+ImproveAny:AddTrans("deDE", "LID_COMBATTEXTX", "Kampftext Position X")
+ImproveAny:AddTrans("deDE", "LID_COMBATTEXTY", "Kampftext Position Y")
+ImproveAny:AddTrans("deDE", "LID_CHAT", "Chat")
+ImproveAny:AddTrans("deDE", "LID_CHATSHORTCHANNELS", "Kurze Chat-Kanäle")
+ImproveAny:AddTrans("deDE", "LID_CHATITEMICONS", "Gegenstandssymbole")
+ImproveAny:AddTrans("deDE", "LID_CHATCLASSICONS", "Klassensymbole")
+ImproveAny:AddTrans("deDE", "LID_CHATRACEICONS", "Völker/KörperTyp Symbole")
+ImproveAny:AddTrans("deDE", "LID_CHATLEVELS", "Spieler-Stufen")
+ImproveAny:AddTrans("deDE", "LID_CHATCLASSCOLORS", "Klassenfarben")
+ImproveAny:AddTrans("deDE", "LID_MINIMAP", "Minimap")
+ImproveAny:AddTrans("deDE", "LID_MINIMAPHIDEBORDER", "Rand der Minimap ausblenden")
+ImproveAny:AddTrans("deDE", "LID_MINIMAPHIDEZOOMBUTTONS", "Minimap-Zoom-Schaltflächen ausblenden")
+ImproveAny:AddTrans("deDE", "LID_MINIMAPSCROLLZOOM", "Minimap-Zoom mit Mausrad")
+ImproveAny:AddTrans("deDE", "LID_MINIMAPSHAPESQUARE", "Quadratische Minimap")
+ImproveAny:AddTrans("deDE", "LID_MINIMAPMINIMAPBUTTONSMOVABLE", "Minimap-Knöpfe verschiebbar machen")
+ImproveAny:AddTrans("deDE", "LID_XPBAR", "XPBar")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBERLEVEL", "Charakterstufe Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENTLEVEL", "Charakterstufe Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBER", "XP Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENT", "XP Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBERQUESTCOMPLETE", "Fertige-Quests-XP Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENTQUESTCOMPLETE", "Fertige-Quests-XP Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBERKILLSTOLEVELUP", "Tötungen zum Aufstieg (Level Up) Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENTKILLSTOLEVELUP", "Tötungen zum Aufstieg (Level Up) Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBERMISSING", "Fehlende XP Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENTMISSING", "Fehlende XP Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPNUMBEREXHAUSTION", "XP-Erschöpfung Nummer")
+ImproveAny:AddTrans("deDE", "LID_XPPERCENTEXHAUSTION", "XP-Erschöpfung Prozent")
+ImproveAny:AddTrans("deDE", "LID_XPHIDEUNKNOWNVALUES", "Verstecke unbekannte XP Zahlen")
+ImproveAny:AddTrans("deDE", "LID_XPHIDEARTWORK", "XP-Leiste Kunstwerk ausblenden")
+ImproveAny:AddTrans("deDE", "LID_XPBARTEXTSHOWINVERTED", "Ein-/Ausblenden des XPBar-Textes invertieren")
+ImproveAny:AddTrans("deDE", "LID_REPBAR", "Rufleiste")
+ImproveAny:AddTrans("deDE", "LID_REPNUMBER", "Ruf Nummer")
+ImproveAny:AddTrans("deDE", "LID_REPPERCENT", "Ruf Prozent")
+ImproveAny:AddTrans("deDE", "LID_REPHIDEARTWORK", "Rufleiste - Kunstwerk ausblenden")
+ImproveAny:AddTrans("deDE", "LID_UNITFRAMES", "Einheitenfenster (UnitFrames)")
+ImproveAny:AddTrans("deDE", "LID_RFHIDEBUFFIDSINCOMBAT", "BuffIds für RaidFrame verstecken (Im Kampf)")
+ImproveAny:AddTrans("deDE", "LID_RFHIDEBUFFIDSINNOTCOMBAT", "BuffIds für RaidFrame verstecken (Außerhalb vom Kampf)")
+ImproveAny:AddTrans("deDE", "LID_RAIDFRAMEMOREBUFFS", "RaidFrame mit mehr Buffs")
+ImproveAny:AddTrans("deDE", "LID_BUFFSCALE", "Buff-Skalierung (Buff-Scale)")
+ImproveAny:AddTrans("deDE", "LID_DEBUFFSCALE", "Debuff-Skalierung (Debuff-Scale)")
+ImproveAny:AddTrans("deDE", "LID_OVERWRITERAIDFRAMESIZE", "Raidfenster-Größe überschreiben")
+ImproveAny:AddTrans("deDE", "LID_RAIDFRAMEW", "Raidfenster Weite")
+ImproveAny:AddTrans("deDE", "LID_RAIDFRAMEH", "Raidfenster Höhe")
+ImproveAny:AddTrans("deDE", "LID_EXTRAS", "Extras")
+ImproveAny:AddTrans("deDE", "LID_MONEYBAR", "Geldleiste")
+ImproveAny:AddTrans("deDE", "LID_MONEYBARPERHOUR", "Geldleiste pro Stunde")
+ImproveAny:AddTrans("deDE", "LID_TOKENBAR", "Wertmarkenleiste")
+ImproveAny:AddTrans("deDE", "LID_IAILVLBAR", "Gegenstandsstufeleiste (Itemlevel)")
+ImproveAny:AddTrans("deDE", "LID_SKILLBARS", "Skillbars (Berufe, Waffenfertigkeiten)")
+ImproveAny:AddTrans("deDE", "LID_CASTBAR", "Zauberleiste (Castbar)")
+ImproveAny:AddTrans("deDE", "LID_DURABILITY", "Haltbarkeit (Zeigt ItemLevel, Reparaturkosten)")
+ImproveAny:AddTrans("deDE", "LID_MICROMENUCOLORED", "Mikro Menü eingefärbt")
+ImproveAny:AddTrans("deDE", "LID_SHOWDURABILITYUNDER", "Zeige Haltbarkeit, wenn unter")
+ImproveAny:AddTrans("deDE", "LID_FREESPACEBAGS", "Freiraum für jede Tasche anzeigen")
+ImproveAny:AddTrans("deDE", "LID_WORLDMAP", "Weltkarte")
+ImproveAny:AddTrans("deDE", "LID_WORLDMAPZOOM", "Weltkarten-Zoom mit Mausrad (mit erhöhtem Zoom)")
+ImproveAny:AddTrans("deDE", "LID_BAGMODE", "Taschen Modus")
+ImproveAny:AddTrans("deDE", "LID_STATUSBARWIDTH", "Statusleiste weite (XPleiste, Rufleiste)")
+ImproveAny:AddTrans("deDE", "LID_UIFONTINDEX", "Schriftart")
+ImproveAny:AddTrans("deDE", "LID_BAGMODEINDEX", "Taschen Modus")
+ImproveAny:AddTrans("deDE", "LID_TOOLTIPSELLPRICE", "Tooltip - Verkaufspreis")
+ImproveAny:AddTrans("deDE", "LID_TOOLTIPEXPANSION", "Tooltip - Spiel-Erweiterung")
+ImproveAny:AddTrans("deDE", "LID_ADDEDIN", "Hinzugefügt in:")
+ImproveAny:AddTrans("deDE", "LID_EXPANSION", "%s%s")
+ImproveAny:AddTrans("deDE", "LID_LFGSHOWLANGUAGEFLAG", "LFG - Sprachflaggen anzeigen")
+ImproveAny:AddTrans("deDE", "LID_LFGSHOWCLASSICON", "LFG - Klassensymbole anzeigen")
+ImproveAny:AddTrans("deDE", "LID_LFGSHOWOVERALLSCORE", "LFG - Gesamtwertung anzeigen")
+ImproveAny:AddTrans("deDE", "LID_LFGSHOWDUNGEONSCORE", "LFG - Dungeonwertung anzeigen")
+ImproveAny:AddTrans("deDE", "LID_LFGSHOWDUNGEONKEY", "LFG - Dungeonstein anzeigen")
+ImproveAny:AddTrans("deDE", "LID_HIDEEXTRAACTIONBUTTONARTWORK", "Extra-Aktionknopf Kunst ausblenden")
+ImproveAny:AddTrans("deDE", "LID_IAPingFrame", "Ping Leiste")
+ImproveAny:AddTrans("deDE", "LID_WORLDMAPCOORDSP", "Koordinaten (Spieler) (Weltkarte)")
+ImproveAny:AddTrans("deDE", "LID_WORLDMAPCOORDSC", "Koordinaten (Zeiger) (Weltkarte)")
+ImproveAny:AddTrans("deDE", "LID_COORDSFONTSIZE", "Koordinatenschriftgröße")
+ImproveAny:AddTrans("deDE", "LID_IACoordsFrame", "Koordinatenfenster")
+ImproveAny:AddTrans("deDE", "LID_RIGHTCLICKSELFCAST", "Rechtsklick für Selbstzauber")
+ImproveAny:AddTrans("deDE", "LID_BLOCKWORDS", "Blockwörter")
+ImproveAny:AddTrans("deDE", "LID_FRAMES", "Fenster")
+ImproveAny:AddTrans("deDE", "LID_WIDEFRAMES", "Weite Fenster")
+ImproveAny:AddTrans("deDE", "LID_AUTOACCEPTQUESTS", "Automatisch Quests annehmen")
+ImproveAny:AddTrans("deDE", "LID_AUTOCHECKINQUESTS", "Automatisch Quests abgeben")
+ImproveAny:AddTrans("deDE", "LID_COMBINEMMBTNS", "Minimap Knöpfe zusammenfassen")
+ImproveAny:AddTrans("deDE", "LID_IMPROVEBAGS", "Taschen verbessern (Suche/Sortieren)")
+ImproveAny:AddTrans("deDE", "LID_IMPROVETRADESKILLFRAME", "Berufsfenster verbessern (Material vorhanden, Suche)")
+ImproveAny:AddTrans("deDE", "LID_CHARACTERFRAMEAUTOEXPAND", "Charakterfenster automatisch erweitern")
+ImproveAny:AddTrans("deDE", "LID_FRAMEANCHOR", "Fenster Anker")
+ImproveAny:AddTrans("deDE", "LID_AUTOSELLJUNK", "Automatisch Müll verkaufen")
+ImproveAny:AddTrans("deDE", "LID_AUTOREPAIR", "Automatisch reparieren")
+ImproveAny:AddTrans("deDE", "LID_NEW", "NEU")
