@@ -19,41 +19,19 @@ function ImproveAny:InitMoneyBar()
 			IAMoneyBar.Reset:SetSize(100, 20)
 			IAMoneyBar.Reset:SetPoint("BOTTOM", IAMoneyBar, 0, 0)
 			IAMoneyBar.Reset:SetText(RESET)
-			IAMoneyBar.Reset:SetScript(
-				"OnClick",
-				function(sel, ...)
-					ts = 0
-					oldMoney = GetMoney()
-				end
-			)
+			IAMoneyBar.Reset:SetScript("OnClick", function(sel, ...)
+				ts = 0
+				oldMoney = GetMoney()
+			end)
 
 			IAMoneyBar.Reset:Hide()
 			function IAMoneyBar.Reset:GetMAEle()
 				return IAMoneyBar
 			end
 
-			IAMoneyBar:SetScript(
-				"OnEnter",
-				function(sel)
-					IAMoneyBar.Reset:Show()
-				end
-			)
-
-			IAMoneyBar:SetScript(
-				"OnLeave",
-				function(sel)
-					if not MouseIsOver(IAMoneyBar.Reset) then
-						IAMoneyBar.Reset:Hide()
-					end
-				end
-			)
-
-			IAMoneyBar.Reset:SetScript(
-				"OnLeave",
-				function(sel)
-					IAMoneyBar.Reset:Hide()
-				end
-			)
+			IAMoneyBar:SetScript("OnEnter", function(sel) IAMoneyBar.Reset:Show() end)
+			IAMoneyBar:SetScript("OnLeave", function(sel) if not IAMoneyBar.Reset:IsMouseOver() then IAMoneyBar.Reset:Hide() end end)
+			IAMoneyBar.Reset:SetScript("OnLeave", function(sel) IAMoneyBar.Reset:Hide() end)
 		else
 			IAMoneyBar.text:SetPoint("CENTER", IAMoneyBar, "CENTER", 0, 0)
 		end
@@ -84,15 +62,12 @@ function ImproveAny:InitMoneyBar()
 		end
 
 		IAMoneyBar:MoneyThink()
-		ImproveAny:After(
-			4,
-			function()
-				if ImproveAny:GetWoWBuild() ~= "RETAIL" and (GOLD_AMOUNT_SYMBOL == nil or GOLD_AMOUNT_SYMBOL == "G") then
-					GOLD_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:2:0|t"
-					SILVER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:2:0|t"
-					COPPER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:2:0|t"
-				end
-			end, "MoneyThink 2"
-		)
+		ImproveAny:After(4, function()
+			if ImproveAny:GetWoWBuild() ~= "RETAIL" and (GOLD_AMOUNT_SYMBOL == nil or GOLD_AMOUNT_SYMBOL == "G") then
+				GOLD_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:2:0|t"
+				SILVER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:2:0|t"
+				COPPER_AMOUNT_SYMBOL = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:2:0|t"
+			end
+		end, "MoneyThink 2")
 	end
 end
