@@ -262,9 +262,13 @@ local function IAReload()
 end
 
 local function BuildElementList()
+	local isRetail = ImproveAny:GetWoWBuild() == "RETAIL"
+	local isClassic = ImproveAny:GetWoWBuild() == "CLASSIC"
+	local hasLFGList = C_LFGList ~= nil and C_LFGList.GetApplicantMemberInfo ~= nil
+	local hasMythicScore = hasLFGList and C_LFGList.GetApplicantDungeonScoreForListing ~= nil and C_ChallengeMode ~= nil and C_ChallengeMode.GetDungeonScoreRarityColor ~= nil
 	IASettings:SuspendLayout()
 	AddCategory("GENERAL")
-	AddCheckBox("SHOWMINIMAPBUTTON", ImproveAny:GetWoWBuild() ~= "RETAIL", Call("UpdateMinimapButton"))
+	AddCheckBox("SHOWMINIMAPBUTTON", not isRetail, Call("UpdateMinimapButton"))
 	AddSlider("MAXZOOM", ImproveAny:GetMaxZoom(), Call("UpdateMaxZoom"), 1, ImproveAny:GetMaxZoom(), 0.1, 1)
 	AddCheckBox("HIDEPVPBADGE", false)
 	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
@@ -282,7 +286,6 @@ local function BuildElementList()
 	AddCheckBox("AUTOACCEPTQUESTS", false)
 	AddCheckBox("AUTOCHECKINQUESTS", false)
 	AddCheckBox("FASTLOOTING", false)
-	AddCheckBox("IMPROVEBAGS", true)
 	if CharacterFrameExpandButton then AddCheckBox("CHARACTERFRAMEAUTOEXPAND", true) end
 	AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0)
 	AddCheckBox("IACoordsFrame", false)
@@ -324,18 +327,21 @@ local function BuildElementList()
 	AddCheckBox("MINIMAP", false, Call("UpdateMinimapSettings"))
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddCheckBox("MINIMAPHIDEBORDER", false, Call("UpdateMinimapSettings")) end
 	AddCheckBox("MINIMAPHIDEZOOMBUTTONS", false, Call("UpdateMinimapSettings"))
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCheckBox("MINIMAPSCROLLZOOM", false, Call("UpdateMinimapSettings")) end
+	if not isRetail then AddCheckBox("MINIMAPSCROLLZOOM", false, Call("UpdateMinimapSettings")) end
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddCheckBox("MINIMAPSHAPESQUARE", false, Call("UpdateMinimapSettings")) end
 	AddCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE", false, Call("UpdateMinimapSettings"))
 	AddCheckBox("COMBINEMMBTNS", false, Call("UpdateMinimapSettings"))
-	AddCategory("FRAMES")
-	AddCheckBox("WIDEFRAMES", false)
-	AddCheckBox("IMPROVETRADESKILLFRAME", true)
+	if not isRetail then
+		AddCategory("FRAMES")
+		AddCheckBox("WIDEFRAMES", false)
+		if isClassic then AddCheckBox("IMPROVETRADESKILLFRAME", true) end
+	end
+
 	AddCategory("FRAMEANCHOR")
 	AddSlider("TOP_OFFSET", 116, Call("UpdateUIParentAttribute"), 0, 1000, 5, 0, "FRAMEANCHOR")
 	AddSlider("LEFT_OFFSET", 16, Call("UpdateUIParentAttribute"), 16, 1000, 5, 0, "FRAMEANCHOR")
 	AddSlider("PANEl_SPACING_X", 32, Call("UpdateUIParentAttribute"), 10, 300, 1, 0, "FRAMEANCHOR")
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then
+	if not isRetail then
 		AddCategory("XPBAR")
 		AddCheckBox("XPBAR", false)
 		AddCheckBox("XPNUMBERLEVEL", false)
@@ -359,29 +365,34 @@ local function BuildElementList()
 		AddCheckBox("REPHIDEARTWORK", false)
 	end
 
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCategory("UNITFRAMES") end
 	AddCategory("EXTRAS")
 	AddCheckBox("MONEYBAR", false)
 	AddCheckBox("MONEYBARPERHOUR", false)
 	AddCheckBox("TOKENBAR", false)
 	AddCheckBox("TOKENBARRESTORE", true)
 	AddCheckBox("IAILVLBAR", false)
-	AddCheckBox("SKILLBARS", false)
+	if not isRetail then AddCheckBox("SKILLBARS", false) end
 	AddCheckBox("CASTBAR", false)
 	AddCheckBox("DURABILITY", false)
 	AddCheckBox("RIGHTCLICKSELFCAST", false)
 	AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0)
 	AddCheckBox("WORLDMAP", false)
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" then AddCheckBox("WORLDMAPZOOM", false) end
+	if not isRetail then AddCheckBox("WORLDMAPZOOM", false) end
 	AddCheckBox("WORLDMAPCOORDSP", false)
 	AddCheckBox("WORLDMAPCOORDSC", false)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
-	AddCheckBox("TOOLTIPEXPANSION", false)
-	AddCheckBox("LFGSHOWLANGUAGEFLAG", false)
-	AddCheckBox("LFGSHOWCLASSICON", false)
-	AddCheckBox("LFGSHOWOVERALLSCORE", false)
-	AddCheckBox("LFGSHOWDUNGEONSCORE", false)
-	AddCheckBox("LFGSHOWDUNGEONKEY", false)
+	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
+	if hasLFGList then
+		AddCheckBox("LFGSHOWLANGUAGEFLAG", false)
+		AddCheckBox("LFGSHOWCLASSICON", false)
+	end
+
+	if hasMythicScore then
+		AddCheckBox("LFGSHOWOVERALLSCORE", false)
+		AddCheckBox("LFGSHOWDUNGEONSCORE", false)
+		AddCheckBox("LFGSHOWDUNGEONKEY", false)
+	end
+
 	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
 	AddCheckBox("IAPingFrame", false)
 	IASettings:ResumeLayout()
