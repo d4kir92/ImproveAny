@@ -52,7 +52,6 @@ end
 local function GetCollapsed(key)
 	IATAB = IATAB or {}
 	IATAB["COLLAPSED"] = IATAB["COLLAPSED"] or {}
-
 	return IATAB["COLLAPSED"][key]
 end
 
@@ -63,92 +62,78 @@ local function SetCollapsed(key, collapsed)
 end
 
 local function Call(name)
-	return function()
-		if ImproveAny[name] then ImproveAny[name](ImproveAny) end
-	end
+	return function() if ImproveAny[name] then ImproveAny[name](ImproveAny) end end
 end
 
-local function AddCategory(key)
-	return IASettings:AddCategory(
-		{
-			["label"] = "LID_" .. key,
-			["key"] = key,
-			["search"] = key
-		}
-	)
+local function AddCategory(key, level)
+	return IASettings:AddCategory({
+		["label"] = "LID_" .. key,
+		["key"] = key,
+		["search"] = key,
+		["level"] = level
+	})
 end
 
 local function AddCheckBox(key, val, func)
 	if val == nil then val = true end
-
-	return IASettings:AddCheckbox(
-		{
-			["label"] = "LID_" .. key,
-			["search"] = key,
-			["value"] = ImproveAny:IsEnabled(key, val),
-			["func"] = function(value)
-				ImproveAny:SetEnabled(key, value)
-				if func then func() end
-				EnableSave()
-			end
-		}
-	)
+	return IASettings:AddCheckbox({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = ImproveAny:IsEnabled(key, val),
+		["func"] = function(value)
+			ImproveAny:SetEnabled(key, value)
+			if func then func() end
+			EnableSave()
+		end
+	})
 end
 
 local function AddSlider(key, val, func, vmin, vmax, step, decimals, extra)
 	local search = key
 	if extra then search = key .. " " .. extra end
-
-	return IASettings:AddSlider(
-		{
-			["label"] = "LID_" .. key,
-			["search"] = search,
-			["value"] = ImproveAny:IAGV(key, val),
-			["min"] = vmin,
-			["max"] = vmax,
-			["step"] = step,
-			["decimals"] = decimals,
-			["func"] = function(value)
-				if value == ImproveAny:IAGV(key) then return end
-				ImproveAny:IASV(key, value)
-				if func then func() end
-				EnableSave()
-			end
-		}
-	)
+	return IASettings:AddSlider({
+		["label"] = "LID_" .. key,
+		["search"] = search,
+		["value"] = ImproveAny:IAGV(key, val),
+		["min"] = vmin,
+		["max"] = vmax,
+		["step"] = step,
+		["decimals"] = decimals,
+		["func"] = function(value)
+			if value == ImproveAny:IAGV(key) then return end
+			ImproveAny:IASV(key, value)
+			if func then func() end
+			EnableSave()
+		end
+	})
 end
 
 local function AddDropdown(key, val, func, tab)
 	local cur = ImproveAny:IAGV(key, val)
-
-	return IASettings:AddDropdown(
-		{
-			["label"] = "LID_" .. key,
-			["search"] = key,
-			["value"] = cur,
-			["choices"] = UI:ChoicesFromMap(tab, cur),
-			["func"] = function(value)
-				if value == ImproveAny:IAGV(key) then return end
-				ImproveAny:IASV(key, value)
-				if func then func() end
-				EnableSave()
-			end
-		}
-	)
+	return IASettings:AddDropdown({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = cur,
+		["choices"] = UI:ChoicesFromMap(tab, cur),
+		["func"] = function(value)
+			if value == ImproveAny:IAGV(key) then return end
+			ImproveAny:IASV(key, value)
+			if func then func() end
+			EnableSave()
+		end
+	})
 end
 
 local function AddEditBox(key, val, func)
-	return IASettings:AddEditbox(
-		{
-			["label"] = "LID_" .. key,
-			["search"] = key,
-			["value"] = ImproveAny:IAGV(key, val),
-			["func"] = function(value, box)
-				ImproveAny:IASV(key, value)
-				if func then func(box) end
-			end
-		}
-	)
+	return IASettings:AddEditbox({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = ImproveAny:IAGV(key, val),
+		["func"] = function(value, box)
+			ImproveAny:IASV(key, value)
+			if func then func(box) end
+		end
+	})
 end
 
 function ImproveAny:UpdateILVLIcons()
@@ -250,17 +235,8 @@ local function BuildElementList()
 	IASettings:SuspendLayout()
 	AddCategory("GENERAL")
 	AddCheckBox("SHOWMINIMAPBUTTON", not isRetail, Call("UpdateMinimapButton"))
+	AddCategory("CONSOLEVARIABLES")
 	AddSlider("MAXZOOM", ImproveAny:GetMaxZoom(), Call("UpdateMaxZoom"), 1, ImproveAny:GetMaxZoom(), 0.1, 1)
-	AddCheckBox("HIDEPVPBADGE", false)
-	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
-	AddCategory("OVERALLUI")
-	AddDropdown("UIFONTINDEX", 1, Call("Fonts"), IAFONTS)
-	AddSlider("WORLDTEXTSCALE", 1.0, Call("UpdateWorldTextScale"), 0.1, 2.0, 0.1, 1)
-	AddCategory("BAGS")
-	AddCheckBox("FREESPACEBAGS", false)
-	AddCheckBox("BAGSAMESIZE", false)
-	AddSlider("BAGSIZE", 30, function() BAGThink.UpdateItemInfos() end, 20, 80, 1, 0)
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddDropdown("BAGMODEINDEX", 1, Call("UpdateBagMode"), IABAGMODES) end
 	AddCategory("QUICKGAMEPLAY")
 	AddCheckBox("AUTOSELLJUNK", true)
 	AddCheckBox("AUTOREPAIR", true)
@@ -268,60 +244,35 @@ local function BuildElementList()
 	AddCheckBox("AUTOCHECKINQUESTS", false)
 	AddCheckBox("FASTLOOTING", false)
 	if CharacterFrameExpandButton then AddCheckBox("CHARACTERFRAMEAUTOEXPAND", true) end
-	AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0)
-	AddCheckBox("IACoordsFrame", false)
-	AddCategory("COMBAT")
-	AddCheckBox("COMBATTEXTICONS", false)
-	AddCheckBox("COMBATTEXTPOSITION", false)
-	AddSlider("COMBATTEXTX", 0, nil, -600, 600, 10, 0)
-	AddSlider("COMBATTEXTY", 0, nil, -250, 250, 10, 0)
-	AddEditBox(
-		"BLOCKWORDS",
-		"",
-		function(eb)
-			eb.lastchange = GetTime()
-			ImproveAny:Debug("settings, lastchange")
-			ImproveAny:After(
-				1,
-				function()
-					if eb.lastchange < GetTime() - 0.9 then
-						ImproveAny:IASV("BLOCKWORDS", eb:GetText())
-						if eb:GetText() ~= "" then
-							ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
-							for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-								if strlen(v) < 3 then
-									ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
-								else
-									ImproveAny:MSG(" • |cFF00FF00" .. v)
-								end
-							end
+	AddCategory("CHAT")
+	AddEditBox("BLOCKWORDS", "", function(eb)
+		eb.lastchange = GetTime()
+		ImproveAny:Debug("settings, lastchange")
+		ImproveAny:After(1, function()
+			if eb.lastchange < GetTime() - 0.9 then
+				ImproveAny:IASV("BLOCKWORDS", eb:GetText())
+				if eb:GetText() ~= "" then
+					ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
+					for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
+						if strlen(v) < 3 then
+							ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
 						else
-							ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
+							ImproveAny:MSG(" • |cFF00FF00" .. v)
 						end
 					end
-				end, "lastchange"
-			)
-		end
-	)
+				else
+					ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
+				end
+			end
+		end, "lastchange")
+	end)
 
-	AddCategory("MINIMAP")
-	AddCheckBox("MINIMAP", false, Call("UpdateMinimapSettings"))
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddCheckBox("MINIMAPHIDEBORDER", false, Call("UpdateMinimapSettings")) end
-	AddCheckBox("MINIMAPHIDEZOOMBUTTONS", false, Call("UpdateMinimapSettings"))
-	if not isRetail then AddCheckBox("MINIMAPSCROLLZOOM", false, Call("UpdateMinimapSettings")) end
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddCheckBox("MINIMAPSHAPESQUARE", false, Call("UpdateMinimapSettings")) end
-	AddCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE", false, Call("UpdateMinimapSettings"))
-	AddCheckBox("COMBINEMMBTNS", false, Call("UpdateMinimapSettings"))
 	if not isRetail then
 		AddCategory("FRAMES")
 		AddCheckBox("WIDEFRAMES", false)
 		if isClassic then AddCheckBox("IMPROVETRADESKILLFRAME", true) end
 	end
 
-	AddCategory("FRAMEANCHOR")
-	AddSlider("TOP_OFFSET", 116, Call("UpdateUIParentAttribute"), 0, 1000, 5, 0, "FRAMEANCHOR")
-	AddSlider("LEFT_OFFSET", 16, Call("UpdateUIParentAttribute"), 16, 1000, 5, 0, "FRAMEANCHOR")
-	AddSlider("PANEl_SPACING_X", 32, Call("UpdateUIParentAttribute"), 10, 300, 1, 0, "FRAMEANCHOR")
 	if not isRetail then
 		AddCategory("XPBAR")
 		AddCheckBox("XPBAR", false)
@@ -346,71 +297,103 @@ local function BuildElementList()
 		AddCheckBox("REPHIDEARTWORK", false)
 	end
 
-	AddCategory("EXTRAS")
-	AddCheckBox("MONEYBAR", false)
-	AddCheckBox("MONEYBARPERHOUR", false)
-	AddCheckBox("TOKENBAR", false)
-	AddCheckBox("TOKENBARRESTORE", true)
-	AddCheckBox("IAILVLBAR", false)
-	if not isRetail then AddCheckBox("SKILLBARS", false) end
+	AddCategory("USERINTERFACE")
+	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
 	AddCheckBox("CASTBAR", false)
-	AddCheckBox("DURABILITY", false)
-	AddCheckBox("RIGHTCLICKSELFCAST", false)
-	AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0)
+	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
+	AddCategory("OVERALLUI", 2)
+	AddDropdown("UIFONTINDEX", 1, Call("Fonts"), IAFONTS)
+	AddSlider("WORLDTEXTSCALE", 1.0, Call("UpdateWorldTextScale"), 0.1, 2.0, 0.1, 1)
+	AddCheckBox("HIDEPVPBADGE", false)
+	AddCategory("FRAMEANCHOR", 3)
+	AddSlider("TOP_OFFSET", 116, Call("UpdateUIParentAttribute"), 0, 1000, 5, 0, "FRAMEANCHOR")
+	AddSlider("LEFT_OFFSET", 16, Call("UpdateUIParentAttribute"), 16, 1000, 5, 0, "FRAMEANCHOR")
+	AddSlider("PANEl_SPACING_X", 32, Call("UpdateUIParentAttribute"), 10, 300, 1, 0, "FRAMEANCHOR")
+	AddCategory("BAGS", 2)
+	AddCheckBox("FREESPACEBAGS", false)
+	AddCheckBox("BAGSAMESIZE", false)
+	AddSlider("BAGSIZE", 30, function() BAGThink.UpdateItemInfos() end, 20, 80, 1, 0)
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddDropdown("BAGMODEINDEX", 1, Call("UpdateBagMode"), IABAGMODES) end
+	AddCategory("MINIMAP", 2)
+	AddCheckBox("MINIMAP", false, Call("UpdateMinimapSettings"))
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddCheckBox("MINIMAPHIDEBORDER", false, Call("UpdateMinimapSettings")) end
+	AddCheckBox("MINIMAPHIDEZOOMBUTTONS", false, Call("UpdateMinimapSettings"))
+	if not isRetail then AddCheckBox("MINIMAPSCROLLZOOM", false, Call("UpdateMinimapSettings")) end
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddCheckBox("MINIMAPSHAPESQUARE", false, Call("UpdateMinimapSettings")) end
+	AddCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE", false, Call("UpdateMinimapSettings"))
+	AddCheckBox("COMBINEMMBTNS", false, Call("UpdateMinimapSettings"))
+	AddCategory("WORLDMAP", 2)
 	AddCheckBox("WORLDMAP", false)
 	if not isRetail then AddCheckBox("WORLDMAPZOOM", false) end
 	AddCheckBox("WORLDMAPCOORDSP", false)
 	AddCheckBox("WORLDMAPCOORDSC", false)
+	AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0)
+	AddCategory("TOOLTIP", 2)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
 	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
 	if hasLFGList then
+		AddCategory("LOOKINGFORGROUP", 2)
 		AddCheckBox("LFGSHOWLANGUAGEFLAG", false)
 		AddCheckBox("LFGSHOWCLASSICON", false)
+		if hasMythicScore then
+			AddCheckBox("LFGSHOWOVERALLSCORE", false)
+			AddCheckBox("LFGSHOWDUNGEONSCORE", false)
+			AddCheckBox("LFGSHOWDUNGEONKEY", false)
+		end
 	end
 
-	if hasMythicScore then
-		AddCheckBox("LFGSHOWOVERALLSCORE", false)
-		AddCheckBox("LFGSHOWDUNGEONSCORE", false)
-		AddCheckBox("LFGSHOWDUNGEONKEY", false)
-	end
-
-	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
+	AddCategory("WIDGETS", 2)
 	AddCheckBox("IAPingFrame", false)
+	AddCheckBox("IAILVLBAR", false)
+	AddCheckBox("IACoordsFrame", false)
+	AddCategory("DURABILITYFRAME", 3)
+	AddCheckBox("DURABILITY", false)
+	AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0)
+	AddCategory("MONEYBAR", 3)
+	AddCheckBox("MONEYBAR", false)
+	AddCheckBox("MONEYBARPERHOUR", false)
+	AddCategory("BADGES", 3)
+	AddCheckBox("TOKENBAR", false)
+	AddCheckBox("TOKENBARRESTORE", true)
+	AddCategory("COMBAT", 2)
+	AddCheckBox("COMBATTEXTICONS", false)
+	AddCheckBox("COMBATTEXTPOSITION", false)
+	AddSlider("COMBATTEXTX", 0, nil, -600, 600, 10, 0)
+	AddSlider("COMBATTEXTY", 0, nil, -250, 250, 10, 0)
+	AddCategory("EXTRAS")
+	if not isRetail then AddCheckBox("SKILLBARS", false) end
+	AddCheckBox("RIGHTCLICKSELFCAST", false)
 	IASettings:ResumeLayout()
 end
 
 function ImproveAny:InitIASettings()
-	ImproveAny:SetVersion(136033, "0.9.227")
+	ImproveAny:SetVersion(136033, "1.0.0")
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
-	IASettings = ImproveAny:CreateUIWindow(
-		{
-			["name"] = "IASettings",
-			["title"] = format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()),
-			["pTab"] = pTab,
-			["width"] = ImproveAny:IAGV("SETTINGSWIDTH", 550),
-			["height"] = ImproveAny:IAGV("SETTINGSHEIGHT", 500),
-			["minWidth"] = 550,
-			["minHeight"] = 300,
-			["onResize"] = function(width, height)
-				ImproveAny:IASV("SETTINGSWIDTH", width)
-				ImproveAny:IASV("SETTINGSHEIGHT", height)
-			end,
-			["onMove"] = function(mp1, mp3, mp4, mp5) ImproveAny:SetElePoint("IASettings", mp1, nil, mp3, mp4, mp5) end,
-			["getCollapsed"] = function(key) return GetCollapsed(key) end,
-			["setCollapsed"] = function(key, collapsed) SetCollapsed(key, collapsed) end,
-			["onClose"] = function() ImproveAny:ToggleSettings() end
-		}
-	)
+	IASettings = ImproveAny:CreateUIWindow({
+		["name"] = "IASettings",
+		["title"] = format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()),
+		["pTab"] = pTab,
+		["width"] = ImproveAny:IAGV("SETTINGSWIDTH", 550),
+		["height"] = ImproveAny:IAGV("SETTINGSHEIGHT", 500),
+		["minWidth"] = 550,
+		["minHeight"] = 300,
+		["onResize"] = function(width, height)
+			ImproveAny:IASV("SETTINGSWIDTH", width)
+			ImproveAny:IASV("SETTINGSHEIGHT", height)
+		end,
+		["onMove"] = function(mp1, mp3, mp4, mp5) ImproveAny:SetElePoint("IASettings", mp1, nil, mp3, mp4, mp5) end,
+		["getCollapsed"] = function(key) return GetCollapsed(key) end,
+		["setCollapsed"] = function(key, collapsed) SetCollapsed(key, collapsed) end,
+		["onClose"] = function() ImproveAny:ToggleSettings() end
+	})
 
 	IASettings:SetFrameLevel(999)
 	IASettings.Search = IASettings:AddSearch()
-	IASettings:AddFooter(
-		{
-			["height"] = 24
-		}
-	)
+	IASettings:AddFooter({
+		["height"] = 24
+	})
 
 	IASettings.save = ImproveAny:CreateButton("IASettings_save", IASettings.footer)
 	IASettings.save:SetSize(112, 24)
@@ -427,17 +410,14 @@ function ImproveAny:InitIASettings()
 	IASettings.showerrors:SetSize(112, 24)
 	IASettings.showerrors:SetPoint("LEFT", IASettings.reload, "RIGHT", 4, 0)
 	IASettings.showerrors:SetText("Show Errors")
-	IASettings.showerrors:SetScript(
-		"OnClick",
-		function()
-			if GetCVar("ScriptErrors") == "0" then
-				SetCVar("ScriptErrors", 1)
-				IAReload()
-			end
-
-			ImproveAny:UpdateShowErrors()
+	IASettings.showerrors:SetScript("OnClick", function()
+		if GetCVar("ScriptErrors") == "0" then
+			SetCVar("ScriptErrors", 1)
+			IAReload()
 		end
-	)
+
+		ImproveAny:UpdateShowErrors()
+	end)
 
 	IASettings.DISCORD = CreateFrame("EditBox", "IASettings_DISCORD", IASettings.footer, "InputBoxTemplate")
 	IASettings.DISCORD:SetSize(160, 24)
