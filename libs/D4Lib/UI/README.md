@@ -15,6 +15,7 @@ so any string starting with `LID_` is translated and any other string is used as
 | `D4UICheckbox.lua` | `win:AddCheckbox` |
 | `D4UISlider.lua` | `win:AddSlider` |
 | `D4UIDropdown.lua` | `win:AddDropdown` |
+| `D4UIEditbox.lua` | `win:AddEditbox` |
 
 ## Usage
 
@@ -54,6 +55,12 @@ win:AddDropdown({
         {value = "BOTTOMRIGHT", label = "LID_BOTTOMRIGHT"},
     },
     func = function(value) MyAddonDB.flagPoint = value end,
+})
+
+win:AddEditbox({
+    label = "LID_BLOCKWORDS",
+    value = MyAddonDB.blockWords,
+    func = function(value) MyAddonDB.blockWords = value end,
 })
 
 win:Show()
@@ -155,6 +162,14 @@ on top of the translated label.
   Everywhere else it falls back to a self-drawn list — the same values and the same
   `func`, just a plain list opened by one button. Lists longer than `maxVisible`
   (12 by default) scroll there instead of growing off-screen.
+- `AddEditbox`: `label`, `value`, `func(value, box)`, `maxLetters`, `numeric`.
+  The label sits above the box, the box stretches to the window width.
+  `func` fires on every actual change of the text, not on every keystroke that leaves
+  it unchanged — debounce it yourself if the change is expensive. `maxLetters` defaults
+  to 0 (unlimited), `numeric = true` restricts input to digits.
+  Escape restores the last value and drops focus, Enter just drops focus.
+  The returned frame has `holder:SetValue(value)` to set the text without firing `func`,
+  `holder.value` is the current text and `holder.control` is the edit box itself.
 
 ## Window
 

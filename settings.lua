@@ -45,7 +45,6 @@ function ImproveAny:GetBagMode()
 end
 
 local UI = ImproveAny.UI
-local EDITBOXHEIGHT = 44
 local function EnableSave()
 	if IASettings and IASettings.save then IASettings.save:Enable() end
 end
@@ -139,35 +138,17 @@ local function AddDropdown(key, val, func, tab)
 end
 
 local function AddEditBox(key, val, func)
-	local name = "IASettings_" .. key
-	local text = ImproveAny:Trans("LID_" .. key)
-	local holder = CreateFrame("Frame", name .. "_Holder", IASettings.content)
-	holder:SetSize(math.max(1, IASettings.contentWidth - 8), EDITBOXHEIGHT)
-	holder.Label = holder:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	holder.Label:SetPoint("TOPLEFT", holder, "TOPLEFT", 0, 0)
-	holder.Label:SetText(text)
-	local eb = CreateFrame("EditBox", name, holder, "InputBoxTemplate")
-	eb:SetPoint("TOPLEFT", holder, "TOPLEFT", 6, -20)
-	eb:SetPoint("TOPRIGHT", holder, "TOPRIGHT", -6, -20)
-	eb:SetHeight(24)
-	eb:SetAutoFocus(false)
-	eb.text = ImproveAny:IAGV(key, val)
-	eb:SetText(ImproveAny:IAGV(key, val))
-	eb:SetScript(
-		"OnTextChanged",
-		function(sel, ...)
-			if sel.text == sel:GetText() then return end
-			ImproveAny:IASV(key, sel:GetText())
-			if func then func(sel, ...) end
-		end
+	return IASettings:AddEditbox(
+		{
+			["label"] = "LID_" .. key,
+			["search"] = key,
+			["value"] = ImproveAny:IAGV(key, val),
+			["func"] = function(value, box)
+				ImproveAny:IASV(key, value)
+				if func then func(box) end
+			end
+		}
 	)
-
-	eb:SetScript("OnEscapePressed", function(sel) sel:ClearFocus() end)
-	eb:SetScript("OnEnterPressed", function(sel) sel:ClearFocus() end)
-	UI:Add(IASettings, holder, EDITBOXHEIGHT, text, true, key)
-	holder.editBox = eb
-
-	return eb
 end
 
 function ImproveAny:UpdateILVLIcons()
