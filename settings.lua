@@ -256,6 +256,7 @@ local function BuildElementList()
 	AddCheckBox("SHOWMINIMAPBUTTON", not isRetail, Call("UpdateMinimapButton"))
 	AddCategory("CONSOLEVARIABLES")
 	AddSlider("MAXZOOM", ImproveAny:GetMaxZoom(), Call("UpdateMaxZoom"), 1, ImproveAny:GetMaxZoom(), 0.1, 1)
+	AddCheckBox("RIGHTCLICKSELFCAST", false)
 	AddCategory("QUICKGAMEPLAY")
 	AddCheckBox("AUTOSELLJUNK", true)
 	AddCheckBox("AUTOREPAIR", true)
@@ -287,14 +288,23 @@ local function BuildElementList()
 		end, "lastchange")
 	end)
 
+	AddCategory("USERINTERFACE")
+	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
+	AddCheckBox("CASTBAR", false)
+	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
+	AddCategory("OVERALLUI", 2)
+	AddDropdown("UIFONTINDEX", 1, Call("Fonts"), IAFONTS)
+	AddSlider("WORLDTEXTSCALE", 1.0, Call("UpdateWorldTextScale"), 0.1, 2.0, 0.1, 1)
+	AddCheckBox("HIDEPVPBADGE", false)
+	AddCategory("FRAMEANCHOR", 3)
+	AddSlider("TOP_OFFSET", 116, Call("UpdateUIParentAttribute"), 0, 1000, 5, 0, "FRAMEANCHOR")
+	AddSlider("LEFT_OFFSET", 16, Call("UpdateUIParentAttribute"), 16, 1000, 5, 0, "FRAMEANCHOR")
+	AddSlider("PANEl_SPACING_X", 32, Call("UpdateUIParentAttribute"), 10, 300, 1, 0, "FRAMEANCHOR")
 	if not isRetail then
-		AddCategory("FRAMES")
+		AddCategory("FRAMES", 2)
 		AddCheckBox("WIDEFRAMES", false)
 		if isClassic then AddCheckBox("IMPROVETRADESKILLFRAME", true) end
-	end
-
-	if not isRetail then
-		AddCategory("XPBAR")
+		AddCategory("XPBAR", 2)
 		AddCheckBox("XPBAR", false)
 		AddCheckBox("XPNUMBERLEVEL", false)
 		AddCheckBox("XPPERCENTLEVEL", false)
@@ -310,25 +320,13 @@ local function BuildElementList()
 		AddCheckBox("XPHIDEARTWORK", false)
 		AddCheckBox("XPHIDEUNKNOWNVALUES", false)
 		AddCheckBox("XPBARTEXTSHOWINVERTED", false)
-		AddCategory("REPBAR")
+		AddCategory("REPBAR", 2)
 		AddCheckBox("REPBAR", false)
 		AddCheckBox("REPNUMBER", false)
 		AddCheckBox("REPPERCENT", false)
 		AddCheckBox("REPHIDEARTWORK", false)
 	end
 
-	AddCategory("USERINTERFACE")
-	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
-	AddCheckBox("CASTBAR", false)
-	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
-	AddCategory("OVERALLUI", 2)
-	AddDropdown("UIFONTINDEX", 1, Call("Fonts"), IAFONTS)
-	AddSlider("WORLDTEXTSCALE", 1.0, Call("UpdateWorldTextScale"), 0.1, 2.0, 0.1, 1)
-	AddCheckBox("HIDEPVPBADGE", false)
-	AddCategory("FRAMEANCHOR", 3)
-	AddSlider("TOP_OFFSET", 116, Call("UpdateUIParentAttribute"), 0, 1000, 5, 0, "FRAMEANCHOR")
-	AddSlider("LEFT_OFFSET", 16, Call("UpdateUIParentAttribute"), 16, 1000, 5, 0, "FRAMEANCHOR")
-	AddSlider("PANEl_SPACING_X", 32, Call("UpdateUIParentAttribute"), 10, 300, 1, 0, "FRAMEANCHOR")
 	AddCategory("BAGS", 2)
 	AddCheckBox("FREESPACEBAGS", false)
 	AddCheckBox("BAGSAMESIZE", false)
@@ -366,6 +364,7 @@ local function BuildElementList()
 	AddCheckBox("IAPingFrame", false)
 	AddCheckBox("IAILVLBAR", false)
 	AddCheckBox("IACoordsFrame", false)
+	if not isRetail then AddCheckBox("SKILLBARS", false) end
 	AddCategory("DURABILITYFRAME", 3)
 	AddCheckBox("DURABILITY", false)
 	AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0)
@@ -380,9 +379,6 @@ local function BuildElementList()
 	AddCheckBox("COMBATTEXTPOSITION", false)
 	AddSlider("COMBATTEXTX", 0, nil, -600, 600, 10, 0)
 	AddSlider("COMBATTEXTY", 0, nil, -250, 250, 10, 0)
-	AddCategory("EXTRAS")
-	if not isRetail then AddCheckBox("SKILLBARS", false) end
-	AddCheckBox("RIGHTCLICKSELFCAST", false)
 	IASettings:ResumeLayout()
 end
 
@@ -391,7 +387,7 @@ function ImproveAny:InitIASettings()
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
-	IASettings = ImproveAny:CreateUIWindow({
+	IASettings = ImproveAny:CreateU1.0.3ow({
 		["name"] = "IASettings",
 		["title"] = format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()),
 		["pTab"] = pTab,
