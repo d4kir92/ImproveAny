@@ -50,7 +50,7 @@ end
 
 function ImproveAny:UpdateWatchedTokens()
 	if restoring then return end
-	if not ImproveAny:IsEnabled("TOKENBARRESTORE", false) then return end
+	if not ImproveAny:IsEnabled("TOKENBARRESTORE", true) then return end
 	local saved = ImproveAny:GetWatchedTokens()
 	for index = 1, GetTokenListSize() do
 		local name, isHeader, isWatched = GetTokenInfo(index)
@@ -118,7 +118,7 @@ end
 
 IATokenBar = CreateFrame("FRAME", "IATokenBar", UIParent)
 function ImproveAny:InitTokenBar()
-	if ImproveAny:IsEnabled("TOKENBARRESTORE", false) then
+	if ImproveAny:IsEnabled("TOKENBARRESTORE", true) then
 		local watcher = CreateFrame("FRAME", "IAWatchedTokens")
 		ImproveAny:RegisterEvent(watcher, "CURRENCY_DISPLAY_UPDATE")
 		ImproveAny:OnEvent(
