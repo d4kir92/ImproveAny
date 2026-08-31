@@ -5,7 +5,7 @@
 ## Interface-Mists: 50504
 ## Interface: 120100
 
-## Version: 1.0.0
+## Version: 1.0.1
 ## Title: ImproveAny by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen
@@ -65,6 +65,7 @@ ele\lfgframe.lua
 ele\micromenu.lua
 ele\minimap.lua
 ele\moneybar.lua
+ele\nameplates.lua
 ele\partymember.lua
 ele\pingframe.lua
 ele\repbar.lua

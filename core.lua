@@ -160,6 +160,7 @@ function ImproveAny:Event(event, ...)
 		end, "AUTOSELLJUNK")
 
 		if ImproveAny.InitMinimap then ImproveAny:InitMinimap() end
+		if ImproveAny.InitNameplateFonts then ImproveAny:InitNameplateFonts() end
 		if ImproveAny.InitMoneyBar then ImproveAny:InitMoneyBar() end
 		if ImproveAny.InitTokenBar then ImproveAny:InitTokenBar() end
 		if ImproveAny.InitIAILVLBar then ImproveAny:InitIAILVLBar() end
