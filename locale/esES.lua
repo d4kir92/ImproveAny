@@ -1,6 +1,8 @@
 -- esES Spanish (Spain)
 local _, ImproveAny = ...
 ImproveAny:AddTrans("esES", "LID_GENERAL", "General")
+ImproveAny:AddTrans("esES", "LID_OVERALLUI", "Interfaz general")
+ImproveAny:AddTrans("esES", "LID_BAGS", "Bolsas")
 ImproveAny:AddTrans("esES", "LID_SHOWMINIMAPBUTTON", "Mostrar Botón del Minimapa")
 ImproveAny:AddTrans("esES", "LID_UIFONT", "Fuente de la Interfaz")
 ImproveAny:AddTrans("esES", "LID_WORLDTEXTSCALE", "Escala del Texto del Mundo")

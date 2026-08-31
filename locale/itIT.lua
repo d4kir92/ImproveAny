@@ -1,6 +1,8 @@
 -- itIT Italian
 local _, ImproveAny = ...
 ImproveAny:AddTrans("itIT", "LID_GENERAL", "Generale")
+ImproveAny:AddTrans("itIT", "LID_OVERALLUI", "Interfaccia generale")
+ImproveAny:AddTrans("itIT", "LID_BAGS", "Borse")
 ImproveAny:AddTrans("itIT", "LID_SHOWMINIMAPBUTTON", "Mostra Pulsante Minimappa")
 ImproveAny:AddTrans("itIT", "LID_UIFONT", "Font Interfaccia")
 ImproveAny:AddTrans("itIT", "LID_WORLDTEXTSCALE", "Scala Testo del Mondo")

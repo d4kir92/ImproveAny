@@ -1,6 +1,8 @@
 -- esMX Spanish (Mexico)
 local _, ImproveAny = ...
 ImproveAny:AddTrans("esMX", "LID_GENERAL", "General")
+ImproveAny:AddTrans("esMX", "LID_OVERALLUI", "Interfaz general")
+ImproveAny:AddTrans("esMX", "LID_BAGS", "Bolsas")
 ImproveAny:AddTrans("esMX", "LID_SHOWMINIMAPBUTTON", "Mostrar Botón del Minimapa")
 ImproveAny:AddTrans("esMX", "LID_UIFONT", "Fuente de la Interfaz")
 ImproveAny:AddTrans("esMX", "LID_WORLDTEXTSCALE", "Escala del Texto del Mundo")

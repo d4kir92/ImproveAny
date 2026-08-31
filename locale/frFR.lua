@@ -1,6 +1,8 @@
 -- frFR French
 local _, ImproveAny = ...
 ImproveAny:AddTrans("frFR", "LID_GENERAL", "Général")
+ImproveAny:AddTrans("frFR", "LID_OVERALLUI", "Interface globale")
+ImproveAny:AddTrans("frFR", "LID_BAGS", "Sacs")
 ImproveAny:AddTrans("frFR", "LID_SHOWMINIMAPBUTTON", "Afficher le Bouton de la Minicarte")
 ImproveAny:AddTrans("frFR", "LID_UIFONT", "Police de l'Interface")
 ImproveAny:AddTrans("frFR", "LID_WORLDTEXTSCALE", "Échelle du Texte du Monde")

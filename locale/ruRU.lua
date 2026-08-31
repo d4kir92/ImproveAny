@@ -1,6 +1,8 @@
 -- ruRU Russian
 local _, ImproveAny = ...
 ImproveAny:AddTrans("ruRU", "LID_GENERAL", "Общие")
+ImproveAny:AddTrans("ruRU", "LID_OVERALLUI", "Общий интерфейс")
+ImproveAny:AddTrans("ruRU", "LID_BAGS", "Сумки")
 ImproveAny:AddTrans("ruRU", "LID_SHOWMINIMAPBUTTON", "Показывать кнопку на миникарте")
 ImproveAny:AddTrans("ruRU", "LID_UIFONT", "Шрифт интерфейса")
 ImproveAny:AddTrans("ruRU", "LID_WORLDTEXTSCALE", "Масштаб текста в мире")

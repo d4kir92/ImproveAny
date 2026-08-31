@@ -1,6 +1,8 @@
 -- zhCN Chinese (Simplified)
 local _, ImproveAny = ...
 ImproveAny:AddTrans("zhCN", "LID_GENERAL", "常规")
+ImproveAny:AddTrans("zhCN", "LID_OVERALLUI", "整体用户界面")
+ImproveAny:AddTrans("zhCN", "LID_BAGS", "背包")
 ImproveAny:AddTrans("zhCN", "LID_SHOWMINIMAPBUTTON", "显示小地图按钮")
 ImproveAny:AddTrans("zhCN", "LID_UIFONT", "界面字体")
 ImproveAny:AddTrans("zhCN", "LID_WORLDTEXTSCALE", "世界文字缩放")

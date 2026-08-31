@@ -1,6 +1,8 @@
 -- koKR Korean
 local _, ImproveAny = ...
 ImproveAny:AddTrans("koKR", "LID_GENERAL", "일반")
+ImproveAny:AddTrans("koKR", "LID_OVERALLUI", "전체 사용자 인터페이스")
+ImproveAny:AddTrans("koKR", "LID_BAGS", "가방")
 ImproveAny:AddTrans("koKR", "LID_SHOWMINIMAPBUTTON", "미니맵 버튼 표시")
 ImproveAny:AddTrans("koKR", "LID_UIFONT", "UI 글꼴")
 ImproveAny:AddTrans("koKR", "LID_WORLDTEXTSCALE", "월드 텍스트 크기")

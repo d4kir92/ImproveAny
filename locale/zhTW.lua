@@ -1,6 +1,8 @@
 -- zhTW Chinese (Traditional)
 local _, ImproveAny = ...
 ImproveAny:AddTrans("zhTW", "LID_GENERAL", "一般")
+ImproveAny:AddTrans("zhTW", "LID_OVERALLUI", "整體使用者介面")
+ImproveAny:AddTrans("zhTW", "LID_BAGS", "背包")
 ImproveAny:AddTrans("zhTW", "LID_SHOWMINIMAPBUTTON", "顯示小地圖按鈕")
 ImproveAny:AddTrans("zhTW", "LID_UIFONT", "介面字型")
 ImproveAny:AddTrans("zhTW", "LID_WORLDTEXTSCALE", "世界文字縮放")

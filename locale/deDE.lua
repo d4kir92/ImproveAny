@@ -1,6 +1,8 @@
 -- deDE German Deutsch
 local _, ImproveAny = ...
 ImproveAny:AddTrans("deDE", "LID_GENERAL", "Allgemein")
+ImproveAny:AddTrans("deDE", "LID_OVERALLUI", "Gesamt-Benutzeroberfläche")
+ImproveAny:AddTrans("deDE", "LID_BAGS", "Taschen")
 ImproveAny:AddTrans("deDE", "LID_SHOWMINIMAPBUTTON", "Minimapknopf anzeigen")
 ImproveAny:AddTrans("deDE", "LID_UIFONT", "Ui Schriftart")
 ImproveAny:AddTrans("deDE", "LID_WORLDTEXTSCALE", "Welttext Skala")

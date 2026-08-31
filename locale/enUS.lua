@@ -1,6 +1,8 @@
 -- enUS English
 local _, ImproveAny = ...
 ImproveAny:AddTrans("enUS", "LID_GENERAL", "General")
+ImproveAny:AddTrans("enUS", "LID_OVERALLUI", "Overall User Interface")
+ImproveAny:AddTrans("enUS", "LID_BAGS", "Bags")
 ImproveAny:AddTrans("enUS", "LID_SHOWMINIMAPBUTTON", "Show Minimap Button")
 ImproveAny:AddTrans("enUS", "LID_UIFONT", "Ui Font")
 ImproveAny:AddTrans("enUS", "LID_WORLDTEXTSCALE", "World Text Scale")

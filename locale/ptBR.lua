@@ -1,6 +1,8 @@
 -- ptBR Portuguese (Brazil)
 local _, ImproveAny = ...
 ImproveAny:AddTrans("ptBR", "LID_GENERAL", "Geral")
+ImproveAny:AddTrans("ptBR", "LID_OVERALLUI", "Interface geral")
+ImproveAny:AddTrans("ptBR", "LID_BAGS", "Bolsas")
 ImproveAny:AddTrans("ptBR", "LID_SHOWMINIMAPBUTTON", "Mostrar Botão do Minimapa")
 ImproveAny:AddTrans("ptBR", "LID_UIFONT", "Fonte da Interface")
 ImproveAny:AddTrans("ptBR", "LID_WORLDTEXTSCALE", "Escala do Texto do Mundo")
