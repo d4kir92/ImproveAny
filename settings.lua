@@ -387,7 +387,7 @@ function ImproveAny:InitIASettings()
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
-	IASettings = ImproveAny:CreateU1.0.3ow({
+	IASettings = ImproveAny:CreateU1.0.4ow({
 		["name"] = "IASettings",
 		["title"] = format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()),
 		["pTab"] = pTab,
