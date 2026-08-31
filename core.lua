@@ -168,6 +168,7 @@ function ImproveAny:Event(event, ...)
 		if ImproveAny.InitBags then ImproveAny:InitBags() end
 		if ImproveAny:IsEnabled("WORLDMAP", false) and ImproveAny.InitWorldMapFrame then ImproveAny:InitWorldMapFrame() end
 		if (ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) or ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false)) and ImproveAny.InitAutoAcceptQuests then ImproveAny:InitAutoAcceptQuests() end
+		if ImproveAny.InitAchievements then ImproveAny:InitAchievements() end
 		if ImproveAny.InitCombatText then ImproveAny:InitCombatText() end
 		if ImproveAny.InitXPBar then ImproveAny:After(1, function() ImproveAny:InitXPBar() end, "InitXPBar") end
 		if ImproveAny.InitSuperTrackedFrame then ImproveAny:InitSuperTrackedFrame() end

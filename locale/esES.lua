@@ -22,6 +22,8 @@ ImproveAny:AddTrans("esES", "LID_BAGSAMESIZE", "Todas las Bolsas del Mismo Tama�
 ImproveAny:AddTrans("esES", "LID_BAGSIZE", "Tamaño de Bolsa")
 ImproveAny:AddTrans("esES", "LID_QUICKGAMEPLAY", "Juego Rápido")
 ImproveAny:AddTrans("esES", "LID_FASTLOOTING", "Saqueo Rápido")
+ImproveAny:AddTrans("esES", "LID_UNTRACKCOMPLETEDACHIEVEMENTS", "Dejar de seguir logros completados")
+ImproveAny:AddTrans("esES", "LID_UNTRACKEDACHIEVEMENT", "Logro completado, seguimiento eliminado:")
 ImproveAny:AddTrans("esES", "LID_COMBAT", "Combate")
 ImproveAny:AddTrans("esES", "LID_COMBATTEXTICONS", "Iconos de Texto de Combate")
 ImproveAny:AddTrans("esES", "LID_COMBATTEXTPOSITION", "Posición del Texto de Combate")

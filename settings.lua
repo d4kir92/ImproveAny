@@ -262,6 +262,7 @@ local function BuildElementList()
 	AddCheckBox("AUTOACCEPTQUESTS", false)
 	AddCheckBox("AUTOCHECKINQUESTS", false)
 	AddCheckBox("FASTLOOTING", false)
+	if ImproveAny.HasAchievementTracking and ImproveAny:HasAchievementTracking() then AddCheckBox("UNTRACKCOMPLETEDACHIEVEMENTS", false, Call("UntrackCompletedAchievements")) end
 	if CharacterFrameExpandButton then AddCheckBox("CHARACTERFRAMEAUTOEXPAND", true) end
 	AddCategory("CHAT")
 	AddEditBox("BLOCKWORDS", "", function(eb)
@@ -386,7 +387,7 @@ local function BuildElementList()
 end
 
 function ImproveAny:InitIASettings()
-	ImproveAny:SetVersion(136033, "1.0.1")
+	ImproveAny:SetVersion(136033, "1.0.2")
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end

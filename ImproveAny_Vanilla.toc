@@ -1,5 +1,5 @@
 ## Interface: 11509
-## Version: 1.0.1
+## Version: 1.0.2
 ## Title: ImproveAny |T136033:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Improved user interfaces
 ## Notes-deDE: Verbessert Benutzeroberflächen
@@ -48,6 +48,7 @@ locale\ruRU.lua
 locale\zhCN.lua
 locale\zhTW.lua
 
+ele\achievements.lua
 ele\bags.lua
 ele\castbar.lua
 ele\chat.lua

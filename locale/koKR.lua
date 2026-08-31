@@ -22,6 +22,8 @@ ImproveAny:AddTrans("koKR", "LID_BAGSAMESIZE", "모든 가방 크기 동일하�
 ImproveAny:AddTrans("koKR", "LID_BAGSIZE", "가방 크기")
 ImproveAny:AddTrans("koKR", "LID_QUICKGAMEPLAY", "빠른 게임플레이")
 ImproveAny:AddTrans("koKR", "LID_FASTLOOTING", "빠른 전리품 획득")
+ImproveAny:AddTrans("koKR", "LID_UNTRACKCOMPLETEDACHIEVEMENTS", "완료된 업적 추적 해제")
+ImproveAny:AddTrans("koKR", "LID_UNTRACKEDACHIEVEMENT", "업적 완료, 추적이 해제되었습니다:")
 ImproveAny:AddTrans("koKR", "LID_COMBAT", "전투")
 ImproveAny:AddTrans("koKR", "LID_COMBATTEXTICONS", "전투 텍스트 아이콘")
 ImproveAny:AddTrans("koKR", "LID_COMBATTEXTPOSITION", "전투 텍스트 위치")

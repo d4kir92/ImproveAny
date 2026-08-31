@@ -22,6 +22,8 @@ ImproveAny:AddTrans("ruRU", "LID_BAGSAMESIZE", "Все сумки одинако
 ImproveAny:AddTrans("ruRU", "LID_BAGSIZE", "Размер сумки")
 ImproveAny:AddTrans("ruRU", "LID_QUICKGAMEPLAY", "Быстрый игровой процесс")
 ImproveAny:AddTrans("ruRU", "LID_FASTLOOTING", "Быстрый сбор лута")
+ImproveAny:AddTrans("ruRU", "LID_UNTRACKCOMPLETEDACHIEVEMENTS", "Снимать отслеживание завершённых достижений")
+ImproveAny:AddTrans("ruRU", "LID_UNTRACKEDACHIEVEMENT", "Достижение выполнено, отслеживание снято:")
 ImproveAny:AddTrans("ruRU", "LID_COMBAT", "Бой")
 ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTICONS", "Иконки боевого текста")
 ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTPOSITION", "Позиция боевого текста")

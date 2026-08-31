@@ -22,6 +22,8 @@ ImproveAny:AddTrans("itIT", "LID_BAGSAMESIZE", "Tutte le Borse della Stessa Dime
 ImproveAny:AddTrans("itIT", "LID_BAGSIZE", "Dimensione Borsa")
 ImproveAny:AddTrans("itIT", "LID_QUICKGAMEPLAY", "Gioco Rapido")
 ImproveAny:AddTrans("itIT", "LID_FASTLOOTING", "Bottino Rapido")
+ImproveAny:AddTrans("itIT", "LID_UNTRACKCOMPLETEDACHIEVEMENTS", "Smetti di seguire le imprese completate")
+ImproveAny:AddTrans("itIT", "LID_UNTRACKEDACHIEVEMENT", "Impresa completata, monitoraggio rimosso:")
 ImproveAny:AddTrans("itIT", "LID_COMBAT", "Combattimento")
 ImproveAny:AddTrans("itIT", "LID_COMBATTEXTICONS", "Icone del Testo di Combattimento")
 ImproveAny:AddTrans("itIT", "LID_COMBATTEXTPOSITION", "Posizione del Testo di Combattimento")

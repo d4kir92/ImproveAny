@@ -22,6 +22,8 @@ ImproveAny:AddTrans("ptBR", "LID_BAGSAMESIZE", "Todas as Bolsas do Mesmo Tamanho
 ImproveAny:AddTrans("ptBR", "LID_BAGSIZE", "Tamanho da Bolsa")
 ImproveAny:AddTrans("ptBR", "LID_QUICKGAMEPLAY", "Jogabilidade Rápida")
 ImproveAny:AddTrans("ptBR", "LID_FASTLOOTING", "Saque Rápido")
+ImproveAny:AddTrans("ptBR", "LID_UNTRACKCOMPLETEDACHIEVEMENTS", "Parar de rastrear conquistas concluídas")
+ImproveAny:AddTrans("ptBR", "LID_UNTRACKEDACHIEVEMENT", "Conquista concluída, rastreamento removido:")
 ImproveAny:AddTrans("ptBR", "LID_COMBAT", "Combate")
 ImproveAny:AddTrans("ptBR", "LID_COMBATTEXTICONS", "Ícones de Texto de Combate")
 ImproveAny:AddTrans("ptBR", "LID_COMBATTEXTPOSITION", "Posição do Texto de Combate")
