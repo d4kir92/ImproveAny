@@ -33,18 +33,34 @@ function ImproveAny:InitLFGFrame()
 
 				local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(id, index, activeEntryInfo.activityIDs[1])
 				local dungeonRating = bestDungeonScoreForListing.mapScore
-				if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and dungeonRating and dungeonRating > 0 then
-					local color = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonRating)
-					if color then
-						text = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r " .. text
-					else
-						text = dungeonRating .. " " .. text
-					end
-				end
-
 				local dungeonKey = bestDungeonScoreForListing.bestRunLevel
-				if ImproveAny:IsEnabled("LFGSHOWDUNGEONKEY", false) and dungeonKey then
-					text = dungeonKey .. " " .. text
+				local showDungeonScore = ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false)
+				local showDungeonKey = ImproveAny:IsEnabled("LFGSHOWDUNGEONKEY", false)
+				if member.Rating and (showDungeonScore or showDungeonKey) then
+					local font, _, flags = member.Rating:GetFont()
+					if font then
+						member.Rating:SetFont(font, 9, flags)
+					end
+
+					if member.Rating:IsShown() then
+						local info = {}
+						if showDungeonKey and dungeonKey and dungeonKey > 0 then
+							info[#info + 1] = dungeonKey
+						end
+
+						if showDungeonScore and dungeonRating and dungeonRating > 0 then
+							local color = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonRating)
+							if color then
+								info[#info + 1] = "|c" .. color:GenerateHexColor() .. dungeonRating .. "|r"
+							else
+								info[#info + 1] = dungeonRating
+							end
+						end
+
+						if #info > 0 then
+							member.Rating:SetText((member.Rating:GetText() or "") .. " (" .. table.concat(info, ":") .. ")")
+						end
+					end
 				end
 
 				if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny.GetClassIcon and ImproveAny:GetClassIcon(class, 0) then
@@ -88,18 +104,37 @@ function ImproveAny:InitLFGFrame()
 
 					-- only when its for dungeon
 					if sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore then
+						local score = ""
 						if ImproveAny:IsEnabled("LFGSHOWOVERALLSCORE", false) and sri.leaderOverallDungeonScore and sri.leaderOverallDungeonScore > 0 then
 							local color = C_ChallengeMode.GetDungeonScoreRarityColor(sri.leaderOverallDungeonScore)
 							if color then
-								text = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r " .. text
+								score = "|c" .. color:GenerateHexColor() .. sri.leaderOverallDungeonScore .. "|r"
 							end
 						end
 
-						if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and sri.leaderDungeonScoreInfo and sri.leaderDungeonScoreInfo.mapScore > 0 then
+						local info = {}
+						local bestRunLevel = sri.leaderDungeonScoreInfo.bestRunLevel
+						if ImproveAny:IsEnabled("LFGSHOWDUNGEONKEY", false) and bestRunLevel and bestRunLevel > 0 then
+							info[#info + 1] = bestRunLevel
+						end
+
+						if ImproveAny:IsEnabled("LFGSHOWDUNGEONSCORE", false) and sri.leaderDungeonScoreInfo.mapScore > 0 then
 							local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(sri.leaderDungeonScoreInfo.mapScore)
 							if color then
-								text = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r " .. text
+								info[#info + 1] = "|c" .. color:GenerateHexColor() .. sri.leaderDungeonScoreInfo.mapScore .. "|r"
 							end
+						end
+
+						if #info > 0 then
+							if score ~= "" then
+								score = score .. " (" .. table.concat(info, ":") .. ")"
+							else
+								score = table.concat(info, ":")
+							end
+						end
+
+						if score ~= "" then
+							text = score .. " " .. text
 						end
 					end
 
