@@ -39,7 +39,7 @@ function ImproveAny:InitLFGFrame()
 				if member.Rating and (showDungeonScore or showDungeonKey) then
 					local font, _, flags = member.Rating:GetFont()
 					if font then
-						member.Rating:SetFont(font, 9, flags)
+						member.Rating:SetFont(font, 8, flags)
 					end
 
 					if member.Rating:IsShown() then
