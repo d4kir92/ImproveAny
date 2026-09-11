@@ -63,8 +63,30 @@ function ImproveAny:InitLFGFrame()
 					end
 				end
 
-				if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny.GetClassIcon and ImproveAny:GetClassIcon(class, 0) then
-					text = text .. ImproveAny:GetClassIcon(class, 0)
+				if member.RoleIcon1 and ImproveAny.GetClassAtlas then
+					if member.IAClassIcon == nil then
+						member.IAClassIcon = member:CreateTexture(nil, "OVERLAY")
+						member.IAClassIcon:SetSize(16, 16)
+						member.IAClassIcon:SetPoint("RIGHT", member.RoleIcon1, "LEFT", -2, 0)
+						for i = 1, member.Name:GetNumPoints() do
+							local point, rel, relPoint, x, y = member.Name:GetPoint(i)
+							if point == "RIGHT" then
+								member.IANameRight = {rel or member, relPoint, x, y}
+								break
+							end
+						end
+					end
+
+					if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and class then
+						member.IAClassIcon:SetAtlas(ImproveAny:GetClassAtlas(class))
+						member.IAClassIcon:Show()
+						member.Name:SetPoint("RIGHT", member.RoleIcon1, "LEFT", -20, 0)
+					else
+						member.IAClassIcon:Hide()
+						if member.IANameRight then
+							member.Name:SetPoint("RIGHT", member.IANameRight[1], member.IANameRight[2], member.IANameRight[3], member.IANameRight[4])
+						end
+					end
 				end
 
 				text = text .. dName
