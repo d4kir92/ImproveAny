@@ -1,10 +1,10 @@
 local _, ImproveAny = ...
 
-function ImproveAny:GetFlagString(realmName, text, ts)
+function ImproveAny:GetFlagString(realmName, text)
 	if not ImproveAny:IsEnabled("LFGSHOWLANGUAGEFLAG", false) then return text end
 	local realmLang = ImproveAny:GetRealmFlag(realmName)
 	if realmLang and realmLang ~= "" then
-		return "|T" .. "Interface\\Addons\\ImproveAny\\media\\flags\\" .. realmLang .. ":" .. ts .. ":" .. (ts * 2) .. ":0:0|t" .. " " .. text
+		return "|T" .. "Interface\\Addons\\ImproveAny\\media\\flags\\" .. realmLang .. ":0:2:0:0|t" .. " " .. text
 	else
 		return text
 	end
@@ -47,8 +47,8 @@ function ImproveAny:InitLFGFrame()
 					text = dungeonKey .. " " .. text
 				end
 
-				if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny.GetClassIcon and ImproveAny:GetClassIcon(class) then
-					text = text .. ImproveAny:GetClassIcon(class)
+				if ImproveAny:IsEnabled("LFGSHOWCLASSICON", false) and ImproveAny.GetClassIcon and ImproveAny:GetClassIcon(class, 0) then
+					text = text .. ImproveAny:GetClassIcon(class, 0)
 				end
 
 				text = text .. dName
@@ -60,9 +60,9 @@ function ImproveAny:InitLFGFrame()
 					server = GetRealmName()
 				end
 
-				local _, fontSize = member.Name:GetFont()
-				local lang = ImproveAny:GetFlagString(server, text, fontSize)
+				local lang = ImproveAny:GetFlagString(server, text)
 				if lang then
+					if member.Name.SetWordWrap then member.Name:SetWordWrap(false) end
 					member.Name:SetText(lang)
 				end
 			end
@@ -115,9 +115,9 @@ function ImproveAny:InitLFGFrame()
 						server = GetRealmName()
 					end
 
-					local _, fontSize = sel.ActivityName:GetFont()
-					local lang = ImproveAny:GetFlagString(server, sel.ActivityName:GetText(), fontSize)
+					local lang = ImproveAny:GetFlagString(server, sel.ActivityName:GetText())
 					if lang then
+						if sel.ActivityName.SetWordWrap then sel.ActivityName:SetWordWrap(false) end
 						sel.ActivityName:SetText(lang)
 					end
 				end
