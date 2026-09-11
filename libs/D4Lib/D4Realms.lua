@@ -4,6 +4,7 @@ local initRealmLangs = false
 local missingRealmNameOnce = true
 local missingRealms = {}
 local realms = {}
+local realmsSupported = false
 local missingRealmLangs = {}
 local region = GetCurrentRegion and GetCurrentRegion() or 1
 local withoutSpaces = {}
@@ -69,6 +70,8 @@ local function InitRealms()
     for name, val in pairs(withoutSpaces) do
         realms[name] = val
     end
+
+    realmsSupported = next(realms) ~= nil
 end
 
 function D4:GetRealmLang(realmName)
@@ -78,8 +81,7 @@ function D4:GetRealmLang(realmName)
         InitRealms()
     end
 
-    if GetLocale() == "" then return "" end
-    if not (GetLocale() == "enUS" or GetLocale() == "deDE" or GetLocale() == "koKR" or GetLocale() == "zhTW") then return "" end
+    if realmsSupported == false then return "" end
     if realmName == nil then
         if missingRealmNameOnce then
             missingRealmNameOnce = false
@@ -115,90 +117,142 @@ function D4:GetRealmLang(realmName)
     return realms[realmName]
 end
 
+local function AddRealmLangs(lang, names)
+    for i = 1, #names do
+        realmLangs[names[i]] = lang
+    end
+end
+
 local function InitRealmLangs()
-    -- deDE 
-    realmLangs["Deutsch"] = "deDE"
-    realmLangs["German"] = "deDE"
-    realmLangs["독일어"] = "deDE"
-    realmLangs["德國"] = "deDE"
-    -- esES 
-    realmLangs["Spanish"] = "esES"
-    realmLangs["Spanisch"] = "esES"
-    realmLangs["스페인어"] = "esES"
-    realmLangs["拉丁美洲"] = "esES"
-    realmLangs["라틴 아메리카"] = "esES"
-    realmLangs["Lateinamerika"] = "esES"
-    realmLangs["Latin America"] = "esES"
-    realmLangs["西班牙"] = "esES"
-    -- enUS 
+    AddRealmLangs("deDE", {"Deutsch", "German", "Allemand", "Alemán", "Alemão", "Tedesco", "Нем.", "독일어", "德國", "德语",})
+    AddRealmLangs(
+        "esES",
+        {
+            "Spanish",
+            "Spanisch",
+            "Español",
+            "Espagnol",
+            "Espanhol",
+            "Spagnolo",
+            "Исп.",
+            "스페인어",
+            "西班牙",
+            "西班牙语",
+            "Latin America",
+            "Lateinamerika",
+            "América Latina",
+            "America Latina",
+            "Amérique latine",
+            "Латинская Америка",
+            "拉丁美洲",
+            "라틴 아메리카",
+        }
+    )
+
+    AddRealmLangs("frFR", {"French", "Französisch", "Français", "Francés", "Francês", "Francese", "Франц.", "프랑스어", "法國", "法语",})
+    AddRealmLangs("itIT", {"Italian", "Italienisch", "Italiano", "Italien", "Итальянск.", "이탈리아어", "義大利", "意大利语",})
+    AddRealmLangs("koKR", {"Korea", "Corea", "Coreia", "Corée", "Корея", "한국", "韓國", "韩国",})
+    AddRealmLangs("ptBR", {"Brazil", "Brasilien", "Brasil", "Brasile", "Brésil", "Бразилия", "브라질", "巴西",})
+    AddRealmLangs("ruRU", {"Russian", "Russisch", "Russe", "Ruso", "Russo", "Русский", "러시아어", "俄羅斯", "俄语",})
+    AddRealmLangs("chTW", {"Taiwan", "Taiwán", "Taïwan", "Тайвань", "대만", "台灣", "中国台湾",})
+    AddRealmLangs("enGB", {"Oceanic", "Oceania", "Oceánico", "Océanique", "Ozeanisch", "Океания", "오세아니아", "大洋洲", "英國",})
+    local enLang = "enUS"
     if region == regions["EU"] then
-        realmLangs["English"] = "enGB"
-        realmLangs["Englisch"] = "enGB"
-        realmLangs["영어"] = "enGB"
-        realmLangs["美國"] = "enGB"
-        realmLangs["미국"] = "enGB"
-        realmLangs["Vereinigte Staaten"] = "enGB"
-        realmLangs["United States"] = "enGB"
-        realmLangs["Global"] = "enGB"
-        realmLangs["글로벌"] = "enGB"
-        realmLangs["全球"] = "enGB"
-        realmLangs["Saisonbedingt"] = "enGB"
-        realmLangs["Hardcore"] = "enGB"
-        realmLangs["Classic-Ära"] = "enGB"
-        realmLangs["Seasonal"] = "enGB"
-        realmLangs["Classic Era"] = "enGB"
-    else
-        realmLangs["English"] = "enUS"
-        realmLangs["Englisch"] = "enUS"
-        realmLangs["영어"] = "enUS"
-        realmLangs["美國"] = "enUS"
-        realmLangs["미국"] = "enUS"
-        realmLangs["Vereinigte Staaten"] = "enUS"
-        realmLangs["United States"] = "enUS"
-        realmLangs["Global"] = "enUS"
-        realmLangs["글로벌"] = "enUS"
-        realmLangs["全球"] = "enUS"
-        realmLangs["Saisonbedingt"] = "enUS"
-        realmLangs["Hardcore"] = "enUS"
-        realmLangs["Classic-Ära"] = "enUS"
-        realmLangs["Seasonal"] = "enUS"
-        realmLangs["Classic Era"] = "enUS"
+        enLang = "enGB"
     end
 
-    -- enGB 
-    realmLangs["大洋洲"] = "enGB"
-    realmLangs["오세아니아"] = "enGB"
-    realmLangs["Ozeanisch"] = "enGB"
-    realmLangs["Oceanic"] = "enGB"
-    realmLangs["英國"] = "enGB"
-    -- frFR 
-    realmLangs["French"] = "frFR"
-    realmLangs["Französisch"] = "frFR"
-    realmLangs["프랑스어"] = "frFR"
-    realmLangs["法國"] = "frFR"
-    -- itIT 
-    realmLangs["Italian"] = "itIT"
-    realmLangs["Italienisch"] = "itIT"
-    realmLangs["이탈리아어"] = "itIT"
-    realmLangs["義大利"] = "itIT"
-    -- koKR 
-    realmLangs["Korea"] = "koKR"
-    realmLangs["한국"] = "koKR"
-    realmLangs["韓國"] = "koKR"
-    -- ptBR 
-    realmLangs["巴西"] = "ptBR"
-    realmLangs["브라질"] = "ptBR"
-    realmLangs["Brasilien"] = "ptBR"
-    realmLangs["Brazil"] = "ptBR"
-    -- ruRU 
-    realmLangs["Russian"] = "ruRU"
-    realmLangs["Russisch"] = "ruRU"
-    realmLangs["러시아어"] = "ruRU"
-    realmLangs["俄羅斯"] = "ruRU"
-    -- cnTW 
-    realmLangs["Taiwan"] = "chTW"
-    realmLangs["대만"] = "chTW"
-    realmLangs["台灣"] = "chTW"
+    AddRealmLangs(
+        enLang,
+        {
+            "English",
+            "Englisch",
+            "Anglais",
+            "Inglés",
+            "Inglês",
+            "Inglese",
+            "Англ.",
+            "영어",
+            "英语",
+            "United States",
+            "Vereinigte Staaten",
+            "Estados Unidos",
+            "États-Unis",
+            "Stati Uniti",
+            "США",
+            "미국",
+            "美国",
+            "美國",
+            "US East",
+            "USA Ost",
+            "미국 동부",
+            "美東",
+            "US West",
+            "USA West",
+            "미국 서부",
+            "美西",
+            "Global",
+            "Globale",
+            "Mondial",
+            "Глобальный",
+            "글로벌",
+            "全球",
+            "Seasonal",
+            "Saisonbedingt",
+            "Saisonnier",
+            "Sazonal",
+            "De temporada",
+            "Stagionale",
+            "Сезонные",
+            "시즌",
+            "赛季",
+            "賽季",
+            "Classic Era",
+            "Classic-Ära",
+            "Klassisch",
+            "Era Classic",
+            "Ère classique",
+            "Clásicos",
+            "Классические",
+            "클래식 시대",
+            "經典時期",
+            "旧世经典服务器（60级）",
+            "Hardcore",
+            "Extrême",
+            "Серьезный",
+            "하드코어",
+            "专家模式",
+            "專家模式",
+            "Anniversary",
+            "Anniversaire",
+            "Aniversario",
+            "Aniversário",
+            "Jubiläum",
+            "Годовщина",
+            "기념일",
+            "周年纪念版",
+            "週年慶",
+            "Legacy",
+            "Legado",
+            "Héritage",
+            "낭만",
+            "旧版",
+            "懷舊",
+            "Active",
+            "Aktiv",
+            "Actif",
+            "Activos",
+            "Ativo",
+            "Активные",
+            "활성화",
+            "激活",
+            "現行",
+        }
+    )
+
+    AddRealmLangs("koKR", {"koKR",})
+    AddRealmLangs("ruRU", {"ruRU",})
+    AddRealmLangs("ukUA", {"ukUA",})
+    AddRealmLangs("zhCN", {"zhCN",})
 end
 
 function D4:GetRealmFlag(realmName)
@@ -212,20 +266,15 @@ function D4:GetRealmFlag(realmName)
         realmName = GetRealmName()
     end
 
-    if not (GetLocale() == "enUS" or GetLocale() == "deDE" or GetLocale() == "koKR" or GetLocale() == "zhTW") then return "" end
     local realmLang = D4:GetRealmLang(realmName)
-    if realmLang == nil then return "" end
+    if realmLang == nil or realmLang == "" then return "" end
     if realmLangs[realmLang] == nil then
-        if realmLang == nil then
-            if missingRealmLangs[realmLang] == nil then
-                missingRealmLangs[realmLang] = true
-                D4:MSG("[D4] Missing realmsLangs", realmName, realmLang)
-            end
-
-            return ""
+        if missingRealmLangs[realmLang] == nil then
+            missingRealmLangs[realmLang] = true
+            D4:MSG("[D4] Missing realmsLangs", realmName, realmLang)
         end
 
-        return realmLang
+        return ""
     end
 
     return realmLangs[realmLang]
