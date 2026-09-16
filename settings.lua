@@ -263,7 +263,6 @@ local function BuildElementList()
 	AddCheckBox("AUTOACCEPTQUESTS", false)
 	AddCheckBox("AUTOCHECKINQUESTS", false)
 	AddCheckBox("FASTLOOTING", false)
-	if ImproveAny.HasAchievementTracking and ImproveAny:HasAchievementTracking() then AddCheckBox("UNTRACKCOMPLETEDACHIEVEMENTS", false, Call("UntrackCompletedAchievements")) end
 	if CharacterFrameExpandButton then AddCheckBox("CHARACTERFRAMEAUTOEXPAND", true) end
 	AddCategory("CHAT")
 	AddEditBox("BLOCKWORDS", "", function(eb)

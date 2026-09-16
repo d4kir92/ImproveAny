@@ -54,7 +54,6 @@ locale\ruRU.lua
 locale\zhCN.lua
 locale\zhTW.lua
 
-ele\achievements.lua
 ele\bags.lua
 ele\castbar.lua
 ele\chat.lua
