@@ -1,10 +1,7 @@
 local _, ImproveAny = ...
 function ImproveAny:InitSuperTrackedFrame()
 	local stf = SuperTrackedFrame
-	if stf == nil then
-		stf = WorldSpacePin
-	end
-
+	if stf == nil then stf = WorldSpacePin end
 	if stf then
 		if stf.GetTargetAlphaBaseValue then
 			local fAlpha = stf.GetTargetAlphaBaseValue
@@ -28,10 +25,7 @@ function ImproveAny:InitSuperTrackedFrame()
 			end
 		end
 
-		if stf.DistanceText == nil then
-			stf.DistanceText = WorldSpacePin.text
-		end
-
+		if stf.DistanceText == nil then stf.DistanceText = WorldSpacePin.text end
 		stf.DistanceTime = stf:CreateFontString(nil, "ARTWORK")
 		if C_Navigation then
 			stf.DistanceTime:SetFont(STANDARD_TEXT_FONT, 12, "")
@@ -54,14 +48,8 @@ function ImproveAny:InitSuperTrackedFrame()
 			local scale = 10
 			function ImproveAny:ThinkSTF()
 				local distance = 0
-				if WorldMapPin_GetDistance then
-					distance = WorldMapPin_GetDistance()
-				end
-
-				if C_Navigation and C_Navigation.GetDistance then
-					distance = C_Navigation.GetDistance()
-				end
-
+				if WorldMapPin_GetDistance then distance = WorldMapPin_GetDistance() end
+				if C_Navigation and C_Navigation.GetDistance then distance = C_Navigation.GetDistance() end
 				local distDif = lastDist - distance
 				distPerSec = distDif * scale
 				distPerSec = floor(distPerSec)
@@ -74,10 +62,7 @@ function ImproveAny:InitSuperTrackedFrame()
 
 				local secs = timeToTarget
 				local clamped = false
-				if C_Navigation then
-					clamped = C_Navigation.WasClampedToScreen()
-				end
-
+				if C_Navigation then clamped = C_Navigation.WasClampedToScreen() end
 				if clamped then
 					stf.DistanceTime:SetText("")
 				else
