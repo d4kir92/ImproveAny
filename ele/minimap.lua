@@ -202,16 +202,18 @@ function ImproveAny:InitMinimap()
 			end
 
 			function ImproveAny:ConvertToMinimapButton(name, stay, hide)
-				if not ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", false) then return end
+				local movable = ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", false)
+				local combine = ImproveAny:IsEnabled("COMBINEMMBTNS", false)
+				if not movable and not combine then return end
 				local btn = _G[name]
 				if btn and not tContains(IAMMBtnsConverted, name) then
 					tinsert(IAMMBtnsConverted, name)
-					if hide then
+					if hide and movable then
 						tinsert(IAMMBtnsBliz, btn)
 						btn:Hide()
 					end
 
-					if stay or not ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
+					if movable and (stay or not combine) then
 						IATAB[name .. "db"] = IATAB[name .. "db"] or {}
 						btn:SetParent(Minimap)
 						btn:SetMovable(true)
