@@ -3,13 +3,22 @@ function ImproveAny:InitSuperTrackedFrame()
 	local stf = SuperTrackedFrame
 	if stf == nil then stf = WorldSpacePin end
 	if stf then
+		local function ShouldForceAlpha()
+			if not C_Navigation or not C_Navigation.GetDistance then return false end
+			local distance = C_Navigation.GetDistance()
+			if ImproveAny:IsCamelot() then return stf.navFrame ~= nil and distance > 0 end
+
+			return distance >= 1000
+		end
+
 		if stf.GetTargetAlphaBaseValue then
 			local fAlpha = stf.GetTargetAlphaBaseValue
 			function stf:GetTargetAlphaBaseValue()
-				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
+				local alpha = fAlpha(self)
+				if alpha == 0 and ShouldForceAlpha() then
 					return 0.5
 				else
-					return fAlpha(self)
+					return alpha
 				end
 			end
 		end
@@ -17,10 +26,11 @@ function ImproveAny:InitSuperTrackedFrame()
 		if stf.GetTargetAlpha then
 			local fAlpha = stf.GetTargetAlpha
 			function stf:GetTargetAlpha()
-				if fAlpha(self) == 0 and C_Navigation.GetDistance() >= 1000 then
+				local alpha = fAlpha(self)
+				if alpha == 0 and ShouldForceAlpha() then
 					return 0.5
 				else
-					return fAlpha(self)
+					return alpha
 				end
 			end
 		end
