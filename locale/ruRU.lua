@@ -116,3 +116,5 @@ ImproveAny:AddTrans("ruRU", "LID_FRAMEANCHOR", "Крепление фрейма"
 ImproveAny:AddTrans("ruRU", "LID_AUTOSELLJUNK", "Автоматически продавать хлам")
 ImproveAny:AddTrans("ruRU", "LID_AUTOREPAIR", "Автоматически ремонтировать экипировку")
 ImproveAny:AddTrans("ruRU", "LID_NEW", "НОВОЕ")
+ImproveAny:AddTrans("ruRU", "LID_SAVEANDCLOSE", "Сохранить и закрыть")
+ImproveAny:AddTrans("ruRU", "LID_SAVEANDREOPEN", "Сохранить и открыть снова")
