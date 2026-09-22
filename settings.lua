@@ -250,8 +250,6 @@ end
 local function BuildElementList()
 	local isRetail = ImproveAny:GetWoWBuild() == "RETAIL"
 	local isClassic = ImproveAny:GetWoWBuild() == "CLASSIC"
-	local hasLFGList = C_LFGList ~= nil and C_LFGList.GetApplicantMemberInfo ~= nil
-	local hasMythicScore = hasLFGList and C_LFGList.GetApplicantDungeonScoreForListing ~= nil and C_ChallengeMode ~= nil and C_ChallengeMode.GetDungeonScoreRarityColor ~= nil
 	IASettings:SuspendLayout()
 	AddCategory("GENERAL")
 	AddCheckBox("SHOWMINIMAPBUTTON", not isRetail, Call("UpdateMinimapButton"))
@@ -369,16 +367,6 @@ local function BuildElementList()
 	AddCategory("TOOLTIP", 2)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
 	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
-	if hasLFGList then
-		AddCategory("LOOKINGFORGROUP", 2)
-		AddCheckBox("LFGSHOWLANGUAGEFLAG", false)
-		AddCheckBox("LFGSHOWCLASSICON", false)
-		if hasMythicScore then
-			AddCheckBox("LFGSHOWOVERALLSCORE", false)
-			AddCheckBox("LFGSHOWDUNGEONSCORE", false)
-			AddCheckBox("LFGSHOWDUNGEONKEY", false)
-		end
-	end
 
 	AddCategory("WIDGETS", 2)
 	AddCheckBox("IAPingFrame", false)
