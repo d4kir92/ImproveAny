@@ -332,13 +332,33 @@ local function BuildElementList()
 	AddSlider("BAGSIZE", 30, function() BAGThink.UpdateItemInfos() end, 20, 80, 1, 0)
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddDropdown("BAGMODEINDEX", 1, Call("UpdateBagMode"), IABAGMODES) end
 	AddCategory("MINIMAP", 2)
-	AddCheckBox("MINIMAP", false, Call("UpdateMinimapSettings"))
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddCheckBox("MINIMAPHIDEBORDER", false, Call("UpdateMinimapSettings")) end
-	AddCheckBox("MINIMAPHIDEZOOMBUTTONS", false, Call("UpdateMinimapSettings"))
-	if not isRetail then AddCheckBox("MINIMAPSCROLLZOOM", false, Call("UpdateMinimapSettings")) end
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddCheckBox("MINIMAPSHAPESQUARE", false, Call("UpdateMinimapSettings")) end
-	AddCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE", false, Call("UpdateMinimapSettings"))
-	AddCheckBox("COMBINEMMBTNS", false, Call("UpdateMinimapSettings"))
+	local minimapSettings = {}
+	local function UpdateMinimapControls()
+		local enabled = ImproveAny:IsEnabled("MINIMAP", false)
+		for _, control in ipairs(minimapSettings) do
+			control:SetEnabled(enabled)
+			if control.cb and control.cb.SetEnabled then control.cb:SetEnabled(enabled) end
+			control.holder:SetAlpha(enabled and 1 or 0.5)
+		end
+	end
+
+	local function AddMinimapCheckBox(key)
+		local control = AddCheckBox(key, false, Call("UpdateMinimapSettings"))
+		control.uiElement.depth = control.uiElement.depth + 1
+		tinsert(minimapSettings, control)
+	end
+
+	AddCheckBox("MINIMAP", false, function()
+		ImproveAny:UpdateMinimapSettings()
+		UpdateMinimapControls()
+	end)
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddMinimapCheckBox("MINIMAPHIDEBORDER") end
+	AddMinimapCheckBox("MINIMAPHIDEZOOMBUTTONS")
+	if not isRetail then AddMinimapCheckBox("MINIMAPSCROLLZOOM") end
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddMinimapCheckBox("MINIMAPSHAPESQUARE") end
+	AddMinimapCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE")
+	AddMinimapCheckBox("COMBINEMMBTNS")
+	UpdateMinimapControls()
 	AddCategory("WORLDMAP", 2)
 	AddCheckBox("WORLDMAP", false)
 	if not isRetail then AddCheckBox("WORLDMAPZOOM", false) end
