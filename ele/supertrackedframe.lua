@@ -6,8 +6,7 @@ function ImproveAny:InitSuperTrackedFrame()
 		local function ShouldForceAlpha()
 			if not C_Navigation or not C_Navigation.GetDistance then return false end
 			local distance = C_Navigation.GetDistance()
-			if ImproveAny:IsCamelot() then return stf.navFrame ~= nil and distance > 0 end
-
+			if ImproveAny:IsForever() then return stf.navFrame ~= nil and distance > 0 end
 			return distance >= 1000
 		end
 
