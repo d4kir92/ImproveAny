@@ -12,6 +12,7 @@ local GetSkillLineInfo = _G["GetSkillLineInfo"]
 if GetSkillLineInfo == nil and C_SkillInfo and C_SkillInfo.GetSkillLineInfo and C_SkillInfo.GetNumSkillLines then
 	GetNumSkillLines = C_SkillInfo.GetNumSkillLines
 	GetSkillLineInfo = function(index)
+		if type(index) ~= "number" or index < 1 or index > C_SkillInfo.GetNumSkillLines() then return nil end
 		local info = C_SkillInfo.GetSkillLineInfo(index)
 		if info == nil then return nil end
 
