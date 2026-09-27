@@ -2,14 +2,8 @@ local _, ImproveAny = ...
 function ImproveAny:InitSlash()
 	ImproveAny:AddSlash("IMPROVE", ImproveAny.ToggleSettings)
 	ImproveAny:AddSlash("IMPROVEANY", ImproveAny.ToggleSettings)
-	if C_UI then
-		ImproveAny:AddSlash("RL", C_UI.Reload)
-		ImproveAny:AddSlash("REL", C_UI.Reload)
-	else
-		local ReloadUi = getglobal("ReloadUi")
-		ImproveAny:AddSlash("RL", ReloadUi)
-		ImproveAny:AddSlash("REL", ReloadUi)
-	end
+	ImproveAny:AddSlashAlias("RL", "reload")
+	ImproveAny:AddSlashAlias("REL", "reload")
 end
 
 IAHIDDEN = CreateFrame("FRAME", "IAHIDDEN")

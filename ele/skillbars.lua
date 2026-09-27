@@ -150,7 +150,11 @@ function ImproveAny:SkillsThink()
 
 				bar:SetPoint("TOPLEFT", IASkills, "TOPLEFT", 0, -(id - 1) * sh)
 				bar.text:SetText(name .. " " .. textc .. cur .. textw .. "/" .. textc .. max)
-				bar.bar:SetWidth(cur / max * bar.bar.sw)
+				if bar.SetFillPercent then
+					bar:SetFillPercent(cur / max)
+				else
+					bar.bar:SetWidth(cur / max * bar.bar.sw)
+				end
 				id = id + 1
 			else
 				if bar:IsShown() then
@@ -173,9 +177,30 @@ function ImproveAny:SkillsThink()
 	ImproveAny:After(1, ImproveAny.SkillsThink, "SkillsThink")
 end
 
+local function HasBlizzardSkillBarStyle()
+	return ColoredProgressBarMixin ~= nil and C_Texture ~= nil and C_Texture.GetAtlasInfo ~= nil and C_Texture.GetAtlasInfo("common-stat-bar-BG") ~= nil and C_Texture.GetAtlasInfo("common-stat-bar-blue") ~= nil
+end
+
 local skillid = 0
 function ImproveAny:AddStatusBar(func, args)
 	skillid = skillid + 1
+	if HasBlizzardSkillBarStyle() then
+		local ok, bar = pcall(CreateFrame, "FRAME", nil, IASkills, "ColoredProgressBarTemplate")
+		if ok and bar and bar.Fill and bar.Text then
+			IASkills.bars[skillid] = bar
+			bar.func = func
+			bar.args = args
+			bar:SetSize(sw, 29)
+			bar:SetPoint("TOPLEFT", IASkills, "TOPLEFT", 0, 0)
+			bar:SetFillTextureByColorType(ColoredProgressBarMixin.ColorType.Blue)
+			bar:SetFillPercent(0)
+			bar.text = bar.Text
+			bar.text:SetText("LOAD")
+
+			return
+		end
+	end
+
 	if skillid then
 		IASkills.bars[skillid] = CreateFrame("FRAME", name, IASkills)
 		local bar = IASkills.bars[skillid]
@@ -205,6 +230,10 @@ end
 
 function ImproveAny:InitSkillBars()
 	if ImproveAny:HasSkillLines() and ImproveAny:IsEnabled("SKILLBARS", false) then
+		if HasBlizzardSkillBarStyle() then
+			sh = 24
+		end
+
 		IASkills = CreateFrame("FRAME", "IASkills", UIParent)
 		IASkills:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 520, 0)
 		IASkills:SetSize(sw, 6 * sh)

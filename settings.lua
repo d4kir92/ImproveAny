@@ -332,15 +332,6 @@ function ImproveAny:ToggleSettings()
 	end
 end
 
-local function IAReload(reopen)
-	if reopen ~= nil then ImproveAny:SetEnabled("SETTINGS", reopen) end
-	if C_UI then
-		C_UI.Reload()
-	else
-		ReloadUi()
-	end
-end
-
 local function BuildElementList()
 	local isRetail = ImproveAny:GetWoWBuild() == "RETAIL"
 	local isClassic = ImproveAny:GetWoWBuild() == "CLASSIC"
@@ -495,29 +486,22 @@ function ImproveAny:InitIASettings()
 		["height"] = 24
 	})
 
-	IASettings.save = ImproveAny:CreateButton("IASettings_save", IASettings.footer)
+	IASettings.save = ImproveAny:CreateReloadButton("IASettings_save", IASettings.footer)
 	IASettings.save:SetSize(136, 24)
 	IASettings.save:SetPoint("LEFT", IASettings.footer, "LEFT", 0, 0)
 	IASettings.save:SetText(ImproveAny:Trans("LID_SAVEANDCLOSE"))
-	IASettings.save:SetScript("OnClick", function() IAReload(false) end)
+	IASettings.save:SetScript("PreClick", function() ImproveAny:SetEnabled("SETTINGS", false) end)
 	IASettings.save:Disable()
-	IASettings.reload = ImproveAny:CreateButton("IASettings_reload", IASettings.footer)
+	IASettings.reload = ImproveAny:CreateReloadButton("IASettings_reload", IASettings.footer)
 	IASettings.reload:SetSize(136, 24)
 	IASettings.reload:SetPoint("LEFT", IASettings.save, "RIGHT", 4, 0)
 	IASettings.reload:SetText(ImproveAny:Trans("LID_SAVEANDREOPEN"))
-	IASettings.reload:SetScript("OnClick", function() IAReload(true) end)
-	IASettings.showerrors = ImproveAny:CreateButton("IASettings_showerrors", IASettings.footer)
+	IASettings.reload:SetScript("PreClick", function() ImproveAny:SetEnabled("SETTINGS", true) end)
+	IASettings.showerrors = ImproveAny:CreateReloadButton("IASettings_showerrors", IASettings.footer)
 	IASettings.showerrors:SetSize(90, 24)
 	IASettings.showerrors:SetPoint("LEFT", IASettings.reload, "RIGHT", 4, 0)
 	IASettings.showerrors:SetText("Show Errors")
-	IASettings.showerrors:SetScript("OnClick", function()
-		if GetCVar("ScriptErrors") == "0" then
-			SetCVar("ScriptErrors", 1)
-			IAReload()
-		end
-
-		ImproveAny:UpdateShowErrors()
-	end)
+	IASettings.showerrors:SetScript("PreClick", function() SetCVar("ScriptErrors", 1) end)
 
 	IASettings.DISCORD = CreateFrame("EditBox", "IASettings_DISCORD", IASettings.footer, "InputBoxTemplate")
 	IASettings.DISCORD:SetSize(140, 24)
