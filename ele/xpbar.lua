@@ -294,8 +294,12 @@ function ImproveAny:RegisterKillXP()
 	)
 end
 
-function ImproveAny:ForeachForeverStatusBar(barIndex, callback)
-	if StatusTrackingBarManager == nil or StatusTrackingBarManager.barContainers == nil or StatusTrackingBarInfo == nil then return end
+function ImproveAny:HasTrackingBars()
+	return StatusTrackingBarManager ~= nil and StatusTrackingBarManager.barContainers ~= nil and StatusTrackingBarInfo ~= nil
+end
+
+function ImproveAny:ForeachTrackingBar(barIndex, callback)
+	if not ImproveAny:HasTrackingBars() then return end
 	for _, container in ipairs(StatusTrackingBarManager.barContainers) do
 		local bar = container.bars and container.bars[barIndex]
 		if bar then
@@ -304,7 +308,7 @@ function ImproveAny:ForeachForeverStatusBar(barIndex, callback)
 	end
 end
 
-function ImproveAny:UpdateForeverStatusBarTextShown(bar, inverted)
+function ImproveAny:UpdateTrackingBarTextShown(bar, inverted)
 	local text = bar.OverlayFrame and bar.OverlayFrame.Text
 	if text == nil then return end
 	local hovered = bar.textLocked == true
@@ -315,8 +319,8 @@ function ImproveAny:UpdateForeverStatusBarTextShown(bar, inverted)
 	end
 end
 
-local foreverArtworkHooked = false
-function ImproveAny:UpdateForeverStatusBarArtwork(container)
+local trackingArtworkHooked = false
+function ImproveAny:UpdateTrackingBarArtwork(container)
 	local bar = container:GetShownBar()
 	local hide = false
 	if bar and bar.barIndex == StatusTrackingBarInfo.BarsEnum.Experience then
@@ -337,23 +341,25 @@ function ImproveAny:UpdateForeverStatusBarArtwork(container)
 	end
 end
 
-function ImproveAny:InitForeverStatusBarArtwork()
-	if foreverArtworkHooked then return end
-	if StatusTrackingBarManager == nil or StatusTrackingBarManager.barContainers == nil then return end
-	foreverArtworkHooked = true
+function ImproveAny:InitTrackingBarArtwork()
+	if trackingArtworkHooked then return end
+	if not ImproveAny:HasTrackingBars() then return end
+	trackingArtworkHooked = true
 	for _, container in ipairs(StatusTrackingBarManager.barContainers) do
 		local function update()
-			ImproveAny:UpdateForeverStatusBarArtwork(container)
+			ImproveAny:UpdateTrackingBarArtwork(container)
 		end
 
 		hooksecurefunc(container, "ApplyPendingBarToShow", update)
-		hooksecurefunc(container, "UpdateDividers", update)
+		if container.UpdateDividers then
+			hooksecurefunc(container, "UpdateDividers", update)
+		end
 		update()
 	end
 end
 
-local foreverQcx = {}
-local function GetForeverQuestCompleteXP()
+local trackingQcx = {}
+local function GetTrackingQuestCompleteXP()
 	if C_QuestLog == nil or C_QuestLog.GetNumQuestLogEntries == nil or GetQuestLogRewardXP == nil then return 0 end
 	local totalXP = 0
 	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
@@ -366,7 +372,7 @@ local function GetForeverQuestCompleteXP()
 	return totalXP
 end
 
-function ImproveAny:UpdateForeverXPBarText(bar)
+function ImproveAny:UpdateTrackingXPBarText(bar)
 	local text = bar.OverlayFrame and bar.OverlayFrame.Text
 	if text == nil then return end
 	local currXP, maxBar, level = bar:GetLevelData()
@@ -375,15 +381,15 @@ function ImproveAny:UpdateForeverXPBarText(bar)
 	local showQuestComplete = ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false)
 	local questCompleteXP = 0
 	if showQuestComplete then
-		questCompleteXP = GetForeverQuestCompleteXP()
+		questCompleteXP = GetTrackingQuestCompleteXP()
 	end
 
-	local qcx = foreverQcx[bar]
+	local qcx = trackingQcx[bar]
 	if qcx == nil and showQuestComplete then
 		qcx = bar.StatusBar:CreateTexture(nil, "BACKGROUND", nil, 2)
 		qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		qcx:SetVertexColor(1, 1, 0, 0.6)
-		foreverQcx[bar] = qcx
+		trackingQcx[bar] = qcx
 	end
 
 	if qcx then
@@ -425,32 +431,32 @@ function ImproveAny:UpdateForeverXPBarText(bar)
 		text:SetText(text2)
 	end
 
-	ImproveAny:UpdateForeverStatusBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+	ImproveAny:UpdateTrackingBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
 end
 
-function ImproveAny:UpdateForeverXPBars()
-	ImproveAny:ForeachForeverStatusBar(
+function ImproveAny:UpdateTrackingXPBars()
+	ImproveAny:ForeachTrackingBar(
 		StatusTrackingBarInfo.BarsEnum.Experience,
 		function(bar)
 			if bar:IsShown() then
-				ImproveAny:UpdateForeverXPBarText(bar)
+				ImproveAny:UpdateTrackingXPBarText(bar)
 			end
 		end
 	)
 end
 
-function ImproveAny:InitXPBarForever()
+function ImproveAny:InitTrackingXPBar()
 	if StatusTrackingBarInfo == nil then return end
 	ImproveAny:RegisterKillXP()
-	ImproveAny:InitForeverStatusBarArtwork()
-	ImproveAny:ForeachForeverStatusBar(
+	ImproveAny:InitTrackingBarArtwork()
+	ImproveAny:ForeachTrackingBar(
 		StatusTrackingBarInfo.BarsEnum.Experience,
 		function(bar)
 			hooksecurefunc(
 				bar,
 				"UpdateCurrentText",
 				function(sel)
-					ImproveAny:UpdateForeverXPBarText(sel)
+					ImproveAny:UpdateTrackingXPBarText(sel)
 				end
 			)
 
@@ -458,11 +464,11 @@ function ImproveAny:InitXPBarForever()
 				bar,
 				"UpdateTextVisibility",
 				function(sel)
-					ImproveAny:UpdateForeverStatusBarTextShown(sel, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+					ImproveAny:UpdateTrackingBarTextShown(sel, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
 				end
 			)
 
-			ImproveAny:UpdateForeverStatusBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+			ImproveAny:UpdateTrackingBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
 		end
 	)
 
@@ -472,17 +478,17 @@ function ImproveAny:InitXPBarForever()
 	ImproveAny:OnEvent(
 		frame,
 		function()
-			ImproveAny:UpdateForeverXPBars()
-		end, "ForeverXPBar"
+			ImproveAny:UpdateTrackingXPBars()
+		end, "TrackingXPBar"
 	)
 
-	ImproveAny:UpdateForeverXPBars()
+	ImproveAny:UpdateTrackingXPBars()
 end
 
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", false) then
-		if ImproveAny:IsForever() then
-			ImproveAny:InitXPBarForever()
+		if ImproveAny:HasTrackingBars() then
+			ImproveAny:InitTrackingXPBar()
 
 			return
 		end

@@ -19,7 +19,7 @@ local function BuildRepText(value, maxBar)
 	return (string.gsub(text, "%s+$", ""))
 end
 
-local function UpdateForeverRepBarText(bar)
+local function UpdateTrackingRepBarText(bar)
 	local text = bar.OverlayFrame and bar.OverlayFrame.Text
 	if text == nil then return end
 	if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
@@ -29,29 +29,29 @@ local function UpdateForeverRepBarText(bar)
 		end
 	end
 
-	ImproveAny:UpdateForeverStatusBarTextShown(bar, false)
+	ImproveAny:UpdateTrackingBarTextShown(bar, false)
 end
 
-local function InitRepBarForever()
+local function InitTrackingRepBar()
 	if StatusTrackingBarInfo == nil or C_Reputation == nil or C_Reputation.GetWatchedFactionData == nil then return end
-	ImproveAny:InitForeverStatusBarArtwork()
-	ImproveAny:ForeachForeverStatusBar(
+	ImproveAny:InitTrackingBarArtwork()
+	ImproveAny:ForeachTrackingBar(
 		StatusTrackingBarInfo.BarsEnum.Reputation,
 		function(bar)
-			hooksecurefunc(bar, "Update", UpdateForeverRepBarText)
-			hooksecurefunc(bar, "UpdateCurrentText", UpdateForeverRepBarText)
+			hooksecurefunc(bar, "Update", UpdateTrackingRepBarText)
+			hooksecurefunc(bar, "UpdateCurrentText", UpdateTrackingRepBarText)
 			hooksecurefunc(
 				bar,
 				"UpdateTextVisibility",
 				function(sel)
-					ImproveAny:UpdateForeverStatusBarTextShown(sel, false)
+					ImproveAny:UpdateTrackingBarTextShown(sel, false)
 				end
 			)
 
 			if bar:IsShown() then
-				UpdateForeverRepBarText(bar)
+				UpdateTrackingRepBarText(bar)
 			else
-				ImproveAny:UpdateForeverStatusBarTextShown(bar, false)
+				ImproveAny:UpdateTrackingBarTextShown(bar, false)
 			end
 		end
 	)
@@ -62,8 +62,8 @@ ImproveAny:After(
 	0.01,
 	function()
 		if ImproveAny:IsEnabled("REPBAR", false) then
-			if ImproveAny:IsForever() then
-				InitRepBarForever()
+			if ImproveAny:HasTrackingBars() then
+				InitTrackingRepBar()
 
 				return
 			end
