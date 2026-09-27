@@ -93,8 +93,61 @@ local function AddCategory(key, level)
 	})
 end
 
+local defaults = {}
+local dependents = {}
+local function IsKeyEnabled(key)
+	return ImproveAny:IsEnabled(key, defaults[key] == true)
+end
+
+local function IsRequirementMet(req)
+	if type(req) ~= "table" then return IsKeyEnabled(req) end
+	for _, key in ipairs(req) do
+		if IsKeyEnabled(key) then return true end
+	end
+
+	return false
+end
+
+local function SetControlEnabled(control, enabled)
+	if control.slider then
+		control.slider:SetEnabled(enabled)
+	else
+		control:SetEnabled(enabled)
+	end
+
+	local holder = control.holder or control
+	holder:SetAlpha(enabled and 1 or 0.5)
+end
+
+local function UpdateDependents()
+	for _, dep in ipairs(dependents) do
+		local enabled = true
+		for _, req in ipairs(dep.requires) do
+			if not IsRequirementMet(req) then
+				enabled = false
+				break
+			end
+		end
+
+		SetControlEnabled(dep.control, enabled)
+	end
+end
+
+local function Requires(control, ...)
+	if control == nil then return end
+	local requires = {...}
+	control.uiElement.depth = control.uiElement.depth + #requires
+	tinsert(dependents, {
+		["control"] = control,
+		["requires"] = requires
+	})
+
+	return control
+end
+
 local function AddCheckBox(key, val, func)
 	if val == nil then val = true end
+	defaults[key] = val
 	return IASettings:AddCheckbox({
 		["label"] = "LID_" .. key,
 		["search"] = key,
@@ -102,6 +155,7 @@ local function AddCheckBox(key, val, func)
 		["func"] = function(value)
 			ImproveAny:SetEnabled(key, value)
 			if func then func() end
+			UpdateDependents()
 			EnableSave()
 		end
 	})
@@ -328,22 +382,10 @@ local function BuildElementList()
 
 	AddCategory("USERINTERFACE")
 	if StatusTrackingBarManager then
-		local statusBarWidthSlider
-		local function UpdateStatusBarWidthControl()
-			local enabled = ImproveAny:IsEnabled("STATUSBARWIDTHENABLED", false)
-			statusBarWidthSlider.slider:SetEnabled(enabled)
-			statusBarWidthSlider:SetAlpha(enabled and 1 or 0.5)
-		end
-
-		AddCheckBox("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false), function()
-			ImproveAny:UpdateStatusBar()
-			UpdateStatusBarWidthControl()
-		end)
-
-		statusBarWidthSlider = AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0)
-		statusBarWidthSlider.uiElement.depth = statusBarWidthSlider.uiElement.depth + 1
-		UpdateStatusBarWidthControl()
+		AddCheckBox("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false), Call("UpdateStatusBar"))
+		Requires(AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0), "STATUSBARWIDTHENABLED")
 	end
+
 	AddCheckBox("CASTBAR", false)
 	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
 	AddCategory("OVERALLUI", 2)
@@ -363,66 +405,40 @@ local function BuildElementList()
 	if not isRetail or ImproveAny:HasTrackingBars() then
 		AddCategory("XPBAR", 2)
 		AddCheckBox("XPBAR", false)
-		AddCheckBox("XPNUMBERLEVEL", false)
-		AddCheckBox("XPPERCENTLEVEL", false)
-		AddCheckBox("XPNUMBER", false)
-		AddCheckBox("XPPERCENT", false)
-		AddCheckBox("XPNUMBEREXHAUSTION", false)
-		AddCheckBox("XPPERCENTEXHAUSTION", false)
-		AddCheckBox("XPNUMBERMISSING", false)
-		AddCheckBox("XPPERCENTMISSING", false)
-		AddCheckBox("XPNUMBERQUESTCOMPLETE", false)
-		AddCheckBox("XPPERCENTQUESTCOMPLETE", false)
-		AddCheckBox("XPNUMBERKILLSTOLEVELUP", false)
-		AddCheckBox("XPHIDEARTWORK", false)
-		AddCheckBox("XPHIDEUNKNOWNVALUES", false)
-		AddCheckBox("XPBARTEXTSHOWINVERTED", false)
+		for _, key in ipairs({"XPNUMBERLEVEL", "XPPERCENTLEVEL", "XPNUMBER", "XPPERCENT", "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", "XPNUMBERMISSING", "XPPERCENTMISSING", "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", "XPNUMBERKILLSTOLEVELUP", "XPHIDEARTWORK", "XPHIDEUNKNOWNVALUES", "XPBARTEXTSHOWINVERTED"}) do
+			Requires(AddCheckBox(key, false), "XPBAR")
+		end
+
 		AddCategory("REPBAR", 2)
 		AddCheckBox("REPBAR", false)
-		AddCheckBox("REPNUMBER", false)
-		AddCheckBox("REPPERCENT", false)
-		AddCheckBox("REPHIDEARTWORK", false)
-	end
-
-	AddCategory("BAGS", 2)
-	AddCheckBox("FREESPACEBAGS", false)
-	AddCheckBox("BAGSAMESIZE", false)
-	AddSlider("BAGSIZE", 30, function() BAGThink.UpdateItemInfos() end, 20, 80, 1, 0)
-	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddDropdown("BAGMODEINDEX", 1, Call("UpdateBagMode"), IABAGMODES) end
-	AddCategory("MINIMAP", 2)
-	local minimapSettings = {}
-	local function UpdateMinimapControls()
-		local enabled = ImproveAny:IsEnabled("MINIMAP", false)
-		for _, control in ipairs(minimapSettings) do
-			control:SetEnabled(enabled)
-			if control.cb and control.cb.SetEnabled then control.cb:SetEnabled(enabled) end
-			control.holder:SetAlpha(enabled and 1 or 0.5)
+		for _, key in ipairs({"REPNUMBER", "REPPERCENT", "REPHIDEARTWORK"}) do
+			Requires(AddCheckBox(key, false), "REPBAR")
 		end
 	end
 
+	AddCategory("BAGS", 2)
+	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "BAGMODEINDEX") then AddDropdown("BAGMODEINDEX", 1, Call("UpdateBagMode"), IABAGMODES) end
+	AddCheckBox("FREESPACEBAGS", false)
+	AddCheckBox("BAGSAMESIZE", false)
+	Requires(AddSlider("BAGSIZE", 30, function() BAGThink.UpdateItemInfos() end, 20, 80, 1, 0), "BAGSAMESIZE")
+	AddCategory("MINIMAP", 2)
 	local function AddMinimapCheckBox(key)
-		local control = AddCheckBox(key, false, Call("UpdateMinimapSettings"))
-		control.uiElement.depth = control.uiElement.depth + 1
-		tinsert(minimapSettings, control)
+		Requires(AddCheckBox(key, false, Call("UpdateMinimapSettings")), "MINIMAP")
 	end
 
-	AddCheckBox("MINIMAP", false, function()
-		ImproveAny:UpdateMinimapSettings()
-		UpdateMinimapControls()
-	end)
+	AddCheckBox("MINIMAP", false, Call("UpdateMinimapSettings"))
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPHIDEBORDER") then AddMinimapCheckBox("MINIMAPHIDEBORDER") end
 	AddMinimapCheckBox("MINIMAPHIDEZOOMBUTTONS")
 	if not isRetail then AddMinimapCheckBox("MINIMAPSCROLLZOOM") end
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddMinimapCheckBox("MINIMAPSHAPESQUARE") end
 	AddMinimapCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE")
 	AddMinimapCheckBox("COMBINEMMBTNS")
-	UpdateMinimapControls()
 	AddCategory("WORLDMAP", 2)
 	AddCheckBox("WORLDMAP", false)
-	if not isRetail then AddCheckBox("WORLDMAPZOOM", false) end
-	AddCheckBox("WORLDMAPCOORDSP", false)
-	AddCheckBox("WORLDMAPCOORDSC", false)
-	AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0)
+	if not isRetail then Requires(AddCheckBox("WORLDMAPZOOM", false), "WORLDMAP") end
+	Requires(AddCheckBox("WORLDMAPCOORDSP", false), "WORLDMAP")
+	Requires(AddCheckBox("WORLDMAPCOORDSC", false), "WORLDMAP")
+	Requires(AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0), "WORLDMAP", {"WORLDMAPCOORDSP", "WORLDMAPCOORDSC"})
 	AddCategory("TOOLTIP", 2)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
 	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
@@ -431,21 +447,22 @@ local function BuildElementList()
 	AddCheckBox("IAPingFrame", false)
 	AddCheckBox("IAILVLBAR", false)
 	AddCheckBox("IACoordsFrame", false)
-	if not isRetail then AddCheckBox("SKILLBARS", false) end
+	if ImproveAny:HasSkillLines() then AddCheckBox("SKILLBARS", false) end
 	AddCategory("DURABILITYFRAME", 3)
 	AddCheckBox("DURABILITY", false)
-	AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0)
+	Requires(AddSlider("SHOWDURABILITYUNDER", 100, nil, 5, 100, 5, 0), "DURABILITY")
 	AddCategory("MONEYBAR", 3)
 	AddCheckBox("MONEYBAR", false)
-	AddCheckBox("MONEYBARPERHOUR", false)
+	Requires(AddCheckBox("MONEYBARPERHOUR", false), "MONEYBAR")
 	AddCategory("BADGES", 3)
 	AddCheckBox("TOKENBAR", false)
 	AddCheckBox("TOKENBARRESTORE", true)
 	AddCategory("COMBAT", 2)
 	AddCheckBox("COMBATTEXTICONS", false)
 	AddCheckBox("COMBATTEXTPOSITION", false)
-	AddSlider("COMBATTEXTX", 0, nil, -600, 600, 10, 0)
-	AddSlider("COMBATTEXTY", 0, nil, -250, 250, 10, 0)
+	Requires(AddSlider("COMBATTEXTX", 0, nil, -600, 600, 10, 0), "COMBATTEXTPOSITION")
+	Requires(AddSlider("COMBATTEXTY", 0, nil, -250, 250, 10, 0), "COMBATTEXTPOSITION")
+	UpdateDependents()
 	IASettings:ResumeLayout()
 end
 

@@ -7,6 +7,22 @@ local skillMax = -1
 local skillIds = {}
 local jobs = {}
 local subTypes = {}
+local GetNumSkillLines = _G["GetNumSkillLines"]
+local GetSkillLineInfo = _G["GetSkillLineInfo"]
+if GetSkillLineInfo == nil and C_SkillInfo and C_SkillInfo.GetSkillLineInfo and C_SkillInfo.GetNumSkillLines then
+	GetNumSkillLines = C_SkillInfo.GetNumSkillLines
+	GetSkillLineInfo = function(index)
+		local info = C_SkillInfo.GetSkillLineInfo(index)
+		if info == nil then return nil end
+
+		return info.name, info.isHeader, not info.isCollapsed, info.rank, info.tempPoints, info.modifier, info.maxRank, info.isAbandonable
+	end
+end
+
+function ImproveAny:HasSkillLines()
+	return GetSkillLineInfo ~= nil and GetNumSkillLines ~= nil
+end
+
 function ImproveAny:GetSkillData(name)
 	local itemcur = nil
 	local itemmax = nil
@@ -187,7 +203,7 @@ function ImproveAny:AddStatusBar(func, args)
 end
 
 function ImproveAny:InitSkillBars()
-	if ImproveAny:GetWoWBuild() ~= "RETAIL" and ImproveAny:IsEnabled("SKILLBARS", false) then
+	if ImproveAny:HasSkillLines() and ImproveAny:IsEnabled("SKILLBARS", false) then
 		IASkills = CreateFrame("FRAME", "IASkills", UIParent)
 		IASkills:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 520, 0)
 		IASkills:SetSize(sw, 6 * sh)
@@ -196,14 +212,14 @@ function ImproveAny:InitSkillBars()
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 16)
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 17)
 			ImproveAny:AddStatusBar(ImproveAny.GetWeaponSkillData, 18)
-			ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(STAT_CATEGORY_DEFENSE))
+			if STAT_CATEGORY_DEFENSE then ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(STAT_CATEGORY_DEFENSE)) end
 		end
 
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
 		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, "job")
-		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FIRST_AID))
-		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_COOKING))
-		ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(PROFESSIONS_FISHING))
+		for _, skillName in ipairs({PROFESSIONS_FIRST_AID or false, PROFESSIONS_COOKING or false, PROFESSIONS_FISHING or false}) do
+			if skillName then ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower(skillName)) end
+		end
 		if GetLocale() == "enGB" or GetLocale() == "enUS" then
 			ImproveAny:AddStatusBar(ImproveAny.GetSkillData, string.lower("Lockpicking"))
 		elseif GetLocale() == "deDE" then
