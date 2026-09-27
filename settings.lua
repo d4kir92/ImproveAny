@@ -195,37 +195,76 @@ function ImproveAny:UpdateUIParentAttribute()
 	end
 end
 
-function ImproveAny:UpdateStatusBar()
-	if ImproveAny:IsForever() then return end
-	if ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false) then
-		local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
-		if StatusTrackingBarManager then
-			StatusTrackingBarManager:SetWidth(w)
-			if StatusTrackingBarManager.TopBarFrameTexture then StatusTrackingBarManager.TopBarFrameTexture:SetWidth(w + 5) end
-			if StatusTrackingBarManager.BottomBarFrameTexture then StatusTrackingBarManager.BottomBarFrameTexture:SetWidth(w + 5) end
-			ImproveAny:ForeachChildren(StatusTrackingBarManager, function(child, x)
-				child:SetWidth(w)
-				if child.OverlayFrame then child.OverlayFrame:SetWidth(w) end
-				if child.StatusBar then child.StatusBar:SetWidth(w) end
-			end, "UpdateStatusBar")
-		end
+local statusBarOrgWidths = {}
+local function SetStatusBarWidth(frame, w)
+	if frame == nil or frame.SetWidth == nil then return end
+	if statusBarOrgWidths[frame] == nil then
+		if w == nil then return end
+		statusBarOrgWidths[frame] = frame:GetWidth()
+	end
 
-		if MainStatusTrackingBarContainer then
-			MainStatusTrackingBarContainer:SetWidth(w)
-			ImproveAny:ForeachChildren(MainStatusTrackingBarContainer, function(child, x)
-				child:SetWidth(w - 5)
-				ImproveAny:ForeachChildren(child, function(va, id) if id ~= 3 then va:SetWidth(w - 5) end end, "MainStatusTrackingBarContainer 2")
-			end, "MainStatusTrackingBarContainer 1")
-		end
+	frame:SetWidth(w or statusBarOrgWidths[frame])
+end
 
-		if SecondaryStatusTrackingBarContainer then
-			SecondaryStatusTrackingBarContainer:SetWidth(w)
-			ImproveAny:ForeachChildren(SecondaryStatusTrackingBarContainer, function(child, x)
-				child:SetWidth(w - 5)
-				ImproveAny:ForeachChildren(child, function(va, id) if id ~= 3 then va:SetWidth(w - 5) end end, "SecondaryStatusTrackingBarContainer 2")
-			end, "SecondaryStatusTrackingBarContainer 1")
+local function UpdateTrackingContainerWidth(container, w)
+	SetStatusBarWidth(container, w)
+	local width = container:GetWidth()
+	local adjustment = STATUS_BAR_SIZE_ADJUSTMENT or 6
+	for _, bar in pairs(container.bars or {}) do
+		SetStatusBarWidth(bar, w and (width - adjustment))
+		SetStatusBarWidth(bar.StatusBar, w and (width - adjustment))
+		if bar.ExhaustionTick and bar:IsShown() then bar.ExhaustionTick:UpdateTickPosition() end
+	end
+
+	if container.HorizontalDividersPool and container.GetExpectedSegments then
+		local numSegments = container:GetExpectedSegments()
+		local i = 0
+		for divider in container.HorizontalDividersPool:EnumerateActive() do
+			i = i + 1
+			divider:ClearAllPoints()
+			divider:SetPoint("LEFT", container, "LEFT", width / numSegments * i, 0)
 		end
 	end
+end
+
+local statusBarCombatFrame
+function ImproveAny:UpdateStatusBar()
+	if StatusTrackingBarManager == nil then return end
+	if InCombatLockdown() then
+		if statusBarCombatFrame == nil then
+			statusBarCombatFrame = CreateFrame("Frame")
+			statusBarCombatFrame:SetScript("OnEvent", function(sel)
+				sel:UnregisterEvent("PLAYER_REGEN_ENABLED")
+				ImproveAny:UpdateStatusBar()
+			end)
+		end
+
+		statusBarCombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+		return
+	end
+
+	local w
+	if ImproveAny:IsEnabled("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false)) then
+		w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
+	end
+
+	SetStatusBarWidth(StatusTrackingBarManager, w)
+	if StatusTrackingBarManager.barContainers then
+		for _, container in ipairs(StatusTrackingBarManager.barContainers) do
+			UpdateTrackingContainerWidth(container, w)
+		end
+
+		return
+	end
+
+	SetStatusBarWidth(StatusTrackingBarManager.TopBarFrameTexture, w and (w + 5))
+	SetStatusBarWidth(StatusTrackingBarManager.BottomBarFrameTexture, w and (w + 5))
+	ImproveAny:ForeachChildren(StatusTrackingBarManager, function(child, x)
+		SetStatusBarWidth(child, w)
+		SetStatusBarWidth(child.OverlayFrame, w)
+		SetStatusBarWidth(child.StatusBar, w)
+	end, "UpdateStatusBar")
 end
 
 function ImproveAny:ToggleSettings()
@@ -288,7 +327,23 @@ local function BuildElementList()
 	end)
 
 	AddCategory("USERINTERFACE")
-	if StatusTrackingBarManager and not ImproveAny:IsForever() then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
+	if StatusTrackingBarManager then
+		local statusBarWidthSlider
+		local function UpdateStatusBarWidthControl()
+			local enabled = ImproveAny:IsEnabled("STATUSBARWIDTHENABLED", false)
+			statusBarWidthSlider.slider:SetEnabled(enabled)
+			statusBarWidthSlider:SetAlpha(enabled and 1 or 0.5)
+		end
+
+		AddCheckBox("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false), function()
+			ImproveAny:UpdateStatusBar()
+			UpdateStatusBarWidthControl()
+		end)
+
+		statusBarWidthSlider = AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0)
+		statusBarWidthSlider.uiElement.depth = statusBarWidthSlider.uiElement.depth + 1
+		UpdateStatusBarWidthControl()
+	end
 	AddCheckBox("CASTBAR", false)
 	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
 	AddCategory("OVERALLUI", 2)
@@ -305,7 +360,7 @@ local function BuildElementList()
 		if isClassic then AddCheckBox("IMPROVETRADESKILLFRAME", true) end
 	end
 
-	if not isRetail or ImproveAny:IsForever() then
+	if not isRetail or ImproveAny:HasTrackingBars() then
 		AddCategory("XPBAR", 2)
 		AddCheckBox("XPBAR", false)
 		AddCheckBox("XPNUMBERLEVEL", false)
