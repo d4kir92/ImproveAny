@@ -196,6 +196,7 @@ function ImproveAny:UpdateUIParentAttribute()
 end
 
 function ImproveAny:UpdateStatusBar()
+	if ImproveAny:IsForever() then return end
 	if ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false) then
 		local w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
 		if StatusTrackingBarManager then
@@ -287,7 +288,7 @@ local function BuildElementList()
 	end)
 
 	AddCategory("USERINTERFACE")
-	if StatusTrackingBarManager then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
+	if StatusTrackingBarManager and not ImproveAny:IsForever() then AddSlider("STATUSBARWIDTH", 570, Call("UpdateStatusBar"), 100, 1920, 5, 0) end
 	AddCheckBox("CASTBAR", false)
 	if ExtraActionButton1 and ExtraActionButton1.style then AddCheckBox("HIDEEXTRAACTIONBUTTONARTWORK", false) end
 	AddCategory("OVERALLUI", 2)
@@ -302,6 +303,9 @@ local function BuildElementList()
 		AddCategory("FRAMES", 2)
 		AddCheckBox("WIDEFRAMES", false)
 		if isClassic then AddCheckBox("IMPROVETRADESKILLFRAME", true) end
+	end
+
+	if not isRetail or ImproveAny:IsForever() then
 		AddCategory("XPBAR", 2)
 		AddCheckBox("XPBAR", false)
 		AddCheckBox("XPNUMBERLEVEL", false)

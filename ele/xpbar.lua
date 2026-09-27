@@ -261,8 +261,232 @@ function ImproveAny:FindXpTextFrame(frame, str)
 	return test
 end
 
+local killXPRegistered = false
+function ImproveAny:RegisterKillXP()
+	if killXPRegistered then return end
+	killXPRegistered = true
+	local frame = CreateFrame("Frame")
+	ImproveAny:RegisterEvent(frame, "CHAT_MSG_COMBAT_XP_GAIN")
+	local xpGainText = COMBATLOG_XPGAIN_FIRSTPERSON
+	if strfind(xpGainText, "%1$s", 1, true) then
+		xpGainText = ImproveAny:ReplaceStr(xpGainText, "%1$s", "%s")
+	end
+
+	if strfind(xpGainText, "%2$d", 1, true) then
+		xpGainText = ImproveAny:ReplaceStr(xpGainText, "%2$d", "%d")
+	end
+
+	local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(xpGainText, "%s", "(.-)"), "%d", "(%d+)")
+	ImproveAny:OnEvent(
+		frame,
+		function(sel, event, message, ...)
+			pcall(
+				function()
+					if strfind(message, xpKillText) then
+						local xpGained = tonumber(message:match("(%d+)"))
+						if xpGained then
+							ImproveAny:AddXPPerMob(xpGained)
+						end
+					end
+				end
+			)
+		end, "xpKillText"
+	)
+end
+
+function ImproveAny:ForeachForeverStatusBar(barIndex, callback)
+	if StatusTrackingBarManager == nil or StatusTrackingBarManager.barContainers == nil or StatusTrackingBarInfo == nil then return end
+	for _, container in ipairs(StatusTrackingBarManager.barContainers) do
+		local bar = container.bars and container.bars[barIndex]
+		if bar then
+			callback(bar, container)
+		end
+	end
+end
+
+function ImproveAny:UpdateForeverStatusBarTextShown(bar, inverted)
+	local text = bar.OverlayFrame and bar.OverlayFrame.Text
+	if text == nil then return end
+	local hovered = bar.textLocked == true
+	if inverted then
+		text:SetShown(hovered)
+	else
+		text:SetShown(not hovered)
+	end
+end
+
+local foreverArtworkHooked = false
+function ImproveAny:UpdateForeverStatusBarArtwork(container)
+	local bar = container:GetShownBar()
+	local hide = false
+	if bar and bar.barIndex == StatusTrackingBarInfo.BarsEnum.Experience then
+		hide = ImproveAny:IsEnabled("XPBAR", false) and ImproveAny:IsEnabled("XPHIDEARTWORK", false)
+	elseif bar and bar.barIndex == StatusTrackingBarInfo.BarsEnum.Reputation then
+		hide = ImproveAny:IsEnabled("REPBAR", false) and ImproveAny:IsEnabled("REPHIDEARTWORK", false)
+	end
+
+	local alpha = hide and 0 or 1
+	if container.BarFrameTexture then
+		container.BarFrameTexture:SetAlpha(alpha)
+	end
+
+	if container.HorizontalDividersPool then
+		for divider in container.HorizontalDividersPool:EnumerateActive() do
+			divider:SetAlpha(alpha)
+		end
+	end
+end
+
+function ImproveAny:InitForeverStatusBarArtwork()
+	if foreverArtworkHooked then return end
+	if StatusTrackingBarManager == nil or StatusTrackingBarManager.barContainers == nil then return end
+	foreverArtworkHooked = true
+	for _, container in ipairs(StatusTrackingBarManager.barContainers) do
+		local function update()
+			ImproveAny:UpdateForeverStatusBarArtwork(container)
+		end
+
+		hooksecurefunc(container, "ApplyPendingBarToShow", update)
+		hooksecurefunc(container, "UpdateDividers", update)
+		update()
+	end
+end
+
+local foreverQcx = {}
+local function GetForeverQuestCompleteXP()
+	if C_QuestLog == nil or C_QuestLog.GetNumQuestLogEntries == nil or GetQuestLogRewardXP == nil then return 0 end
+	local totalXP = 0
+	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
+		local info = C_QuestLog.GetInfo(i)
+		if info and not info.isHeader and info.questID and C_QuestLog.IsComplete(info.questID) then
+			totalXP = totalXP + (GetQuestLogRewardXP(info.questID) or 0)
+		end
+	end
+
+	return totalXP
+end
+
+function ImproveAny:UpdateForeverXPBarText(bar)
+	local text = bar.OverlayFrame and bar.OverlayFrame.Text
+	if text == nil then return end
+	local currXP, maxBar, level = bar:GetLevelData()
+	if maxBar == nil or maxBar == 0 then return end
+	maxlevel = bar:GetMaxLevel() or maxlevel
+	local showQuestComplete = ImproveAny:IsEnabled("XPNUMBERQUESTCOMPLETE", false) or ImproveAny:IsEnabled("XPPERCENTQUESTCOMPLETE", false)
+	local questCompleteXP = 0
+	if showQuestComplete then
+		questCompleteXP = GetForeverQuestCompleteXP()
+	end
+
+	local qcx = foreverQcx[bar]
+	if qcx == nil and showQuestComplete then
+		qcx = bar.StatusBar:CreateTexture(nil, "BACKGROUND", nil, 2)
+		qcx:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		qcx:SetVertexColor(1, 1, 0, 0.6)
+		foreverQcx[bar] = qcx
+	end
+
+	if qcx then
+		local sw = bar.StatusBar:GetWidth()
+		local px = math.min(currXP / maxBar, 1) * sw
+		local wi = questCompleteXP / maxBar * sw
+		if px + wi > sw then
+			wi = sw - px
+		end
+
+		if showQuestComplete and wi > 1 then
+			qcx:ClearAllPoints()
+			qcx:SetPoint("LEFT", bar.StatusBar, "LEFT", px, 0)
+			qcx:SetSize(wi, bar.StatusBar:GetHeight())
+			qcx:Show()
+		else
+			qcx:Hide()
+		end
+	end
+
+	local text2 = ""
+	text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, level, ImproveAny:GetMaxLevel())
+	text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
+	text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, maxBar - currXP, maxBar)
+	local exhaustion = GetXPExhaustion()
+	if exhaustion and exhaustion >= 0 then
+		text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, exhaustion, maxBar)
+	end
+
+	text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
+	text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
+	if UnitExists("PET") and GetPetExperience ~= nil then
+		local currXPPet, maxBarPet = GetPetExperience()
+		text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
+	end
+
+	text2 = string.gsub(text2, "%s+$", "")
+	if text2 ~= "" then
+		text:SetText(text2)
+	end
+
+	ImproveAny:UpdateForeverStatusBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+end
+
+function ImproveAny:UpdateForeverXPBars()
+	ImproveAny:ForeachForeverStatusBar(
+		StatusTrackingBarInfo.BarsEnum.Experience,
+		function(bar)
+			if bar:IsShown() then
+				ImproveAny:UpdateForeverXPBarText(bar)
+			end
+		end
+	)
+end
+
+function ImproveAny:InitXPBarForever()
+	if StatusTrackingBarInfo == nil then return end
+	ImproveAny:RegisterKillXP()
+	ImproveAny:InitForeverStatusBarArtwork()
+	ImproveAny:ForeachForeverStatusBar(
+		StatusTrackingBarInfo.BarsEnum.Experience,
+		function(bar)
+			hooksecurefunc(
+				bar,
+				"UpdateCurrentText",
+				function(sel)
+					ImproveAny:UpdateForeverXPBarText(sel)
+				end
+			)
+
+			hooksecurefunc(
+				bar,
+				"UpdateTextVisibility",
+				function(sel)
+					ImproveAny:UpdateForeverStatusBarTextShown(sel, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+				end
+			)
+
+			ImproveAny:UpdateForeverStatusBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
+		end
+	)
+
+	local frame = CreateFrame("Frame")
+	ImproveAny:RegisterEvent(frame, "QUEST_LOG_UPDATE")
+	ImproveAny:RegisterEvent(frame, "UNIT_PET_EXPERIENCE")
+	ImproveAny:OnEvent(
+		frame,
+		function()
+			ImproveAny:UpdateForeverXPBars()
+		end, "ForeverXPBar"
+	)
+
+	ImproveAny:UpdateForeverXPBars()
+end
+
 function ImproveAny:InitXPBar()
 	if ImproveAny:IsEnabled("XPBAR", false) then
+		if ImproveAny:IsForever() then
+			ImproveAny:InitXPBarForever()
+
+			return
+		end
+
 		if QuestLogFrame then
 			QuestLogFrame:Show()
 			QuestLogFrame:Hide()
@@ -512,41 +736,7 @@ function ImproveAny:InitXPBar()
 						end
 					end
 
-					if true then
-						local frame = CreateFrame("Frame")
-						ImproveAny:RegisterEvent(frame, "CHAT_MSG_COMBAT_XP_GAIN")
-						if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", 1, true) then
-							COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%1$s", "%s")
-						end
-
-						if strfind(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", 1, true) then
-							COMBATLOG_XPGAIN_FIRSTPERSON = ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%2$d", "%d")
-						end
-
-						local xpKillText = ImproveAny:ReplaceStr(ImproveAny:ReplaceStr(COMBATLOG_XPGAIN_FIRSTPERSON, "%s", "(.-)"), "%d", "(%d+)")
-						ImproveAny:OnEvent(
-							frame,
-							function(sel, event, message, ...)
-								-- Only if it is a kill
-								pcall(
-									function()
-										if strfind(message, xpKillText) then
-											local xpGained, xpGainedEx = message:match("(%d+)%D*(%d*)")
-											xpGained = tonumber(xpGained)
-											if xpGained then
-												if xpGainedEx then
-													xpGainedEx = tonumber(xpGainedEx)
-													ImproveAny:AddXPPerMob(xpGained)
-												else
-													ImproveAny:AddXPPerMob(xpGained)
-												end
-											end
-										end
-									end
-								)
-							end, "xpKillText"
-						)
-					end
+					ImproveAny:RegisterKillXP()
 
 					if xpBar then
 						if xpBar.SetStatusBarColor then

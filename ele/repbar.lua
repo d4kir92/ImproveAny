@@ -1,9 +1,73 @@
 local _, ImproveAny = ...
+local textc = "|cFF00FF00"
+local textw = "|r"
+local function BuildRepText(value, maxBar)
+	local text = ""
+	if ImproveAny:IsEnabled("REPNUMBER", false) then
+		text = text .. textc .. value .. textw .. "/" .. textc .. maxBar
+	end
+
+	if ImproveAny:IsEnabled("REPPERCENT", false) then
+		local percent = value / maxBar * 100
+		if text ~= "" then
+			text = text .. textw .. " (" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
+		else
+			text = text .. textc .. format("%.2f", percent) .. "%"
+		end
+	end
+
+	return (string.gsub(text, "%s+$", ""))
+end
+
+local function UpdateForeverRepBarText(bar)
+	local text = bar.OverlayFrame and bar.OverlayFrame.Text
+	if text == nil then return end
+	if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
+		local data = C_Reputation.GetWatchedFactionData()
+		if data and data.factionID ~= 0 and bar.value and bar.max and bar.max > 0 then
+			text:SetText(data.name .. ": " .. BuildRepText(bar.value, bar.max))
+		end
+	end
+
+	ImproveAny:UpdateForeverStatusBarTextShown(bar, false)
+end
+
+local function InitRepBarForever()
+	if StatusTrackingBarInfo == nil or C_Reputation == nil or C_Reputation.GetWatchedFactionData == nil then return end
+	ImproveAny:InitForeverStatusBarArtwork()
+	ImproveAny:ForeachForeverStatusBar(
+		StatusTrackingBarInfo.BarsEnum.Reputation,
+		function(bar)
+			hooksecurefunc(bar, "Update", UpdateForeverRepBarText)
+			hooksecurefunc(bar, "UpdateCurrentText", UpdateForeverRepBarText)
+			hooksecurefunc(
+				bar,
+				"UpdateTextVisibility",
+				function(sel)
+					ImproveAny:UpdateForeverStatusBarTextShown(sel, false)
+				end
+			)
+
+			if bar:IsShown() then
+				UpdateForeverRepBarText(bar)
+			else
+				ImproveAny:UpdateForeverStatusBarTextShown(bar, false)
+			end
+		end
+	)
+end
+
 ImproveAny:Debug("repbar.lua: Init")
 ImproveAny:After(
 	0.01,
 	function()
 		if ImproveAny:IsEnabled("REPBAR", false) then
+			if ImproveAny:IsForever() then
+				InitRepBarForever()
+
+				return
+			end
+
 			if ReputationWatchBar and ReputationWatchBar.StatusBar then
 				ReputationWatchBar.show = true
 				ReputationWatchBar:HookScript(
@@ -139,32 +203,10 @@ ImproveAny:After(
 						end
 
 						minBar = 0
-						--			  "|cAARRGGBB"
-						local textc = "|cFF00FF00" -- Colored
-						local textw = "|r" -- WHITE
-						local text = ""
 						if name ~= nil then
 							sel.rep = value
-							local per = (value - minBar) / (maxBar - minBar)
-							local percent = per * 100
 							if maxBar - minBar > 0 then
-								if ImproveAny:IsEnabled("REPNUMBER", false) then
-									if text ~= "" then
-										text = text .. " "
-									end
-
-									text = text .. textc .. (value - minBar) .. textw .. "/" .. textc .. (maxBar - minBar)
-								end
-
-								if ImproveAny:IsEnabled("REPPERCENT", false) then
-									if text ~= "" then
-										text = text .. textw .. " (" .. textc .. format("%.2f", percent) .. "%" .. textw .. ")"
-									else
-										text = text .. textc .. format("%.2f", percent) .. "%"
-									end
-								end
-
-								text = string.gsub(text, "%s+$", "")
+								local text = BuildRepText(value - minBar, maxBar - minBar)
 								if ImproveAny:IsEnabled("REPNUMBER", false) or ImproveAny:IsEnabled("REPPERCENT", false) then
 									sel:SetText(name .. ": " .. text)
 								else
