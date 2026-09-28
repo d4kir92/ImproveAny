@@ -95,6 +95,7 @@ end
 
 local defaults = {}
 local dependents = {}
+local checkboxes = {}
 local function IsKeyEnabled(key)
 	return ImproveAny:IsEnabled(key, defaults[key] == true)
 end
@@ -137,6 +138,12 @@ local function Requires(control, ...)
 	if control == nil then return end
 	local requires = {...}
 	control.uiElement.depth = control.uiElement.depth + #requires
+	for _, req in ipairs(requires) do
+		for _, key in ipairs(type(req) == "table" and req or {req}) do
+			if checkboxes[key] then IASettings:AddRequirement(control, checkboxes[key]) end
+		end
+	end
+
 	tinsert(dependents, {
 		["control"] = control,
 		["requires"] = requires
@@ -148,7 +155,7 @@ end
 local function AddCheckBox(key, val, func)
 	if val == nil then val = true end
 	defaults[key] = val
-	return IASettings:AddCheckbox({
+	checkboxes[key] = IASettings:AddCheckbox({
 		["label"] = "LID_" .. key,
 		["search"] = key,
 		["value"] = ImproveAny:IsEnabled(key, val),
@@ -159,6 +166,8 @@ local function AddCheckBox(key, val, func)
 			EnableSave()
 		end
 	})
+
+	return checkboxes[key]
 end
 
 local function AddSlider(key, val, func, vmin, vmax, step, decimals, extra)
