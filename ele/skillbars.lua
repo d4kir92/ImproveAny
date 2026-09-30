@@ -68,6 +68,24 @@ function ImproveAny:GetSkillData(name)
 	return itemname, itemcur, itemmax
 end
 
+local function GetUnarmedSkillName()
+	if GetLocale() == "enGB" or GetLocale() == "enUS" then
+		return "unarmed"
+	elseif GetLocale() == "deDE" then
+		return "unbewaffnet"
+	end
+
+	return nil
+end
+
+local function IsFistWeapon(item)
+	local getItemInfoInstant = C_Item and C_Item.GetItemInfoInstant or GetItemInfoInstant
+	if getItemInfoInstant == nil then return false end
+	local _, _, _, _, _, classID, subClassID = getItemInfoInstant(item)
+
+	return classID == 2 and subClassID == 13
+end
+
 function ImproveAny:GetWeaponSkillData(id)
 	local itemcur = nil
 	local itemmax = nil
@@ -75,6 +93,9 @@ function ImproveAny:GetWeaponSkillData(id)
 	local item = GetInventoryItemLink("player", id)
 	if item then
 		if subTypes[item] then
+			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
+		elseif IsFistWeapon(item) and GetUnarmedSkillName() then
+			subTypes[item] = GetUnarmedSkillName()
 			itemname, itemcur, itemmax = ImproveAny:GetSkillData(subTypes[item])
 		else
 			local _, _, _, _, _, _, itemSubType = ImproveAny:GetItemInfo(item)
@@ -99,12 +120,8 @@ function ImproveAny:GetWeaponSkillData(id)
 			end
 		end
 	else
-		if id == 16 then
-			if GetLocale() == "enGB" or GetLocale() == "enUS" then
-				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unarmed")
-			elseif GetLocale() == "deDE" then
-				itemname, itemcur, itemmax = ImproveAny:GetSkillData("unbewaffnet")
-			end
+		if id == 16 and GetUnarmedSkillName() then
+			itemname, itemcur, itemmax = ImproveAny:GetSkillData(GetUnarmedSkillName())
 		end
 	end
 
