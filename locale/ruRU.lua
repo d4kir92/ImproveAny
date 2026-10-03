@@ -98,7 +98,6 @@ ImproveAny:AddTrans("ruRU", "LID_WORLDMAPCOORDSC", "Координаты (кур
 ImproveAny:AddTrans("ruRU", "LID_COORDSFONTSIZE", "Размер шрифта координат")
 ImproveAny:AddTrans("ruRU", "LID_IACoordsFrame", "Рамка координат")
 ImproveAny:AddTrans("ruRU", "LID_RIGHTCLICKSELFCAST", "ПКМ для каста на себя")
-ImproveAny:AddTrans("ruRU", "LID_BLOCKWORDS", "Заблокированные слова")
 ImproveAny:AddTrans("ruRU", "LID_FRAMES", "Окна (фреймы)")
 ImproveAny:AddTrans("ruRU", "LID_WIDEFRAMES", "Широкие окна (широкие фреймы)")
 ImproveAny:AddTrans("ruRU", "LID_AUTOACCEPTQUESTS", "Автоматически принимать задания")

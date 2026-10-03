@@ -98,7 +98,6 @@ ImproveAny:AddTrans("frFR", "LID_WORLDMAPCOORDSC", "Coordonnées (Curseur) (Cart
 ImproveAny:AddTrans("frFR", "LID_COORDSFONTSIZE", "Taille de Police des Coordonnées")
 ImproveAny:AddTrans("frFR", "LID_IACoordsFrame", "Cadre de Coordonnées")
 ImproveAny:AddTrans("frFR", "LID_RIGHTCLICKSELFCAST", "Clic droit pour se lancer un sort à soi-même")
-ImproveAny:AddTrans("frFR", "LID_BLOCKWORDS", "Mots Bloqués")
 ImproveAny:AddTrans("frFR", "LID_FRAMES", "Fenêtres (Cadres)")
 ImproveAny:AddTrans("frFR", "LID_WIDEFRAMES", "Fenêtres Larges (Cadres Larges)")
 ImproveAny:AddTrans("frFR", "LID_AUTOACCEPTQUESTS", "Accepter Automatiquement les Quêtes")

@@ -98,7 +98,6 @@ ImproveAny:AddTrans("deDE", "LID_WORLDMAPCOORDSC", "Koordinaten (Zeiger) (Weltka
 ImproveAny:AddTrans("deDE", "LID_COORDSFONTSIZE", "Koordinatenschriftgröße")
 ImproveAny:AddTrans("deDE", "LID_IACoordsFrame", "Koordinatenfenster")
 ImproveAny:AddTrans("deDE", "LID_RIGHTCLICKSELFCAST", "Rechtsklick für Selbstzauber")
-ImproveAny:AddTrans("deDE", "LID_BLOCKWORDS", "Blockwörter")
 ImproveAny:AddTrans("deDE", "LID_FRAMES", "Fenster")
 ImproveAny:AddTrans("deDE", "LID_WIDEFRAMES", "Weite Fenster")
 ImproveAny:AddTrans("deDE", "LID_AUTOACCEPTQUESTS", "Automatisch Quests annehmen")

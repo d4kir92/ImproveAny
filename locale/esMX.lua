@@ -98,7 +98,6 @@ ImproveAny:AddTrans("esMX", "LID_WORLDMAPCOORDSC", "Coordenadas (Cursor) (Mapa d
 ImproveAny:AddTrans("esMX", "LID_COORDSFONTSIZE", "Tamaño de Fuente de Coordenadas")
 ImproveAny:AddTrans("esMX", "LID_IACoordsFrame", "Marco de Coordenadas")
 ImproveAny:AddTrans("esMX", "LID_RIGHTCLICKSELFCAST", "Clic derecho para autolanzarse")
-ImproveAny:AddTrans("esMX", "LID_BLOCKWORDS", "Palabras Bloqueadas")
 ImproveAny:AddTrans("esMX", "LID_FRAMES", "Ventanas (Marcos)")
 ImproveAny:AddTrans("esMX", "LID_WIDEFRAMES", "Ventanas Anchas (Marcos Anchos)")
 ImproveAny:AddTrans("esMX", "LID_AUTOACCEPTQUESTS", "Aceptar Misiones Automáticamente")

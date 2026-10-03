@@ -206,18 +206,6 @@ local function AddDropdown(key, val, func, tab)
 	})
 end
 
-local function AddEditBox(key, val, func)
-	return IASettings:AddEditbox({
-		["label"] = "LID_" .. key,
-		["search"] = key,
-		["value"] = ImproveAny:IAGV(key, val),
-		["func"] = function(value, box)
-			ImproveAny:IASV(key, value)
-			if func then func(box) end
-		end
-	})
-end
-
 function ImproveAny:UpdateILVLIcons()
 	ImproveAny:PDUpdateItemInfos()
 	if ImproveAny.IFUpdateItemInfos then ImproveAny:IFUpdateItemInfos() end
@@ -357,29 +345,6 @@ local function BuildElementList()
 	AddCheckBox("AUTOCHECKINQUESTS", false)
 	AddCheckBox("FASTLOOTING", false)
 	if CharacterFrameExpandButton then AddCheckBox("CHARACTERFRAMEAUTOEXPAND", true) end
-	AddCategory("CHAT")
-	AddEditBox("BLOCKWORDS", "", function(eb)
-		eb.lastchange = GetTime()
-		ImproveAny:Debug("settings, lastchange")
-		ImproveAny:After(1, function()
-			if eb.lastchange < GetTime() - 0.9 then
-				ImproveAny:IASV("BLOCKWORDS", eb:GetText())
-				if eb:GetText() ~= "" then
-					ImproveAny:MSG("|cFF00FF00" .. "BLOCKWORDS changed to: |r")
-					for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-						if strlen(v) < 3 then
-							ImproveAny:MSG(" • |cFFFF0000" .. v .. " [TO SHORT!]")
-						else
-							ImproveAny:MSG(" • |cFF00FF00" .. v)
-						end
-					end
-				else
-					ImproveAny:MSG("|cFFFF0000" .. "BLOCKWORDS are disabled")
-				end
-			end
-		end, "lastchange")
-	end)
-
 	AddCategory("USERINTERFACE")
 	if StatusTrackingBarManager then
 		AddCheckBox("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false), Call("UpdateStatusBar"))
@@ -533,26 +498,3 @@ function ImproveAny:InitIASettings()
 		IASettings:Hide()
 	end
 end
-
-function ImproveAny:CheckBlockedWords()
-	if IATAB and ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
-		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-			if strlen(v) < 3 then ImproveAny:MSG("|cFFFF0000" .. "Blockword \"" .. v .. "\" is to short!") end
-		end
-	end
-end
-
-ImproveAny:After(2, ImproveAny.CheckBlockedWords, "CheckBlockedWords")
-function ImproveAny:RemoveBadWords(self, msg, author, ...)
-	msg = strlower(msg)
-	if ImproveAny:IAGV("BLOCKWORDS") and ImproveAny:IAGV("BLOCKWORDS") ~= "" and ImproveAny:IAGV("BLOCKWORDS") ~= " " then
-		for i, v in pairs({string.split(",", ImproveAny:IAGV("BLOCKWORDS"))}) do
-			if v ~= "" and msg:find(strlower(v)) then return true end
-		end
-	end
-end
-
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ImproveAny.RemoveBadWords)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ImproveAny.RemoveBadWords)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", ImproveAny.RemoveBadWords)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", ImproveAny.RemoveBadWords)

@@ -98,7 +98,6 @@ ImproveAny:AddTrans("ptBR", "LID_WORLDMAPCOORDSC", "Coordenadas (Cursor) (Mapa-M
 ImproveAny:AddTrans("ptBR", "LID_COORDSFONTSIZE", "Tamanho da Fonte das Coordenadas")
 ImproveAny:AddTrans("ptBR", "LID_IACoordsFrame", "Quadro de Coordenadas")
 ImproveAny:AddTrans("ptBR", "LID_RIGHTCLICKSELFCAST", "Clique direito para autolançar")
-ImproveAny:AddTrans("ptBR", "LID_BLOCKWORDS", "Palavras Bloqueadas")
 ImproveAny:AddTrans("ptBR", "LID_FRAMES", "Janelas (Quadros)")
 ImproveAny:AddTrans("ptBR", "LID_WIDEFRAMES", "Janelas Largas (Quadros Largos)")
 ImproveAny:AddTrans("ptBR", "LID_AUTOACCEPTQUESTS", "Aceitar Missões Automaticamente")

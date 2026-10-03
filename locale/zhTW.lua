@@ -98,7 +98,6 @@ ImproveAny:AddTrans("zhTW", "LID_WORLDMAPCOORDSC", "座標（游標）（世界�
 ImproveAny:AddTrans("zhTW", "LID_COORDSFONTSIZE", "座標字型大小")
 ImproveAny:AddTrans("zhTW", "LID_IACoordsFrame", "座標框體")
 ImproveAny:AddTrans("zhTW", "LID_RIGHTCLICKSELFCAST", "右鍵點擊自我施法")
-ImproveAny:AddTrans("zhTW", "LID_BLOCKWORDS", "封鎖字詞")
 ImproveAny:AddTrans("zhTW", "LID_FRAMES", "視窗（框體）")
 ImproveAny:AddTrans("zhTW", "LID_WIDEFRAMES", "寬幅視窗（寬幅框體）")
 ImproveAny:AddTrans("zhTW", "LID_AUTOACCEPTQUESTS", "自動接受任務")

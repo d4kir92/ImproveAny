@@ -98,7 +98,6 @@ ImproveAny:AddTrans("itIT", "LID_WORLDMAPCOORDSC", "Coordinate (Cursore) (Mappa 
 ImproveAny:AddTrans("itIT", "LID_COORDSFONTSIZE", "Dimensione Font Coordinate")
 ImproveAny:AddTrans("itIT", "LID_IACoordsFrame", "Riquadro Coordinate")
 ImproveAny:AddTrans("itIT", "LID_RIGHTCLICKSELFCAST", "Click destro per lanciare su se stessi")
-ImproveAny:AddTrans("itIT", "LID_BLOCKWORDS", "Parole Bloccate")
 ImproveAny:AddTrans("itIT", "LID_FRAMES", "Finestre (Riquadri)")
 ImproveAny:AddTrans("itIT", "LID_WIDEFRAMES", "Finestre Larghe (Riquadri Larghi)")
 ImproveAny:AddTrans("itIT", "LID_AUTOACCEPTQUESTS", "Accetta Automaticamente le Missioni")

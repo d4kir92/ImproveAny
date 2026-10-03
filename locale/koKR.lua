@@ -98,7 +98,6 @@ ImproveAny:AddTrans("koKR", "LID_WORLDMAPCOORDSC", "좌표 (커서) (월드맵)"
 ImproveAny:AddTrans("koKR", "LID_COORDSFONTSIZE", "좌표 글꼴 크기")
 ImproveAny:AddTrans("koKR", "LID_IACoordsFrame", "좌표 프레임")
 ImproveAny:AddTrans("koKR", "LID_RIGHTCLICKSELFCAST", "우클릭으로 자신에게 시전")
-ImproveAny:AddTrans("koKR", "LID_BLOCKWORDS", "차단 단어")
 ImproveAny:AddTrans("koKR", "LID_FRAMES", "창 (프레임)")
 ImproveAny:AddTrans("koKR", "LID_WIDEFRAMES", "넓은 창 (넓은 프레임)")
 ImproveAny:AddTrans("koKR", "LID_AUTOACCEPTQUESTS", "퀘스트 자동 수락")

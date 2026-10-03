@@ -98,7 +98,6 @@ ImproveAny:AddTrans("zhCN", "LID_WORLDMAPCOORDSC", "坐标（光标）（世界�
 ImproveAny:AddTrans("zhCN", "LID_COORDSFONTSIZE", "坐标字体大小")
 ImproveAny:AddTrans("zhCN", "LID_IACoordsFrame", "坐标框体")
 ImproveAny:AddTrans("zhCN", "LID_RIGHTCLICKSELFCAST", "右键点击自我施法")
-ImproveAny:AddTrans("zhCN", "LID_BLOCKWORDS", "屏蔽词")
 ImproveAny:AddTrans("zhCN", "LID_FRAMES", "窗口（框体）")
 ImproveAny:AddTrans("zhCN", "LID_WIDEFRAMES", "宽幅窗口（宽幅框体）")
 ImproveAny:AddTrans("zhCN", "LID_AUTOACCEPTQUESTS", "自动接受任务")
