@@ -72,12 +72,107 @@ function ImproveAny:GetQuestCompleteXP()
 	return math.floor(totalXP)
 end
 
-local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
+local xpIcons = {
+	LEVEL = {
+		{
+			atlas = "bags-greenarrow"
+		},
+		{
+			file = "Interface\\Buttons\\Arrow-Up-Up"
+		},
+	},
+	XP = {
+		{
+			file = "Interface\\Icons\\XP_Icon",
+			size = 64,
+			coords = {5, 59, 5, 59}
+		},
+	},
+	RESTED = {
+		{
+			file = "Interface\\HUD\\UIUnitFrameRestingFlipbook",
+			size = 512,
+			coords = {4, 56, 244, 296}
+		},
+		{
+			atlas = "UI-HUD-UnitFrame-Player-Rest-Flipbook",
+			cols = 6,
+			rows = 7,
+			col = 0,
+			row = 4
+		},
+		{
+			file = "Interface\\AddOns\\ImproveAny\\media\\rested",
+			size = 64,
+			coords = {6, 58, 6, 58},
+			addon = true
+		},
+	},
+	QUESTCOMPLETE = {
+		{
+			file = "Interface\\GossipFrame\\ActiveQuestIcon"
+		},
+	},
+	KILLS = {
+		{
+			file = "Interface\\CharacterFrame\\UI-StateIcon",
+			size = 64,
+			coords = {32, 64, 0, 32}
+		},
+		{
+			atlas = "UI-HUD-UnitFrame-Player-CombatIcon"
+		},
+	},
+}
+
+local xpIconCache = {}
+local function GetXPIcon(key)
+	if key == nil or xpIcons[key] == nil then return nil end
+	if xpIconCache[key] ~= nil then return xpIconCache[key] or nil end
+	local markup = false
+	for _, icon in ipairs(xpIcons[key]) do
+		if icon.atlas then
+			local info = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo(icon.atlas)
+			local file = info and (info.file or info.filename)
+			if file then
+				local l, r, t, b = info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
+				if icon.cols and icon.rows then
+					local w = (r - l) / icon.cols
+					local h = (b - t) / icon.rows
+					l = l + w * (icon.col or 0)
+					t = t + h * (icon.row or 0)
+					r = l + w
+					b = t + h
+				end
+
+				markup = format("|T%s:0:0:0:0:4096:4096:%d:%d:%d:%d|t", file, l * 4096, r * 4096, t * 4096, b * 4096)
+				break
+			end
+		elseif icon.addon or GetFileIDFromPath == nil or GetFileIDFromPath(icon.file) then
+			if icon.coords then
+				local c = icon.coords
+				markup = format("|T%s:0:0:0:0:%d:%d:%d:%d:%d:%d|t", icon.file, icon.size, icon.size, c[1], c[2], c[3], c[4])
+			else
+				markup = format("|T%s:0|t", icon.file)
+			end
+
+			break
+		end
+	end
+
+	xpIconCache[key] = markup
+
+	return markup or nil
+end
+
+local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color, iconKey)
 	local res = ""
 	if ImproveAny:IsEnabled(bNum, false) or (bPer and ImproveAny:IsEnabled(bPer, false)) then
 		if text ~= "" then
 			res = res .. "    "
 		end
+
+		str = GetXPIcon(iconKey) or (str .. ":")
 
 		local num = "%d"
 		if bDecimals then
@@ -94,19 +189,19 @@ local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color)
 		if (vNum and vNum ~= 0) or (bNum == "XPNUMBER") then
 			if vNumMax and vNumMax > 0 then
 				if ImproveAny:IsEnabled(bNum, false) and (bPer and ImproveAny:IsEnabled(bPer, false)) then
-					res = res .. format("%s%s: %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
+					res = res .. format("%s%s %s%d%s/%s%d%s (%s%0.1f%s%%)", col1, str, col2, vNum, textw, textc, vNumMax, textw, textc, vNum / vNumMax * 100, textw)
 				elseif bPer and ImproveAny:IsEnabled(bPer, false) then
-					res = res .. format("%s%s: %s%0.1f%s%%", col1, str, col2, vNum / vNumMax * 100, textw)
+					res = res .. format("%s%s %s%0.1f%s%%", col1, str, col2, vNum / vNumMax * 100, textw)
 				elseif ImproveAny:IsEnabled(bNum, false) then
-					res = res .. format("%s%s: %s%d%s/%s%d", col1, str, col2, vNum, textw, textc, vNumMax, textw)
+					res = res .. format("%s%s %s%d%s/%s%d", col1, str, col2, vNum, textw, textc, vNumMax, textw)
 				end
 			else
 				if ImproveAny:IsEnabled(bNum, false) then
-					res = res .. format("%s%s: %s" .. num .. "%s", col1, str, col2, vNum, textw)
+					res = res .. format("%s%s %s" .. num .. "%s", col1, str, col2, vNum, textw)
 				end
 			end
 		elseif ImproveAny:IsEnabled("XPHIDEUNKNOWNVALUES", false) == false then
-			res = res .. format("%s%s: %s%s", col1, str, col2, UNKNOWN, textw)
+			res = res .. format("%s%s %s%s", col1, str, col2, UNKNOWN, textw)
 		end
 	end
 
@@ -359,6 +454,7 @@ function ImproveAny:InitTrackingBarArtwork()
 end
 
 local trackingQcx = {}
+local trackingFonts = {}
 local function GetTrackingQuestCompleteXP()
 	if C_QuestLog == nil or C_QuestLog.GetNumQuestLogEntries == nil or GetQuestLogRewardXP == nil then return 0 end
 	local totalXP = 0
@@ -411,16 +507,16 @@ function ImproveAny:UpdateTrackingXPBarText(bar)
 	end
 
 	local text2 = ""
-	text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, level, ImproveAny:GetMaxLevel())
-	text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
+	text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, level, ImproveAny:GetMaxLevel(), nil, nil, "LEVEL")
+	text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar, nil, nil, "XP")
 	text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, maxBar - currXP, maxBar)
 	local exhaustion = GetXPExhaustion()
 	if exhaustion and exhaustion >= 0 then
-		text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, exhaustion, maxBar)
+		text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, exhaustion, maxBar, nil, nil, "RESTED")
 	end
 
-	text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
-	text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
+	text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00", "QUESTCOMPLETE")
+	text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true, nil, "KILLS")
 	if UnitExists("PET") and GetPetExperience ~= nil then
 		local currXPPet, maxBarPet = GetPetExperience()
 		text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", PET, currXPPet, maxBarPet)
@@ -428,6 +524,16 @@ function ImproveAny:UpdateTrackingXPBarText(bar)
 
 	text2 = string.gsub(text2, "%s+$", "")
 	if text2 ~= "" then
+		local font = trackingFonts[text]
+		if font == nil then
+			font = {text:GetFont()}
+			trackingFonts[text] = font
+		end
+
+		if font[1] and font[2] then
+			text:SetFont(font[1], font[2] - 2, font[3])
+		end
+
 		text:SetText(text2)
 	end
 
@@ -770,7 +876,7 @@ function ImproveAny:InitXPBar()
 
 					if xpBar and xpBarText then
 						local fontName, _, fontFlags = xpBarText:GetFont()
-						xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fontFlags)
+						xpBarText:SetFont(fontName, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30) - 2, fontFlags)
 						if DragonflightUIXPBar and DragonflightUIXPBar.Bar then
 							local xpBarSetPoint
 							hooksecurefunc(
@@ -806,7 +912,7 @@ function ImproveAny:InitXPBar()
 								end
 
 								local ff, _, fflags = sel:GetFont()
-								sel:SetFont(ff, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30), fflags)
+								sel:SetFont(ff, ImproveAny:Clamp(xpBar:GetHeight() * 0.7, 8, 30) - 2, fflags)
 								if GameLimitedMode_IsActive() then
 									local rLevel = GetRestrictedAccountData()
 									if UnitLevel("player") >= rLevel then
@@ -842,20 +948,20 @@ function ImproveAny:InitXPBar()
 								end
 
 								-- Level
-								text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, UnitLevel("PLAYER"), ImproveAny:GetMaxLevel())
+								text2 = text2 .. AddText(text2, "XPNUMBERLEVEL", "XPPERCENTLEVEL", LEVEL, UnitLevel("PLAYER"), ImproveAny:GetMaxLevel(), nil, nil, "LEVEL")
 								-- XP
-								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar)
+								text2 = text2 .. AddText(text2, "XPNUMBER", "XPPERCENT", XP, currXP, maxBar, nil, nil, "XP")
 								-- XP Missing
 								text2 = text2 .. AddText(text2, "XPNUMBERMISSING", "XPPERCENTMISSING", ADDON_MISSING, missingXp, maxBar)
 								-- XP Exhaustion
 								if GetXPExhaustion() and GetXPExhaustion() >= 0 then
-									text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, GetXPExhaustion(), maxBar)
+									text2 = text2 .. AddText(text2, "XPNUMBEREXHAUSTION", "XPPERCENTEXHAUSTION", TUTORIAL_TITLE26, GetXPExhaustion(), maxBar, nil, nil, "RESTED")
 								end
 
 								-- XP QuestComplete
-								text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00")
+								text2 = text2 .. AddText(text2, "XPNUMBERQUESTCOMPLETE", "XPPERCENTQUESTCOMPLETE", QUEST_COMPLETE, questCompleteXP, maxBar, nil, "|cFFFFFF00", "QUESTCOMPLETE")
 								-- XP KILLSTOLEVELUP
-								text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true)
+								text2 = text2 .. AddText(text2, "XPNUMBERKILLSTOLEVELUP", nil, QUICKBUTTON_NAME_KILLS, ImproveAny:GetKillsToLevelUp(), nil, true, nil, "KILLS")
 								-- XPBAR -> SetText
 								if UnitExists("PET") and GetPetExperience ~= nil then
 									local currXPPet, maxBarPet = GetPetExperience()
