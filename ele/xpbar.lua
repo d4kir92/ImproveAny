@@ -455,6 +455,7 @@ end
 
 local trackingQcx = {}
 local trackingFonts = {}
+local trackingTextMoved = {}
 local function GetTrackingQuestCompleteXP()
 	if C_QuestLog == nil or C_QuestLog.GetNumQuestLogEntries == nil or GetQuestLogRewardXP == nil then return 0 end
 	local totalXP = 0
@@ -532,6 +533,15 @@ function ImproveAny:UpdateTrackingXPBarText(bar)
 
 		if font[1] and font[2] then
 			text:SetFont(font[1], font[2] - 2, font[3])
+		end
+
+		if ImproveAny:IsForever() and not trackingTextMoved[text] then
+			local point, relativeTo, relativePoint, x, y = text:GetPoint(1)
+			if point then
+				text:ClearAllPoints()
+				text:SetPoint(point, relativeTo, relativePoint, x, y - 2)
+				trackingTextMoved[text] = true
+			end
 		end
 
 		text:SetText(text2)
