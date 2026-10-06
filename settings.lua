@@ -105,7 +105,6 @@ local function IsRequirementMet(req)
 	for _, key in ipairs(req) do
 		if IsKeyEnabled(key) then return true end
 	end
-
 	return false
 end
 
@@ -148,7 +147,6 @@ local function Requires(control, ...)
 		["control"] = control,
 		["requires"] = requires
 	})
-
 	return control
 end
 
@@ -166,7 +164,6 @@ local function AddCheckBox(key, val, func)
 			EnableSave()
 		end
 	})
-
 	return checkboxes[key]
 end
 
@@ -291,21 +288,16 @@ function ImproveAny:UpdateStatusBar()
 		end
 
 		statusBarCombatFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-
 		return
 	end
 
 	local w
-	if ImproveAny:IsEnabled("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false)) then
-		w = ImproveAny:IAGV("STATUSBARWIDTH", 570)
-	end
-
+	if ImproveAny:IsEnabled("STATUSBARWIDTHENABLED", ImproveAny:IsEnabled("XPBAR", false) or ImproveAny:IsEnabled("REPBAR", false)) then w = ImproveAny:IAGV("STATUSBARWIDTH", 570) end
 	SetStatusBarWidth(StatusTrackingBarManager, w)
 	if StatusTrackingBarManager.barContainers then
 		for _, container in ipairs(StatusTrackingBarManager.barContainers) do
 			UpdateTrackingContainerWidth(container, w)
 		end
-
 		return
 	end
 
@@ -404,7 +396,6 @@ local function BuildElementList()
 	AddCategory("TOOLTIP", 2)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
 	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
-
 	AddCategory("WIDGETS", 2)
 	AddCheckBox("IAPingFrame", false)
 	AddCheckBox("IAILVLBAR", false)
@@ -429,7 +420,7 @@ local function BuildElementList()
 end
 
 function ImproveAny:InitIASettings()
-	ImproveAny:SetVersion(136033, "1.0.2")
+	ImproveAny:SetVersion(136033, "1.0.20")
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
@@ -473,7 +464,6 @@ function ImproveAny:InitIASettings()
 	IASettings.showerrors:SetPoint("LEFT", IASettings.reload, "RIGHT", 4, 0)
 	IASettings.showerrors:SetText("Show Errors")
 	IASettings.showerrors:SetScript("PreClick", function() SetCVar("ScriptErrors", 1) end)
-
 	IASettings.DISCORD = CreateFrame("EditBox", "IASettings_DISCORD", IASettings.footer, "InputBoxTemplate")
 	IASettings.DISCORD:SetSize(140, 24)
 	IASettings.DISCORD:SetPoint("RIGHT", IASettings.footer, "RIGHT", 0, 0)
