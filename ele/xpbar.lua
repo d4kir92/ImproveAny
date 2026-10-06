@@ -168,6 +168,7 @@ end
 function ImproveAny:SizeXPTextIcons(text, fontString)
 	local _, size = fontString:GetFont()
 	if size == nil then return text end
+	size = size * 2
 
 	return (text:gsub("(|T[^:|]+):0:0:", function(texture) return format("%s:%g:%g:", texture, size, size) end):gsub("(|T[^:|]+):0|t", function(texture) return format("%s:%g:%g|t", texture, size, size) end))
 end
