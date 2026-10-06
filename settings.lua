@@ -401,9 +401,6 @@ local function BuildElementList()
 	AddCategory("WORLDMAP", 2)
 	AddCheckBox("WORLDMAP", false)
 	if not isRetail then Requires(AddCheckBox("WORLDMAPZOOM", false), "WORLDMAP") end
-	Requires(AddCheckBox("WORLDMAPCOORDSP", false), "WORLDMAP")
-	Requires(AddCheckBox("WORLDMAPCOORDSC", false), "WORLDMAP")
-	Requires(AddSlider("COORDSFONTSIZE", 8, Call("UpdateCoordsFontSize"), 6, 20, 1, 0), "WORLDMAP", {"WORLDMAPCOORDSP", "WORLDMAPCOORDSC"})
 	AddCategory("TOOLTIP", 2)
 	AddCheckBox("TOOLTIPSELLPRICE", false)
 	if isRetail then AddCheckBox("TOOLTIPEXPANSION", false) end
