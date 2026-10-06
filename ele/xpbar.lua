@@ -165,6 +165,13 @@ local function GetXPIcon(key)
 	return markup or nil
 end
 
+function ImproveAny:SizeXPTextIcons(text, fontString)
+	local _, size = fontString:GetFont()
+	if size == nil then return text end
+
+	return (text:gsub("(|T[^:|]+):0:0:", function(texture) return format("%s:%g:%g:", texture, size, size) end):gsub("(|T[^:|]+):0|t", function(texture) return format("%s:%g:%g|t", texture, size, size) end))
+end
+
 local function AddText(text, bNum, bPer, str, vNum, vNumMax, bDecimals, color, iconKey)
 	local res = ""
 	if ImproveAny:IsEnabled(bNum, false) or (bPer and ImproveAny:IsEnabled(bPer, false)) then
@@ -544,7 +551,7 @@ function ImproveAny:UpdateTrackingXPBarText(bar)
 			end
 		end
 
-		text:SetText(text2)
+		text:SetText(ImproveAny:SizeXPTextIcons(text2, text))
 	end
 
 	ImproveAny:UpdateTrackingBarTextShown(bar, ImproveAny:IsEnabled("XPBARTEXTSHOWINVERTED", false))
@@ -979,7 +986,7 @@ function ImproveAny:InitXPBar()
 								end
 
 								text2 = string.gsub(text2, "%s+$", "")
-								sel:SetText(text2)
+								sel:SetText(ImproveAny:SizeXPTextIcons(text2, sel))
 								if xpBar.show then
 									sel:Show()
 								end
