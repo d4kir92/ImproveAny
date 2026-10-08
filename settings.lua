@@ -420,7 +420,7 @@ local function BuildElementList()
 end
 
 function ImproveAny:InitIASettings()
-	ImproveAny:SetVersion(136033, "1.0.20")
+	ImproveAny:SetVersion(136033, "1.0.21")
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
