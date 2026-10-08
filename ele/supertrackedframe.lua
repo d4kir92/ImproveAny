@@ -10,7 +10,7 @@ function ImproveAny:InitSuperTrackedFrame()
 			stf.DistanceTime:SetPoint("TOP", stf, "BOTTOM", 0, 2)
 		else
 			stf.DistanceTime:SetFont(STANDARD_TEXT_FONT, 10, "")
-			stf.DistanceTime:SetPoint("TOP", stf, "BOTTOM", 0, -12)
+			stf.DistanceTime:SetPoint("TOP", stf.DistanceText, "BOTTOM", 0, -2)
 		end
 
 		stf.DistanceTime:SetText("LOADING (IA)")
