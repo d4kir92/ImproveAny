@@ -142,7 +142,7 @@ function ImproveAny:InitMinimap()
 					["icon"] = 1120721,
 					["var"] = mmbtn,
 					["dbtab"] = IATAB["MMBtns"],
-					["vTT"] = {{"Minimap Buttons", "|T136033:16:16:0:0|t ImproveAny"}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Visibility"}},
+					["vTT"] = {{"Minimap Buttons", format("|T%s:16:16:0:0|t ImproveAny", ImproveAny:GetAddonIcon())}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Visibility"}},
 					["funcL"] = function()
 						IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
 						ImproveAny:UpdateIAMMBtns()

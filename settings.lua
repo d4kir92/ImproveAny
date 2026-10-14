@@ -420,13 +420,13 @@ local function BuildElementList()
 end
 
 function ImproveAny:InitIASettings()
-	ImproveAny:SetVersion(136033, "1.0.22")
+	ImproveAny:SetVersion()
 	local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IASettings")
 	local pTab = {"CENTER", UIParent, "CENTER", 0, 0}
 	if p1 and p3 then pTab = {p1, UIParent, p3, p4, p5} end
 	IASettings = ImproveAny:CreateUIWindow({
 		["name"] = "IASettings",
-		["title"] = format("|T136033:16:16:0:0|t ImproveAny v%s", ImproveAny:GetVersion()),
+		["title"] = format("|T%s:16:16:0:0|t ImproveAny v%s", ImproveAny:GetAddonIcon(), ImproveAny:GetVersion()),
 		["pTab"] = pTab,
 		["width"] = ImproveAny:IAGV("SETTINGSWIDTH", 550),
 		["height"] = ImproveAny:IAGV("SETTINGSHEIGHT", 500),

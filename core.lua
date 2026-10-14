@@ -205,10 +205,10 @@ function ImproveAny:Event(event, ...)
 		local mmbtn = nil
 		ImproveAny:CreateMinimapButton({
 			["name"] = "ImproveAny",
-			["icon"] = 136033,
+			["icon"] = ImproveAny:GetAddonIcon(),
 			["var"] = mmbtn,
 			["dbtab"] = IATAB,
-			["vTT"] = {{"|T136033:16:16:0:0|t ImproveAny", "v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
+			["vTT"] = {{format("|T%s:16:16:0:0|t ImproveAny", ImproveAny:GetAddonIcon()),"v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
 			["funcL"] = function() ImproveAny:ToggleSettings() end,
 			["funcR"] = function()
 				ImproveAny:MSG("Minimap Button is now hidden.")
