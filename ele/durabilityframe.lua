@@ -35,7 +35,7 @@ function ImproveAny:InitDurabilityFrame()
 				end
 
 				if costs > 0 then
-					textrepaircosts:SetText(GetCoinTextureString(costs))
+					textrepaircosts:SetText(ImproveAny:GetCoinTextureString(costs))
 				else
 					textrepaircosts:SetText("")
 				end

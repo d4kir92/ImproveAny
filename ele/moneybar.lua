@@ -1,6 +1,15 @@
 local _, ImproveAny = ...
 local fontSize = 12
 IAMoneyBar = CreateFrame("FRAME", "IAMoneyBar", UIParent)
+function ImproveAny:GetCoinTextureString(amount, size)
+	amount = math.floor(tonumber(amount) or 0)
+	if C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString then return C_CurrencyInfo.GetCoinTextureString(amount, size) end
+	if GetCoinTextureString then return GetCoinTextureString(amount, size) end
+	if GetMoneyString then return GetMoneyString(amount) end
+
+	return tostring(amount)
+end
+
 function ImproveAny:InitMoneyBar()
 	if ImproveAny:IsEnabled("MONEYBAR", false) then
 		IAMoneyBar:SetSize(180, 30)
@@ -37,7 +46,7 @@ function ImproveAny:InitMoneyBar()
 		end
 
 		function IAMoneyBar:MoneyThink()
-			local text = GetCoinTextureString(GetMoney(), fontSize)
+			local text = ImproveAny:GetCoinTextureString(GetMoney(), fontSize)
 			IAMoneyBar.text:SetText(text)
 			if ImproveAny:IsEnabled("MONEYBARPERHOUR", false) then
 				local text2 = ""
@@ -47,9 +56,9 @@ function ImproveAny:InitMoneyBar()
 					local mopm = mops * 60
 					local moph = mopm * 60
 					if moph >= 0 then
-						text2 = GetCoinTextureString(moph, fontSize) .. "/" .. "H"
+						text2 = ImproveAny:GetCoinTextureString(moph, fontSize) .. "/" .. "H"
 					elseif moph < 0 then
-						text2 = "-" .. GetCoinTextureString(math.abs(moph), fontSize) .. "/" .. "H"
+						text2 = "-" .. ImproveAny:GetCoinTextureString(math.abs(moph), fontSize) .. "/" .. "H"
 					end
 				end
 
