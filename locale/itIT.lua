@@ -83,8 +83,6 @@ ImproveAny:AddTrans("itIT", "LID_FREESPACEBAGS", "Mostra Spazio Libero per ogni 
 ImproveAny:AddTrans("itIT", "LID_WORLDMAP", "Mappa del Mondo")
 ImproveAny:AddTrans("itIT", "LID_WORLDMAPZOOM", "Zoom Mappa del Mondo con la Rotellina del Mouse (Zoom Esteso)")
 ImproveAny:AddTrans("itIT", "LID_BAGMODE", "Modalità Borsa")
-ImproveAny:AddTrans("itIT", "LID_STATUSBARWIDTH", "Larghezza Barra di Stato (Barra XP, Barra Reputazione)")
-ImproveAny:AddTrans("itIT", "LID_STATUSBARWIDTHENABLED", "Larghezza personalizzata della barra di stato")
 ImproveAny:AddTrans("itIT", "LID_UIFONTINDEX", "Font")
 ImproveAny:AddTrans("itIT", "LID_BAGMODEINDEX", "Modalità Borsa")
 ImproveAny:AddTrans("itIT", "LID_TOOLTIPSELLPRICE", "Tooltip - Prezzo di Vendita")

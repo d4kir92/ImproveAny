@@ -168,7 +168,6 @@ function ImproveAny:Event(event, ...)
 		if ImproveAny.InitMicroMenu then ImproveAny:InitMicroMenu() end
 		if ImproveAny.InitPartyFrames then ImproveAny:InitPartyFrames() end
 		if ImproveAny.UpdateUIParentAttribute then ImproveAny:UpdateUIParentAttribute() end
-		if ImproveAny.UpdateStatusBar then ImproveAny:UpdateStatusBar() end
 		if ImproveAny.InitIAPingFrame then ImproveAny:InitIAPingFrame() end
 		if ImproveAny.InitIACoordsFrame then ImproveAny:InitIACoordsFrame() end
 		if ImproveAny:GetWoWBuild() ~= "RETAIL" then ImproveAny:InitSpellBookFix() end
