@@ -1,26 +1,12 @@
 local _, ImproveAny = ...
 local IATabTalents = {}
-function ImproveAny:UpdateCombatTextPos()
-	if ImproveAny.Setup and ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) and COMBAT_TEXT_LOCATIONS then
-		local x = ImproveAny:IAGV("COMBATTEXTX", 0)
-		local y = ImproveAny:IAGV("COMBATTEXTY", 0)
-		if x ~= 0 or y ~= 0 then
-			COMBAT_TEXT_LOCATIONS.startX = x
-			COMBAT_TEXT_LOCATIONS.startY = y + 384
-			COMBAT_TEXT_LOCATIONS.endX = x
-			COMBAT_TEXT_LOCATIONS.endY = y + 609
-		end
-	end
-end
-
 local once = true
 local cle = CreateFrame("Frame")
 local cacheTime = 0
-local cachedPosition = false
 local cachedIcons = false
 local IANoAuraCache = {}
 function ImproveAny:InitCombatText()
-	if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) or ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
+	if ImproveAny:IsEnabled("COMBATTEXTICONS", false) then
 		if once then
 			once = false
 			IATabBuffs = ImproveAny:GetTalentIcons()
@@ -31,12 +17,7 @@ function ImproveAny:InitCombatText()
 					local now = GetTime()
 					if now - cacheTime > 1 then
 						cacheTime = now
-						cachedPosition = ImproveAny:IsEnabled("COMBATTEXTPOSITION", false)
 						cachedIcons = ImproveAny:IsEnabled("COMBATTEXTICONS", false)
-					end
-
-					if cachedPosition then
-						ImproveAny:UpdateCombatTextPos()
 					end
 
 					if cachedIcons then
@@ -137,10 +118,6 @@ function ImproveAny:InitCombatText()
 					end
 				)
 			end
-		end
-
-		if ImproveAny:IsEnabled("COMBATTEXTPOSITION", false) then
-			ImproveAny:UpdateCombatTextPos()
 		end
 
 		if max > 1 then
