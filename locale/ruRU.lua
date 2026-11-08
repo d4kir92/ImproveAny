@@ -23,7 +23,6 @@ ImproveAny:AddTrans("ruRU", "LID_CHATRACEICONS", "Иконки расы/типо
 ImproveAny:AddTrans("ruRU", "LID_CHATSHORTCHANNELS", "Короткие названия каналов чата")
 ImproveAny:AddTrans("ruRU", "LID_COMBAT", "Бой")
 ImproveAny:AddTrans("ruRU", "LID_COMBATTEXTICONS", "Иконки боевого текста")
-ImproveAny:AddTrans("ruRU", "LID_COMBINEMMBTNS", "Объединить кнопки миникарты")
 ImproveAny:AddTrans("ruRU", "LID_CONSOLEVARIABLES", "Консольные переменные")
 ImproveAny:AddTrans("ruRU", "LID_DEBUFFSCALE", "Масштаб дебаффов")
 ImproveAny:AddTrans("ruRU", "LID_DURABILITY", "Прочность (показывает уровень предмета, стоимость ремонта)")

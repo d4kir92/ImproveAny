@@ -80,9 +80,7 @@ function ImproveAny:UpdateMinimapSettings()
 	end, "UpdateMinimapSettings")
 end
 
-local IAMMBtns = {}
 local IAMMBtnsConverted = {}
-local MMBtnSize = 31
 function ImproveAny:InitMinimap()
 	if GetMinimapShape == nil then
 		function GetMinimapShape()
@@ -109,149 +107,63 @@ function ImproveAny:InitMinimap()
 		ImproveAny:Debug("minimap.lua: delay #2")
 		ImproveAny:After(0.3, function()
 			local mmBtnsNames = {"Lib_GPI_Minimap_", "MinimapButton_D4Lib_", "LibDBIcon10_", "BtWQuests", "MinimapButton", "MinimapIcon", "_Minimap_"}
-			local IAMMBtnsBliz = {}
-			local IAMMBtnsFrame = CreateFrame("Frame", "IAMMBtnsFrame", UIParent)
-			IAMMBtnsFrame:SetSize(100, 100)
-			IAMMBtnsFrame.bg = IAMMBtnsFrame:CreateTexture("IAMMBtnsFrame.bg", "ARTWORK")
-			IAMMBtnsFrame.bg:SetAllPoints(IAMMBtnsFrame)
-			IAMMBtnsFrame.bg:SetColorTexture(0.03, 0.03, 0.03, 0.5)
-			IAMMBtnsFrame:EnableMouse(true)
-			IAMMBtnsFrame:SetMovable(true)
-			IAMMBtnsFrame:RegisterForDrag("LeftButton")
-			IAMMBtnsFrame:SetScript("OnDragStart", function() IAMMBtnsFrame:StartMoving() end)
-			IAMMBtnsFrame:SetScript("OnDragStop", function()
-				IAMMBtnsFrame:StopMovingOrSizing()
-				local p1, _, p3, p4, p5 = IAMMBtnsFrame:GetPoint()
-				if p1 and p3 then ImproveAny:SetElePoint("IAMMBtnsFrame", p1, _, p3, p4, p5) end
+			local pendingConvert = {}
+			local regenFrame = CreateFrame("Frame")
+			regenFrame:SetScript("OnEvent", function(sel, event)
+				sel:UnregisterEvent(event)
+				for name, args in pairs(pendingConvert) do
+					pendingConvert[name] = nil
+					ImproveAny:ConvertToMinimapButton(name, args[1])
+				end
 			end)
 
-			local p1, _, p3, p4, p5 = ImproveAny:GetElePoint("IAMMBtnsFrame")
-			if p1 then
-				IAMMBtnsFrame:SetPoint(p1, UIParent, p3, p4, p5)
-			else
-				IAMMBtnsFrame:SetPoint("CENTER", 0, 0)
-			end
-
-			IAMMBtnsFrame:Hide()
-			IAMMBtnsFrame.hide = true
-			if ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
-				local mmbtn = nil
-				IATAB["MMBtns"] = IATAB["MMBtns"] or {}
-				ImproveAny:CreateMinimapButton({
-					["name"] = "ImproveAnyMMBtns",
-					["icon"] = 1120721,
-					["var"] = mmbtn,
-					["dbtab"] = IATAB["MMBtns"],
-					["vTT"] = {{"Minimap Buttons", format("|T%s:16:16:0:0|t ImproveAny", ImproveAny:GetAddonIcon())}, {ImproveAny:Trans("LID_LEFTCLICK"), "Toggle Visibility"}},
-					["funcL"] = function()
-						IAMMBtnsFrame.hide = not IAMMBtnsFrame.hide
-						ImproveAny:UpdateIAMMBtns()
-					end,
-					["addoncomp"] = false,
-					["dbkey"] = ""
-				})
-			end
-
-			local function sortFunc(a, b)
-				local a1 = ImproveAny:GetName(a)
-				local b1 = ImproveAny:GetName(b)
-				for i, v in pairs(mmBtnsNames) do
-					a1 = string.gsub(a1, v, "")
-					b1 = string.gsub(b1, v, "")
-				end
-				return a1 < b1
-			end
-
-			function ImproveAny:UpdateIAMMBtns()
-				if ImproveAny:IsEnabled("COMBINEMMBTNS", false) then
-					local br = 7
-					local sr = 1
-					local sum = 0
-					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() and (ImproveAny:GetParent(v) == Minimap or ImproveAny:GetParent(v) == IAMMBtnsFrame) then sum = sum + 1 end
-					end
-
-					table.sort(IAMMBtns, sortFunc)
-					local rows, cols = ImproveAny:GetRowsCols(sum)
-					IAMMBtnsFrame:SetSize(cols * (MMBtnSize + sr) + 2 * br - sr, rows * (MMBtnSize + sr) + 2 * br - sr)
-					local row, col = 0, 0
-					for i, v in pairs(IAMMBtns) do
-						if v:IsShown() and (ImproveAny:GetParent(v) == Minimap or ImproveAny:GetParent(v) == IAMMBtnsFrame) then
-							if col == cols then
-								col = 0
-								row = row + 1
-							end
-
-							v:SetParent(IAMMBtnsFrame)
-							v:ClearAllPoints()
-							local cSpace = 0
-							local rSpace = 0
-							if col > 0 then cSpace = col * sr end
-							if row > 0 then rSpace = row * sr end
-							v:SetPoint("TOPLEFT", IAMMBtnsFrame, "TOPLEFT", col * MMBtnSize + cSpace + br, -row * MMBtnSize - rSpace - br)
-							col = col + 1
-						end
-					end
-
-					if not IAMMBtnsFrame.hide then
-						IAMMBtnsFrame:Show()
-					else
-						IAMMBtnsFrame:Hide()
-					end
-				end
-			end
-
-			function ImproveAny:ConvertToMinimapButton(name, stay, hide)
-				local movable = ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", false)
-				local combine = ImproveAny:IsEnabled("COMBINEMMBTNS", false)
-				if not movable and not combine then return end
+			function ImproveAny:ConvertToMinimapButton(name, hide)
+				if not ImproveAny:IsEnabled("MINIMAPMINIMAPBUTTONSMOVABLE", false) then return end
 				local btn = _G[name]
 				if btn and not tContains(IAMMBtnsConverted, name) then
+					if InCombatLockdown() and btn:IsProtected() then
+						pendingConvert[name] = {hide}
+						regenFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+						return
+					end
+
 					tinsert(IAMMBtnsConverted, name)
-					if hide and movable then
-						tinsert(IAMMBtnsBliz, btn)
+					if hide then
 						btn:Hide()
 					end
 
-					if movable and (stay or not combine) then
-						IATAB[name .. "db"] = IATAB[name .. "db"] or {}
-						btn:SetParent(Minimap)
-						btn:SetMovable(true)
-						btn.db = IATAB[name .. "db"]
-						btn.db.minimapPos = btn.db.minimapPos or 0
-						btn.minimapPos = btn.minimapPos or 0
-						ImproveAny:UpdatePosition(btn, btn.db.minimapPos)
-						btn:RegisterForDrag("LeftButton")
-						btn:SetScript("OnDragStart", function(sel)
-							sel.isMouseDown = true
-							sel:SetScript("OnUpdate", function(se)
-								local mx, my = Minimap:GetCenter()
-								local px, py = GetCursorPosition()
-								local scale = Minimap:GetEffectiveScale()
-								px, py = px / scale, py / scale
-								local pos = 0
-								if se.db then
-									pos = deg(atan2(py - my, px - mx)) % 360
-									se.db.minimapPos = pos
-								else
-									pos = deg(atan2(py - my, px - mx)) % 360
-									se.minimapPos = pos
-								end
+					IATAB[name .. "db"] = IATAB[name .. "db"] or {}
+					btn:SetParent(Minimap)
+					btn:SetMovable(true)
+					btn.db = IATAB[name .. "db"]
+					btn.db.minimapPos = btn.db.minimapPos or 0
+					btn.minimapPos = btn.minimapPos or 0
+					ImproveAny:UpdatePosition(btn, btn.db.minimapPos)
+					btn:RegisterForDrag("LeftButton")
+					btn:SetScript("OnDragStart", function(sel)
+						sel.isMouseDown = true
+						sel:SetScript("OnUpdate", function(se)
+							local mx, my = Minimap:GetCenter()
+							local px, py = GetCursorPosition()
+							local scale = Minimap:GetEffectiveScale()
+							px, py = px / scale, py / scale
+							local pos = 0
+							if se.db then
+								pos = deg(atan2(py - my, px - mx)) % 360
+								se.db.minimapPos = pos
+							else
+								pos = deg(atan2(py - my, px - mx)) % 360
+								se.minimapPos = pos
+							end
 
-								ImproveAny:UpdatePosition(se, pos)
-							end)
+							ImproveAny:UpdatePosition(se, pos)
 						end)
+					end)
 
-						btn:SetScript("OnDragStop", function(sel)
-							sel:SetScript("OnUpdate", nil)
-							sel.isMouseDown = false
-						end)
-					end
-
-					if not stay then
-						table.insert(IAMMBtns, btn)
-						ImproveAny:UpdateIAMMBtns()
-					end
+					btn:SetScript("OnDragStop", function(sel)
+						sel:SetScript("OnUpdate", nil)
+						sel.isMouseDown = false
+					end)
 				end
 			end
 
@@ -270,10 +182,10 @@ function ImproveAny:InitMinimap()
 
 			-- Blizzard Minimap Buttons Dragging
 			-- ALL
-			ImproveAny:ConvertToMinimapButton("MiniMapWorldMapButton", true) -- WorldMap
-			ImproveAny:ConvertToMinimapButton("MiniMapMailFrame", true) -- Mail
+			ImproveAny:ConvertToMinimapButton("MiniMapWorldMapButton") -- WorldMap
+			ImproveAny:ConvertToMinimapButton("MiniMapMailFrame") -- Mail
 			-- Retail
-			ImproveAny:ConvertToMinimapButton("MiniMapTrackingButton", true) -- Tracking
+			ImproveAny:ConvertToMinimapButton("MiniMapTrackingButton") -- Tracking
 			if MiniMapTracking and MiniMapTrackingButton then
 				hooksecurefunc(MiniMapTrackingButton, "SetPoint", function(sel, ...)
 					if sel.ia_setpoint then return end
@@ -304,29 +216,29 @@ function ImproveAny:InitMinimap()
 			if GameTimeFrame then GameTimeFrame:SetFrameLevel(10) end
 			if MiniMapInstanceDifficulty and ImproveAny:GetParent(MiniMapInstanceDifficulty) == "MinimapCluster" then MiniMapInstanceDifficulty:SetParent(Minimap) end
 			if select(4, GetBuildInfo()) < 100000 then
-				ImproveAny:ConvertToMinimapButton("GameTimeFrame", true, ImproveAny:GetWoWBuild() == "CLASSIC") -- Calendar
+				ImproveAny:ConvertToMinimapButton("GameTimeFrame", ImproveAny:GetWoWBuild() == "CLASSIC") -- Calendar
 			end
 
-			ImproveAny:ConvertToMinimapButton("ExpansionLandingPageMinimapButton", true) -- Sanctum
-			ImproveAny:ConvertToMinimapButton("GarrisonLandingPageMinimapButton", true) -- Sanctum
-			ImproveAny:ConvertToMinimapButton("QueueStatusMinimapButton", true) -- LFG
+			ImproveAny:ConvertToMinimapButton("ExpansionLandingPageMinimapButton") -- Sanctum
+			ImproveAny:ConvertToMinimapButton("GarrisonLandingPageMinimapButton") -- Sanctum
+			ImproveAny:ConvertToMinimapButton("QueueStatusMinimapButton") -- LFG
 			-- Classic ERA
 			if MiniMapTrackingFrame then
-				ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame", true) -- Tracking
+				ImproveAny:ConvertToMinimapButton("MiniMapTrackingFrame") -- Tracking
 			elseif MiniMapTracking then
 				MiniMapTracking:SetScale(1)
-				ImproveAny:ConvertToMinimapButton("MiniMapTracking", true) -- Tracking
+				ImproveAny:ConvertToMinimapButton("MiniMapTracking") -- Tracking
 			end
 
-			ImproveAny:ConvertToMinimapButton("MiniMapLFGFrame", true) -- LFG
+			ImproveAny:ConvertToMinimapButton("MiniMapLFGFrame") -- LFG
 			-- Blizzard Minimap Buttons Dragging
-			ImproveAny:ConvertToMinimapButton("MiniMapBattlefieldFrame", true) -- PVP
-			ImproveAny:ConvertToMinimapButton("MinimapZoomIn", true)
-			ImproveAny:ConvertToMinimapButton("MinimapZoomOut", true)
-			ImproveAny:ConvertToMinimapButton("CodexBrowserIcon", true)
-			ImproveAny:ConvertToMinimapButton("CalendarButtonFrame", true)
-			ImproveAny:ConvertToMinimapButton("HelpOpenWebTicketButton", true)
-			if LFGMinimapFrame and ImproveAny:GetParent(LFGMinimapFrame) == MinimapBackdrop then ImproveAny:ConvertToMinimapButton("LFGMinimapFrame", true) end
+			ImproveAny:ConvertToMinimapButton("MiniMapBattlefieldFrame") -- PVP
+			ImproveAny:ConvertToMinimapButton("MinimapZoomIn")
+			ImproveAny:ConvertToMinimapButton("MinimapZoomOut")
+			ImproveAny:ConvertToMinimapButton("CodexBrowserIcon")
+			ImproveAny:ConvertToMinimapButton("CalendarButtonFrame")
+			ImproveAny:ConvertToMinimapButton("HelpOpenWebTicketButton")
+			if LFGMinimapFrame and ImproveAny:GetParent(LFGMinimapFrame) == MinimapBackdrop then ImproveAny:ConvertToMinimapButton("LFGMinimapFrame") end
 			-- ADDONS
 			local mmbtns = {}
 			local numChilds = -1
@@ -339,13 +251,11 @@ function ImproveAny:InitMinimap()
 							for x, w in pairs(mmBtnsNames) do
 								if strfind(name, w) and not tContains(mmbtns, child) and not strfind(name, "Peggle") then
 									tinsert(mmbtns, child)
-									ImproveAny:ConvertToMinimapButton(name, strfind(name, "ImproveAnyMMBtns") ~= nil or strfind(name, "GreatVault") ~= nil or strfind(name, "CooldownViewerSettings") ~= nil or strfind(name, "BugSack") ~= nil or strfind(name, "AutoQueueWA") ~= nil)
+									ImproveAny:ConvertToMinimapButton(name)
 								end
 							end
 						end
 					end, "Minimap")
-
-					ImproveAny:UpdateIAMMBtns()
 				end
 
 				ImproveAny:After(3, ImproveAny.UpdateMMBtns, "UpdateMMBtns")

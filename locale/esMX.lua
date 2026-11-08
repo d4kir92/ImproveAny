@@ -23,7 +23,6 @@ ImproveAny:AddTrans("esMX", "LID_CHATRACEICONS", "Iconos de Raza/Tipo de Cuerpo"
 ImproveAny:AddTrans("esMX", "LID_CHATSHORTCHANNELS", "Canales de Chat Cortos")
 ImproveAny:AddTrans("esMX", "LID_COMBAT", "Combate")
 ImproveAny:AddTrans("esMX", "LID_COMBATTEXTICONS", "Iconos de Texto de Combate")
-ImproveAny:AddTrans("esMX", "LID_COMBINEMMBTNS", "Combinar Botones del Minimapa")
 ImproveAny:AddTrans("esMX", "LID_CONSOLEVARIABLES", "Variables de consola")
 ImproveAny:AddTrans("esMX", "LID_DEBUFFSCALE", "Escala de Perjuicios")
 ImproveAny:AddTrans("esMX", "LID_DURABILITY", "Durabilidad (Muestra Nivel de Objeto, Costo de Reparación)")

@@ -23,7 +23,6 @@ ImproveAny:AddTrans("ptBR", "LID_CHATRACEICONS", "Ícones de Raça/Tipo de Corpo
 ImproveAny:AddTrans("ptBR", "LID_CHATSHORTCHANNELS", "Canais de Chat Curtos")
 ImproveAny:AddTrans("ptBR", "LID_COMBAT", "Combate")
 ImproveAny:AddTrans("ptBR", "LID_COMBATTEXTICONS", "Ícones de Texto de Combate")
-ImproveAny:AddTrans("ptBR", "LID_COMBINEMMBTNS", "Combinar Botões do Minimapa")
 ImproveAny:AddTrans("ptBR", "LID_CONSOLEVARIABLES", "Variáveis de console")
 ImproveAny:AddTrans("ptBR", "LID_DEBUFFSCALE", "Escala de Malefícios")
 ImproveAny:AddTrans("ptBR", "LID_DURABILITY", "Durabilidade (Mostra Nível do Item, Custo de Reparo)")

@@ -23,7 +23,6 @@ ImproveAny:AddTrans("frFR", "LID_CHATRACEICONS", "Icônes de Race/Type de Corps"
 ImproveAny:AddTrans("frFR", "LID_CHATSHORTCHANNELS", "Canaux de Chat Courts")
 ImproveAny:AddTrans("frFR", "LID_COMBAT", "Combat")
 ImproveAny:AddTrans("frFR", "LID_COMBATTEXTICONS", "Icônes du Texte de Combat")
-ImproveAny:AddTrans("frFR", "LID_COMBINEMMBTNS", "Combiner les Boutons de la Minicarte")
 ImproveAny:AddTrans("frFR", "LID_CONSOLEVARIABLES", "Variables de console")
 ImproveAny:AddTrans("frFR", "LID_DEBUFFSCALE", "Échelle des Affaiblissements")
 ImproveAny:AddTrans("frFR", "LID_DURABILITY", "Durabilité (Affiche le Niveau d'Objet, les Coûts de Réparation)")

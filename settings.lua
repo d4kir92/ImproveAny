@@ -317,7 +317,6 @@ local function BuildElementList()
 	if not isRetail then AddMinimapCheckBox("MINIMAPSCROLLZOOM") end
 	if not ImproveAny:IsAddOnLoaded("DragonflightUI", "MINIMAPSHAPESQUARE") then AddMinimapCheckBox("MINIMAPSHAPESQUARE") end
 	AddMinimapCheckBox("MINIMAPMINIMAPBUTTONSMOVABLE")
-	AddMinimapCheckBox("COMBINEMMBTNS")
 	AddCategory("WORLDMAP", 2)
 	AddCheckBox("WORLDMAP", false)
 	if not isRetail then Requires(AddCheckBox("WORLDMAPZOOM", false), "WORLDMAP") end
