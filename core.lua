@@ -46,11 +46,27 @@ function ImproveAny:AddRightClick()
 	end
 end
 
+ImproveAny.mainBarSpells = {}
+function ImproveAny:GetActionSpell(slot)
+	local actionType, id, _ = GetActionInfo(slot)
+	if actionType == "macro" then id = GetMacroSpell(id) end
+	return id
+end
+
 function ImproveAny:IsOnActionbar(spellID)
+	local inForm = GetBonusBarOffset and GetBonusBarOffset() > 0
+	if not inForm then
+		for i = 1, 12 do
+			ImproveAny.mainBarSpells[i] = ImproveAny:GetActionSpell(i)
+		end
+	end
+
+	for i = 1, 12 do
+		if ImproveAny.mainBarSpells[i] == spellID then return true end
+	end
+
 	for i = 1, 200 do
-		local actionType, id, _ = GetActionInfo(i)
-		if actionType == "macro" then id = GetMacroSpell(id) end
-		if id == spellID then return true end
+		if ImproveAny:GetActionSpell(i) == spellID then return true end
 	end
 
 	if GetShapeshiftFormInfo then
