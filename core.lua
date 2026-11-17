@@ -1114,53 +1114,43 @@ function ImproveAny:InitAutoAcceptQuests()
 	local function RegisterAutoQuestsEvents()
 		local function Autoquests(sel, event, key, down, ...)
 			if not IsShiftKeyDown() and not IsControlKeyDown() and not IsAltKeyDown() then
+				local autoAccept = ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false)
+				local autoTurnIn = ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false)
 				if event == "GOSSIP_SHOW" then
-					local nActive = C_GossipInfo.GetNumActiveQuests()
-					local activeQuests = C_GossipInfo.GetActiveQuests()
-					local nAvailable = C_GossipInfo.GetNumAvailableQuests()
-					local availableQuests = C_GossipInfo.GetAvailableQuests()
-					local gossipOptions = C_GossipInfo.GetOptions()
-					local autoquestsQuestID
-					local autoquestsIsComplete
-					local autoquestsRepeatable
-					-- if there is only a non-gossip option, then go to it directly
-					if nAvailable == 0 and #activeQuests == 0 and #gossipOptions == 1 then
-						C_GossipInfo.SelectOptionByIndex(0)
-					elseif nAvailable > 0 then
-						for i = 1, nAvailable do
-							if type(availableQuests) == "table" then
-								autoquestsQuestID = availableQuests[i].questID
-								autoquestsRepeatable = availableQuests[i].repeatable
-								if nAvailable < 2 or autoquestsRepeatable == false then C_GossipInfo.SelectAvailableQuest(autoquestsQuestID) end
-							end
-						end
-					elseif nActive > 0 then
-						local selectedIndex = 2
-						if GetQuestLogSelection then selectedIndex = GetQuestLogSelection() end
-						for i = 1, nActive do
-							if type(activeQuests) == "table" then
-								autoquestsIsComplete = activeQuests[i].isComplete
-								autoquestsQuestID = activeQuests[i].questID
-								if SelectQuestLogEntry and GetQuestLogIndexByID then SelectQuestLogEntry(GetQuestLogIndexByID(autoquestsQuestID)) end
-								if autoquestsIsComplete == true or (GetQuestLogLeaderBoard ~= nil and GetQuestLogLeaderBoard(1) == nil) then C_GossipInfo.SelectActiveQuest(autoquestsQuestID) end
-							end
-						end
+					if autoTurnIn then
+						for _, quest in ipairs(C_GossipInfo.GetActiveQuests() or {}) do
+							if quest.isComplete == true then
+								C_GossipInfo.SelectActiveQuest(quest.questID)
 
-						if SelectQuestLogEntry and GetQuestLogIndexByID then SelectQuestLogEntry(selectedIndex) end
+								return
+							end
+						end
+					end
+
+					if autoAccept then
+						local availableQuests = C_GossipInfo.GetAvailableQuests() or {}
+						for _, quest in ipairs(availableQuests) do
+							if #availableQuests == 1 or quest.repeatable == false then
+								C_GossipInfo.SelectAvailableQuest(quest.questID)
+
+								return
+							end
+						end
 					end
 				elseif event == "QUEST_GREETING" then
-					local npcAvailableQuestCount = GetNumAvailableQuests()
-					local npcActiveQuestCount = GetNumActiveQuests()
-					if npcAvailableQuestCount > 0 then
-						for i = 1, GetNumAvailableQuests() do
-							SelectAvailableQuest(i)
-						end
-					elseif npcActiveQuestCount > 0 then
+					if autoTurnIn then
 						for i = 1, GetNumActiveQuests() do
-							SelectActiveQuest(i)
+							local _, isComplete = GetActiveTitle(i)
+							if isComplete == true or isComplete == 1 then
+								SelectActiveQuest(i)
+
+								return
+							end
 						end
 					end
-				elseif event == "QUEST_DETAIL" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
+
+					if autoAccept and GetNumAvailableQuests() > 0 then SelectAvailableQuest(1) end
+				elseif event == "QUEST_DETAIL" and autoAccept then
 					local questId = GetQuestID()
 					if decisionQuests[questId] then
 						ImproveAny:MSG("Auto Accept Quest: This is a decision quest!")
@@ -1173,11 +1163,11 @@ function ImproveAny:InitAutoAcceptQuests()
 					end
 
 					AcceptQuest()
-				elseif event == "QUEST_ACCEPT_CONFIRM" and ImproveAny:IsEnabled("AUTOACCEPTQUESTS", false) then
+				elseif event == "QUEST_ACCEPT_CONFIRM" and autoAccept then
 					ConfirmAcceptQuest()
-				elseif event == "QUEST_PROGRESS" and ImproveAny:IsEnabled("AUTOCHECKINQUESTS", false) then
+				elseif event == "QUEST_PROGRESS" and autoTurnIn and IsQuestCompletable() then
 					CompleteQuest()
-				elseif event == "QUEST_COMPLETE" then
+				elseif event == "QUEST_COMPLETE" and autoTurnIn then
 					local npcQuestRewardsCount = GetNumQuestChoices()
 					if npcQuestRewardsCount > 1 then
 						PlaySound(5274, "master")
