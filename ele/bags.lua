@@ -1,6 +1,7 @@
 local _, ImproveAny = ...
 local BAGS = {"MainMenuBarBackpackButton", "CharacterBag3Slot", "CharacterBag2Slot", "CharacterBag1Slot", "CharacterBag0Slot"}
 local BAGSIDS = {}
+local BAGTEXTS = {}
 BAGSIDS["MainMenuBarBackpackButton"] = 0
 BAGSIDS["CharacterBag3Slot"] = 4
 BAGSIDS["CharacterBag2Slot"] = 3
@@ -51,11 +52,12 @@ function ImproveAny:InitBags()
 		local br = 5
 		for i, slot in pairs(BAGS) do
 			local SLOT = _G[slot]
-			if slot ~= "KeyRingButton" and SLOT and SLOT.text == nil then
-				SLOT.text = SLOT:CreateFontString(nil, "ARTWORK")
-				SLOT.text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
-				SLOT.text:SetPoint("TOP", SLOT, "TOP", 0, -3)
-				SLOT.text:SetText("")
+			if slot ~= "KeyRingButton" and SLOT and BAGTEXTS[SLOT] == nil then
+				local text = SLOT:CreateFontString(nil, "ARTWORK")
+				text:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
+				text:SetPoint("TOP", SLOT, "TOP", 0, -3)
+				text:SetText("")
+				BAGTEXTS[SLOT] = text
 			end
 		end
 
@@ -84,14 +86,13 @@ function ImproveAny:InitBags()
 					end
 				end
 
-				if SLOT and SLOT.text ~= nil and C_Container and C_Container.GetContainerNumFreeSlots and id then
+				if SLOT and BAGTEXTS[SLOT] ~= nil and C_Container and C_Container.GetContainerNumFreeSlots and id then
 					local numberOfFreeSlots = C_Container.GetContainerNumFreeSlots(id)
 					sum = sum + numberOfFreeSlots
 					if ImproveAny:IsEnabled("FREESPACEBAGS", false) then
-						SLOT.text:SetText("(" .. numberOfFreeSlots .. ")")
+						BAGTEXTS[SLOT]:SetText("(" .. numberOfFreeSlots .. ")")
 					end
 
-					SLOT.maxDisplayCount = 999999
 					if COUNT and ImproveAny:IsEnabled("FREESPACEBAGS", false) then
 						COUNT:SetText("")
 					end
