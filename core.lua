@@ -223,9 +223,10 @@ function ImproveAny:Event(event, ...)
 			["icon"] = ImproveAny:GetAddonIcon(),
 			["var"] = mmbtn,
 			["dbtab"] = IATAB,
-			["vTT"] = {{format("|T%s:16:16:0:0|t ImproveAny", ImproveAny:GetAddonIcon()),"v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
+			["vTT"] = {{format("|T%s:16:16:0:0|t ImproveAny", ImproveAny:GetAddonIcon()),"v" .. ImproveAny:GetVersion()}, {ImproveAny:Trans("LID_LEFTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_RIGHTCLICK"), ImproveAny:Trans("LID_OPENSETTINGS")}, {ImproveAny:Trans("LID_SHIFTRIGHTCLICK"), ImproveAny:Trans("LID_HIDEMINIMAPBUTTON")}},
 			["funcL"] = function() ImproveAny:ToggleSettings() end,
-			["funcR"] = function()
+			["funcR"] = function() ImproveAny:ToggleSettings() end,
+			["funcSR"] = function()
 				ImproveAny:MSG("Minimap Button is now hidden.")
 				ImproveAny:SetEnabled("SHOWMINIMAPBUTTON", false)
 				ImproveAny:HideMMBtn("ImproveAny")
